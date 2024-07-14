@@ -1,0 +1,109 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\published\\KoiCoi\\KoiCoi-API\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E63C017E-B1F0-4C0F-9F6C-4E8145D8613D}|KoiCoi-API\\KoiCoi-API.csproj|d:\\published\\koicoi\\koicoi-api\\koicoi-api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E63C017E-B1F0-4C0F-9F6C-4E8145D8613D}|KoiCoi-API\\KoiCoi-API.csproj|solutionrelative:koicoi-api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E63C017E-B1F0-4C0F-9F6C-4E8145D8613D}|KoiCoi-API\\KoiCoi-API.csproj|d:\\published\\koicoi\\koicoi-api\\koicoi-api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E63C017E-B1F0-4C0F-9F6C-4E8145D8613D}|KoiCoi-API\\KoiCoi-API.csproj|solutionrelative:koicoi-api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E63C017E-B1F0-4C0F-9F6C-4E8145D8613D}|KoiCoi-API\\KoiCoi-API.csproj|d:\\published\\koicoi\\koicoi-api\\koicoi-api\\koicoi-api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{E63C017E-B1F0-4C0F-9F6C-4E8145D8613D}|KoiCoi-API\\KoiCoi-API.csproj|solutionrelative:koicoi-api\\koicoi-api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E63C017E-B1F0-4C0F-9F6C-4E8145D8613D}|KoiCoi-API\\KoiCoi-API.csproj|d:\\published\\koicoi\\koicoi-api\\koicoi-api\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E63C017E-B1F0-4C0F-9F6C-4E8145D8613D}|KoiCoi-API\\KoiCoi-API.csproj|solutionrelative:koicoi-api\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E63C017E-B1F0-4C0F-9F6C-4E8145D8613D}|KoiCoi-API\\KoiCoi-API.csproj|d:\\published\\koicoi\\koicoi-api\\koicoi-api\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E63C017E-B1F0-4C0F-9F6C-4E8145D8613D}|KoiCoi-API\\KoiCoi-API.csproj|solutionrelative:koicoi-api\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi-API\\KoiCoi-API\\appsettings.json",
+              "RelativeDocumentMoniker": "KoiCoi-API\\appsettings.json",
+              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi-API\\KoiCoi-API\\appsettings.json",
+              "RelativeToolTip": "KoiCoi-API\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-07-14T06:03:11.356Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "KoiCoi-API",
+              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi-API\\KoiCoi-API\\KoiCoi-API.csproj",
+              "RelativeDocumentMoniker": "KoiCoi-API\\KoiCoi-API.csproj",
+              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi-API\\KoiCoi-API\\KoiCoi-API.csproj",
+              "RelativeToolTip": "KoiCoi-API\\KoiCoi-API.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-07-14T06:03:01.431Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi-API\\KoiCoi-API\\Program.cs",
+              "RelativeDocumentMoniker": "KoiCoi-API\\Program.cs",
+              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi-API\\KoiCoi-API\\Program.cs",
+              "RelativeToolTip": "KoiCoi-API\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-14T06:02:53.641Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "WeatherForecast.cs",
+              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi-API\\KoiCoi-API\\WeatherForecast.cs",
+              "RelativeDocumentMoniker": "KoiCoi-API\\WeatherForecast.cs",
+              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi-API\\KoiCoi-API\\WeatherForecast.cs",
+              "RelativeToolTip": "KoiCoi-API\\WeatherForecast.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAA3wAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-14T06:02:51.631Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "WeatherForecastController.cs",
+              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi-API\\KoiCoi-API\\Controllers\\WeatherForecastController.cs",
+              "RelativeDocumentMoniker": "KoiCoi-API\\Controllers\\WeatherForecastController.cs",
+              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi-API\\KoiCoi-API\\Controllers\\WeatherForecastController.cs",
+              "RelativeToolTip": "KoiCoi-API\\Controllers\\WeatherForecastController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-14T06:02:39.792Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
