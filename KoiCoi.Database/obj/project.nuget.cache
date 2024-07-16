@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DKUgV7t+MtI=",
+  "dgSpecHash": "uuzO8WdJXgQ=",
   "success": true,
-  "projectFilePath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
+  "projectFilePath": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
@@ -88,6 +88,7 @@
     "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\microsoft.entityframeworkcore.inmemory\\7.0.20\\microsoft.entityframeworkcore.inmemory.7.0.20.nupkg.sha512",
     "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\7.0.20\\microsoft.entityframeworkcore.relational.7.0.20.nupkg.sha512",
     "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\7.0.20\\microsoft.entityframeworkcore.sqlserver.7.0.20.nupkg.sha512",
+    "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\7.0.20\\microsoft.entityframeworkcore.tools.7.0.20.nupkg.sha512",
     "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\7.0.0\\microsoft.extensions.caching.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\microsoft.extensions.caching.memory\\7.0.0\\microsoft.extensions.caching.memory.7.0.0.nupkg.sha512",

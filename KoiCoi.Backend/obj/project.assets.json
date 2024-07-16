@@ -4364,6 +4364,7 @@
           "Dapper": "2.1.35",
           "MailKit": "4.7.1.1",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "7.0.20",
+          "Microsoft.EntityFrameworkCore": "7.0.20",
           "Microsoft.EntityFrameworkCore.InMemory": "7.0.20",
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.20",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "7.0.12",
@@ -4381,6 +4382,10 @@
       "KoiCoi.Mapper/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "KoiCoi.Database": "1.0.0",
+          "KoiCoi.Shared": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/KoiCoi.Mapper.dll": {}
         },
@@ -4392,8 +4397,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
-          "KoiCoi.Database": "1.0.0",
-          "KoiCoi.Mapper": "1.0.0"
+          "KoiCoi.Database": "1.0.0"
         },
         "compile": {
           "bin/placeholder/KoiCoi.Models.dll": {}
@@ -12732,11 +12736,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Backend\\KoiCoi.Backend.csproj",
+      "projectUniqueName": "D:\\published\\KoiCoi\\KoiCoi.Backend\\KoiCoi.Backend.csproj",
       "projectName": "KoiCoi.Backend",
-      "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Backend\\KoiCoi.Backend.csproj",
+      "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Backend\\KoiCoi.Backend.csproj",
       "packagesPath": "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\",
-      "outputPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Backend\\obj\\",
+      "outputPath": "D:\\published\\KoiCoi\\KoiCoi.Backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\KTZ Myanmar Group 2\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -12754,20 +12758,20 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
-              "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
+            "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
+              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
             },
-            "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj": {
-              "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj"
+            "D:\\published\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj": {
+              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj"
             },
-            "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {
-              "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj"
+            "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {
+              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj"
             },
-            "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj": {
-              "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj"
+            "D:\\published\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj": {
+              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj"
             },
-            "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
-              "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj"
+            "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
+              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj"
             }
           }
         }

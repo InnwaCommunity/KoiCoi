@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KoiCoi.Database\KoiCoi.Database.csproj" />
-    <ProjectReference Include="..\KoiCoi.Mapper\KoiCoi.Mapper.csproj" />
   </ItemGroup>
 
 </Project>

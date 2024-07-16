@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\KoiCoi.Database\KoiCoi.Database.csproj" />
+    <ProjectReference Include="..\KoiCoi.Shared\KoiCoi.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

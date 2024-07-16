@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj": {}
+    "D:\\published\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj": {}
   },
   "projects": {
-    "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
+    "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
+        "projectUniqueName": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
         "projectName": "KoiCoi.Database",
-        "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
+        "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
         "packagesPath": "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\",
-        "outputPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\obj\\",
+        "outputPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\KTZ Myanmar Group 2\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -58,6 +58,10 @@
               "target": "Package",
               "version": "[7.0.20, )"
             },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.20, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
@@ -69,6 +73,12 @@
               "version": "[7.0.20, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.20, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.20, )"
             },
@@ -109,14 +119,14 @@
         }
       }
     },
-    "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj": {
+    "D:\\published\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj",
+        "projectUniqueName": "D:\\published\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj",
         "projectName": "KoiCoi.Mapper",
-        "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj",
+        "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj",
         "packagesPath": "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\",
-        "outputPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Mapper\\obj\\",
+        "outputPath": "D:\\published\\KoiCoi\\KoiCoi.Mapper\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\KTZ Myanmar Group 2\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -133,7 +143,14 @@
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
+                "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
+              },
+              "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
+                "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -170,14 +187,14 @@
         }
       }
     },
-    "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {
+    "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
+        "projectUniqueName": "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
         "projectName": "KoiCoi.Models",
-        "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
+        "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
         "packagesPath": "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\",
-        "outputPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Models\\obj\\",
+        "outputPath": "D:\\published\\KoiCoi\\KoiCoi.Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\KTZ Myanmar Group 2\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -195,11 +212,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
-                "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
-              },
-              "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj": {
-                "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj"
+              "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
+                "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
               }
             }
           }
@@ -238,14 +252,14 @@
         }
       }
     },
-    "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj": {
+    "D:\\published\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
+        "projectUniqueName": "D:\\published\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
         "projectName": "KoiCoi.Modules",
-        "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
+        "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
         "packagesPath": "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\",
-        "outputPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Modules\\obj\\",
+        "outputPath": "D:\\published\\KoiCoi\\KoiCoi.Modules\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\KTZ Myanmar Group 2\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -263,17 +277,17 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
-                "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
+              "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
+                "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
               },
-              "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj": {
-                "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj"
+              "D:\\published\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj": {
+                "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj"
               },
-              "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {
-                "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj"
+              "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {
+                "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj"
               },
-              "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
-                "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj"
+              "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
+                "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj"
               }
             }
           }
@@ -312,14 +326,14 @@
         }
       }
     },
-    "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
+    "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj",
+        "projectUniqueName": "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj",
         "projectName": "KoiCoi.Shared",
-        "projectPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj",
+        "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj",
         "packagesPath": "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\",
-        "outputPath": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Shared\\obj\\",
+        "outputPath": "D:\\published\\KoiCoi\\KoiCoi.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\KTZ Myanmar Group 2\\AppData\\Roaming\\NuGet\\NuGet.Config",

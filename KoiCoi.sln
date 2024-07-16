@@ -16,15 +16,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Documents", "_Documents", "{57E1EEB6-A3B6-43C5-BA2D-EFEC1E6DC7F1}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
+		sql_graph.drawio = sql_graph.drawio
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoiCoi.Database", "KoiCoi.Database\KoiCoi.Database.csproj", "{9FD96778-3FF4-44EA-9383-EF560A22730D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoiCoi.Database", "KoiCoi.Database\KoiCoi.Database.csproj", "{9FD96778-3FF4-44EA-9383-EF560A22730D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoiCoi.Models", "KoiCoi.Models\KoiCoi.Models.csproj", "{078C8E18-B170-455D-B47D-6E4EC2428000}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoiCoi.Models", "KoiCoi.Models\KoiCoi.Models.csproj", "{078C8E18-B170-455D-B47D-6E4EC2428000}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoiCoi.Mapper", "KoiCoi.Mapper\KoiCoi.Mapper.csproj", "{19DAC7F1-BC49-43D2-9AB9-699DC1A6AA9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoiCoi.Mapper", "KoiCoi.Mapper\KoiCoi.Mapper.csproj", "{19DAC7F1-BC49-43D2-9AB9-699DC1A6AA9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoiCoi.Shared", "KoiCoi.Shared\KoiCoi.Shared.csproj", "{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoiCoi.Shared", "KoiCoi.Shared\KoiCoi.Shared.csproj", "{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
