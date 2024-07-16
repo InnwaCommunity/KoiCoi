@@ -1,0 +1,194 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Dotnet Projects\\KoiCoi\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|d:\\dotnet projects\\koicoi\\koicoi.database\\koicoi.database.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|solutionrelative:koicoi.database\\koicoi.database.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\dotnet projects\\koicoi\\koicoi.backend\\koicoi.backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\koicoi.backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\dotnet projects\\koicoi\\koicoi.modules\\koicoi.modules.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\koicoi.modules.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\dotnet projects\\koicoi\\koicoi.models\\koicoi.models.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\koicoi.models.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}|KoiCoi.Shared\\KoiCoi.Shared.csproj|d:\\dotnet projects\\koicoi\\koicoi.shared\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}|KoiCoi.Shared\\KoiCoi.Shared.csproj|solutionrelative:koicoi.shared\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19DAC7F1-BC49-43D2-9AB9-699DC1A6AA9B}|KoiCoi.Mapper\\KoiCoi.Mapper.csproj|d:\\dotnet projects\\koicoi\\koicoi.mapper\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19DAC7F1-BC49-43D2-9AB9-699DC1A6AA9B}|KoiCoi.Mapper\\KoiCoi.Mapper.csproj|solutionrelative:koicoi.mapper\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\dotnet projects\\koicoi\\koicoi.models\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|d:\\dotnet projects\\koicoi\\koicoi.database\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|solutionrelative:koicoi.database\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\dotnet projects\\koicoi\\koicoi.modules\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\dotnet projects\\koicoi\\koicoi.backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "KoiCoi.Database",
+              "DocumentMoniker": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
+              "RelativeDocumentMoniker": "KoiCoi.Database\\KoiCoi.Database.csproj",
+              "ToolTip": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
+              "RelativeToolTip": "KoiCoi.Database\\KoiCoi.Database.csproj",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAABUAAABGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-07-16T05:07:10.245Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "KoiCoi.Models",
+              "DocumentMoniker": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\KoiCoi.Models.csproj",
+              "ToolTip": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
+              "RelativeToolTip": "KoiCoi.Models\\KoiCoi.Models.csproj",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAoAAABIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-07-16T03:19:05.006Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "KoiCoi.Modules",
+              "DocumentMoniker": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\KoiCoi.Modules.csproj",
+              "ToolTip": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
+              "RelativeToolTip": "KoiCoi.Modules\\KoiCoi.Modules.csproj",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAsAAABIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-07-16T03:18:21.596Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "KoiCoi.Backend.csproj",
+              "DocumentMoniker": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Backend\\KoiCoi.Backend.csproj",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\KoiCoi.Backend.csproj",
+              "ToolTip": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Backend\\KoiCoi.Backend.csproj",
+              "RelativeToolTip": "KoiCoi.Backend\\KoiCoi.Backend.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAA5AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-07-14T17:35:28.599Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Mapper\\Class1.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Mapper\\Class1.cs",
+              "ToolTip": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Mapper\\Class1.cs",
+              "RelativeToolTip": "KoiCoi.Mapper\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-16T03:12:36.26Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Shared\\Class1.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Shared\\Class1.cs",
+              "ToolTip": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Shared\\Class1.cs",
+              "RelativeToolTip": "KoiCoi.Shared\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-16T03:12:55.865Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Models\\Class1.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\Class1.cs",
+              "ToolTip": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Models\\Class1.cs",
+              "RelativeToolTip": "KoiCoi.Models\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-16T03:12:08.371Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\Class1.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Database\\Class1.cs",
+              "ToolTip": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Database\\Class1.cs",
+              "RelativeToolTip": "KoiCoi.Database\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-16T03:11:33.573Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Modules\\Class1.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Class1.cs",
+              "ToolTip": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Modules\\Class1.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-16T03:06:11.545Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Backend\\Program.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Program.cs",
+              "ToolTip": "D:\\Dotnet Projects\\KoiCoi\\KoiCoi.Backend\\Program.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\Program.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAIBJwBQAAAAXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-16T01:47:57.266Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

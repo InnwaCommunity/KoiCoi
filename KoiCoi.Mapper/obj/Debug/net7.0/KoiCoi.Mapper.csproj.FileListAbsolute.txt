@@ -1,0 +1,12 @@
+D:\Dotnet Projects\KoiCoi\KoiCoi.Mapper\bin\Debug\net7.0\KoiCoi.Mapper.deps.json
+D:\Dotnet Projects\KoiCoi\KoiCoi.Mapper\bin\Debug\net7.0\KoiCoi.Mapper.dll
+D:\Dotnet Projects\KoiCoi\KoiCoi.Mapper\bin\Debug\net7.0\KoiCoi.Mapper.pdb
+D:\Dotnet Projects\KoiCoi\KoiCoi.Mapper\obj\Debug\net7.0\KoiCoi.Mapper.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dotnet Projects\KoiCoi\KoiCoi.Mapper\obj\Debug\net7.0\KoiCoi.Mapper.AssemblyInfoInputs.cache
+D:\Dotnet Projects\KoiCoi\KoiCoi.Mapper\obj\Debug\net7.0\KoiCoi.Mapper.AssemblyInfo.cs
+D:\Dotnet Projects\KoiCoi\KoiCoi.Mapper\obj\Debug\net7.0\KoiCoi.Mapper.csproj.CoreCompileInputs.cache
+D:\Dotnet Projects\KoiCoi\KoiCoi.Mapper\obj\Debug\net7.0\KoiCoi.Mapper.sourcelink.json
+D:\Dotnet Projects\KoiCoi\KoiCoi.Mapper\obj\Debug\net7.0\KoiCoi.Mapper.dll
+D:\Dotnet Projects\KoiCoi\KoiCoi.Mapper\obj\Debug\net7.0\refint\KoiCoi.Mapper.dll
+D:\Dotnet Projects\KoiCoi\KoiCoi.Mapper\obj\Debug\net7.0\KoiCoi.Mapper.pdb
+D:\Dotnet Projects\KoiCoi\KoiCoi.Mapper\obj\Debug\net7.0\ref\KoiCoi.Mapper.dll

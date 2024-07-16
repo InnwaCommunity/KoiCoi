@@ -1,0 +1,12 @@
+D:\Dotnet Projects\KoiCoi\KoiCoi.Database\bin\Debug\net7.0\KoiCoi.Database.deps.json
+D:\Dotnet Projects\KoiCoi\KoiCoi.Database\bin\Debug\net7.0\KoiCoi.Database.dll
+D:\Dotnet Projects\KoiCoi\KoiCoi.Database\bin\Debug\net7.0\KoiCoi.Database.pdb
+D:\Dotnet Projects\KoiCoi\KoiCoi.Database\obj\Debug\net7.0\KoiCoi.Database.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dotnet Projects\KoiCoi\KoiCoi.Database\obj\Debug\net7.0\KoiCoi.Database.AssemblyInfoInputs.cache
+D:\Dotnet Projects\KoiCoi\KoiCoi.Database\obj\Debug\net7.0\KoiCoi.Database.AssemblyInfo.cs
+D:\Dotnet Projects\KoiCoi\KoiCoi.Database\obj\Debug\net7.0\KoiCoi.Database.csproj.CoreCompileInputs.cache
+D:\Dotnet Projects\KoiCoi\KoiCoi.Database\obj\Debug\net7.0\KoiCoi.Database.sourcelink.json
+D:\Dotnet Projects\KoiCoi\KoiCoi.Database\obj\Debug\net7.0\KoiCoi.Database.dll
+D:\Dotnet Projects\KoiCoi\KoiCoi.Database\obj\Debug\net7.0\refint\KoiCoi.Database.dll
+D:\Dotnet Projects\KoiCoi\KoiCoi.Database\obj\Debug\net7.0\KoiCoi.Database.pdb
+D:\Dotnet Projects\KoiCoi\KoiCoi.Database\obj\Debug\net7.0\ref\KoiCoi.Database.dll

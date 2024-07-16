@@ -1,0 +1,12 @@
+D:\Dotnet Projects\KoiCoi\KoiCoi.Shared\bin\Debug\net7.0\KoiCoi.Shared.deps.json
+D:\Dotnet Projects\KoiCoi\KoiCoi.Shared\bin\Debug\net7.0\KoiCoi.Shared.dll
+D:\Dotnet Projects\KoiCoi\KoiCoi.Shared\bin\Debug\net7.0\KoiCoi.Shared.pdb
+D:\Dotnet Projects\KoiCoi\KoiCoi.Shared\obj\Debug\net7.0\KoiCoi.Shared.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dotnet Projects\KoiCoi\KoiCoi.Shared\obj\Debug\net7.0\KoiCoi.Shared.AssemblyInfoInputs.cache
+D:\Dotnet Projects\KoiCoi\KoiCoi.Shared\obj\Debug\net7.0\KoiCoi.Shared.AssemblyInfo.cs
+D:\Dotnet Projects\KoiCoi\KoiCoi.Shared\obj\Debug\net7.0\KoiCoi.Shared.csproj.CoreCompileInputs.cache
+D:\Dotnet Projects\KoiCoi\KoiCoi.Shared\obj\Debug\net7.0\KoiCoi.Shared.sourcelink.json
+D:\Dotnet Projects\KoiCoi\KoiCoi.Shared\obj\Debug\net7.0\KoiCoi.Shared.dll
+D:\Dotnet Projects\KoiCoi\KoiCoi.Shared\obj\Debug\net7.0\refint\KoiCoi.Shared.dll
+D:\Dotnet Projects\KoiCoi\KoiCoi.Shared\obj\Debug\net7.0\KoiCoi.Shared.pdb
+D:\Dotnet Projects\KoiCoi\KoiCoi.Shared\obj\Debug\net7.0\ref\KoiCoi.Shared.dll

@@ -1,0 +1,73 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "KoiCoi.Modules/1.0.0": {
+        "dependencies": {
+          "KoiCoi.Database": "1.0.0",
+          "KoiCoi.Mapper": "1.0.0",
+          "KoiCoi.Models": "1.0.0",
+          "KoiCoi.Shared": "1.0.0"
+        },
+        "runtime": {
+          "KoiCoi.Modules.dll": {}
+        }
+      },
+      "KoiCoi.Database/1.0.0": {
+        "runtime": {
+          "KoiCoi.Database.dll": {}
+        }
+      },
+      "KoiCoi.Mapper/1.0.0": {
+        "runtime": {
+          "KoiCoi.Mapper.dll": {}
+        }
+      },
+      "KoiCoi.Models/1.0.0": {
+        "dependencies": {
+          "KoiCoi.Database": "1.0.0",
+          "KoiCoi.Mapper": "1.0.0"
+        },
+        "runtime": {
+          "KoiCoi.Models.dll": {}
+        }
+      },
+      "KoiCoi.Shared/1.0.0": {
+        "runtime": {
+          "KoiCoi.Shared.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "KoiCoi.Modules/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "KoiCoi.Database/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "KoiCoi.Mapper/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "KoiCoi.Models/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "KoiCoi.Shared/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

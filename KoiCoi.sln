@@ -1,0 +1,74 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34928.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoiCoi.Backend", "KoiCoi.Backend\KoiCoi.Backend.csproj", "{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoiCoi.Modules", "KoiCoi.Modules\KoiCoi.Modules.csproj", "{3DED6F6C-4185-4358-97F0-67BA946C1D60}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{0F46306C-6876-47E4-AB5B-E136FB14ADFE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{BAAD6152-2F65-4834-9A8B-A908B18025F1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{A7FA401D-2149-4B01-9B28-98F8E6F8B890}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Documents", "_Documents", "{57E1EEB6-A3B6-43C5-BA2D-EFEC1E6DC7F1}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoiCoi.Database", "KoiCoi.Database\KoiCoi.Database.csproj", "{9FD96778-3FF4-44EA-9383-EF560A22730D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoiCoi.Models", "KoiCoi.Models\KoiCoi.Models.csproj", "{078C8E18-B170-455D-B47D-6E4EC2428000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoiCoi.Mapper", "KoiCoi.Mapper\KoiCoi.Mapper.csproj", "{19DAC7F1-BC49-43D2-9AB9-699DC1A6AA9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoiCoi.Shared", "KoiCoi.Shared\KoiCoi.Shared.csproj", "{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DED6F6C-4185-4358-97F0-67BA946C1D60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DED6F6C-4185-4358-97F0-67BA946C1D60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DED6F6C-4185-4358-97F0-67BA946C1D60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DED6F6C-4185-4358-97F0-67BA946C1D60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FD96778-3FF4-44EA-9383-EF560A22730D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FD96778-3FF4-44EA-9383-EF560A22730D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FD96778-3FF4-44EA-9383-EF560A22730D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FD96778-3FF4-44EA-9383-EF560A22730D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{078C8E18-B170-455D-B47D-6E4EC2428000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{078C8E18-B170-455D-B47D-6E4EC2428000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{078C8E18-B170-455D-B47D-6E4EC2428000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{078C8E18-B170-455D-B47D-6E4EC2428000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19DAC7F1-BC49-43D2-9AB9-699DC1A6AA9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19DAC7F1-BC49-43D2-9AB9-699DC1A6AA9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19DAC7F1-BC49-43D2-9AB9-699DC1A6AA9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19DAC7F1-BC49-43D2-9AB9-699DC1A6AA9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AC8478A5-DE44-4A67-9A44-7B79FA34AC30} = {0F46306C-6876-47E4-AB5B-E136FB14ADFE}
+		{3DED6F6C-4185-4358-97F0-67BA946C1D60} = {BAAD6152-2F65-4834-9A8B-A908B18025F1}
+		{9FD96778-3FF4-44EA-9383-EF560A22730D} = {A7FA401D-2149-4B01-9B28-98F8E6F8B890}
+		{078C8E18-B170-455D-B47D-6E4EC2428000} = {A7FA401D-2149-4B01-9B28-98F8E6F8B890}
+		{19DAC7F1-BC49-43D2-9AB9-699DC1A6AA9B} = {A7FA401D-2149-4B01-9B28-98F8E6F8B890}
+		{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E} = {A7FA401D-2149-4B01-9B28-98F8E6F8B890}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5B6E5B1B-1BF7-4B06-8D91-53AA161CE19A}
+	EndGlobalSection
+EndGlobal
