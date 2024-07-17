@@ -12,6 +12,11 @@ public class UserController : ControllerBase
     {
         _bLUser = _blUser;
     }
+    //[HttpPost("CreateAccount",Name = "CreateAccount")]
+    //public async Task<IActionResult> CreateAccount([FromBody] Newtonsoft.Json.Linq.JObject param)
+    //{
+
+    //}
 
     [HttpGet()]
     public async Task<IActionResult> SearchUser()

@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoiCoi.Mapper", "KoiCoi.Map
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoiCoi.Shared", "KoiCoi.Shared\KoiCoi.Shared.csproj", "{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoiCoi.Operational", "KoiCoi.Operational\KoiCoi.Operational.csproj", "{6ADBAF6B-5F50-4883-AB8D-91A5EDC7E01B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ADBAF6B-5F50-4883-AB8D-91A5EDC7E01B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ADBAF6B-5F50-4883-AB8D-91A5EDC7E01B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ADBAF6B-5F50-4883-AB8D-91A5EDC7E01B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ADBAF6B-5F50-4883-AB8D-91A5EDC7E01B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +74,7 @@ Global
 		{078C8E18-B170-455D-B47D-6E4EC2428000} = {A7FA401D-2149-4B01-9B28-98F8E6F8B890}
 		{19DAC7F1-BC49-43D2-9AB9-699DC1A6AA9B} = {A7FA401D-2149-4B01-9B28-98F8E6F8B890}
 		{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E} = {A7FA401D-2149-4B01-9B28-98F8E6F8B890}
+		{6ADBAF6B-5F50-4883-AB8D-91A5EDC7E01B} = {A7FA401D-2149-4B01-9B28-98F8E6F8B890}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B6E5B1B-1BF7-4B06-8D91-53AA161CE19A}

@@ -4384,6 +4384,7 @@
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
           "KoiCoi.Database": "1.0.0",
+          "KoiCoi.Models": "1.0.0",
           "KoiCoi.Shared": "1.0.0"
         },
         "compile": {
@@ -4420,6 +4421,33 @@
         },
         "runtime": {
           "bin/placeholder/KoiCoi.Modules.dll": {}
+        }
+      },
+      "KoiCoi.Operational/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Dapper": "2.1.35",
+          "KoiCoi.Database": "1.0.0",
+          "KoiCoi.Mapper": "1.0.0",
+          "KoiCoi.Models": "1.0.0",
+          "KoiCoi.Modules": "1.0.0",
+          "KoiCoi.Shared": "1.0.0",
+          "MailKit": "4.7.1.1",
+          "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "7.0.20",
+          "Microsoft.EntityFrameworkCore": "7.0.20",
+          "Microsoft.EntityFrameworkCore.InMemory": "7.0.20",
+          "Microsoft.EntityFrameworkCore.SqlServer": "7.0.20",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "7.0.12",
+          "Pomelo.EntityFrameworkCore.MySql": "7.0.0",
+          "Serilog.AspNetCore": "7.0.0",
+          "Swashbuckle.AspNetCore": "6.5.0"
+        },
+        "compile": {
+          "bin/placeholder/KoiCoi.Operational.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KoiCoi.Operational.dll": {}
         }
       },
       "KoiCoi.Shared/1.0.0": {
@@ -12704,6 +12732,11 @@
       "path": "../KoiCoi.Modules/KoiCoi.Modules.csproj",
       "msbuildProject": "../KoiCoi.Modules/KoiCoi.Modules.csproj"
     },
+    "KoiCoi.Operational/1.0.0": {
+      "type": "project",
+      "path": "../KoiCoi.Operational/KoiCoi.Operational.csproj",
+      "msbuildProject": "../KoiCoi.Operational/KoiCoi.Operational.csproj"
+    },
     "KoiCoi.Shared/1.0.0": {
       "type": "project",
       "path": "../KoiCoi.Shared/KoiCoi.Shared.csproj",
@@ -12717,7 +12750,7 @@
       "KoiCoi.Mapper >= 1.0.0",
       "KoiCoi.Models >= 1.0.0",
       "KoiCoi.Modules >= 1.0.0",
-      "KoiCoi.Shared >= 1.0.0",
+      "KoiCoi.Operational >= 1.0.0",
       "MailKit >= 4.7.1.1",
       "Microsoft.AspNetCore.Mvc.NewtonsoftJson >= 7.0.20",
       "Microsoft.AspNetCore.OpenApi >= 7.0.20",
@@ -12770,8 +12803,8 @@
             "D:\\published\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj": {
               "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj"
             },
-            "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
-              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj"
+            "D:\\published\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj": {
+              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj"
             }
           }
         }

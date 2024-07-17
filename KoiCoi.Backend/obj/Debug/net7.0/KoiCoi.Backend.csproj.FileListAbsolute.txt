@@ -363,3 +363,5 @@ D:\published\KoiCoi\KoiCoi.Backend\obj\Debug\net7.0\scopedcss\bundle\KoiCoi.Back
 D:\published\KoiCoi\KoiCoi.Backend\obj\Debug\net7.0\KoiCoi.B.EEBAC643.Up2Date
 D:\published\KoiCoi\KoiCoi.Backend\obj\Debug\net7.0\KoiCoi.Backend.genruntimeconfig.cache
 D:\published\KoiCoi\KoiCoi.Backend\obj\Debug\net7.0\ref\KoiCoi.Backend.dll
+D:\published\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\KoiCoi.Operational.dll
+D:\published\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\KoiCoi.Operational.pdb

@@ -4313,6 +4313,19 @@
           "bin/placeholder/KoiCoi.Database.dll": {}
         }
       },
+      "KoiCoi.Models/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "KoiCoi.Database": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/KoiCoi.Models.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KoiCoi.Models.dll": {}
+        }
+      },
       "KoiCoi.Shared/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
@@ -12519,6 +12532,11 @@
       "path": "../KoiCoi.Database/KoiCoi.Database.csproj",
       "msbuildProject": "../KoiCoi.Database/KoiCoi.Database.csproj"
     },
+    "KoiCoi.Models/1.0.0": {
+      "type": "project",
+      "path": "../KoiCoi.Models/KoiCoi.Models.csproj",
+      "msbuildProject": "../KoiCoi.Models/KoiCoi.Models.csproj"
+    },
     "KoiCoi.Shared/1.0.0": {
       "type": "project",
       "path": "../KoiCoi.Shared/KoiCoi.Shared.csproj",
@@ -12528,6 +12546,7 @@
   "projectFileDependencyGroups": {
     "net7.0": [
       "KoiCoi.Database >= 1.0.0",
+      "KoiCoi.Models >= 1.0.0",
       "KoiCoi.Shared >= 1.0.0"
     ]
   },
@@ -12561,6 +12580,9 @@
           "projectReferences": {
             "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
               "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
+            },
+            "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {
+              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj"
             },
             "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
               "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj"

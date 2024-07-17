@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -28,7 +28,7 @@
     <ProjectReference Include="..\KoiCoi.Mapper\KoiCoi.Mapper.csproj" />
     <ProjectReference Include="..\KoiCoi.Models\KoiCoi.Models.csproj" />
     <ProjectReference Include="..\KoiCoi.Modules\KoiCoi.Modules.csproj" />
-    <ProjectReference Include="..\KoiCoi.Shared\KoiCoi.Shared.csproj" />
+    <ProjectReference Include="..\KoiCoi.Operational\KoiCoi.Operational.csproj" />
   </ItemGroup>
 
 </Project>

@@ -9,6 +9,7 @@
       "KoiCoi.Mapper/1.0.0": {
         "dependencies": {
           "KoiCoi.Database": "1.0.0",
+          "KoiCoi.Models": "1.0.0",
           "KoiCoi.Shared": "1.0.0"
         },
         "runtime": {
@@ -2782,6 +2783,14 @@
           "KoiCoi.Database.dll": {}
         }
       },
+      "KoiCoi.Models/1.0.0": {
+        "dependencies": {
+          "KoiCoi.Database": "1.0.0"
+        },
+        "runtime": {
+          "KoiCoi.Models.dll": {}
+        }
+      },
       "KoiCoi.Shared/1.0.0": {
         "runtime": {
           "KoiCoi.Shared.dll": {}
@@ -4525,6 +4534,11 @@
       "hashPath": "system.xml.xdocument.4.3.0.nupkg.sha512"
     },
     "KoiCoi.Database/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "KoiCoi.Models/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

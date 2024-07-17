@@ -28,3 +28,5 @@ D:\published\KoiCoi\KoiCoi.Mapper\bin\Debug\net7.0\KoiCoi.Database.pdb
 D:\published\KoiCoi\KoiCoi.Mapper\bin\Debug\net7.0\KoiCoi.Shared.pdb
 D:\published\KoiCoi\KoiCoi.Mapper\obj\Debug\net7.0\KoiCoi.Mapper.csproj.AssemblyReference.cache
 D:\published\KoiCoi\KoiCoi.Mapper\obj\Debug\net7.0\KoiCoi.M.FA22EC94.Up2Date
+D:\published\KoiCoi\KoiCoi.Mapper\bin\Debug\net7.0\KoiCoi.Models.dll
+D:\published\KoiCoi\KoiCoi.Mapper\bin\Debug\net7.0\KoiCoi.Models.pdb

@@ -17,6 +17,8 @@ public partial class CollectPost
 
     public int ApproverId { get; set; }
 
+    public int PrivacyId { get; set; }
+
     public int StatusId { get; set; }
 
     public DateTime? CreatedDate { get; set; }

@@ -2787,6 +2787,7 @@
       "KoiCoi.Mapper/1.0.0": {
         "dependencies": {
           "KoiCoi.Database": "1.0.0",
+          "KoiCoi.Models": "1.0.0",
           "KoiCoi.Shared": "1.0.0"
         },
         "runtime": {

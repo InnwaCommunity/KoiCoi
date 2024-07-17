@@ -1,11 +1,48 @@
-﻿namespace KoiCoi.Backend;
+﻿using KoiCoi.Backend.CustomTokenAuthProvider;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Configuration;
+using Microsoft.OpenApi.Models;
+using System.Configuration;
+
+namespace KoiCoi.Backend;
 
 public static class ModularService
 {
     public static WebApplicationBuilder AddSwagger(this WebApplicationBuilder builder)
     {
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Koi Coi", Version = "v1" });
+        });
+        builder.Services.AddTransient<TokenProviderMiddleware>();
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+        builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
+         .AddNewtonsoftJson(o =>
+         {
+             o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+             o.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
+             o.SerializerSettings.DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Include;    //it must be Include, otherwise default value (boolean=false, int=0, int?=null, object=null) will be missing in response json			
+             o.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+         });
+
+        builder.Services.AddControllers();
+
+
+        builder.Services.AddSession(options =>   //use session for carry event log data like login, ip, etc.
+        {
+            options.IdleTimeout = TimeSpan.FromSeconds(30);
+        });
+
+        builder.Services.Configure<KestrelServerOptions>(options =>
+        {
+            options.AllowSynchronousIO = true;
+        });
         return builder;
     }
 
@@ -27,6 +64,45 @@ public static class ModularService
     public static WebApplicationBuilder AddBusinessLogicService(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<BL_User>();
+        return builder;
+    }
+
+    public static WebApplicationBuilder ConfigureCors(this WebApplicationBuilder builder)
+    {
+        var corsBuilder = new CorsPolicyBuilder();
+        corsBuilder.AllowAnyHeader();
+        corsBuilder.WithMethods("GET", "POST", "PUT", "DELETE");
+        corsBuilder.WithOrigins((builder.Configuration["AllowedOrigins"] ?? "http://localhost").Split(","));
+        corsBuilder.AllowCredentials();
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("CorsAllowAllPolicy", corsBuilder.Build());
+        });
+        return builder;
+    }
+    //it is for error handler of model validation exception when direct bind request parameter to model in controller function
+    public static WebApplicationBuilder ConfigureModelBindingExceptionHandling(this WebApplicationBuilder builder)
+    {
+        builder.Services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.InvalidModelStateResponseFactory = actionContext =>
+            {
+                ValidationProblemDetails error = actionContext.ModelState
+                      .Where(e => e.Value is not null && e.Value.Errors.Count > 0)
+                      .Select(e => new ValidationProblemDetails(actionContext.ModelState)).First();
+
+                string ErrorMessage = "";
+                foreach (KeyValuePair<string, string[]> errobj in error.Errors)
+                {
+                    foreach (string s in errobj.Value)
+                    {
+                        ErrorMessage = ErrorMessage + s + "\r\n";
+                    }
+                }
+                return new BadRequestObjectResult(new { data = 0, error = ErrorMessage });
+            };
+        });
         return builder;
     }
 }

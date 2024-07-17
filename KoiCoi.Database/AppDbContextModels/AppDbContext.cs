@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using MySqlConnector;
+using Newtonsoft.Json.Linq;
 
 namespace KoiCoi.Database.AppDbContextModels;
 
 public partial class AppDbContext : DbContext
 {
+    private string _connectionString = "";
     public AppDbContext()
     {
     }
@@ -13,6 +18,10 @@ public partial class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
+        var appsettingbuilder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
+        var Configuration = appsettingbuilder.Build();
+
+        _connectionString = Environment.GetEnvironmentVariable("DBSTRING") ?? Configuration.GetConnectionString("DefaultConnection")!;
     }
 
     public virtual DbSet<Channel> Channels { get; set; }
@@ -37,7 +46,17 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<EventMembership> EventMemberships { get; set; }
 
+    public virtual DbSet<PostCommand> PostCommands { get; set; }
+
     public virtual DbSet<PostImage> PostImages { get; set; }
+
+    public virtual DbSet<PostPrivacy> PostPrivacies { get; set; }
+
+    public virtual DbSet<PostShare> PostShares { get; set; }
+
+    public virtual DbSet<React> Reacts { get; set; }
+
+    public virtual DbSet<ReactType> ReactTypes { get; set; }
 
     public virtual DbSet<StatusType> StatusTypes { get; set; }
 
@@ -47,10 +66,104 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<UserType> UserTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=NYEINCHANNMOE;Database=Koi_Coi;User Id=sa;Password=nyein@8834;TrustServerCertificate=True;");
+    public dynamic RunExecuteQuery(string query, string queryparams)
+    {
+        var dal = new BaseDataAccess(_connectionString);
+        return dal.ExecuteQuery(query, queryparams);
+    }
+    public async Task<dynamic> RunExecuteQueryAsync(string query, string queryparams)
+    {
+        var dal = new BaseDataAccess(_connectionString);
+        return await dal.ExecuteQueryAsync(query, queryparams);
+    }
 
+    public dynamic RunExecuteRawQuery(string query, JObject queryparams)
+    {
+        var dal = new BaseDataAccess(_connectionString);
+        return dal.ExecuteQueryNew(query, queryparams);
+    }
+    public dynamic RunExecuteReportQuery(string query)
+    {
+        var dal = new BaseDataAccess(_connectionString);
+        return dal.ExecuteReportQuery(query);
+    }
+
+    public async Task<dynamic> RunExecuteRawQueryAsync(string query, JObject queryparams)
+    {
+        var dal = new BaseDataAccess(Database.GetDbConnection());
+        return await dal.ExecuteQueryRawAsync(query, queryparams);
+    }
+    public int RunExecuteNonQuery(string query)
+    {
+        var dal = new BaseDataAccess(_connectionString);
+        return dal.ExecuteNonQuery(query);
+    }
+
+    public int RunExecuteNonQueryWithParams(string query, JObject queryparams)
+    {
+        var dal = new BaseDataAccess(_connectionString);
+        return dal.ExecuteNonQueryWithParams(query, queryparams);
+    }
+
+    public int RunExecuteQueryAndResponseEffectedCount(string query, JObject queryparams)
+    {
+        var dal = new BaseDataAccess(_connectionString);
+        return dal.ExecuteQueryAndResponseEffectedCount(query, queryparams);
+    }
+
+    public async Task<T> GetAsync<T>(string command, object parms)
+    {
+        T result;
+        using (MySqlConnection conn = new MySqlConnection(_connectionString))
+        {
+            result = (await conn.QueryAsync<T>(command, parms).ConfigureAwait(false)).FirstOrDefault();
+        }
+        return result;
+    }
+
+    public T GetSync<T>(string command, object parms)
+    {
+        T result;
+        using (MySqlConnection conn = new MySqlConnection(_connectionString))
+        {
+            result = conn.Query<T>(command, parms).FirstOrDefault();
+        }
+        return result;
+    }
+
+    public async Task<IEnumerable<T>> GetListAsync<T>(string command, object parms, int? timeoutInSeconds = null)
+    {
+        using (MySqlConnection conn = new MySqlConnection(_connectionString))
+        {
+            await conn.OpenAsync().ConfigureAwait(false);
+
+            var commandDefinition = new CommandDefinition(command, parms, commandTimeout: timeoutInSeconds);
+            var result = await conn.QueryAsync<T>(commandDefinition).ConfigureAwait(false);
+            return result;
+        }
+    }
+
+    public IEnumerable<T> GetList<T>(string command, object parms, int? timeoutInSeconds = null)
+    {
+        using (MySqlConnection conn = new MySqlConnection(_connectionString))
+        {
+            conn.Open();
+
+            var commandDefinition = new CommandDefinition(command, parms, commandTimeout: timeoutInSeconds);
+            var result = conn.Query<T>(commandDefinition);
+            return result;
+        }
+    }
+    public int QuerySingle(string command, object parms)
+    {
+        int result = -1;
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+            result = connection.QuerySingle<int>(command, parms);
+        }
+        return result;
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Channel>(entity =>
@@ -145,7 +258,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<CollectPost>(entity =>
         {
-            entity.HasKey(e => e.PostId).HasName("PK__Collect___5875F7AD9AB665F5");
+            entity.HasKey(e => e.PostId).HasName("PK__Collect___5875F7AD26F33F2B");
 
             entity.ToTable("Collect_Posts");
 
@@ -267,6 +380,17 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.UserTypeId).HasColumnName("User_Type_Id");
         });
 
+        modelBuilder.Entity<PostCommand>(entity =>
+        {
+            entity.HasKey(e => e.CommandId).HasName("PK__PostComm__6B410B06CA45DDF2");
+
+            entity.ToTable("PostCommand");
+
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Created_Date");
+        });
+
         modelBuilder.Entity<PostImage>(entity =>
         {
             entity.HasKey(e => e.UrlId).HasName("PK__Post_Ima__A648537B6D74C9A6");
@@ -280,6 +404,46 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(100);
             entity.Property(e => e.PostId).HasColumnName("Post_Id");
             entity.Property(e => e.Url).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<PostPrivacy>(entity =>
+        {
+            entity.HasKey(e => e.PrivacyId).HasName("PK__PostPriv__1F7D0E970E2B12DE");
+
+            entity.ToTable("PostPrivacy");
+
+            entity.Property(e => e.Description).HasMaxLength(200);
+            entity.Property(e => e.Title).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<PostShare>(entity =>
+        {
+            entity.HasKey(e => e.ShareId).HasName("PK__PostShar__D32A3FEE18ACCC78");
+
+            entity.ToTable("PostShare");
+
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Created_Date");
+        });
+
+        modelBuilder.Entity<React>(entity =>
+        {
+            entity.HasKey(e => e.ReactId).HasName("PK__React__7661AD2F819FB25D");
+
+            entity.ToTable("React");
+
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Created_Date");
+        });
+
+        modelBuilder.Entity<ReactType>(entity =>
+        {
+            entity.HasKey(e => e.TypeId).HasName("PK__ReactTyp__516F03B539D74810");
+
+            entity.Property(e => e.Description).HasMaxLength(50);
+            entity.Property(e => e.Icon).HasMaxLength(30);
         });
 
         modelBuilder.Entity<StatusType>(entity =>
@@ -299,15 +463,18 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__B9BE370FFA5AB70B");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__B9BE370F11BFFDCB");
 
-            entity.HasIndex(e => e.Email, "UQ__Users__AB6E6164ED323E83").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__AB6E616487CB97D3").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.DateCreated)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("date_created");
+            entity.Property(e => e.DeviceId)
+                .HasMaxLength(255)
+                .HasColumnName("device_Id");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
