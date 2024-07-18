@@ -11,6 +11,7 @@
     <ProjectReference Include="..\KoiCoi.Mapper\KoiCoi.Mapper.csproj" />
     <ProjectReference Include="..\KoiCoi.Models\KoiCoi.Models.csproj" />
     <ProjectReference Include="..\KoiCoi.Shared\KoiCoi.Shared.csproj" />
+	<ProjectReference Include="..\KoiCoi.Operational\KoiCoi.Operational.csproj" />
   </ItemGroup>
 
 </Project>

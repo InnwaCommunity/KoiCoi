@@ -5,12 +5,10 @@ D:\published\KoiCoi\KoiCoi.Operational\bin\Debug\net7.0\KoiCoi.Operational.pdb
 D:\published\KoiCoi\KoiCoi.Operational\bin\Debug\net7.0\KoiCoi.Database.dll
 D:\published\KoiCoi\KoiCoi.Operational\bin\Debug\net7.0\KoiCoi.Mapper.dll
 D:\published\KoiCoi\KoiCoi.Operational\bin\Debug\net7.0\KoiCoi.Models.dll
-D:\published\KoiCoi\KoiCoi.Operational\bin\Debug\net7.0\KoiCoi.Modules.dll
 D:\published\KoiCoi\KoiCoi.Operational\bin\Debug\net7.0\KoiCoi.Shared.dll
 D:\published\KoiCoi\KoiCoi.Operational\bin\Debug\net7.0\KoiCoi.Database.pdb
 D:\published\KoiCoi\KoiCoi.Operational\bin\Debug\net7.0\KoiCoi.Mapper.pdb
 D:\published\KoiCoi\KoiCoi.Operational\bin\Debug\net7.0\KoiCoi.Models.pdb
-D:\published\KoiCoi\KoiCoi.Operational\bin\Debug\net7.0\KoiCoi.Modules.pdb
 D:\published\KoiCoi\KoiCoi.Operational\bin\Debug\net7.0\KoiCoi.Shared.pdb
 D:\published\KoiCoi\KoiCoi.Operational\obj\Debug\net7.0\KoiCoi.Operational.csproj.AssemblyReference.cache
 D:\published\KoiCoi\KoiCoi.Operational\obj\Debug\net7.0\KoiCoi.Operational.GeneratedMSBuildEditorConfig.editorconfig

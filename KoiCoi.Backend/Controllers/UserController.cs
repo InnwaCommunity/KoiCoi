@@ -8,15 +8,17 @@ public class UserController : ControllerBase
 {
     private readonly BL_User _bLUser;
 
-    public UserController(BL_User _blUser)
+    public UserController(BL_User blUser)
     {
-        _bLUser = _blUser;
+        _bLUser = blUser;
     }
-    //[HttpPost("CreateAccount",Name = "CreateAccount")]
-    //public async Task<IActionResult> CreateAccount([FromBody] Newtonsoft.Json.Linq.JObject param)
-    //{
 
-    //}
+    [HttpPost("RegisterAccount",Name = "RegisterAccount")]
+    public async Task<IActionResult> RegisterAccount(RequestUserDto requestUser)
+    {
+        var respo = await _bLUser.CreateAccount(requestUser);
+        return Ok(respo);
+    }
 
     [HttpGet()]
     public async Task<IActionResult> SearchUser()

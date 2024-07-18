@@ -12,7 +12,6 @@
           "KoiCoi.Database": "1.0.0",
           "KoiCoi.Mapper": "1.0.0",
           "KoiCoi.Models": "1.0.0",
-          "KoiCoi.Modules": "1.0.0",
           "KoiCoi.Shared": "1.0.0",
           "MailKit": "4.7.1.1",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "7.0.20",
@@ -2853,17 +2852,6 @@
           "KoiCoi.Models.dll": {}
         }
       },
-      "KoiCoi.Modules/1.0.0": {
-        "dependencies": {
-          "KoiCoi.Database": "1.0.0",
-          "KoiCoi.Mapper": "1.0.0",
-          "KoiCoi.Models": "1.0.0",
-          "KoiCoi.Shared": "1.0.0"
-        },
-        "runtime": {
-          "KoiCoi.Modules.dll": {}
-        }
-      },
       "KoiCoi.Shared/1.0.0": {
         "runtime": {
           "KoiCoi.Shared.dll": {}
@@ -4645,11 +4633,6 @@
       "sha512": ""
     },
     "KoiCoi.Models/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "KoiCoi.Modules/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

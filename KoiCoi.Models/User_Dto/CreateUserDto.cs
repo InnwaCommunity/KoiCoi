@@ -6,24 +6,29 @@ using System.Threading.Tasks;
 
 namespace KoiCoi.Models.User_Dto;
 
-public class CreateUserDto
+public class ResponseUserDto
 {
-    public int UserId { get; set; }
 
+    public string UserIdval { get; set; } = null!;
     public string Name { get; set; } = null!;
 
-    public string Email { get; set; } = null!;
-
     public string Password { get; set; } = null!;
-
-    public string? Phone { get; set; }
-
-    public string PasswordHash { get; set; } = null!;
-
-    public DateTime? DateCreated { get; set; }
 }
 
 public class RequestUserDto
 {
+    public string? Name { get; set; }
+    public string? UserIdval { get; set; }
 
+    public string? Email { get; set; }
+
+    public string? Password { get; set; }
+
+    public string? Phone { get; set; }
+
+    public string? PasswordHash { get; set; }
+
+    public string DeviceId { get; set; } = null!;
+
+    public DateTime? DateCreated { get; set; }
 }

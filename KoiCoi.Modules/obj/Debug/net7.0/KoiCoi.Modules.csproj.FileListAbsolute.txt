@@ -42,3 +42,5 @@ D:\published\KoiCoi\KoiCoi.Modules\obj\Debug\net7.0\KoiCoi.Modules.dll
 D:\published\KoiCoi\KoiCoi.Modules\obj\Debug\net7.0\refint\KoiCoi.Modules.dll
 D:\published\KoiCoi\KoiCoi.Modules\obj\Debug\net7.0\KoiCoi.Modules.pdb
 D:\published\KoiCoi\KoiCoi.Modules\obj\Debug\net7.0\ref\KoiCoi.Modules.dll
+D:\published\KoiCoi\KoiCoi.Modules\bin\Debug\net7.0\KoiCoi.Operational.dll
+D:\published\KoiCoi\KoiCoi.Modules\bin\Debug\net7.0\KoiCoi.Operational.pdb

@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Dapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using MySqlConnector;
-using Newtonsoft.Json.Linq;
 
 namespace KoiCoi.Database.AppDbContextModels;
 
 public partial class AppDbContext : DbContext
 {
-    private string _connectionString = "";
     public AppDbContext()
     {
     }
@@ -18,10 +13,6 @@ public partial class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
-        var appsettingbuilder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
-        var Configuration = appsettingbuilder.Build();
-
-        _connectionString = Environment.GetEnvironmentVariable("DBSTRING") ?? Configuration.GetConnectionString("DefaultConnection")!;
     }
 
     public virtual DbSet<Channel> Channels { get; set; }
@@ -66,104 +57,10 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<UserType> UserTypes { get; set; }
 
-    public dynamic RunExecuteQuery(string query, string queryparams)
-    {
-        var dal = new BaseDataAccess(_connectionString);
-        return dal.ExecuteQuery(query, queryparams);
-    }
-    public async Task<dynamic> RunExecuteQueryAsync(string query, string queryparams)
-    {
-        var dal = new BaseDataAccess(_connectionString);
-        return await dal.ExecuteQueryAsync(query, queryparams);
-    }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=NYEINCHANNMOE;Database=Koi_Coi;User Id=sa;Password=nyein@8834;TrustServerCertificate=True;");
 
-    public dynamic RunExecuteRawQuery(string query, JObject queryparams)
-    {
-        var dal = new BaseDataAccess(_connectionString);
-        return dal.ExecuteQueryNew(query, queryparams);
-    }
-    public dynamic RunExecuteReportQuery(string query)
-    {
-        var dal = new BaseDataAccess(_connectionString);
-        return dal.ExecuteReportQuery(query);
-    }
-
-    public async Task<dynamic> RunExecuteRawQueryAsync(string query, JObject queryparams)
-    {
-        var dal = new BaseDataAccess(Database.GetDbConnection());
-        return await dal.ExecuteQueryRawAsync(query, queryparams);
-    }
-    public int RunExecuteNonQuery(string query)
-    {
-        var dal = new BaseDataAccess(_connectionString);
-        return dal.ExecuteNonQuery(query);
-    }
-
-    public int RunExecuteNonQueryWithParams(string query, JObject queryparams)
-    {
-        var dal = new BaseDataAccess(_connectionString);
-        return dal.ExecuteNonQueryWithParams(query, queryparams);
-    }
-
-    public int RunExecuteQueryAndResponseEffectedCount(string query, JObject queryparams)
-    {
-        var dal = new BaseDataAccess(_connectionString);
-        return dal.ExecuteQueryAndResponseEffectedCount(query, queryparams);
-    }
-
-    public async Task<T> GetAsync<T>(string command, object parms)
-    {
-        T result;
-        using (MySqlConnection conn = new MySqlConnection(_connectionString))
-        {
-            result = (await conn.QueryAsync<T>(command, parms).ConfigureAwait(false)).FirstOrDefault();
-        }
-        return result;
-    }
-
-    public T GetSync<T>(string command, object parms)
-    {
-        T result;
-        using (MySqlConnection conn = new MySqlConnection(_connectionString))
-        {
-            result = conn.Query<T>(command, parms).FirstOrDefault();
-        }
-        return result;
-    }
-
-    public async Task<IEnumerable<T>> GetListAsync<T>(string command, object parms, int? timeoutInSeconds = null)
-    {
-        using (MySqlConnection conn = new MySqlConnection(_connectionString))
-        {
-            await conn.OpenAsync().ConfigureAwait(false);
-
-            var commandDefinition = new CommandDefinition(command, parms, commandTimeout: timeoutInSeconds);
-            var result = await conn.QueryAsync<T>(commandDefinition).ConfigureAwait(false);
-            return result;
-        }
-    }
-
-    public IEnumerable<T> GetList<T>(string command, object parms, int? timeoutInSeconds = null)
-    {
-        using (MySqlConnection conn = new MySqlConnection(_connectionString))
-        {
-            conn.Open();
-
-            var commandDefinition = new CommandDefinition(command, parms, commandTimeout: timeoutInSeconds);
-            var result = conn.Query<T>(commandDefinition);
-            return result;
-        }
-    }
-    public int QuerySingle(string command, object parms)
-    {
-        int result = -1;
-        using (MySqlConnection connection = new MySqlConnection(_connectionString))
-        {
-            connection.Open();
-            result = connection.QuerySingle<int>(command, parms);
-        }
-        return result;
-    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Channel>(entity =>
@@ -463,9 +360,9 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__B9BE370F11BFFDCB");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__B9BE370FA2DFBDAF");
 
-            entity.HasIndex(e => e.Email, "UQ__Users__AB6E616487CB97D3").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__AB6E616489DE77EC").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.DateCreated)
@@ -473,7 +370,7 @@ public partial class AppDbContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("date_created");
             entity.Property(e => e.DeviceId)
-                .HasMaxLength(255)
+                .HasMaxLength(100)
                 .HasColumnName("device_Id");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
@@ -485,11 +382,14 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("password");
             entity.Property(e => e.PasswordHash)
-                .HasMaxLength(255)
+                .HasMaxLength(100)
                 .HasColumnName("password_hash");
             entity.Property(e => e.Phone)
                 .HasMaxLength(15)
                 .HasColumnName("phone");
+            entity.Property(e => e.UserIdval)
+                .HasMaxLength(100)
+                .HasColumnName("userIdval");
         });
 
         modelBuilder.Entity<UserProfile>(entity =>

@@ -7,6 +7,8 @@ public partial class User
 {
     public int UserId { get; set; }
 
+    public string UserIdval { get; set; } = null!;
+
     public string Name { get; set; } = null!;
 
     public string? Email { get; set; }
@@ -17,7 +19,7 @@ public partial class User
 
     public string? PasswordHash { get; set; }
 
-    public string DeviceId { get; set; } = null!;
+    public string? DeviceId { get; set; }
 
     public DateTime? DateCreated { get; set; }
 }

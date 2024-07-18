@@ -4414,6 +4414,7 @@
           "KoiCoi.Database": "1.0.0",
           "KoiCoi.Mapper": "1.0.0",
           "KoiCoi.Models": "1.0.0",
+          "KoiCoi.Operational": "1.0.0",
           "KoiCoi.Shared": "1.0.0"
         },
         "compile": {
@@ -4431,7 +4432,6 @@
           "KoiCoi.Database": "1.0.0",
           "KoiCoi.Mapper": "1.0.0",
           "KoiCoi.Models": "1.0.0",
-          "KoiCoi.Modules": "1.0.0",
           "KoiCoi.Shared": "1.0.0",
           "MailKit": "4.7.1.1",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "7.0.20",

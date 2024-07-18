@@ -9,4 +9,4 @@ global using KoiCoi.Modules.Repository.User;
 global using KoiCoi.Models.Login_Models;
 global using KoiCoi.Operational.Encrypt;
 global using KoiCoi.Operational;
-global using KoiCoi.Modules.Repository.Base;
+global using KoiCoi.Models.User_Dto;

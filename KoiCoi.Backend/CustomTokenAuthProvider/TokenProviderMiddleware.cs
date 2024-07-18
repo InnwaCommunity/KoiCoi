@@ -76,7 +76,7 @@ public class TokenProviderMiddleware : IMiddleware
             context.Request.Path.ToString().ToLower().Contains("forgotpassword/requestbyemail") ||
             context.Request.Path.ToString().ToLower().Contains("forgotpassword/changepasswordbyotp") ||
             context.Request.Path.ToString().ToLower().Contains("swagger/") ||
-            context.Request.Path.ToString().ToLower().Contains("/api/user/createuseraccount")
+            context.Request.Path.ToString().ToLower().Contains("/api/v1/user/registeraccount")
         )
         {
             await next(context);
@@ -138,6 +138,7 @@ public class TokenProviderMiddleware : IMiddleware
         LoginDataModel? loginData = new();
         string username = "";
         string password = "";
+        string userIdval = "";
         string adminemail = "";
         string _loginType = "";
 
@@ -152,10 +153,12 @@ public class TokenProviderMiddleware : IMiddleware
 
                 if (loginData.UserName == null) loginData.UserName = "";
                 if (loginData.Password == null) loginData.Password = "";
+                if (loginData.UserIdval == null) loginData.UserIdval = "";
                 if (loginData.LoginType == null) loginData.LoginType = "";
                 if (loginData.Email == null) loginData.Email = "";
                 username = loginData.UserName;
                 password = loginData.Password;
+                userIdval = loginData.UserIdval;
                 adminemail = loginData.Email;
                 _loginType = loginData.LoginType;
             }
@@ -177,14 +180,14 @@ public class TokenProviderMiddleware : IMiddleware
 
             if (_loginType == "1")
             {
-                loginresult = await DoAdminTypeloginValidation(username, adminemail, password);
+                loginresult = await DoAdminTypeloginValidation(username, userIdval, password);
                 if (loginresult.error == 0)
                 {
                     loginresult = loginresult.data;
-                    AdminID = loginresult.AdminId;
-                    AdminName = loginresult.AdminName;
-                    AdminEmail = loginresult.AdminEmail;
-                    AdminLevelID = loginresult.AdminLevelId;
+                    AdminID = loginresult.UserId;
+                    AdminName = loginresult.Name;
+                    AdminEmail = loginresult.Email ?? "";
+                    AdminLevelID =  1;
                 }
                 else
                 {
@@ -221,14 +224,13 @@ public class TokenProviderMiddleware : IMiddleware
             var response = new
             {
                 AccessToken = encodedJwt,
-                ExpiresIn = (int)_options.Expiration.TotalSeconds,
+                //ExpiresIn = (int)_options.Expiration.TotalSeconds,
                 // UserID = AdminID.ToString(),
-                UserIDval = Encryption.EncryptID(AdminID.ToString(), LoginUserID.ToString()),
-                UserID = AdminID.ToString(),
-                LoginType = _loginType,
-                UserLevelID = AdminLevelID,
-                AdminEmail = AdminEmail,
-                DisplayName = AdminName
+                //UserIDval = Encryption.EncryptID(AdminID.ToString(), LoginUserID.ToString()),
+                //UserID = AdminID.ToString(),
+                //LoginType = _loginType,
+                //UserLevelID = AdminLevelID,
+                //DisplayName = AdminName
             };
             context.Response.ContentType = "application/json";
             await context.Response.WriteAsync(JsonConvert.SerializeObject(response, _serializerSettings));
@@ -244,23 +246,23 @@ public class TokenProviderMiddleware : IMiddleware
 
 
 
-    async Task<dynamic> DoAdminTypeloginValidation(string username, string email, string password)
+    async Task<dynamic> DoAdminTypeloginValidation(string username, string userIdval, string password)
     {
         try
         {
             //var objAdmin = await _repository.Admin.GetAdminByLoginName(username);
-            var resultAdmin = await _repository.Users.Where(adm => adm.Name == username && adm.Email == email).ToListAsync();
+            var resultAdmin = await _repository.Users.Where(adm => adm.Name == username && adm.UserIdval == userIdval).ToListAsync();
             if (resultAdmin == null || !resultAdmin.Any())
                 throw new ValidationException("Login User " + username + " not found.");
 
-            var objAdmin = resultAdmin.First();
+            var objAdmin = resultAdmin.FirstOrDefault();
             if (objAdmin == null)
             {
                 throw new ValidationException("Invalid Login User " + username);
             }
 
-            string oldsalt = objAdmin.PasswordHash;
-            string oldhash = objAdmin.Password;
+            string oldsalt = objAdmin.PasswordHash!;
+            string oldhash = objAdmin.Password!;
             bool flag = SaltedHash.Verify(oldsalt, oldhash, password);
 
             if (flag == false)  //incorrect pwd
@@ -482,4 +484,5 @@ public class TokenProviderMiddleware : IMiddleware
         }
         return encodedJwt;
     }
+
 }

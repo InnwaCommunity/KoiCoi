@@ -30,7 +30,6 @@
     <ProjectReference Include="..\KoiCoi.Database\KoiCoi.Database.csproj" />
     <ProjectReference Include="..\KoiCoi.Mapper\KoiCoi.Mapper.csproj" />
     <ProjectReference Include="..\KoiCoi.Models\KoiCoi.Models.csproj" />
-    <ProjectReference Include="..\KoiCoi.Modules\KoiCoi.Modules.csproj" />
     <ProjectReference Include="..\KoiCoi.Shared\KoiCoi.Shared.csproj" />
   </ItemGroup>
 

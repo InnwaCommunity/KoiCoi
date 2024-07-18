@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿/*using Newtonsoft.Json.Linq;
 using System.Linq.Expressions;
 
 namespace KoiCoi.Modules.Repository.Base;
@@ -34,3 +34,5 @@ public interface IRepositoryBase<T>
 
 }
 
+
+ */

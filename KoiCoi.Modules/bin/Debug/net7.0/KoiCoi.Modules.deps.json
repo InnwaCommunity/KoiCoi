@@ -11,6 +11,7 @@
           "KoiCoi.Database": "1.0.0",
           "KoiCoi.Mapper": "1.0.0",
           "KoiCoi.Models": "1.0.0",
+          "KoiCoi.Operational": "1.0.0",
           "KoiCoi.Shared": "1.0.0"
         },
         "runtime": {
@@ -2802,6 +2803,27 @@
           "KoiCoi.Models.dll": {}
         }
       },
+      "KoiCoi.Operational/1.0.0": {
+        "dependencies": {
+          "Dapper": "2.1.35",
+          "KoiCoi.Database": "1.0.0",
+          "KoiCoi.Mapper": "1.0.0",
+          "KoiCoi.Models": "1.0.0",
+          "KoiCoi.Shared": "1.0.0",
+          "MailKit": "4.7.1.1",
+          "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "7.0.20",
+          "Microsoft.EntityFrameworkCore": "7.0.20",
+          "Microsoft.EntityFrameworkCore.InMemory": "7.0.20",
+          "Microsoft.EntityFrameworkCore.SqlServer": "7.0.20",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "7.0.12",
+          "Pomelo.EntityFrameworkCore.MySql": "7.0.0",
+          "Serilog.AspNetCore": "7.0.0",
+          "Swashbuckle.AspNetCore": "6.5.0"
+        },
+        "runtime": {
+          "KoiCoi.Operational.dll": {}
+        }
+      },
       "KoiCoi.Shared/1.0.0": {
         "runtime": {
           "KoiCoi.Shared.dll": {}
@@ -4555,6 +4577,11 @@
       "sha512": ""
     },
     "KoiCoi.Models/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "KoiCoi.Operational/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
