@@ -58,12 +58,14 @@ public static class ModularService
     public static WebApplicationBuilder AddDataAccessService(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<DA_User>();
+        builder.Services.AddScoped<DA_ChangePassword>();
         return builder;
     }
 
     public static WebApplicationBuilder AddBusinessLogicService(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<BL_User>();
+        builder.Services.AddScoped<BL_ChangePassword>();
         return builder;
     }
 

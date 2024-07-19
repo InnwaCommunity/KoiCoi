@@ -37,6 +37,10 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<EventMembership> EventMemberships { get; set; }
 
+    public virtual DbSet<InformMail> InformMails { get; set; }
+
+    public virtual DbSet<Otp> Otps { get; set; }
+
     public virtual DbSet<PostCommand> PostCommands { get; set; }
 
     public virtual DbSet<PostImage> PostImages { get; set; }
@@ -275,6 +279,39 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.EventId).HasColumnName("Event_Id");
             entity.Property(e => e.UserId).HasColumnName("User_Id");
             entity.Property(e => e.UserTypeId).HasColumnName("User_Type_Id");
+        });
+
+        modelBuilder.Entity<InformMail>(entity =>
+        {
+            entity.HasKey(e => e.MailId).HasName("PK__InformMa__09A8749A6D76A451");
+
+            entity.Property(e => e.AppPassword).HasMaxLength(100);
+            entity.Property(e => e.DateCreated)
+                .HasColumnType("datetime")
+                .HasColumnName("date_created");
+            entity.Property(e => e.FromMail).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<Otp>(entity =>
+        {
+            entity.HasKey(e => e.Otpid).HasName("PK__OTP__5C2EC48249FF1236");
+
+            entity.ToTable("OTP");
+
+            entity.Property(e => e.Otpid).HasColumnName("OTPId");
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Created_Date");
+            entity.Property(e => e.EmailPhone).HasMaxLength(100);
+            entity.Property(e => e.Ipaddress)
+                .HasMaxLength(100)
+                .HasColumnName("IPAddress");
+            entity.Property(e => e.LastModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Otptoken)
+                .HasMaxLength(50)
+                .HasColumnName("OTPToken");
+            entity.Property(e => e.Passcode).HasMaxLength(30);
+            entity.Property(e => e.SendDateTime).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<PostCommand>(entity =>

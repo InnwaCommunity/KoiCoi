@@ -1,7 +1,5 @@
-﻿using MailKit.Security;
-using Microsoft.AspNetCore.Hosting;
+﻿
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using MimeKit;
 using MailKit.Net.Smtp;
 using Serilog;
@@ -15,11 +13,45 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Configuration;
+using System.Net.Mail;
+using System.Net;
 
 namespace KoiCoi.Operational;
 
 public class Globalfunction
 {
+    public static ResponseData SendEmailAsync(string fromMail,string appPw,string ToEmail,string Subject,string Message)
+    {
+        
+        ResponseData responseData = new ResponseData();
+        try
+        {
+            MailMessage message = new MailMessage();
+            message.From = new MailAddress(fromMail);
+            message.Subject = Subject;
+            message.To.Add(new MailAddress(ToEmail));
+            message.Body = $"<html><body>{Message}</body></html>";
+            message.IsBodyHtml = true;
+
+            var smtpClient = new System.Net.Mail.SmtpClient("smtp.gmail.com")
+            {
+                Port = 587,
+                Credentials = new NetworkCredential(fromMail, appPw),
+                EnableSsl = true,
+            };
+
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Send(message);
+            responseData.StatusCode = 1;
+            return responseData;
+        }
+        catch (Exception ex)
+        {
+            responseData.StatusCode = 0;
+            responseData.Message = ex.Message;
+            return responseData;
+        }
+    }
     /*
     public static dynamic SendEmailAsync(string ToEmail, string Subject, string Message, Boolean IsHTML, string ReplyToEmail = "", string ReplyToName = "")
     {
@@ -66,6 +98,7 @@ public class Globalfunction
 
 
      */
+
     public static string GenerateRandomChar(string[] AllowedCharacters)
     {
         string sOTP;
@@ -153,7 +186,7 @@ public class Globalfunction
                 new Claim("UserID",obj.UserID),
                 new Claim("LoginType",obj.LoginType),
                 new Claim("UserLevelID", obj.UserLevelID),
-                new Claim("isAdmin",obj.isAdmin.ToString()),
+                //new Claim("isAdmin",obj.isAdmin.ToString()),
                 new Claim("TicketExpireDate", obj.TicketExpireDate.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, obj.Sub),
                 new Claim(JwtRegisteredClaimNames.Jti, obj.Jti),
@@ -170,7 +203,7 @@ public class Globalfunction
             obj.UserID = tokenS.Claims.First(claim => claim.Type == "UserID").Value;
             obj.LoginType = tokenS.Claims.First(claim => claim.Type == "LoginType").Value;
             obj.UserLevelID = tokenS.Claims.First(claim => claim.Type == "UserLevelID").Value;
-            obj.isAdmin = Convert.ToBoolean(tokenS.Claims.First(claim => claim.Type == "isAdmin").Value);
+            //obj.isAdmin = Convert.ToBoolean(tokenS.Claims.First(claim => claim.Type == "isAdmin").Value);
             obj.Sub = tokenS.Claims.First(claim => claim.Type == "sub").Value;
             string TicketExpire = tokenS.Claims.First(claim => claim.Type == "TicketExpireDate").Value;
             DateTime TicketExpireDate = DateTime.Parse(TicketExpire);

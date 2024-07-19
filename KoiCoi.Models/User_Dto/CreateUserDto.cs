@@ -17,6 +17,7 @@ public class ResponseUserDto
 
 public class RequestUserDto
 {
+    public int? Id { get; set; }
     public string? Name { get; set; }
     public string? UserIdval { get; set; }
 
@@ -28,7 +29,7 @@ public class RequestUserDto
 
     public string? PasswordHash { get; set; }
 
-    public string DeviceId { get; set; } = null!;
+    public string? DeviceId { get; set; }
 
     public DateTime? DateCreated { get; set; }
 }

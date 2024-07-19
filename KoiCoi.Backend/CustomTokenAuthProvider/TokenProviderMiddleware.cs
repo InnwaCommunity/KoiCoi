@@ -208,7 +208,6 @@ public class TokenProviderMiddleware : IMiddleware
                 Jti = await _options.NonceGenerator(),
                 Iat = new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString(),
                 UserID = AdminID.ToString(),
-                UserName = AdminName,
                 UserLevelID = AdminLevelID.ToString(),
                 LoginType = _loginType.ToString(),
                 TicketExpireDate = now.Add(_options.Expiration)
@@ -219,7 +218,7 @@ public class TokenProviderMiddleware : IMiddleware
             context.User.AddIdentity(appIdentity); //add custom identity because default identity has delay to get data in EventLogRepository
 
             string encodedJwt = CreateEncryptedJWTToken(claims);
-            int LoginUserID = Convert.ToInt32(_tokenData.UserID);
+            //int LoginUserID = Convert.ToInt32(_tokenData.UserID);
 
             var response = new
             {
@@ -378,7 +377,7 @@ public class TokenProviderMiddleware : IMiddleware
                     _newtokenData.Jti = await _options.NonceGenerator();
                     _newtokenData.Iat = new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString();
                     _newtokenData.UserID = userObj.UserId.ToString();
-                    _newtokenData.UserName = userObj.Name;
+                    //_newtokenData.UserName = userObj.Name;
                     //_newtokenData.UserLevelID = userObj.AdminLevelId.ToString();
                     _newtokenData.TicketExpireDate = now.Add(_options.Expiration);
                     _newtokenData.LoginType = _tokenData.LoginType;
@@ -388,7 +387,7 @@ public class TokenProviderMiddleware : IMiddleware
                     _tokenData.Jti = await _options.NonceGenerator();
                     _tokenData.Iat = new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString();
                     _tokenData.UserID = userObj.UserId.ToString();
-                    _tokenData.UserName = userObj.Name;
+                    //_tokenData.UserName = userObj.Name;
                     // var _newtokenData = new TokenData()
                     // {
                     //   Sub = userObj.AdminName,

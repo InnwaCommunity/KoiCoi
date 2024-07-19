@@ -1,9 +1,5 @@
 ﻿
 
-using Microsoft.AspNetCore.Http;
-using System.Security.Cryptography;
-using System.Text;
-
 namespace KoiCoi.Modules.Repository.User;
 
 public class BL_User
@@ -30,7 +26,6 @@ public class BL_User
             RandomPassword passwordGenerator = new RandomPassword();
             if (requestUserDto.Name == null && requestUserDto.Password == null)
             {
-                //string password = CreatePassword(11);
                 string password = passwordGenerator.CreatePassword(11, 3);
                 string temppassword = password;
                 string name = Guid.NewGuid().ToString();
@@ -63,5 +58,10 @@ public class BL_User
             data.Message = ex.Message;
             return data;
         }
+    }
+
+    public async Task<ResponseData> UpdateUserInfo(RequestUserDto requestUserDto)
+    {
+        return await _daUser.UpdateUserInfo(requestUserDto);
     }
 }

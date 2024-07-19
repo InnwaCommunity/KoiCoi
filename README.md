@@ -1,3 +1,12 @@
+                                    KoiCoi
+KoiCoi ဟာငွေကြေးစုဆောင်းမှုကို support ပေးသော software ဖြစ်ပါတယ်။
+
+Features
+
+
+
+
+
 ```bash
 dotnet ef dbcontext scaffold "Server=NYEINCHANNMOE;Database=Koi_Coi;User Id=sa;Password=nyein@8834;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -o AppDbContextModels -c AppDbContext -f
 
