@@ -13,13 +13,17 @@ public partial class User
 
     public string? Email { get; set; }
 
-    public string? Password { get; set; }
+    public string Password { get; set; } = null!;
 
     public string? Phone { get; set; }
 
-    public string? PasswordHash { get; set; }
+    public string PasswordHash { get; set; } = null!;
 
     public string? DeviceId { get; set; }
 
-    public DateTime? DateCreated { get; set; }
+    public DateTime DateCreated { get; set; }
+
+    public DateTime ModifiedDate { get; set; }
+
+    public bool? Inactive { get; set; }
 }

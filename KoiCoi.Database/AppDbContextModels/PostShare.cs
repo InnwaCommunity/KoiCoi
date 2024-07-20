@@ -13,5 +13,9 @@ public partial class PostShare
 
     public int UserId { get; set; }
 
+    public DateTime? ModifiedDate { get; set; }
+
     public DateTime? CreatedDate { get; set; }
+
+    public bool? Inactive { get; set; }
 }

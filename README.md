@@ -13,4 +13,9 @@ dotnet ef dbcontext scaffold "Server=NYEINCHANNMOE;Database=Koi_Coi;User Id=sa;P
 Scaffold-DbContext "Server=NYEINCHANNMOE;Database=Koi_Coi;User ID=sa; Password=nyein@8834;Integrated Security=True;Trusted_Connection=true;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir AppDbContext -Tables Tbl_AdminUserLogin -f
 ```
 
+```bash
+Encryption.EncryptID(item.UserId.ToString(), LoginUserId.ToString())
+Convert.ToInt32(Encryption.DecryptID(id, LoginEmpID.ToString()))
+```
+
 

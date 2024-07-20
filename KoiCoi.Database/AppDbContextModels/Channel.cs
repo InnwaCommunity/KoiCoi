@@ -23,5 +23,9 @@ public partial class Channel
 
     public string? LastBalance { get; set; }
 
-    public DateTime? CreatedDate { get; set; }
+    public DateTime DateCreated { get; set; }
+
+    public DateTime ModifiedDate { get; set; }
+
+    public bool? Inactive { get; set; }
 }

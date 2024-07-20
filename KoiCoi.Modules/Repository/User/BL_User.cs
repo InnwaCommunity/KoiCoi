@@ -1,5 +1,8 @@
 ﻿
 
+using KoiCoi.Models.User_Dto;
+using KoiCoi.Models.Via;
+
 namespace KoiCoi.Modules.Repository.User;
 
 public class BL_User
@@ -15,41 +18,40 @@ public class BL_User
         return await _daUser.GetStatusType();
     }
 
-    public async Task<ResponseData> CreateAccount(RequestUserDto requestUserDto)
+    public async Task<ResponseData> CreateAccount(RequestUserDto requestUser)
     {
         try
         {
-            requestUserDto.Email = requestUserDto.Email ?? "";
-            requestUserDto.Phone = requestUserDto.Phone ?? "";
-            requestUserDto.DeviceId = requestUserDto.DeviceId ?? "";
+            ViaUser viaUser = new ViaUser();
+            viaUser.Email = requestUser.Email ?? "";
+            viaUser.Phone = requestUser.Phone ?? "";
+            viaUser.DeviceId = requestUser.DeviceId ?? "";
             // Generate a new 12-character password with at least 1 non-alphanumeric character.
             RandomPassword passwordGenerator = new RandomPassword();
-            if (requestUserDto.Name == null && requestUserDto.Password == null)
+            if (requestUser.Name == null && requestUser.Password == null)
             {
                 string password = passwordGenerator.CreatePassword(11, 3);
                 string temppassword = password;
                 string name = Guid.NewGuid().ToString();
                 string salt = SaltedHash.GenerateSalt();
                 string userIdval =Encryption.EncryptID(name,salt) + passwordGenerator.CreatePassword(name.Length, name.Length/3);
-                requestUserDto.UserIdval = userIdval;
+                viaUser.UserIdval = userIdval;
                 password = SaltedHash.ComputeHash(salt, password.ToString());
 
-                requestUserDto.Name = name;
-                requestUserDto.Password = password;
-                requestUserDto.PasswordHash = salt;
-                requestUserDto.DateCreated = DateTime.UtcNow;
-                return await _daUser.CreateAccount(requestUserDto,temppassword);
+                viaUser.Name = name;
+                viaUser.Password = password;
+                viaUser.PasswordHash = salt;
+                return await _daUser.CreateAccount(viaUser,temppassword);
             }
             else
             {
                 string salt = SaltedHash.GenerateSalt();
-                string tempPas = requestUserDto.Password!;
-                requestUserDto.Password = SaltedHash.ComputeHash(salt, requestUserDto.Password!.ToString());
-                requestUserDto.PasswordHash = salt;
-                string userIdval = Encryption.EncryptID(requestUserDto.Name!, salt) + passwordGenerator.CreatePassword(requestUserDto.Name!.Length, requestUserDto.Name!.Length / 3);
-                requestUserDto.UserIdval = userIdval;
-                requestUserDto.DateCreated = DateTime.UtcNow;
-                return await _daUser.CreateAccount(requestUserDto, tempPas);
+                string tempPas = requestUser.Password!;
+                viaUser.Password = SaltedHash.ComputeHash(salt, requestUser.Password!.ToString());
+                viaUser.PasswordHash = salt;
+                string userIdval = Encryption.EncryptID(requestUser.Name!, salt) + passwordGenerator.CreatePassword(requestUser.Name!.Length, requestUser.Name!.Length / 3);
+                viaUser.UserIdval = userIdval;
+                return await _daUser.CreateAccount(viaUser, tempPas);
             }
         }
         catch (Exception ex) {
@@ -60,8 +62,18 @@ public class BL_User
         }
     }
 
-    public async Task<ResponseData> UpdateUserInfo(RequestUserDto requestUserDto)
+    public async Task<ResponseData> UpdateUserInfo(RequestUserDto requestUserDto,int LoginUserId)
     {
-        return await _daUser.UpdateUserInfo(requestUserDto);
+        return await _daUser.UpdateUserInfo(requestUserDto, LoginUserId);
+    }
+
+    public async Task<ResponseData> FindUserByName(string name, int LoginUserId)
+    {
+        return await _daUser.FindUserByName(name, LoginUserId);
+    }
+
+    public async Task<ResponseData> DeleteLoginUser(int LoginUserId)
+    {
+        return await _daUser.DeleteLoginUser(LoginUserId);
     }
 }

@@ -39,6 +39,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<InformMail> InformMails { get; set; }
 
+    public virtual DbSet<InviteHistory> InviteHistories { get; set; }
+
     public virtual DbSet<Otp> Otps { get; set; }
 
     public virtual DbSet<PostCommand> PostCommands { get; set; }
@@ -69,22 +71,28 @@ public partial class AppDbContext : DbContext
     {
         modelBuilder.Entity<Channel>(entity =>
         {
-            entity.HasKey(e => e.ChannelId).HasName("PK__Channels__0548C1A0463CBB45");
+            entity.HasKey(e => e.ChannelId).HasName("PK__Channels__0548C1A0AACFB706");
 
             entity.Property(e => e.ChannelId).HasColumnName("Channel_Id");
             entity.Property(e => e.ChannelName)
                 .HasMaxLength(30)
                 .HasColumnName("Channel_Name");
             entity.Property(e => e.ChannelType).HasColumnName("Channel_Type");
-            entity.Property(e => e.CreatedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("Created_Date");
             entity.Property(e => e.CreatorId).HasColumnName("Creator_id");
             entity.Property(e => e.CurrencyId).HasColumnName("Currency_id");
+            entity.Property(e => e.DateCreated)
+                .HasColumnType("datetime")
+                .HasColumnName("date_created");
+            entity.Property(e => e.Inactive)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("inactive");
             entity.Property(e => e.LastBalance)
                 .HasMaxLength(200)
                 .HasColumnName("Last_Balance");
             entity.Property(e => e.MemberCount).HasColumnName("Member_Count");
+            entity.Property(e => e.ModifiedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("modifiedDate");
             entity.Property(e => e.StatusDescription).HasColumnName("Status_Description");
             entity.Property(e => e.TotalBalance)
                 .HasMaxLength(200)
@@ -112,7 +120,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<ChannelMembership>(entity =>
         {
-            entity.HasKey(e => e.MembershipId).HasName("PK__ChannelM__0C6DBAA798BD6952");
+            entity.HasKey(e => e.MembershipId).HasName("PK__ChannelM__0C6DBAA7E0426849");
 
             entity.ToTable("ChannelMembership");
 
@@ -159,7 +167,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<CollectPost>(entity =>
         {
-            entity.HasKey(e => e.PostId).HasName("PK__Collect___5875F7AD26F33F2B");
+            entity.HasKey(e => e.PostId).HasName("PK__Collect___5875F7ADFD5BC384");
 
             entity.ToTable("Collect_Posts");
 
@@ -173,6 +181,9 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("Created_Date");
             entity.Property(e => e.CreaterId).HasColumnName("Creater_Id");
             entity.Property(e => e.EventId).HasColumnName("Event_Id");
+            entity.Property(e => e.Inactive)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("inactive");
             entity.Property(e => e.ModifiedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("Modified_Date");
@@ -202,32 +213,16 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Event>(entity =>
         {
-            entity.HasKey(e => e.EventId).HasName("PK__Events__FD6AEB9CB940A555");
+            entity.HasKey(e => e.Eventid).HasName("PK__Events__7945F468AC4D19F4");
 
-            entity.Property(e => e.EventId).HasColumnName("Event_id");
-            entity.Property(e => e.ApproverId).HasColumnName("Approver_Id");
-            entity.Property(e => e.ChannelId).HasColumnName("Channel_Id");
-            entity.Property(e => e.CreatedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("Created_Date");
-            entity.Property(e => e.CreatorId).HasColumnName("Creator_id");
-            entity.Property(e => e.EndDate)
-                .HasColumnType("datetime")
-                .HasColumnName("End_Date");
-            entity.Property(e => e.EventDescription).HasColumnName("Event_description");
-            entity.Property(e => e.EventName)
-                .HasMaxLength(100)
-                .HasColumnName("Event_name");
-            entity.Property(e => e.LastBalance)
-                .HasMaxLength(200)
-                .HasColumnName("Last_Balance");
-            entity.Property(e => e.StartDate)
-                .HasColumnType("datetime")
-                .HasColumnName("Start_Date");
-            entity.Property(e => e.StatusId).HasColumnName("Status_Id");
-            entity.Property(e => e.TotalBalance)
-                .HasMaxLength(200)
-                .HasColumnName("Total_Balance");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.EndDate).HasColumnType("datetime");
+            entity.Property(e => e.EventName).HasMaxLength(100);
+            entity.Property(e => e.Inactive).HasDefaultValueSql("((0))");
+            entity.Property(e => e.LastBalance).HasMaxLength(200);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.StartDate).HasColumnType("datetime");
+            entity.Property(e => e.TotalBalance).HasMaxLength(200);
         });
 
         modelBuilder.Entity<EventBalanceRecord>(entity =>
@@ -292,6 +287,16 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.FromMail).HasMaxLength(100);
         });
 
+        modelBuilder.Entity<InviteHistory>(entity =>
+        {
+            entity.HasKey(e => e.InviteId).HasName("PK__InviteHi__AFACE86DF041824C");
+
+            entity.ToTable("InviteHistory");
+
+            entity.Property(e => e.InviteData).HasMaxLength(100);
+            entity.Property(e => e.JoinedDate).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<Otp>(entity =>
         {
             entity.HasKey(e => e.Otpid).HasName("PK__OTP__5C2EC48249FF1236");
@@ -316,13 +321,12 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<PostCommand>(entity =>
         {
-            entity.HasKey(e => e.CommandId).HasName("PK__PostComm__6B410B06CA45DDF2");
+            entity.HasKey(e => e.CommandId).HasName("PK__PostComm__6B410B062B261047");
 
             entity.ToTable("PostCommand");
 
-            entity.Property(e => e.CreatedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("Created_Date");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<PostImage>(entity =>
@@ -352,13 +356,15 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<PostShare>(entity =>
         {
-            entity.HasKey(e => e.ShareId).HasName("PK__PostShar__D32A3FEE18ACCC78");
+            entity.HasKey(e => e.ShareId).HasName("PK__PostShar__D32A3FEEAD64BF53");
 
             entity.ToTable("PostShare");
 
-            entity.Property(e => e.CreatedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("Created_Date");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Inactive)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("inactive");
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<React>(entity =>
@@ -397,9 +403,9 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__B9BE370FA2DFBDAF");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__B9BE370FB4B5B396");
 
-            entity.HasIndex(e => e.Email, "UQ__Users__AB6E616489DE77EC").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__AB6E6164716694FE").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.DateCreated)
@@ -412,6 +418,12 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
+            entity.Property(e => e.Inactive)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("inactive");
+            entity.Property(e => e.ModifiedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("modifiedDate");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");

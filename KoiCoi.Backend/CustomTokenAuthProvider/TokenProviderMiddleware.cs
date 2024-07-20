@@ -76,7 +76,8 @@ public class TokenProviderMiddleware : IMiddleware
             context.Request.Path.ToString().ToLower().Contains("forgotpassword/requestbyemail") ||
             context.Request.Path.ToString().ToLower().Contains("forgotpassword/changepasswordbyotp") ||
             context.Request.Path.ToString().ToLower().Contains("swagger/") ||
-            context.Request.Path.ToString().ToLower().Contains("/api/v1/user/registeraccount")
+            context.Request.Path.ToString().ToLower().Contains("/api/v1/user/registeraccount") ||
+            context.Request.Path.ToString().ToLower().Contains("api/imagefileservice")
         )
         {
             await next(context);

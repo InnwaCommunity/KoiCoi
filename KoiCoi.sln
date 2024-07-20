@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoiCoi.Mapper", "KoiCoi.Map
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoiCoi.Shared", "KoiCoi.Shared\KoiCoi.Shared.csproj", "{B52E37FE-4D9A-40B5-A74F-20D5BD12FF3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoiCoi.Operational", "KoiCoi.Operational\KoiCoi.Operational.csproj", "{6ADBAF6B-5F50-4883-AB8D-91A5EDC7E01B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoiCoi.Operational", "KoiCoi.Operational\KoiCoi.Operational.csproj", "{6ADBAF6B-5F50-4883-AB8D-91A5EDC7E01B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

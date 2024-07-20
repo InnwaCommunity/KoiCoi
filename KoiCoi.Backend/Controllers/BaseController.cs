@@ -34,18 +34,18 @@ public class BaseController : Controller
             _ipaddress = Convert.ToString(HttpContextExtensions.GetRemoteIPAddress(context));
             _clienturl = context.HttpContext.Request.Headers["Referer"].ToString() == "" ? context.HttpContext.Request.Headers["myOrigin"].ToString() : context.HttpContext.Request.Headers["Referer"].ToString();
             ClaimsIdentity objclaim = context.HttpContext.User.Identities.Last();
-            //if (objclaim.Claims.Count() >= 1)
-            //{
-                _tokenData.LoginType = objclaim.FindFirst("LoginType").Value;
-                _tokenData.UserLevelID = objclaim.FindFirst("UserLevelID").Value;
-                _tokenData.Sub = objclaim.FindFirst(JwtRegisteredClaimNames.Sub).Value;
-                _tokenData.LoginEmpID = objclaim.FindFirst("UserID").Value;
+            if (objclaim.Claims.Count() >= 7)
+            {
+                _tokenData.LoginType = objclaim.FindFirst("LoginType").Value ;
+                _tokenData.UserLevelID = objclaim.FindFirst("UserLevelID").Value ?? "";
+                _tokenData.Sub = objclaim.FindFirst(JwtRegisteredClaimNames.Sub).Value ?? "";
+                _tokenData.LoginEmpID = objclaim.FindFirst("UserID").Value ?? "";
                 //_tokenData.IPAddress = objclaim.FindFirst("IPAddress").Value;
                 //_tokenData.Browser = objclaim.FindFirst("Browser").Value;
                 //_tokenData.CustomerID = objclaim.FindFirst("CustomerID").Value;
                 //_tokenData.Url = objclaim.FindFirst("Url").Value;
-                _tokenData.TicketExpireDate = DateTime.Parse(objclaim.FindFirst("TicketExpireDate").Value);
-            //}
+                _tokenData.TicketExpireDate = DateTime.Parse(objclaim.FindFirst("TicketExpireDate").Value ?? "");
+            }
         }
         catch (Exception ex)
         {

@@ -2,7 +2,7 @@
 
 [Route("api/v1/[controller]")]
 [ApiController]
-public class UserController : ControllerBase
+public class UserController : BaseController
 {
     private readonly BL_User _bLUser;
 
@@ -18,18 +18,27 @@ public class UserController : ControllerBase
         return Ok(respo);
     }
 
+    
+
     [HttpPost("UpdateUserInfo", Name = "UpdateUserInfo")]
     public async Task<IActionResult> UpdateUserInfo(RequestUserDto requestUser)
     {
-        var respo = await _bLUser.UpdateUserInfo(requestUser);
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        var respo = await _bLUser.UpdateUserInfo(requestUser,LoginEmpID);
         return Ok(respo);
     }
 
-    [HttpGet()]
-    public async Task<IActionResult> SearchUser()
+    [HttpGet("FindUserByName/{username}", Name = "FindUserByName")]
+    public async Task<ResponseData> FindUserByName(string username)
     {
-        var agentList = await _bLUser.GetStatusType();
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        return await _bLUser.FindUserByName(username,LoginEmpID);
+    }
 
-        return Ok(agentList);
+    [HttpDelete("DeleteLoginUser",Name = "DeleteLoginUser")]
+    public async Task<ResponseData> DeleteLoginUser()
+    {
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        return await _bLUser.DeleteLoginUser(LoginEmpID);
     }
 }

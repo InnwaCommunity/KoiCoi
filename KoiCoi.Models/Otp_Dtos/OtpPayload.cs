@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoiCoi.Models.ForgetPassword;
+namespace KoiCoi.Models.Otp_Dtos;
 
 public class OtpPayload
 {

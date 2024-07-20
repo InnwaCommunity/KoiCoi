@@ -15,5 +15,7 @@ public partial class PostCommand
 
     public int? ReplyCommandId { get; set; }
 
+    public DateTime? ModifiedDate { get; set; }
+
     public DateTime? CreatedDate { get; set; }
 }

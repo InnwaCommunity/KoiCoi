@@ -13,5 +13,7 @@ public partial class ChannelMembership
 
     public int UserTypeId { get; set; }
 
+    public int StatusId { get; set; }
+
     public DateTime JoinedDate { get; set; }
 }

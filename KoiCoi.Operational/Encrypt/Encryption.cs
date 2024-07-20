@@ -12,6 +12,15 @@ public class Encryption
     private static string _ClientEncryptionKey = "";//Startup.Configuration.GetSection("Encryption:ClientEncryptionKey").Value;
     private static string _ClientEncryptionSalt = "";//Startup.Configuration.GetSection("Encryption:ClientEncryptionSalt").Value;
 
+
+    public static string EncryptFileName(string FileName)
+    {
+        return Encrypt_CBC_256(FileName);
+    }
+    public static string DecryptFileName(string EncFileName)
+    {
+        return Decrypt_CBC_256(EncFileName);
+    }
     public static string DecryptID(string cipherText, string EncryptKey)
     {
         return MySQL_AES_Decrypt_ECB_128(cipherText, EncryptKey);

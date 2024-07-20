@@ -1,4 +1,5 @@
 ﻿using KoiCoi.Backend.CustomTokenAuthProvider;
+using KoiCoi.Modules.Repository.Channel;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -59,6 +60,7 @@ public static class ModularService
     {
         builder.Services.AddScoped<DA_User>();
         builder.Services.AddScoped<DA_ChangePassword>();
+        builder.Services.AddScoped<DA_Channel>();
         return builder;
     }
 
@@ -66,6 +68,7 @@ public static class ModularService
     {
         builder.Services.AddScoped<BL_User>();
         builder.Services.AddScoped<BL_ChangePassword>();
+        builder.Services.AddScoped<BL_Channel>();
         return builder;
     }
 

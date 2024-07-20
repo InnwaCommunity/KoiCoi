@@ -5,7 +5,7 @@ namespace KoiCoi.Database.AppDbContextModels;
 
 public partial class Event
 {
-    public int EventId { get; set; }
+    public int Eventid { get; set; }
 
     public string EventName { get; set; } = null!;
 
@@ -27,5 +27,9 @@ public partial class Event
 
     public DateTime EndDate { get; set; }
 
-    public DateTime? CreatedDate { get; set; }
+    public DateTime CreatedDate { get; set; }
+
+    public DateTime ModifiedDate { get; set; }
+
+    public bool? Inactive { get; set; }
 }
