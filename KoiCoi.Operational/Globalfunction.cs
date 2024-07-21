@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Net.Mail;
 using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Globalization;
 
 namespace KoiCoi.Operational;
 
@@ -51,6 +53,11 @@ public class Globalfunction
             responseData.Message = ex.Message;
             return responseData;
         }
+    }
+
+    public static decimal StringToDecimal(string value)
+    {
+        return decimal.Parse(value, CultureInfo.InvariantCulture);
     }
     /*
     public static dynamic SendEmailAsync(string ToEmail, string Subject, string Message, Boolean IsHTML, string ReplyToEmail = "", string ReplyToName = "")
@@ -110,7 +117,7 @@ public class Globalfunction
     public static string GenerateRandomOTP(int iOTPLength, string[] AllowedCharacters)
     {
 
-        string sOTP = String.Empty;
+        string sOTP = string.Empty;
 
         string sTempChars;
 
@@ -233,7 +240,7 @@ public class Globalfunction
         Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " - " + ex.Message + ex.StackTrace);
     }
 
-    public static DateTime ConvertStringToDateTime(String datetime)
+    public static DateTime ConvertStringToDateTime(string datetime)
     {
         return DateTime.ParseExact(datetime, "yyyy-MM-d",
                                          System.Globalization.CultureInfo.InvariantCulture);

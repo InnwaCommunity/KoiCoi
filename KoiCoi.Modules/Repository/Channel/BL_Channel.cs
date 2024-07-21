@@ -44,9 +44,9 @@ public class BL_Channel
         return await _daChannel.GetCurrencyList(LoginUserId);
     }
 
-    public async Task<ResponseData> CreateChannel(CreateChannelReqeust channelReqeust ,int LoginUserId)
+    public async Task<ResponseData> CreateChannel(CreateChannelReqeust channelReqeust ,int LoginUserId,string filename)
     {
-        return await _daChannel.CreateChannel(channelReqeust, LoginUserId);
+        return await _daChannel.CreateChannel(channelReqeust, LoginUserId,filename);
     }
 
     public async Task<ResponseData> GetChannels(int LoginUserId)
@@ -62,5 +62,15 @@ public class BL_Channel
     public async Task<ResponseData> UploadProfile(int LoginUserId,int ChannelId,string filename,string? imgDes)
     {
         return await _daChannel.UploadProfile(LoginUserId,ChannelId,filename,imgDes);
+    }
+
+    public async Task<ResponseData> GenerateChannelUrl(int ChannelId,int LoginUserId)
+    {
+        return await _daChannel.GenerateChannelUrl(ChannelId,LoginUserId); 
+    }
+
+    public async Task<ResponseData> VisitChannelByInviteLink(string inviteLink,int LoginUserId)
+    {
+        return await _daChannel.VisitChannelByInviteLink(inviteLink,LoginUserId);
     }
 }

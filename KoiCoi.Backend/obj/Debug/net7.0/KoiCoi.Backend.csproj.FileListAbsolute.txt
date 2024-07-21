@@ -365,3 +365,4 @@ D:\published\KoiCoi\KoiCoi.Backend\obj\Debug\net7.0\KoiCoi.Backend.genruntimecon
 D:\published\KoiCoi\KoiCoi.Backend\obj\Debug\net7.0\ref\KoiCoi.Backend.dll
 D:\published\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\KoiCoi.Operational.dll
 D:\published\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\KoiCoi.Operational.pdb
+D:\published\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\QRCoder.dll

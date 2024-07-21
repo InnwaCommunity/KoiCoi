@@ -36,6 +36,7 @@ public class BL_User
                 string salt = SaltedHash.GenerateSalt();
                 string userIdval =Encryption.EncryptID(name,salt) + passwordGenerator.CreatePassword(name.Length, name.Length/3);
                 viaUser.UserIdval = userIdval;
+                viaUser.Name = name;
                 password = SaltedHash.ComputeHash(salt, password.ToString());
 
                 viaUser.Name = name;
@@ -49,6 +50,7 @@ public class BL_User
                 string tempPas = requestUser.Password!;
                 viaUser.Password = SaltedHash.ComputeHash(salt, requestUser.Password!.ToString());
                 viaUser.PasswordHash = salt;
+                viaUser.Name = requestUser.Name ?? "";
                 string userIdval = Encryption.EncryptID(requestUser.Name!, salt) + passwordGenerator.CreatePassword(requestUser.Name!.Length, requestUser.Name!.Length / 3);
                 viaUser.UserIdval = userIdval;
                 return await _daUser.CreateAccount(viaUser, tempPas);

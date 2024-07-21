@@ -16,4 +16,6 @@ public partial class ChannelMembership
     public int StatusId { get; set; }
 
     public DateTime JoinedDate { get; set; }
+
+    public int? InviterId { get; set; }
 }

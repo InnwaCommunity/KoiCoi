@@ -10,7 +10,7 @@ global using KoiCoi.Models.User_Dto;
 global using KoiCoi.Models.Otp_Dtos;
 global using KoiCoi.Models.ChannelDtos;
 global using KoiCoi.Models.Currency;
-
+global using KoiCoi.Models.ChannelDtos.ResponseDtos;
 //Mapper
 
 global using KoiCoi.Mapper;

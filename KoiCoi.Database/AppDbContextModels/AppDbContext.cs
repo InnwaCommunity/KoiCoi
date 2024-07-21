@@ -63,6 +63,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<UserType> UserTypes { get; set; }
 
+    public virtual DbSet<VisitChannelHistory> VisitChannelHistories { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=NYEINCHANNMOE;Database=Koi_Coi;User Id=sa;Password=nyein@8834;TrustServerCertificate=True;");
@@ -126,6 +128,7 @@ public partial class AppDbContext : DbContext
 
             entity.Property(e => e.MembershipId).HasColumnName("Membership_Id");
             entity.Property(e => e.ChannelId).HasColumnName("Channel_Id");
+            entity.Property(e => e.InviterId).HasColumnName("inviterId");
             entity.Property(e => e.JoinedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("Joined_Date");
@@ -471,6 +474,15 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<VisitChannelHistory>(entity =>
+        {
+            entity.HasKey(e => e.HistoryId).HasName("PK__VisitCha__4D7B4ABDDF56FD00");
+
+            entity.ToTable("VisitChannelHistory");
+
+            entity.Property(e => e.ViewedDate).HasColumnType("datetime");
         });
 
         OnModelCreatingPartial(modelBuilder);

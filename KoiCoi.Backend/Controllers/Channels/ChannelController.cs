@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using QRCoder;
 using Serilog;
 using System.Configuration;
+using System.Drawing.Imaging;
+using System.Drawing;
 
 namespace KoiCoi.Backend.Controllers.Channels;
 
@@ -26,7 +29,7 @@ public class ChannelController : BaseController
         return await _blChannel.GetCurrencyList(LoginEmpID);
     }
 
-    [HttpPost("UploadChannelProfileTemp", Name = "UploadChannelProfileTemp")]
+    /*[HttpPost("UploadChannelProfileTemp", Name = "UploadChannelProfileTemp")]
     public async Task<ResponseData> UploadChannelProfileTemp()
     {
         Response.ContentType = "application/json";
@@ -90,35 +93,39 @@ public class ChannelController : BaseController
             return responseData;
         }
     }
+     */
+
     [HttpPost("CreateChannel",Name = "CreateChannel")]
     public async Task<ResponseData> CreateChannel(CreateChannelReqeust channelReqeust)
     {
         try
         {
-            string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
-            string tempfolderPath = _configuration["appSettings:UploadChannelProfilePath"] ?? throw new Exception("Invalid temp path.");
-            string uploadDirectory = _configuration["appSettings:ChannelProfile"] ?? throw new Exception("Invalid function upload path.");
-            if(!string.IsNullOrEmpty(channelReqeust.ProfileImgName) )
+            string filename = "";
+            if (!string.IsNullOrEmpty(channelReqeust.ProImage64))
             {
-                string destinationDirectory = Path.Combine(baseDirectory, uploadDirectory);
-                string sourceFilePath = Path.Combine(baseDirectory, tempfolderPath, channelReqeust.ProfileImgName);
-                string destinationFilePath = Path.Combine(destinationDirectory, channelReqeust.ProfileImgName);
-                if (!System.IO.File.Exists(sourceFilePath))
-                {
-                     throw new Exception("Source file not found.");
-                }
+                string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
+                //string tempfolderPath = _configuration["appSettings:UploadChannelProfilePath"] ?? throw new Exception("Invalid temp path.");
+                string uploadDirectory = _configuration["appSettings:ChannelProfile"] ?? throw new Exception("Invalid function upload path.");
 
-                if (!Directory.Exists(destinationDirectory))
-                {
-                    Directory.CreateDirectory(destinationDirectory);
-                }
+                string folderPath = Path.Combine(baseDirectory, uploadDirectory);
 
-                System.IO.File.Copy(sourceFilePath, destinationFilePath, true);
-                System.IO.File.Delete(sourceFilePath);
+
+                filename = Guid.NewGuid().ToString() + "." + ".png";
+                string base64Str = channelReqeust.ProImage64;
+                byte[] bytes = Convert.FromBase64String(base64Str!);
+
+                string filePath = Path.Combine(folderPath, filename);
+                if (filePath.Contains(".."))
+                { //if found .. in the file name or path
+                    Log.Error("Invalid path " + filePath);
+                    throw new Exception("Invalid path");
+                }
+                await System.IO.File.WriteAllBytesAsync(filePath, bytes);
             }
+                
 
-            int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-            return await _blChannel.CreateChannel(channelReqeust, LoginEmpID);
+                int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+                return await _blChannel.CreateChannel(channelReqeust, LoginEmpID, filename);
         }
         catch (Exception ex)
         {
@@ -139,11 +146,11 @@ public class ChannelController : BaseController
     }
 
     [HttpPost("GetChannelProfile",Name = "GetChannelProfile")]
-    public async Task<ResponseData> GetChannelProfile(GetChannelProfile getChannelProfile)
+    public async Task<ResponseData> GetChannelProfile(GetChannelData getChannelData)
     {
         try
         {
-            string? channelIdval = getChannelProfile.channelProfileIdval;
+            string? channelIdval = getChannelData.channelIdval;
             if (string.IsNullOrEmpty(channelIdval)) throw new Exception("Channel Id can't Null Or Empty");
 
             string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
@@ -164,71 +171,55 @@ public class ChannelController : BaseController
     }
     [HttpPost("DirectUploadChannelProfile",Name = "DirectUploadChannelProfile")]
 
-    public async Task<ResponseData> DirectUploadChannelProfile([FromForm] string channelId,[FromForm] string? imgDescription)
+    public async Task<ResponseData> DirectUploadChannelProfile(UploadChannelProfileRequest updoadReqeust)
     {
         Response.ContentType = "application/json";
         ResponseData responseData = new ResponseData();
         try
         {
+            if (string.IsNullOrEmpty(updoadReqeust.ChannelIdval)) throw new Exception("ChannelId can't be null or empty");
             int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-            int ChannelId = Convert.ToInt32(Encryption.DecryptID(channelId, LoginEmpID.ToString()));
+            int ChannelId = Convert.ToInt32(Encryption.DecryptID(updoadReqeust.ChannelIdval, LoginEmpID.ToString()));
 
-            var files = Request.Form.Files;
-            if (files.Count > 0)
+            if (!string.IsNullOrEmpty(updoadReqeust.base64data))
             {
-                // Save the file
-                var file = files[0];
-                if (file.Length > 0)
-                {
-                    string uploadfilename = file.FileName;
-                    string ext = FileService.GetFileExtension(uploadfilename);
 
-                    string fullPath = "";
                     string[] allowext = _configuration.GetSection("appSettings:AllowExtension").Get<string[]>()!;
                     string folderPath = _configuration["appSettings:ChannelProfile"] ?? throw new Exception("Invalid temp path.");
                     string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
-                    if (!allowext.Contains(ext))
-                    {
-                        throw new Exception("Invalid File Extension " + ext);
-                    }
+                   
                     folderPath = baseDirectory + folderPath;//flodrer import
                     if (!Directory.Exists(folderPath))
                     {
                         Directory.CreateDirectory(folderPath);
                     }
 
-                    string filename = Guid.NewGuid().ToString() + "." + ext.ToLower();
-                    fullPath = folderPath + filename;
+                    string filename = Guid.NewGuid().ToString() + "." + ".png";
+                    string base64Str = updoadReqeust.base64data!;
+                    byte[] bytes = Convert.FromBase64String(base64Str!);
 
-                    if (fullPath.Contains(".."))
+                    string filePath = Path.Combine(folderPath, filename);
+                    if (filePath.Contains(".."))
                     { //if found .. in the file name or path
-                        Log.Error("Invalid path " + fullPath);
+                        Log.Error("Invalid path " + filePath);
                         throw new Exception("Invalid path");
                     }
+                    await System.IO.File.WriteAllBytesAsync(filePath, bytes);
 
-                    using (var fileStream = new FileStream(fullPath, FileMode.OpenOrCreate))
-                    {
-                        await file.CopyToAsync(fileStream);
-                    }
-
-                    ResponseData resDa= await _blChannel.UploadProfile(LoginEmpID, ChannelId, filename, imgDescription);
+                    ResponseData resDa= await _blChannel.UploadProfile(LoginEmpID, ChannelId, filename, updoadReqeust.description);
                     if (resDa.StatusCode == 0) return resDa;
 
-                    if (!System.IO.File.Exists(fullPath))
+                    if (!System.IO.File.Exists(filePath))
                     {
                         throw new Exception("Empty File.");
                     }
                     else
                     {
-                        byte[] imageBytes = System.IO.File.ReadAllBytes(fullPath);
+                        byte[] imageBytes = System.IO.File.ReadAllBytes(filePath);
                         string base64String = Convert.ToBase64String(imageBytes);
                         resDa.Data = base64String;
                         return resDa;
                     }
-                }
-                else
-
-                    throw new Exception("Empty File.");
             }
             else
                 throw new Exception("No File.");
@@ -240,6 +231,73 @@ public class ChannelController : BaseController
             responseData.Message = ex.Message;
             return responseData;
         }
+    }
+
+    [HttpPost("GenerateChannelUrl",Name = "GenerateChannelUrl")]
+    public async Task<ResponseData> GenerateChannelUrl(GetChannelData getChannelData)
+    {
+        try
+        {
+            string? channelIdval = getChannelData.channelIdval;
+            if (string.IsNullOrEmpty(channelIdval)) throw new Exception("Channel Id can't null or empty");
+            int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+            int ChannelId = Convert.ToInt32(Encryption.DecryptID(channelIdval, LoginEmpID.ToString()));
+            return await _blChannel.GenerateChannelUrl(ChannelId, LoginEmpID);
+        }
+        catch (Exception ex)
+        {
+            ResponseData res= new ResponseData();
+            res.StatusCode = 0;
+            res.Message = ex.Message;
+            return res;
+        }
+
+    }
+
+    [HttpPost("GenerateChannelQrCode",Name = "GenerateChannelQrCode")]
+    public async Task<ResponseData> GenerateChannelQrCode(GetChannelData getChannelData)
+    {
+        try
+        {
+            string? channelIdval = getChannelData.channelIdval;
+            if (string.IsNullOrEmpty(channelIdval)) throw new Exception("Channel Id can't null or empty");
+            int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+            int ChannelId = Convert.ToInt32(Encryption.DecryptID(channelIdval, LoginEmpID.ToString()));
+            ResponseData resData= await _blChannel.GenerateChannelUrl(ChannelId, LoginEmpID);
+            if (resData.StatusCode == 0) return resData;
+
+            // Create a new instance of the QR Code generator
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(resData.Data, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(20);
+
+            // Convert the QR code image to a Base64 string
+            string base64String;
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                qrCodeImage.Save(memoryStream, ImageFormat.Png);
+                byte[] imageBytes = memoryStream.ToArray();
+                base64String = Convert.ToBase64String(imageBytes);
+            }
+            resData.Data = base64String;
+            return resData;
+        }
+        catch (Exception ex)
+        {
+            ResponseData res = new ResponseData();
+            res.StatusCode = 0;
+            res.Message = ex.Message;
+            return res;
+        }
+    }
+
+
+    [HttpPost("VisitChannelByInviteLink",Name = "VisitChannelByInviteLink")]
+    public async Task<ResponseData> VisitChannelByInviteLink(ChannelInviteLinkPayload payload)
+    {
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        return await _blChannel.VisitChannelByInviteLink(payload.InviteLink, LoginEmpID);
     }
 
 }

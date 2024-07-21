@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KoiCoi.Models.ChannelDtos;
 
-public partial class GetChannelProfile
+public partial class GetChannelData
 {
-    public string? channelProfileIdval { get; set; }
+    public string? channelIdval { get; set; }
 }

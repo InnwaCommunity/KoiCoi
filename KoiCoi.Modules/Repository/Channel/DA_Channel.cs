@@ -1,21 +1,19 @@
 ﻿using KoiCoi.Models.Via;
+using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KoiCoi.Modules.Repository.Channel;
 
 public class DA_Channel
 {
     private readonly AppDbContext _db;
+    private readonly IConfiguration _configuration;
 
-    public DA_Channel(AppDbContext db)
+    public DA_Channel(AppDbContext db, IConfiguration configuration)
     {
         _db = db;
+        _configuration = configuration;
     }
 
     public async Task<ResponseData> CreateChannelType(ViaChannelType viaChanType)
@@ -190,7 +188,7 @@ public class DA_Channel
         }
     }
 
-    public async Task<ResponseData> CreateChannel(CreateChannelReqeust channelReqeust, int LoginUserId)
+    public async Task<ResponseData> CreateChannel(CreateChannelReqeust channelReqeust, int LoginUserId,string filename)
     {
         ResponseData responseData = new ResponseData();
         try
@@ -237,8 +235,8 @@ public class DA_Channel
 
             ///Save Profile Image
             ViaChannelProfile  viaChannelProfile = new ViaChannelProfile();
-            viaChannelProfile.Url = channelReqeust.ProfileImgName ?? "";
-            viaChannelProfile.UrlDescription = "";
+            viaChannelProfile.Url = filename;
+            viaChannelProfile.UrlDescription = channelReqeust.imagedescription;
             viaChannelProfile.ChannelId = addedChannel.ChannelId;
 
             await _db.ChannelProfiles.AddAsync(viaChannelProfile.ChangeChannelProfile());
@@ -373,6 +371,154 @@ public class DA_Channel
             responseData.StatusCode = 1;
             responseData.Message = "Save Success";
             return responseData;
+
+        }
+        catch (ValidationException vex)
+        {
+            responseData.StatusCode = 0;
+            responseData.Message = vex.ValidationResult.ErrorMessage;
+            return responseData;
+        }
+        catch (Exception ex)
+        {
+            responseData.StatusCode = 0;
+            responseData.Message = ex.Message;
+            return responseData;
+        }
+    }
+
+    public async Task<ResponseData> GenerateChannelUrl(int ChannelId,int LoginUserId)
+    {
+        ResponseData responseData = new ResponseData();
+        try
+        {
+            string domainUrl = _configuration["appSettings:DomainUrl"] ?? throw new Exception("Invalid DomainUrl");
+            string urlSalt = _configuration["appSettings:UrlSalt"] ?? throw new Exception("Invalid UrlSalt");
+
+            var resda = await _db.Channels.Where(x => x.ChannelId == ChannelId).FirstOrDefaultAsync();
+            if (resda is null) throw new ValidationException("Channel Not Found");
+
+            string channeldata = $"{LoginUserId}/{ChannelId}";
+            string encryptdata = Encryption.EncryptID(channeldata, urlSalt);
+            string url = domainUrl +"Channel/" + encryptdata;
+            responseData.StatusCode = 1;
+            responseData.Message = "Success";
+            responseData.Data = url;
+            return responseData;
+            //responseData.Data = 
+
+        }
+        catch (ValidationException vex)
+        {
+            responseData.StatusCode = 0;
+            responseData.Message = vex.ValidationResult.ErrorMessage;
+            return responseData;
+        }
+        catch (Exception ex)
+        {
+            responseData.StatusCode = 0;
+            responseData.Message = ex.Message;
+            return responseData;
+        }
+    }
+
+    public async Task<ResponseData> VisitChannelByInviteLink(string inviteLink,int LoginUserId)
+    {
+        ResponseData responseData = new ResponseData();
+        try
+        {
+            string urlSalt = _configuration["appSettings:UrlSalt"] ?? throw new Exception("Invalid UrlSalt"); 
+            string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
+            string desdata=Encryption.DecryptID(inviteLink, urlSalt);
+            string[] splidata = desdata.Split('/');
+            int inviterId = Convert.ToInt32(splidata[0]);
+            int channelId = Convert.ToInt32(splidata[1]);
+            var IsMember = await _db.ChannelMemberships
+                                    .Where(x => x.UserId == LoginUserId && x.ChannelId == channelId)
+                                    .FirstOrDefaultAsync();
+            if(IsMember is null)
+            {
+
+                VisitChannelResponse? reData = await (from ch in _db.Channels
+                                                      join ct in _db.ChannelTypes on ch.ChannelType equals ct.ChannelTypeId
+                                                      join user in _db.Users on ch.CreatorId equals user.UserId
+                                                      join cr in _db.Currencies on ch.CurrencyId equals cr.CurrencyId
+                                                      where ch.ChannelId == channelId
+                                                      select new VisitChannelResponse
+                                                      {
+                                                          ChannelIdval = Encryption.EncryptID(ch.ChannelId.ToString(), LoginUserId.ToString()),
+                                                          ChannelName = ch.ChannelName,
+                                                          ChannelDescription = ch.StatusDescription,
+                                                          IsMember = false,
+                                                          MemberStatus = null,
+                                                          ChannelType = ct.ChannelTypeName,
+                                                          CreatorIdval = Encryption.EncryptID(user.UserId.ToString(), LoginUserId.ToString()),
+                                                          CreatorName = user.Name,
+                                                          MemberCount = ch.MemberCount,
+                                                          TotalBalance = null,
+                                                          LastBalance = null,
+
+
+                                                      }).FirstOrDefaultAsync();
+
+                if (reData is null) throw new ValidationException("Channel Not Found");
+
+                VisitChannelHistory inviteHist = new VisitChannelHistory
+                {
+                    UserId = LoginUserId,
+                    InviterId = inviterId,
+                    ChannelId = channelId,
+                    ViewedDate = DateTime.Now
+                };
+                await _db.VisitChannelHistories.AddAsync(inviteHist);
+                await _db.SaveChangesAsync();
+                responseData.StatusCode = 1;
+                responseData.Message = "Success";
+                responseData.Data = reData;
+                return responseData;
+            }
+            else
+            {
+
+                VisitChannelResponse? reData = await (from ch in _db.Channels
+                                    join ct in _db.ChannelTypes on ch.ChannelType equals ct.ChannelTypeId
+                                    join user in _db.Users on ch.CreatorId equals user.UserId
+                                    join cr in _db.Currencies on ch.CurrencyId equals cr.CurrencyId
+                                    where ch.ChannelId == channelId
+                                    select new VisitChannelResponse
+                                    {
+                                        ChannelIdval = Encryption.EncryptID(ch.ChannelId.ToString(), LoginUserId.ToString()),
+                                        ChannelName = ch.ChannelName,
+                                        ChannelDescription = ch.StatusDescription,
+                                        ChannelType = ct.ChannelTypeName,
+                                        CreatorIdval = Encryption.EncryptID(user.UserId.ToString(), LoginUserId.ToString()),
+                                        CreatorName = user.Name,
+                                        ISOCode = cr.IsoCode,
+                                        MemberCount = ch.MemberCount,
+                                        TotalBalance=Globalfunction.StringToDecimal(ch.TotalBalance == "0" || ch.TotalBalance == null ? "0" :
+                                                            Encryption.DecryptID(ch.TotalBalance.ToString(), balanceSalt)),
+                                        LastBalance = Globalfunction.StringToDecimal(ch.LastBalance == "0" || ch.LastBalance == null ? "0" :
+                                                           Encryption.DecryptID(ch.LastBalance.ToString(), balanceSalt)),
+                                        
+                                    }).FirstOrDefaultAsync();
+
+                if (reData is null) throw new ValidationException("Channel Not Found");
+                var statusdata = await (from cm in _db.ChannelMemberships
+                                        join st in _db.StatusTypes on cm.StatusId equals st.StatusId
+                                        where cm.ChannelId == channelId && cm.UserId == LoginUserId
+                                        select new
+                                        {
+                                            StatusId = st.StatusId,
+                                            StatusName = st.StatusName,
+                                        }).FirstOrDefaultAsync();
+                if (statusdata is null) throw new ValidationException("Member Status Not Found");
+                reData.IsMember = statusdata.StatusName.ToLower() == "approved";
+                reData.MemberStatus = statusdata.StatusName;
+                responseData.StatusCode = 1;
+                responseData.Message = "Success";
+                responseData.Data = reData;
+                return responseData;
+            }
 
         }
         catch (ValidationException vex)
