@@ -1,6 +1,7 @@
 ﻿using KoiCoi.Models.Via;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KoiCoi.Modules.Repository.Channel;
@@ -16,140 +17,100 @@ public class DA_Channel
         _configuration = configuration;
     }
 
-    public async Task<ResponseData> CreateChannelType(ViaChannelType viaChanType)
+    public async Task<Result<string>> CreateChannelType(ViaChannelType viaChanType)
     {
-        ResponseData responseData = new ResponseData();
+        Result<string> model = null;
         try
         {
             await _db.ChannelTypes.AddAsync(viaChanType.ChangeChannelType());
             int result = await _db.SaveChangesAsync();
-            if (result < 1)
-                throw new ValidationException("Save Channel Type Fail");
+            if (result < 1) return Result<string>.Error("Save Channel Type Fail");
 
-            responseData.StatusCode = 1;
-            responseData.Message = "Save Channel Type Success";
-            return responseData;
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
+            model = Result<string>.Success("Save Channel Type Success");
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<string>.Error(ex);
         }
+
+        return model;
     }
 
-    public async Task<ResponseData> UpdateChannelType(ChannelTypePayloads channelType, int ChannelTypeid)
+    public async Task<Result<string>> UpdateChannelType(ChannelTypePayloads channelType, int ChannelTypeid)
     {
-        ResponseData responseData = new ResponseData();
+        Result<string> model = null;
         try
         {
             if (string.IsNullOrEmpty(channelType.ChannelTypeName) || string.IsNullOrEmpty(channelType.ChannelTypeDescription))
-                throw new ValidationException("Channel Name and Channel Description Can't Empty");
+                return Result<string>.Error("Channel Name and Channel Description Can't Empty");
             var chanTypeRes = await _db.ChannelTypes
                                         .Where(x=> x.ChannelTypeId == ChannelTypeid)
                                         .FirstOrDefaultAsync();
             if (chanTypeRes is null)
-                throw new ValidationException("Channel Type Not Found");
+                return Result<string>.Error("Channel Type Not Found");
 
             chanTypeRes.ChannelTypeName = channelType.ChannelTypeName!;
             chanTypeRes.ChannelTypeDescription = channelType.ChannelTypeDescription!;
             await _db.SaveChangesAsync();
 
-            responseData.StatusCode = 1;
-            responseData.Message = "Channel Type Update Success";
-            return responseData;
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
+            model = Result<string>.Success("Channel Type Update Success");
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<string>.Error(ex);
         }
+
+        return model;
     }
-    public async Task<ResponseData> DeleteChannelType(int channelTypeId)
+    public async Task<Result<string>> DeleteChannelType(int channelTypeId)
     {
-        ResponseData responseData = new ResponseData();
+        Result<string> model = null;
         try
         {
             var chanTyperes = await _db.ChannelTypes.Where(x=> x.ChannelTypeId==channelTypeId)
                 .FirstOrDefaultAsync();
-            if (chanTyperes is null) throw new ValidationException("Channel Type Not Found");
+            if (chanTyperes is null) return Result<string>.Error("Channel Type Not Found");
 
            _db.ChannelTypes.Remove(chanTyperes);
             await _db.SaveChangesAsync();
-            responseData.StatusCode = 1;
-            responseData.Message = "Delete Success";
-            return responseData;
 
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
+            model = Result<string>.Success("Delete Success");
+
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<string>.Error(ex);
         }
+        return model;
     }
-    public async Task<ResponseData> GetChannelType(int loginUserid)
+    public async Task<Result<List<ChannelTypeResponseDto>>> GetChannelType(int loginUserid)
     {
-        ResponseData responseData = new ResponseData();
+        Result<List<ChannelTypeResponseDto>> model = null;
         try
         {
             var chaltypelst = await _db.ChannelTypes
+                                    .Select(x=> new ChannelTypeResponseDto
+                                    {
+                                        ChannelTypeIdval = Encryption.EncryptID(x.ChannelTypeId.ToString(), loginUserid.ToString()),
+                                        ChannelTypeName = x.ChannelTypeName,
+                                        ChannelTypeDescription = x.ChannelTypeDescription,
+                                    })
                                     .ToListAsync();
-            if(chaltypelst==null)
-                throw new ValidationException("Retrieve Channel Type Error");
-            List<ChannelTypeResponseDto> chaltype = new List<ChannelTypeResponseDto>();
-
-            foreach (var item in chaltypelst)
-            {
-                ChannelTypeResponseDto newRes = new ChannelTypeResponseDto
-                {
-                    ChannelTypeIdval = Encryption.EncryptID(item.ChannelTypeId.ToString(), loginUserid.ToString()),
-                    ChannelTypeName = item.ChannelTypeName,
-                    ChannelTypeDescription = item.ChannelTypeDescription,
-                };
-                chaltype.Add(newRes);
-            }
-            responseData.StatusCode = 1;
-            responseData.Message = "Retrieve Success";
-            responseData.Data = chaltype;
-            return responseData;
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
+            if (chaltypelst == null)
+                return Result<List<ChannelTypeResponseDto>>.Error("Retrieve Channel Type Error");
+            model = Result<List<ChannelTypeResponseDto>>.Success(chaltypelst);
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<List<ChannelTypeResponseDto>>.Error(ex);
         }
+
+        return model;
     }
 
-    public async Task<ResponseData> GetCurrencyList(int LoginUserId)
+    public async Task<Result<List<CurrencyResponseDto>>> GetCurrencyList(int LoginUserId)
     {
-        ResponseData responseData = new ResponseData();
+        Result<List<CurrencyResponseDto>> model = null;
         try
         {
             var currres = await _db.Currencies.ToListAsync();
@@ -169,28 +130,19 @@ public class DA_Channel
                 currData.Add(newres);
 
             }
-            responseData.StatusCode = 1;
-            responseData.Message = "Get Currency Success";
-            responseData.Data = currData;
-            return responseData;
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
+
+            model = Result<List<CurrencyResponseDto>>.Success(currData);
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model =Result<List<CurrencyResponseDto>>.Error(ex);
         }
+        return model;
     }
 
-    public async Task<ResponseData> CreateChannel(CreateChannelReqeust channelReqeust, int LoginUserId,string filename)
+    public async Task<Result<ChannelDataResponse>> CreateChannel(CreateChannelReqeust channelReqeust, int LoginUserId,string filename)
     {
-        ResponseData responseData = new ResponseData();
+        Result<ChannelDataResponse> model = null;
         try
         {
             int ChanneltypeId = Convert.ToInt32(
@@ -209,10 +161,7 @@ public class DA_Channel
 
             var addedChannel = (await _db.Channels.AddAsync(channel.ChangeChannel())).Entity;
             int result = await _db.SaveChangesAsync();
-            if (result < 1) throw new ValidationException("Create Channel Fail");
-
-
-            if(addedChannel == null) throw new ValidationException("Create Channel Fail");
+            if (result < 1) return Result<ChannelDataResponse>.Error("Create Channel Fail");
 
             ///Create MemberShip
             int? ownerid = await _db.UserTypes
@@ -222,14 +171,17 @@ public class DA_Channel
             int? approvedstatusId = await _db.StatusTypes
                     .Where(x=> x.StatusName == "Approved")
                     .Select(x=> x.StatusId) .FirstOrDefaultAsync();
-            if(ownerid == null) throw new ValidationException("Owner UserType Not Found");
+            if (ownerid == null) return Result<ChannelDataResponse>.Error("Owner UserType Not Found");
 
-            if (approvedstatusId == null) throw new ValidationException("Approved Staus Not Found");
-            ViaChannelMemberShip newViaChanMeShip = new ViaChannelMemberShip();
-            newViaChanMeShip.ChannelId = addedChannel.ChannelId;
-            newViaChanMeShip.UserId = LoginUserId;
-            newViaChanMeShip.UserTypeId = ownerid.Value;
-            newViaChanMeShip.StatusId = approvedstatusId.Value;
+            if (approvedstatusId == null) return Result<ChannelDataResponse>.Error("Approved Staus Not Found");
+            
+            ViaChannelMemberShip newViaChanMeShip = new ViaChannelMemberShip
+            {
+                ChannelId = addedChannel.ChannelId,
+                UserId = LoginUserId,
+                UserTypeId = ownerid.Value,
+                StatusId = approvedstatusId.Value
+            };
             await _db.ChannelMemberships.AddAsync(newViaChanMeShip.ChangeChannMemberShip());
             await _db.SaveChangesAsync();
 
@@ -242,71 +194,60 @@ public class DA_Channel
             await _db.ChannelProfiles.AddAsync(viaChannelProfile.ChangeChannelProfile());
             await _db.SaveChangesAsync();
 
-            responseData.StatusCode = 1;
-            responseData.Message = "Create Channel Success";
-            return responseData;
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
+            ChannelDataResponse? data = await (from _cha in _db.Channels
+                                               join ct in _db.ChannelTypes on _cha.ChannelType equals ct.ChannelTypeId
+                                               join cur in _db.Currencies on _cha.CurrencyId equals cur.CurrencyId
+                                               where _cha.ChannelId == addedChannel.ChannelId
+                                               select new ChannelDataResponse
+                                               {
+                                                   ChannelIdval = Encryption.EncryptID(_cha.ChannelId.ToString(), LoginUserId.ToString()),
+                                                   ChannelName = _cha.ChannelName,
+                                                   ChannelDescription = _cha.StatusDescription,
+                                                   ChannelType = ct.ChannelTypeName,
+                                                   ISOCode = cur.IsoCode,
+                                                   MemberCount = _cha.MemberCount,
+                                                   TotalBalance = 0,
+                                                   LastBalance = 0,
+                                               }).FirstOrDefaultAsync();
+            if (data is null) return Result<ChannelDataResponse>.Error("Channel Not Found");
+            return Result<ChannelDataResponse>.Success(data);
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            return Result<ChannelDataResponse>.Error(ex);
         }
     }
 
-    public async Task<ResponseData> GetChannels(int LoginUserId)
+    public async Task<Result<List<ChannelDataResponse>>> GetChannelsList(int LoginUserId)
     {
-        ResponseData responseData = new ResponseData();
+        Result<List<ChannelDataResponse>> model = null;
         try
         {
-            int? ownerid = await _db.UserTypes
-               .Where(x => x.Name == "owner")
-               .Select(x => x.TypeId)
-               .FirstOrDefaultAsync();
-            if (ownerid == null) throw new ValidationException("Owner UserType Not Found");
-
-            var ChannelsWithOwnerName = await (from _cm in _db.ChannelMemberships
-                                               join _user in _db.Users on _cm.UserId equals _user.UserId
-                                               join _channel in _db.Channels on _cm.ChannelId equals _channel.ChannelId
-                                               where _cm.UserTypeId == ownerid
+            List<ChannelDataResponse> Channels = await ( from _channel in _db.Channels 
+                                               join _chantype in _db.ChannelTypes on _channel.ChannelType equals _chantype.ChannelTypeId
+                                               join _curr in _db.Currencies on _channel.CurrencyId equals _curr.CurrencyId
                                                orderby _channel.ChannelName
-                                               select new
+                                               select new ChannelDataResponse
                                                {
-                                                   UserIdval = Encryption.EncryptID(_user.UserId.ToString(), LoginUserId.ToString()),
-                                                   OwnerName = _user.Name,
                                                    ChannelIdval = Encryption.EncryptID(_channel.ChannelId.ToString(), LoginUserId.ToString()),
                                                    ChannelName= _channel.ChannelName,
-                                                   ChannelDescription = _channel.StatusDescription
+                                                   ChannelDescription = _channel.StatusDescription,
+                                                   ChannelType = _chantype.ChannelTypeName,
+                                                   MemberCount = _channel.MemberCount,
                                                }).ToListAsync();
 
-            responseData.StatusCode = 1;
-            responseData.Message = "Get Success";
-            responseData.Data = ChannelsWithOwnerName;
-            return responseData;
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
+            model= Result<List<ChannelDataResponse>>.Success(Channels);
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<List<ChannelDataResponse>>.Error(ex);
         }
+        return model;
     }
 
-    public async Task<ResponseData> GetChannelProfile(int ChannelId,string destDir)
+    public async Task<Result<string>> GetChannelProfile(int ChannelId,string destDir)
     {
-        ResponseData responseData = new ResponseData();
+        Result<string> model = null;
         try
         {
             var channel = await _db.Channels.Where(x => x.ChannelId == ChannelId).FirstOrDefaultAsync();
@@ -318,113 +259,83 @@ public class DA_Channel
                        .FirstOrDefaultAsync();
             if (profiles is null)
             {
-                responseData.Data = "";
+                model = Result<string>.Success("");
             }
             else
             {
                 string profileimg = Path.Combine(destDir, profiles.Url);
                 if (!System.IO.File.Exists(profileimg))
                 {
-                    responseData.Data = "";
+                    model = Result<string>.Success("");
                 }
                 else
                 {
                     byte[] imageBytes = System.IO.File.ReadAllBytes(profileimg);
                     string base64String = Convert.ToBase64String(imageBytes);
-                    responseData.Data =  base64String;
+                    model = Result<string>.Success(base64String);
                 }
             }
-            responseData.StatusCode = 1;
-            responseData.Message = "Get Success";
-            return responseData;
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<string>.Error(ex);
         }
+        return model;
     }
 
-    public async Task<ResponseData> UploadProfile(int LoginUserId, int ChannelId,string filename,string? description)
+    public async Task<Result<string>> UploadProfile(int LoginUserId, int ChannelId,string filename,string? description)
     {
-        ResponseData responseData = new ResponseData();
+        Result<string> model = null;
 
         try
         {
             var channel = await _db.Channels.Where(x => x.ChannelId == ChannelId)
                                             .FirstOrDefaultAsync();
 
-            if (channel is null) throw new ValidationException("Channel Not Found");
+            if (channel is null) return Result<string>.Error("Channel Not Found");
             ViaChannelProfile viaChannelProfile = new ViaChannelProfile();
             viaChannelProfile.ChannelId = ChannelId;
             viaChannelProfile.Url = filename;
             viaChannelProfile.UrlDescription = description;
             await _db.ChannelProfiles.AddAsync(viaChannelProfile.ChangeChannelProfile());
             await _db.SaveChangesAsync();
-            responseData.StatusCode = 1;
-            responseData.Message = "Save Success";
-            return responseData;
+            model = Result<string>.Success("Success");
 
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<string>.Error(ex);
         }
+        return model;
     }
 
-    public async Task<ResponseData> GenerateChannelUrl(int ChannelId,int LoginUserId)
+    public async Task<Result<string>> GenerateChannelUrl(int ChannelId,int LoginUserId)
     {
-        ResponseData responseData = new ResponseData();
+        Result<string> model = null;
         try
         {
             string domainUrl = _configuration["appSettings:DomainUrl"] ?? throw new Exception("Invalid DomainUrl");
             string urlSalt = _configuration["appSettings:UrlSalt"] ?? throw new Exception("Invalid UrlSalt");
 
             var resda = await _db.Channels.Where(x => x.ChannelId == ChannelId).FirstOrDefaultAsync();
-            if (resda is null) throw new ValidationException("Channel Not Found");
+            if (resda is null) return Result<string>.Error("Channel Not Found");
 
             string channeldata = $"{LoginUserId}/{ChannelId}";
             string encryptdata = Encryption.EncryptID(channeldata, urlSalt);
             string url = domainUrl +"Channel/" + encryptdata;
-            responseData.StatusCode = 1;
-            responseData.Message = "Success";
-            responseData.Data = url;
-            return responseData;
-            //responseData.Data = 
+            model = Result<string>.Success(url);
 
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<string>.Error(ex);
         }
+        return model;
     }
 
-    public async Task<ResponseData> VisitChannelByInviteLink(string inviteLink,int LoginUserId)
+    public async Task<Result<VisitChannelResponse>> VisitChannelByInviteLink(string inviteLink,int LoginUserId)
     {
-        ResponseData responseData = new ResponseData();
+        Result<VisitChannelResponse> model = null;
         try
         {
             string urlSalt = _configuration["appSettings:UrlSalt"] ?? throw new Exception("Invalid UrlSalt"); 
@@ -461,7 +372,7 @@ public class DA_Channel
 
                                                       }).FirstOrDefaultAsync();
 
-                if (reData is null) throw new ValidationException("Channel Not Found");
+                if (reData is null) return Result<VisitChannelResponse>.Error("Channel Not Found");
 
                 VisitChannelHistory inviteHist = new VisitChannelHistory
                 {
@@ -472,10 +383,7 @@ public class DA_Channel
                 };
                 await _db.VisitChannelHistories.AddAsync(inviteHist);
                 await _db.SaveChangesAsync();
-                responseData.StatusCode = 1;
-                responseData.Message = "Success";
-                responseData.Data = reData;
-                return responseData;
+                model = Result<VisitChannelResponse>.Success(reData);
             }
             else
             {
@@ -502,7 +410,7 @@ public class DA_Channel
                                         
                                     }).FirstOrDefaultAsync();
 
-                if (reData is null) throw new ValidationException("Channel Not Found");
+                if (reData is null) return Result<VisitChannelResponse>.Error("Channel Not Found");
                 var statusdata = await (from cm in _db.ChannelMemberships
                                         join st in _db.StatusTypes on cm.StatusId equals st.StatusId
                                         where cm.ChannelId == channelId && cm.UserId == LoginUserId
@@ -511,27 +419,17 @@ public class DA_Channel
                                             StatusId = st.StatusId,
                                             StatusName = st.StatusName,
                                         }).FirstOrDefaultAsync();
-                if (statusdata is null) throw new ValidationException("Member Status Not Found");
+                if (statusdata is null) return Result<VisitChannelResponse>.Error("Member Status Not Found");
                 reData.IsMember = statusdata.StatusName.ToLower() == "approved";
                 reData.MemberStatus = statusdata.StatusName;
-                responseData.StatusCode = 1;
-                responseData.Message = "Success";
-                responseData.Data = reData;
-                return responseData;
+                model = Result<VisitChannelResponse>.Success(reData);
             }
 
         }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
-        }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<VisitChannelResponse>.Error(ex);
         }
+        return model;
     }
 }

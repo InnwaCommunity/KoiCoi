@@ -29,14 +29,14 @@ public class UserController : BaseController
     }
 
     [HttpGet("FindUserByName/{username}", Name = "FindUserByName")]
-    public async Task<ResponseData> FindUserByName(string username)
+    public async Task<Result<List<UserInfoResponse>>> FindUserByName(string username)
     {
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
         return await _bLUser.FindUserByName(username,LoginEmpID);
     }
 
     [HttpDelete("DeleteLoginUser",Name = "DeleteLoginUser")]
-    public async Task<ResponseData> DeleteLoginUser()
+    public async Task<Result<string>> DeleteLoginUser()
     {
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
         return await _bLUser.DeleteLoginUser(LoginEmpID);

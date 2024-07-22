@@ -13,45 +13,38 @@ public class DA_ChangePassword
         _db = db;
     }
 
-    public async Task<ResponseData> RequestByEmail(string? email, int userid,string ipaddress, int maxRetryOTPCount, int maxOTPFailCount, int otpExpireMinute)
+    public async Task<Result<OtpPrefixChar>> RequestByEmail(string? email, int userid,string ipaddress, int maxRetryOTPCount, int maxOTPFailCount, int otpExpireMinute)
     {
-        ResponseData responseData = new ResponseData();
+        Result<OtpPrefixChar> model = null;
         try
         {
             var userData = await _db.Users.Where(x => x.UserId == userid).FirstOrDefaultAsync();
             if (userData == null)
-                throw new ValidationException("Login User  not found.");
+                return Result<OtpPrefixChar>.Error("User Not Found");
 
             if (!string.IsNullOrEmpty(email))
             {
-                responseData = await DoOTPValidationAsync("Vertify Email", userData.Name, email, userid, ipaddress, maxRetryOTPCount, maxOTPFailCount, otpExpireMinute);
+                model = await DoOTPValidationAsync("Vertify Email", userData.Name, email, userid, ipaddress, maxRetryOTPCount, maxOTPFailCount, otpExpireMinute);
             }
             else
             {
                 if (string.IsNullOrEmpty(userData.Email))
-                    throw new ValidationException("Login User Email  not found.");
+                    return Result<OtpPrefixChar>.Error("Login User Email  not found.");
 
-                responseData = await DoOTPValidationAsync("Reset Password", userData.Name, userData.Email, userid, ipaddress, maxRetryOTPCount, maxOTPFailCount, otpExpireMinute);
+                model = await DoOTPValidationAsync("Reset Password", userData.Name, userData.Email, userid, ipaddress, maxRetryOTPCount, maxOTPFailCount, otpExpireMinute);
             }
-            return responseData;
 
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<OtpPrefixChar>.Error(ex);
         }
+
+        return model;
     }
-    private async Task<ResponseData> DoOTPValidationAsync(string subject,string LoginName,string Email, int userId, string ipaddress, int _maxRetryOTPCount, int _maxOTPFailCount, int _otpExpireMinute)
+    private async Task<Result<OtpPrefixChar>> DoOTPValidationAsync(string subject,string LoginName,string Email, int userId, string ipaddress, int _maxRetryOTPCount, int _maxOTPFailCount, int _otpExpireMinute)
     {
-        ResponseData responseData = new ResponseData();
+        Result<OtpPrefixChar> model = null;
         string[] OTPAllowedCharacters = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" };
         string[] PrefixAllowedCharacters = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
 
@@ -106,8 +99,7 @@ public class DA_ChangePassword
             var mailinfo = await _db.InformMails.FirstOrDefaultAsync();
             if(mailinfo == null)
             {
-                responseData.StatusCode = 0;
-                responseData.Message = "Inform Email Not Found";
+                model = Result<OtpPrefixChar>.Error("Inform Email Not Found");
             }
             mailinfo!.UseCount = 1 + mailinfo.UseCount;
             await _db.SaveChangesAsync();
@@ -115,28 +107,27 @@ public class DA_ChangePassword
                                     Dear {LoginName},<br>
                                     Your OTP code to {subject} is {sRandomOTP}";
 
-            ResponseData d=Globalfunction.SendEmailAsync(mailinfo.FromMail,mailinfo.AppPassword, Email, subject, messagebody);
+            Result<string> d=Globalfunction.SendEmailAsync(mailinfo.FromMail,mailinfo.AppPassword, Email, subject, messagebody);
             
-            if(d.StatusCode == 0)
+            if(d.IsError)
             {
-                return d;
+                return Result<OtpPrefixChar>.Error(d.Message);
             }
-            responseData.StatusCode = 1;
-            responseData.Message = "Successful generate OTP code";
-            responseData.Data = new { prefix_char = sRandomChar };
-            return responseData;
+            model = Result<OtpPrefixChar>.Success( new OtpPrefixChar{
+                PrefixChar = sRandomChar
+            });
         }
         else
         {
-            responseData.StatusCode = 0;
-            responseData.Message = "You have been reached max OTP code, please try again after 24 hrs";
-            return responseData;
+            model = Result<OtpPrefixChar>.Error("You have been reached max OTP code, please try again after 24 hrs");
         }
+
+        return model;
     }
 
-    public async Task<ResponseData> ChangePasswordByOTP(ChangePasswordOTPPayload objPayload, int _maxRetryOTPCount, int _maxOTPFailCount, int _otpExpireMinute)
+    public async Task<Result<string>> ChangePasswordByOTP(ChangePasswordOTPPayload objPayload, int _maxRetryOTPCount, int _maxOTPFailCount, int _otpExpireMinute)
     {
-        ResponseData resdata = new ResponseData();
+        Result<string> model = null;
         try
         {
             Globalfunction.CheckPassword(objPayload.ConfirmPassword);
@@ -151,13 +142,13 @@ public class DA_ChangePassword
                 {
                     if (otpObject.SendDateTime.AddMinutes(_otpExpireMinute) < DateTime.Now)
                     {
-                        throw new ValidationException("OTP code is expired, please request OTP again.");
+                        return Result<string>.Error("OTP code is expired, please request OTP again.");
                     }
                     string passcode = otpObject.Passcode;
                     // Check otp code
                     if (otpObject.FailCount >= _maxOTPFailCount)
                     {
-                        throw new ValidationException("You have been reached a lot of wrong OTP code, please request OTP again");
+                        return Result<string>.Error("You have been reached a lot of wrong OTP code, please request OTP again");
                     }
 
                     if (otpcode == passcode)
@@ -178,9 +169,7 @@ public class DA_ChangePassword
                         _db.Users.Update(useinfo);
                         await _db.SaveChangesAsync();
 
-                        resdata.StatusCode = 1;
-                        resdata.Message = "Successfully change password";
-                        return resdata;
+                        model = Result<string>.Success("Successfully change password");
                     }
                     else
                     {
@@ -188,36 +177,29 @@ public class DA_ChangePassword
                         otpObject.LastModifiedDate = DateTime.Now;
                          _db.Otps.Update(otpObject);
                         await _db.SaveChangesAsync();
-                        throw new ValidationException("Your OTP code is wrong, please try again.");
+                        model = Result<string>.Error("Your OTP code is wrong, please try again.");
                     }
                 }
                 else
                 {
-                    throw new ValidationException("Invalid  Email");
+                    model = Result<string>.Error("Invalid  Email");
                 }
             }
             else
             {
-               throw new ValidationException("Invalid Login Name");
+                model = Result<string>.Error("Invalid Login Name");
             }
-        }
-        catch (ValidationException vex)
-        {
-            resdata.StatusCode = 0;
-            resdata.Message = vex.ValidationResult.ErrorMessage;
-            return resdata;
         }
         catch (Exception ex)
         {
             Console.WriteLine("GetApproverSettingWeb" + DateTime.Now + ex.Message);
-            resdata.StatusCode = 0;
-            resdata.Message = ex.Message;
-            return resdata;
+            model = Result<string>.Error(ex);
         }
+        return model;
     }
-    public async Task<ResponseData> SaveVertifyEmail(VertifyEmailPayload verEmPay, int _maxRetryOTPCount, int _maxOTPFailCount, int _otpExpireMinute)
+    public async Task<Result<string>> SaveVertifyEmail(VertifyEmailPayload verEmPay, int _maxRetryOTPCount, int _maxOTPFailCount, int _otpExpireMinute)
     {
-        ResponseData resdata = new ResponseData();
+        Result<string> model = null;
         try
         {
             string otpcode = verEmPay.OTPPrefix + "-" + verEmPay.OTPPasscode;
@@ -231,13 +213,13 @@ public class DA_ChangePassword
                 {
                     if (otpObject.SendDateTime.AddMinutes(_otpExpireMinute) < DateTime.Now)
                     {
-                        throw new ValidationException("OTP code is expired, please request OTP again.");
+                        return Result<string>.Error("OTP code is expired, please request OTP again.");
                     }
                     string passcode = otpObject.Passcode;
                     // Check otp code
                     if (otpObject.FailCount >= _maxOTPFailCount)
                     {
-                        throw new ValidationException("You have been reached a lot of wrong OTP code, please request OTP again");
+                        return Result<string>.Error("You have been reached a lot of wrong OTP code, please request OTP again");
                     }
 
                     if (otpcode == passcode)
@@ -254,9 +236,7 @@ public class DA_ChangePassword
                         _db.Users.Update(useinfo);
                         await _db.SaveChangesAsync();
 
-                        resdata.StatusCode = 1;
-                        resdata.Message = "Vertify Email Success";
-                        return resdata;
+                        model = Result<string>.Success("Vertify Email Success");
                     }
                     else
                     {
@@ -264,31 +244,25 @@ public class DA_ChangePassword
                         otpObject.LastModifiedDate = DateTime.Now;
                          _db.Otps.Update(otpObject);
                         await _db.SaveChangesAsync();
-                        throw new ValidationException("Your OTP code is wrong, please try again.");
+                        model = Result<string>.Error("Your OTP code is wrong, please try again.");
                     }
                 }
                 else
                 {
-                    throw new ValidationException("Invalid  Email");
+                    model = Result<string>.Error("Invalid  Email");
                 }
             }
             else
             {
-               throw new ValidationException("Invalid Login Name");
+                model = Result<string>.Error("Invalid Login Name");
             }
-        }
-        catch (ValidationException vex)
-        {
-            resdata.StatusCode = 0;
-            resdata.Message = vex.ValidationResult.ErrorMessage;
-            return resdata;
         }
         catch (Exception ex)
         {
             Console.WriteLine("GetApproverSettingWeb" + DateTime.Now + ex.Message);
-            resdata.StatusCode = 0;
-            resdata.Message = ex.Message;
-            return resdata;
+            model = Result<string>.Error(ex);
         }
+
+        return model;
     }
 }

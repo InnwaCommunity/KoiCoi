@@ -18,4 +18,10 @@ Encryption.EncryptID(item.UserId.ToString(), LoginUserId.ToString())
 Convert.ToInt32(Encryption.DecryptID(id, LoginEmpID.ToString()))
 ```
 
+result pattern
+```bash
+Result<T>.Success(data);
+Result<T>.Error(error);
+```
+
 

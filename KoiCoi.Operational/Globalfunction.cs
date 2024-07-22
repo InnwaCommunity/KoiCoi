@@ -22,10 +22,8 @@ namespace KoiCoi.Operational;
 
 public class Globalfunction
 {
-    public static ResponseData SendEmailAsync(string fromMail,string appPw,string ToEmail,string Subject,string Message)
+    public static Result<string> SendEmailAsync(string fromMail,string appPw,string ToEmail,string Subject,string Message)
     {
-        
-        ResponseData responseData = new ResponseData();
         try
         {
             MailMessage message = new MailMessage();
@@ -44,14 +42,11 @@ public class Globalfunction
 
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Send(message);
-            responseData.StatusCode = 1;
-            return responseData;
+            return Result<string>.Success("Email Send Success");
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            return Result<string>.Error(ex);
         }
     }
 

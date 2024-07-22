@@ -1,8 +1,4 @@
 ﻿
-
-using KoiCoi.Models.User_Dto;
-using KoiCoi.Models.Via;
-
 namespace KoiCoi.Modules.Repository.User;
 
 public class BL_User
@@ -18,7 +14,7 @@ public class BL_User
         return await _daUser.GetStatusType();
     }
 
-    public async Task<ResponseData> CreateAccount(RequestUserDto requestUser)
+    public async Task<Result<ResponseUserDto>> CreateAccount(RequestUserDto requestUser)
     {
         try
         {
@@ -57,24 +53,21 @@ public class BL_User
             }
         }
         catch (Exception ex) {
-            ResponseData data = new ResponseData();
-            data.StatusCode = 0;
-            data.Message = ex.Message;
-            return data;
+            return Result<ResponseUserDto>.Error(ex);
         }
     }
 
-    public async Task<ResponseData> UpdateUserInfo(RequestUserDto requestUserDto,int LoginUserId)
+    public async Task<Result<string>> UpdateUserInfo(RequestUserDto requestUserDto,int LoginUserId)
     {
         return await _daUser.UpdateUserInfo(requestUserDto, LoginUserId);
     }
 
-    public async Task<ResponseData> FindUserByName(string name, int LoginUserId)
+    public async Task<Result<List<UserInfoResponse>>> FindUserByName(string name, int LoginUserId)
     {
         return await _daUser.FindUserByName(name, LoginUserId);
     }
 
-    public async Task<ResponseData> DeleteLoginUser(int LoginUserId)
+    public async Task<Result<string>> DeleteLoginUser(int LoginUserId)
     {
         return await _daUser.DeleteLoginUser(LoginUserId);
     }

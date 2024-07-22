@@ -15,17 +15,17 @@ public class DA_User
         _db = db;
     }
 
-    public async Task<ResponseData> CreateAccount(ViaUser viaUser,string temppassword)
+    public async Task<Result<ResponseUserDto>> CreateAccount(ViaUser viaUser,string temppassword)
     {
-        ResponseData responseData = new ResponseData();
+        Result<ResponseUserDto> model = null;
         try
         {
             if (!(await checkEmailUnique(viaUser.Email ?? "")))
-                throw new ValidationException("You Email Have Been Registered");
+                return Result<ResponseUserDto>.Error("You Email Have Been Registered");
             await _db.Users.AddAsync(viaUser.ChangeUser());
             int result = await _db.SaveChangesAsync();
             if (result == 0)
-                throw new ValidationException("Registration Fail");
+                return Result<ResponseUserDto>.Error("Registration Fail");
             RequestUserDto? userData = await _db.Users.Where(x => x.Name == viaUser.Name && x.Password == viaUser.Password)
                 .Select(x => new RequestUserDto
                 {
@@ -33,29 +33,20 @@ public class DA_User
                     Name = x.Name
                 }).FirstOrDefaultAsync();
             if (userData == null)
-                throw new ValidationException("Registration Fail");
-            responseData.StatusCode = 1;
-            responseData.Message = "Registration Success";
-            responseData.Data = new ResponseUserDto
+                return Result<ResponseUserDto>.Error("Registration Fail");
+            
+            model = Result<ResponseUserDto>.Success(new ResponseUserDto
             {
-                    UserIdval =userData.UserIdval!,
-                    Name = userData.Name!,
-                    Password = temppassword!
-            };
-            return responseData;
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
+                UserIdval = userData.UserIdval!,
+                Name = userData.Name!,
+                Password = temppassword!
+            });
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<ResponseUserDto>.Error(ex);
         }
+        return model;
     }
     private async Task<bool> checkEmailUnique(string email)
     {
@@ -68,46 +59,45 @@ public class DA_User
         return unique;
     }
 
-    public async Task<ResponseData> UpdateUserInfo(RequestUserDto requestUserDto,int LoginUserId)
+    public async Task<Result<string>> UpdateUserInfo(RequestUserDto requestUserDto,int LoginUserId)
     {
-        ResponseData responseData = new ResponseData();
+        Result<string> model = null;
         try
         {
             var useData = await _db.Users
                                         .Where(x => x.UserId == LoginUserId).FirstOrDefaultAsync();
-            if (useData==null)
-                throw new ValidationException("User Not Found");
+            if (useData == null)
+                return Result<string>.Error("User Not Found");
             useData.Name = requestUserDto.Email ?? useData.Email!;
             useData.Phone = requestUserDto.Phone ?? useData.Phone;
             useData.DeviceId = requestUserDto.DeviceId ?? useData.DeviceId;
             useData.ModifiedDate = DateTime.Now;
             int result = await _db.SaveChangesAsync();
             if (result == 0)
-                throw new ValidationException("Update Fail");
-            responseData.StatusCode = 1;
-            responseData.Message = "Update Success";
-            return responseData;
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
+                return Result<string>.Error("Update Fail");
+
+
+            model = Result<string>.Success("Update Success");
         }
         catch (Exception ex) 
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<string>.Error(ex);
         }
+        return model;
     }
 
-    public async Task<ResponseData> FindUserByIdval(int userId)
+    /*public async Task<Result<UserInfoResponse>> FindUserByIdval(int userId,int LoginUserId)
     {
-        ResponseData responseData = new ResponseData();
+        Result<UserInfoResponse> model = null;
         try
         {
-            var userData = await _db.Users.Where(x=> x.UserId == userId && x.Inactive == false).FirstOrDefaultAsync();
+            var userData = await _db.Users.Where(x=> x.UserId == userId && x.Inactive == false)
+                                        .Select(x=> new UserInfoResponse
+                                        {
+                                            UserIdval = Encryption.EncryptID(x.UserId.ToString(), LoginUserId.ToString()),
+                                            UserName = x.Name
+                                        })
+                                        .FirstOrDefaultAsync();
             if (userData == null)
                 throw new ValidationException("Login User  not found.");
 
@@ -128,43 +118,29 @@ public class DA_User
             return responseData;
         }
     }
+     */
 
-    public async Task<ResponseData> FindUserByName(string name,int LoginUserId)
+    public async Task<Result<List<UserInfoResponse>>> FindUserByName(string name,int LoginUserId)
     {
-        ResponseData responseData = new ResponseData();
+        Result<List<UserInfoResponse>> model = null;
         try
         {
-            var userData = await _db.Users.Where(x => x.Name.Contains(name) && x.Inactive == false).ToListAsync();
-            if (userData == null)
-                throw new ValidationException("Login User  not found.");
+            List<UserInfoResponse> user = await _db.Users.Where(x => x.Name.Contains(name) && x.Inactive == false)
+                                           .Select(x=> new UserInfoResponse
+                                           {
+                                               UserIdval = Encryption.EncryptID(x.UserId.ToString(), LoginUserId.ToString()),
+                                               UserName = x.Name,
+                                           })
+                                          .ToListAsync();
 
-            var respon = new List<dynamic>();
-            foreach (var item in userData)
-            {
-                var newres = new
-                {
-                    UserIdval = Encryption.EncryptID(item.UserId.ToString(), LoginUserId.ToString()),
-                    Name = item.Name,
-                };
-                respon.Add(newres);
-            }
-            responseData.StatusCode = 1;
-            responseData.Message = "Get User Success";
-            responseData.Data = respon;
-            return responseData;
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
+            model = Result<List<UserInfoResponse>>.Success(user);
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<List<UserInfoResponse>>.Error(ex);
         }
+
+        return model;
     }
 
     public async Task<dynamic> GetStatusType()
@@ -187,33 +163,27 @@ public class DA_User
         }
     }
 
-    public async Task<ResponseData> DeleteLoginUser(int LoginUserId)
+    public async Task<Result<string>> DeleteLoginUser(int LoginUserId)
     {
-        ResponseData responseData = new ResponseData();
+        Result<string> model = null;
         try
         {
             var userData = await _db.Users.Where(x => x.UserId == LoginUserId).FirstOrDefaultAsync();
             if (userData == null)
-                throw new ValidationException("Login User  not found.");
+                return Result<string>.Error("Login User  not found.");
 
             userData.ModifiedDate = DateTime.Now;
             userData.Inactive = true;
             await _db.SaveChangesAsync();
-            responseData.StatusCode = 1;
-            responseData.Message = "Login User Delete Success.You can get your account within 30 days.Please remember your password or your email.";
-            return responseData;
-        }
-        catch (ValidationException vex)
-        {
-            responseData.StatusCode = 0;
-            responseData.Message = vex.ValidationResult.ErrorMessage;
-            return responseData;
+
+
+            model = Result<string>.Success("Login User Delete Success.You can get your account within 30 days.Please remember your password or your email.");
+            
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            model = Result<string>.Error(ex);
         }
+        return model;
     }
 }

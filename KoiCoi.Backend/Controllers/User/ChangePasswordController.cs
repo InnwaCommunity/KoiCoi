@@ -2,6 +2,7 @@
 
 using KoiCoi.Backend.Controllers;
 using KoiCoi.Models.Otp_Dtos;
+using KoiCoi.Models.Otp_Dtos.Response;
 using Org.BouncyCastle.Utilities.Encoders;
 using System.ComponentModel.DataAnnotations;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -25,59 +26,46 @@ public class ChangePasswordController : BaseController
         _otpExpireMinute = _configuration.GetSection("appSettings:OTPExpireMinute").Get<int>();
     }
     [HttpPost("RequestByEmail", Name = "RequestByEmail")]
-    public async Task<ResponseData> RequestByEmail(ForgotPasswordEmailPayload payload)
+    public async Task<Result<OtpPrefixChar>> RequestByEmail(ForgotPasswordEmailPayload payload)
     {
         try
         {
             int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
             string Email = payload.Email;
             string ipaddress = Convert.ToString(Globalfunction.GetClientIP(HttpContext));
-            ResponseData res = await _blChnagePassword.RequestByEmail(Email,LoginEmpID, ipaddress, _maxRetryOTPCount, _maxOTPFailCount, _otpExpireMinute);
+            Result<OtpPrefixChar> res = await _blChnagePassword.RequestByEmail(Email,LoginEmpID, ipaddress, _maxRetryOTPCount, _maxOTPFailCount, _otpExpireMinute);
             return res;
         }
         catch (Exception ex)
         {
             Console.WriteLine("GetApproverSettingWeb" + DateTime.Now + ex.Message);
-            ResponseData data = new ResponseData();
-            data.StatusCode = 0;
-            data.Message = ex.Message;
-            return data;
+            return Result<OtpPrefixChar>.Error(ex);
         }
     }
 
     [HttpPost("ChangePasswordByOTP", Name = "ChangePasswordByOTP")]
-    public async Task<ResponseData> ChangePasswordByOTP(ChangePasswordOTPPayload ObjPayload)
+    public async Task<Result<string>> ChangePasswordByOTP(ChangePasswordOTPPayload ObjPayload)
     {
         try
         {
             if (ObjPayload.Password != ObjPayload.ConfirmPassword)
-                throw new ValidationException("Password and confirm password not match.");
+                return Result<string>.Error("Password and confirm password not match.");
 
             int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
             ObjPayload.LoginId = LoginEmpID;
             return await _blChnagePassword.ChangePasswordByOTP(ObjPayload, _maxRetryOTPCount, _maxOTPFailCount, _otpExpireMinute);
 
         }
-        catch (ValidationException vex)
-        {
-            ResponseData data = new ResponseData();
-            data.StatusCode = 0;
-            data.Message = vex.ValidationResult.ErrorMessage;
-            return data;
-        }
         catch (Exception ex)
         {
             Console.WriteLine("GetApproverSettingWeb" + DateTime.Now + ex.Message);
-            ResponseData data = new ResponseData();
-            data.StatusCode = 0;
-            data.Message = ex.Message;
-            return data;
+            return Result<string>.Error(ex);
         }
     }
 
 
     [HttpPost("SaveVertifyEmail",Name = "SaveVertifyEmail")]
-    public async Task<ResponseData> SaveVertifyEmail(VertifyEmailPayload verEmPay)
+    public async Task<Result<string>> SaveVertifyEmail(VertifyEmailPayload verEmPay)
     {
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
         verEmPay.LoginId = LoginEmpID;

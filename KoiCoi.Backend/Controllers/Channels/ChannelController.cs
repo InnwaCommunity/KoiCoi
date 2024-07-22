@@ -5,6 +5,7 @@ using Serilog;
 using System.Configuration;
 using System.Drawing.Imaging;
 using System.Drawing;
+using KoiCoi.Models.ChannelDtos.ResponseDtos;
 
 namespace KoiCoi.Backend.Controllers.Channels;
 
@@ -23,7 +24,7 @@ public class ChannelController : BaseController
 
 
     [HttpGet("GetCurrencyList", Name = "GetCurrencyList")]
-    public async Task<ResponseData> GetCurrencyList()
+    public async Task<Result<List<CurrencyResponseDto>>> GetCurrencyList()
     {
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
         return await _blChannel.GetCurrencyList(LoginEmpID);
@@ -96,7 +97,7 @@ public class ChannelController : BaseController
      */
 
     [HttpPost("CreateChannel",Name = "CreateChannel")]
-    public async Task<ResponseData> CreateChannel(CreateChannelReqeust channelReqeust)
+    public async Task<Result<ChannelDataResponse>> CreateChannel(CreateChannelReqeust channelReqeust)
     {
         try
         {
@@ -129,24 +130,21 @@ public class ChannelController : BaseController
         }
         catch (Exception ex)
         {
-            ResponseData responseData = new ResponseData();
-            responseData.StatusCode = 0;
-            responseData.Message= ex.Message;
-            return responseData;
+            return Result<ChannelDataResponse>.Error(ex);
         }
     }
 
-    [HttpGet("GetChannels",Name = "GetChannels")]
-    public async Task<ResponseData> GetChannels()
+    [HttpGet("GetChannelsList", Name = "GetChannelsList")]
+    public async Task<Result<List<ChannelDataResponse>>> GetChannelsList()
     {
 
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-        return await _blChannel.GetChannels(LoginEmpID);
+        return await _blChannel.GetChannelsList(LoginEmpID);
 
     }
 
     [HttpPost("GetChannelProfile",Name = "GetChannelProfile")]
-    public async Task<ResponseData> GetChannelProfile(GetChannelData getChannelData)
+    public async Task<Result<string>> GetChannelProfile(GetChannelData getChannelData)
     {
         try
         {
@@ -162,19 +160,15 @@ public class ChannelController : BaseController
         }
         catch (Exception ex)
         {
-            ResponseData responseData = new ResponseData();
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            return Result<string>.Error(ex);
         }
 
     }
     [HttpPost("DirectUploadChannelProfile",Name = "DirectUploadChannelProfile")]
 
-    public async Task<ResponseData> DirectUploadChannelProfile(UploadChannelProfileRequest updoadReqeust)
+    public async Task<Result<string>> DirectUploadChannelProfile(UploadChannelProfileRequest updoadReqeust)
     {
         Response.ContentType = "application/json";
-        ResponseData responseData = new ResponseData();
         try
         {
             if (string.IsNullOrEmpty(updoadReqeust.ChannelIdval)) throw new Exception("ChannelId can't be null or empty");
@@ -206,8 +200,8 @@ public class ChannelController : BaseController
                     }
                     await System.IO.File.WriteAllBytesAsync(filePath, bytes);
 
-                    ResponseData resDa= await _blChannel.UploadProfile(LoginEmpID, ChannelId, filename, updoadReqeust.description);
-                    if (resDa.StatusCode == 0) return resDa;
+                Result<string> resDa = await _blChannel.UploadProfile(LoginEmpID, ChannelId, filename, updoadReqeust.description);
+                    if (resDa.IsError) return resDa;
 
                     if (!System.IO.File.Exists(filePath))
                     {
@@ -227,14 +221,12 @@ public class ChannelController : BaseController
         }
         catch (Exception ex)
         {
-            responseData.StatusCode = 0;
-            responseData.Message = ex.Message;
-            return responseData;
+            return Result<string>.Error(ex);
         }
     }
 
     [HttpPost("GenerateChannelUrl",Name = "GenerateChannelUrl")]
-    public async Task<ResponseData> GenerateChannelUrl(GetChannelData getChannelData)
+    public async Task<Result<string>> GenerateChannelUrl(GetChannelData getChannelData)
     {
         try
         {
@@ -246,16 +238,13 @@ public class ChannelController : BaseController
         }
         catch (Exception ex)
         {
-            ResponseData res= new ResponseData();
-            res.StatusCode = 0;
-            res.Message = ex.Message;
-            return res;
+            return Result<string>.Error(ex);
         }
 
     }
 
     [HttpPost("GenerateChannelQrCode",Name = "GenerateChannelQrCode")]
-    public async Task<ResponseData> GenerateChannelQrCode(GetChannelData getChannelData)
+    public async Task<Result<string>> GenerateChannelQrCode(GetChannelData getChannelData)
     {
         try
         {
@@ -263,8 +252,8 @@ public class ChannelController : BaseController
             if (string.IsNullOrEmpty(channelIdval)) throw new Exception("Channel Id can't null or empty");
             int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
             int ChannelId = Convert.ToInt32(Encryption.DecryptID(channelIdval, LoginEmpID.ToString()));
-            ResponseData resData= await _blChannel.GenerateChannelUrl(ChannelId, LoginEmpID);
-            if (resData.StatusCode == 0) return resData;
+            Result<string> resData = await _blChannel.GenerateChannelUrl(ChannelId, LoginEmpID);
+            if (resData.IsError) return resData;
 
             // Create a new instance of the QR Code generator
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
@@ -285,16 +274,13 @@ public class ChannelController : BaseController
         }
         catch (Exception ex)
         {
-            ResponseData res = new ResponseData();
-            res.StatusCode = 0;
-            res.Message = ex.Message;
-            return res;
+            return Result<string>.Error(ex);
         }
     }
 
 
     [HttpPost("VisitChannelByInviteLink",Name = "VisitChannelByInviteLink")]
-    public async Task<ResponseData> VisitChannelByInviteLink(ChannelInviteLinkPayload payload)
+    public async Task<Result<VisitChannelResponse>> VisitChannelByInviteLink(ChannelInviteLinkPayload payload)
     {
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
         return await _blChannel.VisitChannelByInviteLink(payload.InviteLink, LoginEmpID);

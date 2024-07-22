@@ -11,6 +11,8 @@ global using KoiCoi.Models.Otp_Dtos;
 global using KoiCoi.Models.ChannelDtos;
 global using KoiCoi.Models.Currency;
 global using KoiCoi.Models.ChannelDtos.ResponseDtos;
+global using KoiCoi.Models.Otp_Dtos.Response;
+global using KoiCoi.Models.Via;
 //Mapper
 
 global using KoiCoi.Mapper;

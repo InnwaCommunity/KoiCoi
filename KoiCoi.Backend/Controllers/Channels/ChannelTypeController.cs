@@ -17,13 +17,13 @@ public class ChannelTypeController : BaseController
     }
 
     [HttpPost("CreateChannelType",Name = "CreateChannelType")]
-    public async Task<ResponseData> CreateChannelType(ViaChannelType channelType)
+    public async Task<Result<string>> CreateChannelType(ViaChannelType channelType)
     {
         return await _blChannel.CreateChannelType(channelType);
     }
 
     [HttpPost("UpdateChannelType", Name = "UpdateChannelType")]
-    public async Task<ResponseData> UpdateChannelType(ChannelTypePayloads channelType)
+    public async Task<Result<string>> UpdateChannelType(ChannelTypePayloads channelType)
     {
         try
         {
@@ -33,16 +33,12 @@ public class ChannelTypeController : BaseController
         }
         catch (Exception ex)
         {
-            Console.WriteLine("GetApproverSettingWeb" + DateTime.Now + ex.Message);
-            ResponseData data = new ResponseData();
-            data.StatusCode = 0;
-            data.Message = ex.Message;
-            return data;
+            return Result<string>.Error(ex);
         }
     }
 
     [HttpDelete("DeleteChannelType/{id}",Name = "DeleteChannelType")]
-    public async Task<ResponseData> DeleteChannelType(string id)
+    public async Task<Result<string>> DeleteChannelType(string id)
     {
         try
         {
@@ -52,16 +48,12 @@ public class ChannelTypeController : BaseController
         }
         catch (Exception ex)
         {
-            Console.WriteLine("GetApproverSettingWeb" + DateTime.Now + ex.Message);
-            ResponseData data = new ResponseData();
-            data.StatusCode = 0;
-            data.Message = ex.Message;
-            return data;
+            return Result<string>.Error(ex);
         }
     }
 
     [HttpGet("GetChannelType",Name = "GetChannelType")]
-    public async Task<ResponseData> GetChannelType()
+    public async Task<Result<List<ChannelTypeResponseDto>>> GetChannelType()
     {
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
         return await _blChannel.GetChannelType(LoginEmpID);
