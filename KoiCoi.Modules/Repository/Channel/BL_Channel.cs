@@ -66,4 +66,14 @@ public class BL_Channel
     {
         return await _daChannel.VisitChannelByInviteLink(inviteLink,LoginUserId);
     }
+
+    public async Task<Result<string>> JoinChannelByInviteLink(JoinChannelInviteLinkPayload payload,int LoginUserId)
+    {
+        return await _daChannel.JoinChannelByInviteLink(payload, LoginUserId);
+    }
+
+    public async Task<Result<List<ChannelMemberResponse>>> GetChannelMemberRequest(string ChannelIdval,string MemberStatus,int LoginUserId)
+    {
+        return await _daChannel.GetChannelMemberRequest(ChannelIdval,MemberStatus, LoginUserId);
+    }
 }

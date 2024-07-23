@@ -71,4 +71,9 @@ public class BL_User
     {
         return await _daUser.DeleteLoginUser(LoginUserId);
     }
+
+    public async Task<Result<string>> UploadUserProfile(UploadUserProfileReqeust payload,int LoginUserId)
+    {
+        return await _daUser.UploadUserProfile(payload, LoginUserId);
+    }
 }

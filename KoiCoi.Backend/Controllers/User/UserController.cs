@@ -41,4 +41,11 @@ public class UserController : BaseController
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
         return await _bLUser.DeleteLoginUser(LoginEmpID);
     }
+
+    [HttpPost("UploadUserProfile",Name = "UploadUserProfile")]
+    public async Task<Result<string>> UploadUserProfile(UploadUserProfileReqeust payload)
+    {
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        return await _bLUser.UploadUserProfile(payload,LoginEmpID);
+    }
 }

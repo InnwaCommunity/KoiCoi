@@ -6,6 +6,8 @@ using System.Configuration;
 using System.Drawing.Imaging;
 using System.Drawing;
 using KoiCoi.Models.ChannelDtos.ResponseDtos;
+using static QRCoder.PayloadGenerator;
+using System.Collections.Generic;
 
 namespace KoiCoi.Backend.Controllers.Channels;
 
@@ -282,8 +284,25 @@ public class ChannelController : BaseController
     [HttpPost("VisitChannelByInviteLink",Name = "VisitChannelByInviteLink")]
     public async Task<Result<VisitChannelResponse>> VisitChannelByInviteLink(ChannelInviteLinkPayload payload)
     {
+        if (string.IsNullOrEmpty(payload.InviteLink)) return Result<VisitChannelResponse>.Error("Invite  Link Can't Null Or Empty");
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
         return await _blChannel.VisitChannelByInviteLink(payload.InviteLink, LoginEmpID);
     }
 
+
+    [HttpPost("JoinChannelByInviteLink",Name = "JoinChannelByInviteLink")]
+    public async Task<Result<string>> JoinChannelByInviteLink(JoinChannelInviteLinkPayload payload)
+    {
+        if (string.IsNullOrEmpty(payload.InviteLink)) return Result<string>.Error("Invite  Link Can't Null Or Empty");
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        return await _blChannel.JoinChannelByInviteLink(payload, LoginEmpID);
+    }
+
+    [HttpPost("GetChannelMemberRequest",Name = "GetChannelMemberRequest")]
+    public async Task<Result<List<ChannelMemberResponse>>> GetChannelMemberRequest(GetMembershipPayload payload)
+    {
+        if (string.IsNullOrEmpty(payload.ChannelIdval) || string.IsNullOrEmpty(payload.MemberState)) return Result< List < ChannelMemberResponse >>.Error("Channel Id can't be empty or null");
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        return await _blChannel.GetChannelMemberRequest(payload.ChannelIdval,payload.MemberState.ToLower(), LoginEmpID);
+    }
 }

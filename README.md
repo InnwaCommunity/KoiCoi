@@ -15,7 +15,7 @@ Scaffold-DbContext "Server=NYEINCHANNMOE;Database=Koi_Coi;User ID=sa; Password=n
 
 ```bash
 Encryption.EncryptID(item.UserId.ToString(), LoginUserId.ToString())
-Convert.ToInt32(Encryption.DecryptID(id, LoginEmpID.ToString()))
+Convert.ToInt32(Encryption.DecryptID(id, LoginUserId.ToString()))
 ```
 
 result pattern

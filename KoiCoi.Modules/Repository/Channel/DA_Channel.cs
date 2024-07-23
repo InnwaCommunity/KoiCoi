@@ -1,4 +1,5 @@
-﻿using KoiCoi.Models.Via;
+﻿using Azure;
+using KoiCoi.Models.Via;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -429,6 +430,134 @@ public class DA_Channel
         catch (Exception ex)
         {
             model = Result<VisitChannelResponse>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<string>> JoinChannelByInviteLink(JoinChannelInviteLinkPayload payload, int LoginUserId)
+    {
+        Result<string> model = null;
+        try
+        {
+            string urlSalt = _configuration["appSettings:UrlSalt"] ?? throw new Exception("Invalid UrlSalt");
+            string desdata = Encryption.DecryptID(payload.InviteLink!, urlSalt);
+            string[] splidata = desdata.Split('/');
+            int inviterId = Convert.ToInt32(splidata[0]);
+            int channelId = Convert.ToInt32(splidata[1]);
+
+            ///Join
+            if (payload.IsJoin ?? true)
+            {
+                var IsMember = await _db.ChannelMemberships
+                                        .Where(x => x.UserId == LoginUserId && x.ChannelId == channelId)
+                                        .FirstOrDefaultAsync();
+                if (IsMember is not null) return Result<string>.Error("Already Joined");
+
+                var hasChannel = await _db.Channels.Where(x => x.ChannelId == channelId).FirstOrDefaultAsync();
+                if (hasChannel is null) return Result<string>.Error("Channel Not Found");
+                int? memberLevel = await _db.UserTypes.Where(x => x.Name.ToLower() == "member").Select(x => x.TypeId).FirstOrDefaultAsync();
+                if (memberLevel is null) return Result<string>.Error("Member User Type Not Found");
+                ChannelMembership meship = new ChannelMembership
+                {
+                    ChannelId = channelId,
+                    UserId = LoginUserId,
+                    UserTypeId = memberLevel.Value,
+                    StatusId = 1,
+                    JoinedDate = DateTime.Now,
+                    InviterId = inviterId,
+                };
+                await _db.ChannelMemberships.AddAsync(meship);
+                await _db.SaveChangesAsync();
+                model = Result<string>.Success("Joined Success");
+            }
+            else
+            {
+                ///Cancel
+                var isReqeust = await _db.ChannelMemberships
+                                        .Where(x => x.UserId == LoginUserId
+                                        && x.ChannelId == channelId)
+                                        .FirstOrDefaultAsync();
+                if (isReqeust is not null)
+                {
+                    if (isReqeust.StatusId == 1 || isReqeust.StatusId == 3)
+                    {
+                        _db.ChannelMemberships.Remove(isReqeust);
+                        await _db.SaveChangesAsync();
+                        model = Result<string>.Success("Cancel Success");
+                    }
+                    else
+                    {
+                        model = Result<string>.Error("You are already member,so you can leave in channel detail");
+                    }
+                }
+                else
+                {
+                    model = Result<string>.Error("You are already cancel");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            model = Result<string>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<List<ChannelMemberResponse>>> GetChannelMemberRequest(string ChannelIdval,string MemberStatus, int LoginUserId)
+    {
+        Result<List<ChannelMemberResponse>> model = null;
+        try
+        {
+            int channelId = Convert.ToInt32(Encryption.DecryptID(ChannelIdval, LoginUserId.ToString()));
+            var chan = await _db.Channels.Where(x=> x.ChannelId == channelId).FirstOrDefaultAsync();
+            var statusType = await _db.StatusTypes.Where(x=> x.StatusName.ToLower() == MemberStatus).FirstOrDefaultAsync();
+
+
+            if (chan is null) return Result<List<ChannelMemberResponse>>.Error("Channel Not Found");
+            if(statusType is null) return Result<List<ChannelMemberResponse>>.Error("User Type Not Found");
+            string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
+            string uploadDirectory = _configuration["appSettings:UserProfile"] ?? throw new Exception("Invalid function upload path.");
+            string destDirectory = Path.Combine(baseDirectory, uploadDirectory);
+
+
+            List<ChannelMemberResponse> query = await (from ch in _db.ChannelMemberships
+                               join us in _db.Users on ch.UserId equals us.UserId
+                               join inv in _db.Users on ch.InviterId equals inv.UserId
+                               //join pro in _db.UserProfiles on ch.UserId equals pro.UserId
+                               where ch.ChannelId == channelId && ch.StatusId == statusType.StatusId
+                                select new ChannelMemberResponse
+                               {
+                                    MembershipId = Encryption.EncryptID(ch.MembershipId.ToString(), LoginUserId.ToString()),
+                                    MemberIdval = ch.UserId.ToString(), 
+                                   MemberName = us.Name,
+                                   InviterIdval = inv.UserId.ToString(),
+                                   InviterName = inv.Name,
+                                   JoinedDate = ch.JoinedDate,
+                                    UserImage64 = ""
+                                }).ToListAsync();
+            List<ChannelMemberResponse> resData = new List<ChannelMemberResponse>();
+
+            foreach( ChannelMemberResponse response in query )
+            {
+                /*string? userImageUrl = await _db.UserProfiles.Where(x => x.UserId == Convert.ToInt32(response.MemberIdval))
+                                        .Select(x=> x.Url)
+                                        .FirstOrDefaultAsync();
+                if (!string.IsNullOrEmpty(userImageUrl))
+                {
+                    string profileimg = Path.Combine(destDirectory, userImageUrl);
+                    byte[] imageBytes = System.IO.File.ReadAllBytes(profileimg);
+                    string base64String = Convert.ToBase64String(imageBytes);
+                    response.UserImage64 = base64String;
+                }*/
+                response.MemberIdval = Encryption.EncryptID(response.MemberIdval!, LoginUserId.ToString());
+                response.InviterIdval = Encryption.EncryptID(response.InviterIdval!, LoginUserId.ToString());
+                resData.Add(response);
+            }
+            model = Result<List<ChannelMemberResponse>>.Success(resData);
+        }
+        catch (Exception ex)
+        {
+            model = Result<List<ChannelMemberResponse>>.Error(ex);
         }
         return model;
     }

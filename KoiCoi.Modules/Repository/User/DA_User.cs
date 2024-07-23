@@ -1,7 +1,9 @@
 ﻿
 using KoiCoi.Database.AppDbContextModels;
 using KoiCoi.Models.Via;
+using Microsoft.Extensions.Configuration;
 using Org.BouncyCastle.Crypto;
+using Serilog;
 using System.ComponentModel.DataAnnotations;
 
 namespace KoiCoi.Modules.Repository.User;
@@ -9,10 +11,12 @@ namespace KoiCoi.Modules.Repository.User;
 public class DA_User
 {
     private readonly AppDbContext _db;
+    private readonly IConfiguration _configuration;
 
-    public DA_User(AppDbContext db)
+    public DA_User(AppDbContext db, IConfiguration configuration)
     {
         _db = db;
+        _configuration = configuration;
     }
 
     public async Task<Result<ResponseUserDto>> CreateAccount(ViaUser viaUser,string temppassword)
@@ -180,6 +184,57 @@ public class DA_User
             model = Result<string>.Success("Login User Delete Success.You can get your account within 30 days.Please remember your password or your email.");
             
         }
+        catch (Exception ex)
+        {
+            model = Result<string>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<string>> UploadUserProfile(UploadUserProfileReqeust payload, int LoginUserId)
+    {
+        Result<string> model = null;
+        try
+        {
+            if (string.IsNullOrEmpty(payload.description)) return Result<string>.Error("Image Not Found");
+
+            string? folderPath = _configuration["appSettings:UserProfile"];
+            if(folderPath is null) return Result<string>.Error("Invalid temp path.");
+            string? baseDirectory = _configuration["appSettings:UploadPath"];
+            if (baseDirectory is null) return Result<string>.Error("Invalid UploadPath");
+
+            folderPath = baseDirectory + folderPath;//flodrer import
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            string filename = Guid.NewGuid().ToString() + ".png";
+            string base64Str = payload.base64data!;
+            byte[] bytes = Convert.FromBase64String(base64Str!);
+
+            string filePath = Path.Combine(folderPath, filename);
+            if (filePath.Contains(".."))
+            { //if found .. in the file name or path
+                Log.Error("Invalid path " + filePath);
+                return Result<string>.Error("Invalid path");
+            }
+            await System.IO.File.WriteAllBytesAsync(filePath, bytes);
+
+
+            UserProfile profile = new UserProfile
+            {
+                Url = filename,
+                UrlDescription = payload.description,
+                UserId = LoginUserId,
+                CreatedDate = DateTime.Now,
+            };
+
+            await _db.UserProfiles.AddAsync(profile);
+            await _db.SaveChangesAsync();
+            model = Result<string>.Success("Upload Success");
+
+         }
         catch (Exception ex)
         {
             model = Result<string>.Error(ex);
