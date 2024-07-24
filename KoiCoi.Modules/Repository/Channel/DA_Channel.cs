@@ -520,9 +520,22 @@ public class DA_Channel
             string destDirectory = Path.Combine(baseDirectory, uploadDirectory);
 
 
+            var loginUserType = await (from ch in _db.ChannelMemberships
+                                              join ut in _db.UserTypes on ch.UserTypeId equals ut.TypeId
+                                              where ch.ChannelId == channelId && ch.UserId == LoginUserId
+                                              select new
+                                              {
+                                                  UserTypeName = ut.Name
+                                              }).FirstOrDefaultAsync();
+            if(loginUserType is null || loginUserType.UserTypeName.ToLower()=="member" )
+                return Result<List<ChannelMemberResponse>>.Success(new List<ChannelMemberResponse>());
+
+
+
             List<ChannelMemberResponse> query = await (from ch in _db.ChannelMemberships
                                join us in _db.Users on ch.UserId equals us.UserId
                                join inv in _db.Users on ch.InviterId equals inv.UserId
+                               join usertype in _db.UserTypes on ch.UserTypeId equals usertype.TypeId
                                //join pro in _db.UserProfiles on ch.UserId equals pro.UserId
                                where ch.ChannelId == channelId && ch.StatusId == statusType.StatusId
                                 select new ChannelMemberResponse
@@ -530,7 +543,9 @@ public class DA_Channel
                                     MembershipId = Encryption.EncryptID(ch.MembershipId.ToString(), LoginUserId.ToString()),
                                     MemberIdval = ch.UserId.ToString(), 
                                    MemberName = us.Name,
-                                   InviterIdval = inv.UserId.ToString(),
+                                    UserTypeIdval = Encryption.EncryptID(usertype.TypeId.ToString(), LoginUserId.ToString()),
+                                    UserTypeName = usertype.Name,
+                                    InviterIdval = inv.UserId.ToString(),
                                    InviterName = inv.Name,
                                    JoinedDate = ch.JoinedDate,
                                     UserImage64 = ""
