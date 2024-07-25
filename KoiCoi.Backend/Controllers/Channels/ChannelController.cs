@@ -298,11 +298,27 @@ public class ChannelController : BaseController
         return await _blChannel.JoinChannelByInviteLink(payload, LoginEmpID);
     }
 
-    [HttpPost("GetChannelMemberRequest",Name = "GetChannelMemberRequest")]
-    public async Task<Result<List<ChannelMemberResponse>>> GetChannelMemberRequest(GetMembershipPayload payload)
+    [HttpPost("GetChannelMember", Name = "GetChannelMember")]
+    public async Task<Result<List<ChannelMemberResponse>>> GetChannelMember(GetMembershipPayload payload)
     {
         if (string.IsNullOrEmpty(payload.ChannelIdval) || string.IsNullOrEmpty(payload.MemberState)) return Result< List < ChannelMemberResponse >>.Error("Channel Id can't be empty or null");
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-        return await _blChannel.GetChannelMemberRequest(payload.ChannelIdval,payload.MemberState.ToLower(), LoginEmpID);
+        return await _blChannel.GetChannelMember(payload.ChannelIdval,payload.MemberState.ToLower(), LoginEmpID);
     }
+
+    [HttpPost("ApproveRejectChannelMember",Name = "ApproveRejectChannelMember")]
+    public async Task<Result<string>> ApproveRejectChannelMember(List<AppRejChannelMemberPayload> payload)
+    {
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        return await _blChannel.ApproveRejectChannelMember(payload, LoginEmpID);
+    }
+    [HttpGet("GetVisitUsersRecords",Name = "VisitUsersRecords")]
+    public async Task<Result<VisitUserResponse>> GetVisitUsersRecords(GetVisitUsersPayload payload)
+    {
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        return await _blChannel.GetVisitUsersRecords(payload,LoginEmpID);
+    }
+    ///LeaveChannel
+    ///Visit Users in a month
+    ///New Member in a month
 }

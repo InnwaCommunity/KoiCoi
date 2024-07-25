@@ -72,8 +72,17 @@ public class BL_Channel
         return await _daChannel.JoinChannelByInviteLink(payload, LoginUserId);
     }
 
-    public async Task<Result<List<ChannelMemberResponse>>> GetChannelMemberRequest(string ChannelIdval,string MemberStatus,int LoginUserId)
+    public async Task<Result<List<ChannelMemberResponse>>> GetChannelMember(string ChannelIdval,string MemberStatus,int LoginUserId)
     {
-        return await _daChannel.GetChannelMemberRequest(ChannelIdval,MemberStatus, LoginUserId);
+        return await _daChannel.GetChannelMember(ChannelIdval,MemberStatus, LoginUserId);
+    }
+
+    public async Task<Result<string>> ApproveRejectChannelMember(List<AppRejChannelMemberPayload> payload,int LoginUserId)
+    {
+        return await _daChannel.ApproveRejectChannelMember(payload,LoginUserId);
+    }
+    public async Task<Result<VisitUserResponse>> GetVisitUsersRecords(GetVisitUsersPayload payload,int LoginUserId)
+    {
+        return await _daChannel.GetVisitUsersRecords(payload,LoginUserId);
     }
 }

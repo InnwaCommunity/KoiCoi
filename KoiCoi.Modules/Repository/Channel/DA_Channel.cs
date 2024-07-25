@@ -224,10 +224,16 @@ public class DA_Channel
         Result<List<ChannelDataResponse>> model = null;
         try
         {
+            int? ApprovedStatus = await _db.StatusTypes.Where(x=> x.StatusName.ToLower() == "approved")
+                            .Select(x=> x.StatusId)
+                            .FirstOrDefaultAsync();
+            if (ApprovedStatus == null) return Result<List<ChannelDataResponse>>.Error("Status Type Not Found");
             List<ChannelDataResponse> Channels = await ( from _channel in _db.Channels 
                                                join _chantype in _db.ChannelTypes on _channel.ChannelType equals _chantype.ChannelTypeId
                                                join _curr in _db.Currencies on _channel.CurrencyId equals _curr.CurrencyId
-                                               orderby _channel.ChannelName
+                                               join _mem in _db.ChannelMemberships on _channel.ChannelId equals _mem.ChannelId
+                                               where _mem.UserId == LoginUserId && _mem.StatusId == ApprovedStatus
+                                                         orderby _channel.ChannelName
                                                select new ChannelDataResponse
                                                {
                                                    ChannelIdval = Encryption.EncryptID(_channel.ChannelId.ToString(), LoginUserId.ToString()),
@@ -375,14 +381,26 @@ public class DA_Channel
 
                 if (reData is null) return Result<VisitChannelResponse>.Error("Channel Not Found");
 
-                VisitChannelHistory inviteHist = new VisitChannelHistory
+                var visitRecord = await _db.VisitChannelHistories.Where(
+                                    x => x.UserId == LoginUserId
+                                    && x.InviterId == inviterId
+                                    && x.ChannelId == channelId).FirstOrDefaultAsync();
+                if(visitRecord is null)
                 {
-                    UserId = LoginUserId,
-                    InviterId = inviterId,
-                    ChannelId = channelId,
-                    ViewedDate = DateTime.Now
-                };
-                await _db.VisitChannelHistories.AddAsync(inviteHist);
+                    VisitChannelHistory inviteHist = new VisitChannelHistory
+                    {
+                        UserId = LoginUserId,
+                        InviterId = inviterId,
+                        ChannelId = channelId,
+                        ViewedDate = DateTime.Now
+                    };
+                    await _db.VisitChannelHistories.AddAsync(inviteHist);
+                }
+                else
+                {
+                    visitRecord.ViewedDate = DateTime.Now;
+                    _db.VisitChannelHistories.Update(visitRecord);
+                }
                 await _db.SaveChangesAsync();
                 model = Result<VisitChannelResponse>.Success(reData);
             }
@@ -503,14 +521,14 @@ public class DA_Channel
         return model;
     }
 
-    public async Task<Result<List<ChannelMemberResponse>>> GetChannelMemberRequest(string ChannelIdval,string MemberStatus, int LoginUserId)
+    public async Task<Result<List<ChannelMemberResponse>>> GetChannelMember(string ChannelIdval,string MemberStatus, int LoginUserId)
     {
         Result<List<ChannelMemberResponse>> model = null;
         try
         {
             int channelId = Convert.ToInt32(Encryption.DecryptID(ChannelIdval, LoginUserId.ToString()));
             var chan = await _db.Channels.Where(x=> x.ChannelId == channelId).FirstOrDefaultAsync();
-            var statusType = await _db.StatusTypes.Where(x=> x.StatusName.ToLower() == MemberStatus).FirstOrDefaultAsync();
+            var statusType = await _db.StatusTypes.Where(x=> x.StatusName.ToLower() == MemberStatus.ToLower()).FirstOrDefaultAsync();
 
 
             if (chan is null) return Result<List<ChannelMemberResponse>>.Error("Channel Not Found");
@@ -531,25 +549,44 @@ public class DA_Channel
                 return Result<List<ChannelMemberResponse>>.Success(new List<ChannelMemberResponse>());
 
 
-
             List<ChannelMemberResponse> query = await (from ch in _db.ChannelMemberships
-                               join us in _db.Users on ch.UserId equals us.UserId
-                               join inv in _db.Users on ch.InviterId equals inv.UserId
-                               join usertype in _db.UserTypes on ch.UserTypeId equals usertype.TypeId
-                               //join pro in _db.UserProfiles on ch.UserId equals pro.UserId
-                               where ch.ChannelId == channelId && ch.StatusId == statusType.StatusId
-                                select new ChannelMemberResponse
-                               {
-                                    MembershipId = Encryption.EncryptID(ch.MembershipId.ToString(), LoginUserId.ToString()),
-                                    MemberIdval = ch.UserId.ToString(), 
-                                   MemberName = us.Name,
-                                    UserTypeIdval = Encryption.EncryptID(usertype.TypeId.ToString(), LoginUserId.ToString()),
-                                    UserTypeName = usertype.Name,
-                                    InviterIdval = inv.UserId.ToString(),
-                                   InviterName = inv.Name,
-                                   JoinedDate = ch.JoinedDate,
-                                    UserImage64 = ""
-                                }).ToListAsync();
+                                                       join us in _db.Users on ch.UserId equals us.UserId
+                                                       join inv in _db.Users on ch.InviterId equals inv.UserId into invGroup
+                                                       from inv in invGroup.DefaultIfEmpty()
+                                                       join usertype in _db.UserTypes on ch.UserTypeId equals usertype.TypeId
+                                                       where ch.ChannelId == channelId && ch.StatusId == statusType.StatusId
+                                                       select new ChannelMemberResponse
+                                                       {
+                                                           MembershipId = Encryption.EncryptID(ch.MembershipId.ToString(), LoginUserId.ToString()),
+                                                           MemberIdval = ch.UserId.ToString(),
+                                                           MemberName = us.Name,
+                                                           UserTypeIdval = Encryption.EncryptID(usertype.TypeId.ToString(), LoginUserId.ToString()),
+                                                           UserTypeName = usertype.Name,
+                                                           InviterIdval = inv != null ? inv.UserId.ToString() : null,
+                                                           InviterName = inv != null ? inv.Name : null,
+                                                           JoinedDate = ch.JoinedDate,
+                                                           UserImage64 = ""
+                                                       }).ToListAsync();
+
+            /* List<ChannelMemberResponse> query = await (from ch in _db.ChannelMemberships
+                                join us in _db.Users on ch.UserId equals us.UserId
+                                join inv in _db.Users on ch.InviterId equals inv.UserId
+                                join usertype in _db.UserTypes on ch.UserTypeId equals usertype.TypeId
+                                //join pro in _db.UserProfiles on ch.UserId equals pro.UserId
+                                where ch.ChannelId == channelId && ch.StatusId == statusType.StatusId
+                                 select new ChannelMemberResponse
+                                {
+                                     MembershipId = Encryption.EncryptID(ch.MembershipId.ToString(), LoginUserId.ToString()),
+                                     MemberIdval = ch.UserId.ToString(), 
+                                    MemberName = us.Name,
+                                     UserTypeIdval = Encryption.EncryptID(usertype.TypeId.ToString(), LoginUserId.ToString()),
+                                     UserTypeName = usertype.Name,
+                                     InviterIdval = inv.UserId.ToString(),
+                                    InviterName = inv.Name,
+                                    JoinedDate = ch.JoinedDate,
+                                     UserImage64 = ""
+                                 }).ToListAsync();
+             */
             List<ChannelMemberResponse> resData = new List<ChannelMemberResponse>();
 
             foreach( ChannelMemberResponse response in query )
@@ -574,6 +611,74 @@ public class DA_Channel
         {
             model = Result<List<ChannelMemberResponse>>.Error(ex);
         }
+        return model;
+    }
+    public async Task<Result<string>> ApproveRejectChannelMember(List<AppRejChannelMemberPayload> payload, int LoginUserId)
+    {
+        Result<string> model = null;
+        try
+        {
+            foreach (var item in payload)
+            {
+                if (!string.IsNullOrEmpty(item.MembershipIdval) && !string.IsNullOrEmpty(item.UserTypeIdval))
+                {
+                    int MembershipId = Convert.ToInt32(Encryption.DecryptID(item.MembershipIdval, LoginUserId.ToString()));
+                    int userTypeId = Convert.ToInt32(Encryption.DecryptID(item.UserTypeIdval, LoginUserId.ToString()));
+
+                    ///1 to approve
+                    if (item.ApproveStatus == 1)
+                    {
+                        int ApproveStatus = await _db.StatusTypes.Where(x => x.StatusName.ToLower() == "approved")
+                            .Select(x => x.StatusId).FirstOrDefaultAsync();
+                        var membership = await _db.ChannelMemberships.Where(x => x.MembershipId == MembershipId)
+                                                .FirstOrDefaultAsync();
+                        if (membership is not null && membership.StatusId != ApproveStatus)
+                        {
+                            membership.StatusId = ApproveStatus;
+                            membership.UserTypeId = userTypeId;
+                            _db.ChannelMemberships.Update(membership);
+                            await _db.SaveChangesAsync();
+
+                            //update channel member count
+                            var channel = await _db.Channels.Where(x => x.ChannelId == membership.ChannelId)
+                                                .FirstOrDefaultAsync();
+
+                            if (channel is not null)
+                            {
+                                channel.MemberCount = channel.MemberCount + 1;
+                                _db.Channels.Update(channel);
+                                await _db.SaveChangesAsync();
+                            }
+                        }
+                    }
+                    ///2 to reject
+                    else if(item.ApproveStatus == 2)
+                    {
+                        int RejectStatus = await _db.StatusTypes.Where(x => x.StatusName.ToLower() == "rejected")
+                            .Select(x => x.StatusId).FirstOrDefaultAsync();
+                        var membership = await _db.ChannelMemberships.Where(x => x.MembershipId == MembershipId)
+                                                .FirstOrDefaultAsync();
+                        if (membership is not null)
+                        {
+                            membership.StatusId = RejectStatus;
+                            _db.ChannelMemberships.Update(membership);
+                            await _db.SaveChangesAsync();
+                        }
+                    }
+                }
+            }
+            model = Result<string>.Success("Success");
+        }
+        catch (Exception ex)
+        {
+            model = Result<string>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<VisitUserResponse>> GetVisitUsersRecords(GetVisitUsersPayload payload, int LoginUserId)
+    {
+        Result<VisitUserResponse> model = null;
         return model;
     }
 }
