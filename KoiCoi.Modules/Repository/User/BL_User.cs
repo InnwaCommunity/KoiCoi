@@ -30,7 +30,7 @@ public class BL_User
                 string temppassword = password;
                 string name = Guid.NewGuid().ToString();
                 string salt = SaltedHash.GenerateSalt();
-                string userIdval =Encryption.EncryptID(name,salt) + passwordGenerator.CreatePassword(name.Length, name.Length/3);
+                string userIdval =Encryption.EncryptID(name,salt);// + passwordGenerator.CreatePassword(name.Length, name.Length/3)
                 viaUser.UserIdval = userIdval;
                 viaUser.Name = name;
                 password = SaltedHash.ComputeHash(salt, password.ToString());

@@ -1,5 +1,6 @@
 ﻿using Azure;
 using KoiCoi.Models.Via;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -228,6 +229,7 @@ public class DA_Channel
                             .Select(x=> x.StatusId)
                             .FirstOrDefaultAsync();
             if (ApprovedStatus == null) return Result<List<ChannelDataResponse>>.Error("Status Type Not Found");
+            string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             List<ChannelDataResponse> Channels = await ( from _channel in _db.Channels 
                                                join _chantype in _db.ChannelTypes on _channel.ChannelType equals _chantype.ChannelTypeId
                                                join _curr in _db.Currencies on _channel.CurrencyId equals _curr.CurrencyId
@@ -241,6 +243,11 @@ public class DA_Channel
                                                    ChannelDescription = _channel.StatusDescription,
                                                    ChannelType = _chantype.ChannelTypeName,
                                                    MemberCount = _channel.MemberCount,
+                                                   ISOCode = _curr.IsoCode,
+                                                   TotalBalance = Globalfunction.StringToDecimal(_channel.TotalBalance == "0" || _channel.TotalBalance == null ? "0" :
+                                                            Encryption.DecryptID(_channel.TotalBalance.ToString(), balanceSalt)),
+                                                   LastBalance = Globalfunction.StringToDecimal(_channel.LastBalance == "0" || _channel.LastBalance == null ? "0" :
+                                                           Encryption.DecryptID(_channel.LastBalance.ToString(), balanceSalt)),
                                                }).ToListAsync();
 
             model= Result<List<ChannelDataResponse>>.Success(Channels);
@@ -676,9 +683,46 @@ public class DA_Channel
         return model;
     }
 
-    public async Task<Result<VisitUserResponse>> GetVisitUsersRecords(GetVisitUsersPayload payload, int LoginUserId)
+    public async Task<Result<List<VisitUserResponse>>> GetVisitUsersRecords(GetVisitUsersPayload payload, int LoginUserId)
     {
-        Result<VisitUserResponse> model = null;
+        Result<List<VisitUserResponse>> model = null;
+        try
+        {
+            int channelId = Convert.ToInt32(Encryption.DecryptID(payload.ChannelIdval!,LoginUserId.ToString()));
+            
+            DateTime date;
+            if(DateTime.TryParseExact(payload.Date!, "yyyy-MM", null, System.Globalization.DateTimeStyles.None, out date))
+            {
+                List<VisitUserResponse> query = await (from visit in _db.VisitChannelHistories
+                                   join chan in _db.Channels on visit.ChannelId equals chan.ChannelId
+                                   join visituser in _db.Users on visit.UserId equals visituser.UserId
+                                   join inviter in _db.Users on visit.InviterId equals inviter.UserId
+                                   join meme in _db.ChannelMemberships on chan.ChannelId equals meme.ChannelId
+                                   where visit.ChannelId == channelId
+                                   && meme.UserId == LoginUserId && meme.StatusId == 2//Approved Status
+                                   && visit.ViewedDate.Year == date.Year 
+                                   && visit.ViewedDate.Month == date.Month
+                                   select new VisitUserResponse
+                                   {
+                                       UserIdval = Encryption.EncryptID(visituser.UserId.ToString(), LoginUserId.ToString()),
+                                       UserName = visituser.Name,
+                                       InviterIdval = Encryption.EncryptID(inviter.UserId.ToString(),LoginUserId.ToString()),
+                                       InviterName = inviter.Name,
+                                       VisitedDate = visit.ViewedDate.ToString("yyyy-MM-dd")
+                                   }).ToListAsync();
+                model = Result<List<VisitUserResponse>>.Success(query);
+
+            }
+            else
+            {
+                model = Result<List<VisitUserResponse>>.Error("Wroung Date Formate");
+            }
+            
+        }
+        catch (Exception ex)
+        {
+            model = Result<List<VisitUserResponse>>.Error(ex);
+        }
         return model;
     }
 }

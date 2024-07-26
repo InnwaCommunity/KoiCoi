@@ -81,7 +81,7 @@ public class BL_Channel
     {
         return await _daChannel.ApproveRejectChannelMember(payload,LoginUserId);
     }
-    public async Task<Result<VisitUserResponse>> GetVisitUsersRecords(GetVisitUsersPayload payload,int LoginUserId)
+    public async Task<Result<List<VisitUserResponse>>> GetVisitUsersRecords(GetVisitUsersPayload payload,int LoginUserId)
     {
         return await _daChannel.GetVisitUsersRecords(payload,LoginUserId);
     }

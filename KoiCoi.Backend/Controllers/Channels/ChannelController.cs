@@ -312,10 +312,12 @@ public class ChannelController : BaseController
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
         return await _blChannel.ApproveRejectChannelMember(payload, LoginEmpID);
     }
-    [HttpGet("GetVisitUsersRecords",Name = "VisitUsersRecords")]
-    public async Task<Result<VisitUserResponse>> GetVisitUsersRecords(GetVisitUsersPayload payload)
+    [HttpPost("GetVisitUsersRecords",Name = "VisitUsersRecords")]
+    public async Task<Result<List<VisitUserResponse>>> GetVisitUsersRecords(GetVisitUsersPayload payload)
     {
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        if (string.IsNullOrEmpty(payload.ChannelIdval) ||
+            string.IsNullOrEmpty(payload.Date)) return Result<List<VisitUserResponse>>.Error("ChannelId or Viewed Date can't be null or empty");
         return await _blChannel.GetVisitUsersRecords(payload,LoginEmpID);
     }
     ///LeaveChannel

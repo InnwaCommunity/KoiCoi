@@ -56,7 +56,7 @@ public class DA_User
     {
         bool unique = false;
         var resultAdmin = await _db.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
-        if (resultAdmin == null)
+        if (resultAdmin == null ||  string.IsNullOrEmpty(email))
         {
             unique = true;///There is no account by this email.
         }
