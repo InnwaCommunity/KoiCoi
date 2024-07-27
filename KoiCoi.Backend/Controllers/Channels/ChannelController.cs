@@ -320,7 +320,24 @@ public class ChannelController : BaseController
             string.IsNullOrEmpty(payload.Date)) return Result<List<VisitUserResponse>>.Error("ChannelId or Viewed Date can't be null or empty");
         return await _blChannel.GetVisitUsersRecords(payload,LoginEmpID);
     }
+
+    [HttpPost("NewMembersRecords",Name = "NewMembersRecords")]
+    public async Task<Result<List<VisitUserResponse>>> NewMembersRecords(GetVisitUsersPayload payload)
+    {
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        if (string.IsNullOrEmpty(payload.ChannelIdval) ||
+            string.IsNullOrEmpty(payload.Date)) return Result<List<VisitUserResponse>>.Error("ChannelId or Viewed Date can't be null or empty");
+        return await _blChannel.NewMembersRecords(payload, LoginEmpID);
+    }
+
+    /*
+     [HttpPost("LeaveChannel",Name = "LeaveChannel")]
+    public async Task<Result<string>> LeaveChannel(GetChannelData payload)
+    {
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        if (string.IsNullOrEmpty(payload.channelIdval)) return Result<string>.Error("ChannelId can't be null or empty");
+        //return await _blChannel.LeaveChannel();
+    }*/
     ///LeaveChannel
-    ///Visit Users in a month
-    ///New Member in a month
+    ///remove member by admin or owner
 }

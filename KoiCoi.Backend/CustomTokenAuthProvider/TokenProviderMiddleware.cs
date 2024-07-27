@@ -145,6 +145,9 @@ public class TokenProviderMiddleware : IMiddleware
 
         try
         {
+            string aseKey = _configuration.GetSection("AesEncryption:AseKey").Get<string>()!;
+            string aseIv = _configuration.GetSection("AesEncryption:AseIV").Get<string>()!;
+
             using (var reader = new System.IO.StreamReader(context.Request.Body))
             {
                 var request_body = reader.ReadToEnd();
@@ -158,7 +161,7 @@ public class TokenProviderMiddleware : IMiddleware
                 if (loginData.LoginType == null) loginData.LoginType = "";
                 if (loginData.Email == null) loginData.Email = "";
                 username = loginData.UserName;
-                password = loginData.Password;
+                password = AesEncryption.Decrypt(loginData.Password,aseKey,aseIv);
                 userIdval = loginData.UserIdval;
                 adminemail = loginData.Email;
                 _loginType = loginData.LoginType;

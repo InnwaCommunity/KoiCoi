@@ -49,6 +49,33 @@ public class Globalfunction
             return Result<string>.Error(ex);
         }
     }
+    public static string CalculateDateTime(DateTime inputDateTime)
+    {
+        DateTime now = DateTime.Now;
+        TimeSpan difference = now - inputDateTime;
+        if (difference.TotalSeconds < 60)
+        {
+            return $"{difference.Seconds} minutes ago";
+        }
+        else
+        if (difference.TotalMinutes < 60)
+        {
+            return $"{difference.Minutes} minutes ago";
+        }
+        else if (difference.TotalHours < 24)
+        {
+            return $"{difference.Hours} hours ago";
+        }
+        else if (difference.TotalDays < 7)
+        {
+            return $"{inputDateTime:dddd}"; // Returns the day of the week
+        }
+        else
+        {
+            return inputDateTime.ToString("yyyy-MM-dd");
+        }
+    }
+
 
     public static decimal StringToDecimal(string value)
     {

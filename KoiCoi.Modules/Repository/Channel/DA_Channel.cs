@@ -702,13 +702,14 @@ public class DA_Channel
                                    && meme.UserId == LoginUserId && meme.StatusId == 2//Approved Status
                                    && visit.ViewedDate.Year == date.Year 
                                    && visit.ViewedDate.Month == date.Month
+                                   orderby visit.ViewedDate descending
                                    select new VisitUserResponse
                                    {
                                        UserIdval = Encryption.EncryptID(visituser.UserId.ToString(), LoginUserId.ToString()),
                                        UserName = visituser.Name,
                                        InviterIdval = Encryption.EncryptID(inviter.UserId.ToString(),LoginUserId.ToString()),
                                        InviterName = inviter.Name,
-                                       VisitedDate = visit.ViewedDate.ToString("yyyy-MM-dd")
+                                       VisitedDate = Globalfunction.CalculateDateTime(visit.ViewedDate),
                                    }).ToListAsync();
                 model = Result<List<VisitUserResponse>>.Success(query);
 
@@ -723,6 +724,50 @@ public class DA_Channel
         {
             model = Result<List<VisitUserResponse>>.Error(ex);
         }
+        return model;
+    }
+
+    public async Task<Result<List<VisitUserResponse>>> NewMembersRecords(GetVisitUsersPayload payload, int LoginUserId)
+    {
+        Result<List<VisitUserResponse>> model = null;
+        try
+        {
+            int channelId = Convert.ToInt32(Encryption.DecryptID(payload.ChannelIdval!, LoginUserId.ToString()));
+
+            DateTime date;
+            if (DateTime.TryParseExact(payload.Date!, "yyyy-MM", null, System.Globalization.DateTimeStyles.None, out date))
+            {
+                List<VisitUserResponse> query = await (from chanmeb in _db.ChannelMemberships
+                                                       join chan in _db.Channels on chanmeb.ChannelId equals chan.ChannelId
+                                                       join newme in _db.Users on chanmeb.UserId equals newme.UserId
+                                                       join inviter in _db.Users on chanmeb.InviterId equals inviter.UserId
+                                                       join meme in _db.ChannelMemberships on chan.ChannelId equals meme.ChannelId
+                                                       where chanmeb.ChannelId == channelId
+                                                       && meme.UserId == LoginUserId && meme.StatusId == 2//Approved Status
+                                                       && chanmeb.StatusId == 2
+                                                       && chanmeb.JoinedDate.Year == date.Year
+                                                       && chanmeb.JoinedDate.Month == date.Month
+                                                       orderby chanmeb.JoinedDate descending
+                                                       select new VisitUserResponse
+                                                       {
+                                                           UserIdval = Encryption.EncryptID(newme.UserId.ToString(), LoginUserId.ToString()),
+                                                           UserName = newme.Name,
+                                                           InviterIdval = Encryption.EncryptID(inviter.UserId.ToString(), LoginUserId.ToString()),
+                                                           InviterName = inviter.Name,
+                                                           VisitedDate = Globalfunction.CalculateDateTime(chanmeb.JoinedDate),
+                                                       }).ToListAsync();
+                model = Result<List<VisitUserResponse>>.Success(query);
+
+            }
+            else
+            {
+                model = Result<List<VisitUserResponse>>.Error("Wroung Date Formate");
+            }
+        }
+        catch (Exception ex) { 
+            model = Result<List<VisitUserResponse>>.Error(ex);
+        }
+
         return model;
     }
 }

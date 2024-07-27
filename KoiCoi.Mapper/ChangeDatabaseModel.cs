@@ -12,7 +12,7 @@ public static class ChangeDatabaseModel
             {
                 UserIdval = viaUser.UserIdval!,
                 Name = viaUser.Name!,
-                Email = string.IsNullOrWhiteSpace(viaUser.Email) ? null : viaUser.Email,
+                Email = viaUser.Email,
                 Password = viaUser.Password!,
                 Phone = viaUser.Phone,
                 PasswordHash = viaUser.PasswordHash!,

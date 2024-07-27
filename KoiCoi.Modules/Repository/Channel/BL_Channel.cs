@@ -85,4 +85,9 @@ public class BL_Channel
     {
         return await _daChannel.GetVisitUsersRecords(payload,LoginUserId);
     }
+    public async Task<Result<List<VisitUserResponse>>> NewMembersRecords(GetVisitUsersPayload payload, int LoginUserId)
+    {
+        return await _daChannel.NewMembersRecords(payload, LoginUserId);
+    }
+    
 }

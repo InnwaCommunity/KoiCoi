@@ -38,12 +38,13 @@ public class DA_User
                 }).FirstOrDefaultAsync();
             if (userData == null)
                 return Result<ResponseUserDto>.Error("Registration Fail");
-            
+            string aseKey = _configuration.GetSection("AesEncryption:AseKey").Get<string>()!;
+            string aseIv = _configuration.GetSection("AesEncryption:AseIV").Get<string>()!;
             model = Result<ResponseUserDto>.Success(new ResponseUserDto
             {
                 UserIdval = userData.UserIdval!,
                 Name = userData.Name!,
-                Password = temppassword!
+                Password = AesEncryption.Encrypt(temppassword,aseKey,aseIv)
             });
         }
         catch (Exception ex)
