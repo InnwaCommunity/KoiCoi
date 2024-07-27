@@ -76,4 +76,9 @@ public class BL_User
     {
         return await _daUser.UploadUserProfile(payload, LoginUserId);
     }
+
+    public async Task<Result<List<UserTypeResponse>>> GetUserTypes(int LoginUserId)
+    {
+        return await _daUser.GetUserTypes(LoginUserId);
+    }
 }

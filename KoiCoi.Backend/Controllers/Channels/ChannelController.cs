@@ -330,14 +330,23 @@ public class ChannelController : BaseController
         return await _blChannel.NewMembersRecords(payload, LoginEmpID);
     }
 
-    /*
+    
      [HttpPost("LeaveChannel",Name = "LeaveChannel")]
     public async Task<Result<string>> LeaveChannel(GetChannelData payload)
     {
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
         if (string.IsNullOrEmpty(payload.channelIdval)) return Result<string>.Error("ChannelId can't be null or empty");
-        //return await _blChannel.LeaveChannel();
-    }*/
+        return await _blChannel.LeaveChannel(payload.channelIdval,LoginEmpID);
+    }
+
+    [HttpPost("RemoveMemberByAdmin",Name = "RemoveMemberByAdmin")]
+    public async Task<Result<string>> RemoveMemberByAdmin(RemoveMemberPayload payload)
+    {
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        if (string.IsNullOrEmpty(payload.ChannelIdval)) return Result<string>.Error("ChannelId Can't be null or empty");
+        if (payload.removeMember == null || payload.removeMember.Count == 0) return Result<string>.Error("Please Select one Member");
+        return await _blChannel.RemoveMemberByAdmin(payload.ChannelIdval,payload.removeMember,LoginEmpID);
+    }
     ///LeaveChannel
     ///remove member by admin or owner
 }

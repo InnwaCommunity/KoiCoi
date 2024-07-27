@@ -55,6 +55,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<ReactType> ReactTypes { get; set; }
 
+    public virtual DbSet<RemoveMemberHistory> RemoveMemberHistories { get; set; }
+
     public virtual DbSet<StatusType> StatusTypes { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -389,6 +391,16 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Icon).HasMaxLength(30);
         });
 
+        modelBuilder.Entity<RemoveMemberHistory>(entity =>
+        {
+            entity.HasKey(e => e.HistoryId).HasName("PK__RemoveMe__4D7B4ABD7DAA7A72");
+
+            entity.ToTable("RemoveMemberHistory");
+
+            entity.Property(e => e.Reason).HasMaxLength(100);
+            entity.Property(e => e.RemoveDate).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<StatusType>(entity =>
         {
             entity.HasKey(e => e.StatusId).HasName("PK__StatusTy__5190094C7B90086A");
@@ -407,8 +419,6 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.UserId).HasName("PK__Users__B9BE370FB4B5B396");
-
-            entity.HasIndex(e => e.Email, "UQ__Users__AB6E6164716694FE").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.DateCreated)

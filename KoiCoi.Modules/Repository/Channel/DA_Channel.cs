@@ -552,7 +552,7 @@ public class DA_Channel
                                               {
                                                   UserTypeName = ut.Name
                                               }).FirstOrDefaultAsync();
-            if(loginUserType is null || loginUserType.UserTypeName.ToLower()=="member" )
+            if(loginUserType is null || (statusType.StatusName.ToLower() == "pending" && loginUserType.UserTypeName.ToLower() == "member") )
                 return Result<List<ChannelMemberResponse>>.Success(new List<ChannelMemberResponse>());
 
 
@@ -571,7 +571,7 @@ public class DA_Channel
                                                            UserTypeName = usertype.Name,
                                                            InviterIdval = inv != null ? inv.UserId.ToString() : null,
                                                            InviterName = inv != null ? inv.Name : null,
-                                                           JoinedDate = ch.JoinedDate,
+                                                           JoinedDate = Globalfunction.CalculateDateTime(ch.JoinedDate) ,
                                                            UserImage64 = ""
                                                        }).ToListAsync();
 
@@ -768,6 +768,89 @@ public class DA_Channel
             model = Result<List<VisitUserResponse>>.Error(ex);
         }
 
+        return model;
+    }
+
+    public async Task<Result<string>> LeaveChannel(string channelIdval, int LoginUserId)
+    {
+        Result<string> model = null;
+        try
+        {
+            int channelId = Convert.ToInt32(Encryption.DecryptID(channelIdval, LoginUserId.ToString()));
+            var membership = await _db.ChannelMemberships
+                                    .Where(x => x.ChannelId == channelId && x.UserId == LoginUserId)
+                                    .FirstOrDefaultAsync();
+            if (membership is null) {
+                model = Result<string>.Error("Member Not Found");
+            }
+            else
+            {
+                var channel = await _db.Channels.Where(x => x.ChannelId == channelId).FirstOrDefaultAsync();
+                if (channel is null) return Result<string>.Error("Channel Not Found");
+                channel.MemberCount = channel.MemberCount - 1;
+                _db.Channels.Update(channel);
+                _db.ChannelMemberships.Remove(membership);
+                await _db.SaveChangesAsync();
+                model = Result<string>.Success("Success");
+            }
+        }
+        catch (Exception ex)
+        {
+            model = Result<string>.Error(ex);
+        }
+        return model;
+    }
+
+    public async Task<Result<string>> RemoveMemberByAdmin(string channelIdval, List<RemoveMemberData> memberdatas, int LoginUserId)
+    {
+        Result<string> model = null;
+        try
+        {
+            int channelId = Convert.ToInt32(Encryption.DecryptID(channelIdval, LoginUserId.ToString()));
+            var checkLoginUserAccess = await (from meship in _db.ChannelMemberships
+                                              join channal in _db.Channels on meship.ChannelId equals channal.ChannelId
+                                              join usertype in _db.UserTypes on meship.UserTypeId equals usertype.TypeId
+                                              where meship.UserId == LoginUserId && meship.ChannelId == channelId
+                                             && (usertype.Name.ToLower() == "admin" || usertype.Name.ToLower() == "owner")
+                                             select new
+                                             {
+                                                 UserType = usertype.Name
+                                             }).FirstOrDefaultAsync();
+            if (checkLoginUserAccess == null) return Result<string>.Error("Login User Can't access to remove member");
+            foreach (var memberdata in memberdatas)
+            {
+                int memberId = Convert.ToInt32(Encryption.DecryptID(memberdata.MemberIdval!, LoginUserId.ToString()));
+                var membership = await _db.ChannelMemberships
+                                    .Where(x => x.ChannelId == channelId && x.UserId == memberId)
+                                    .FirstOrDefaultAsync();
+                if (membership is not null)
+                {
+                    var channel = await _db.Channels.Where(x => x.ChannelId == channelId).FirstOrDefaultAsync();
+                    if (channel is null) return Result<string>.Error("Channel Not Found");
+                    channel.MemberCount = channel.MemberCount - 1;
+                    _db.Channels.Update(channel);
+                    _db.ChannelMemberships.Remove(membership);
+                    await _db.SaveChangesAsync();
+                    RemoveMemberHistory data = new RemoveMemberHistory
+                    {
+                        AdminId = LoginUserId,
+                        MemberId = memberId,
+                        ChannelId = channelId,
+                        Reason = memberdata.Reason ?? "",
+                        RemoveDate = DateTime.Now
+                    };
+                    await _db.RemoveMemberHistories.AddAsync(data);
+                    await _db.SaveChangesAsync();
+                }
+            }
+
+            model = Result<string>.Success("Success");
+
+        }
+        catch (Exception ex)
+        {
+            model = Result<string>.Error(ex);
+        }
         return model;
     }
 }

@@ -48,4 +48,11 @@ public class UserController : BaseController
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
         return await _bLUser.UploadUserProfile(payload,LoginEmpID);
     }
+
+    [HttpGet("GetUserTypes",Name = "GetUserTypes")]
+    public async Task<Result<List<UserTypeResponse>>> GetUserTypes()
+    {
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        return await _bLUser.GetUserTypes(LoginEmpID);
+    }
 }

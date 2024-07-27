@@ -89,5 +89,16 @@ public class BL_Channel
     {
         return await _daChannel.NewMembersRecords(payload, LoginUserId);
     }
-    
+
+    public async Task<Result<string>> LeaveChannel(string channelIdval,int LoginUserId)
+    {
+        return await _daChannel.LeaveChannel(channelIdval, LoginUserId);
+    }
+
+    public async Task<Result<string>> RemoveMemberByAdmin(string channelIdval,List<RemoveMemberData> members,int LoginUserId)
+    {
+        return await _daChannel.RemoveMemberByAdmin(channelIdval,members,LoginUserId);
+    }
+
+
 }

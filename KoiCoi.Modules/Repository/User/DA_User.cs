@@ -242,4 +242,23 @@ public class DA_User
         }
         return model;
     }
+
+    public async Task<Result<List<UserTypeResponse>>> GetUserTypes(int LoginUserId)
+    {
+        Result<List<UserTypeResponse>> model = null;
+        try
+        {
+            var query = await _db.UserTypes.Select(x => new UserTypeResponse
+            {
+                UserTypeIdval = Encryption.EncryptID(x.TypeId.ToString(), LoginUserId.ToString()),
+                UserTypeName = x.Name
+            }).ToListAsync();
+            model = Result<List<UserTypeResponse>>.Success(query);
+        }
+        catch (Exception ex)
+        {
+            model = Result<List<UserTypeResponse>>.Error(ex);
+        }
+        return model;
+    }
 }

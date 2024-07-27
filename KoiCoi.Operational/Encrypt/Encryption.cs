@@ -7,11 +7,10 @@ namespace KoiCoi.Operational.Encrypt;
 
 public class Encryption
 {
-    private static string _EncryptionKey = "";//Startup.Configuration.GetSection("Encryption:EncryptionKey").Value;
-    private static string _SaltKey = "";// Startup.Configuration.GetSection("Encryption:EncryptionSalt").Value;
-    private static string _ClientEncryptionKey = "";//Startup.Configuration.GetSection("Encryption:ClientEncryptionKey").Value;
-    private static string _ClientEncryptionSalt = "";//Startup.Configuration.GetSection("Encryption:ClientEncryptionSalt").Value;
-
+    private static string _EncryptionKey = "LGdeb@lTraining21lob@lTrvaining";//Startup.Configuration.GetSection("Encryption:EncryptionKey").Value;
+    private static string _SaltKey = "InnwaKoi@88";// Startup.Configuration.GetSection("Encryption:EncryptionSalt").Value;
+    private static string _ClientEncryptionKey = "TTRAINING001224GGWTT";//Startup.Configuration.GetSection("Encryption:ClientEncryptionKey").Value;
+    private static string _ClientEncryptionSalt = "VITRAINING001222987";//Startup.Configuration.GetSection("Encryption:ClientEncryptionSalt").Value;
 
     public static string EncryptFileName(string FileName)
     {
