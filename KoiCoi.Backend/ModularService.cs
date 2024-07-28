@@ -1,11 +1,9 @@
 ﻿using KoiCoi.Backend.CustomTokenAuthProvider;
-using KoiCoi.Modules.Repository.Channel;
+using KoiCoi.Modules.Repository.EventFreture;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
-using System.Configuration;
 
 namespace KoiCoi.Backend;
 
@@ -61,6 +59,7 @@ public static class ModularService
         builder.Services.AddScoped<DA_User>();
         builder.Services.AddScoped<DA_ChangePassword>();
         builder.Services.AddScoped<DA_Channel>();
+        builder.Services.AddScoped<DA_Event>();
         return builder;
     }
 
@@ -69,6 +68,7 @@ public static class ModularService
         builder.Services.AddScoped<BL_User>();
         builder.Services.AddScoped<BL_ChangePassword>();
         builder.Services.AddScoped<BL_Channel>();
+        builder.Services.AddScoped<BL_Event>();
         return builder;
     }
 
