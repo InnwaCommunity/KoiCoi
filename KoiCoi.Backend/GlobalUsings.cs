@@ -11,6 +11,7 @@ global using KoiCoi.Database.AppDbContextModels;
 global using KoiCoi.Modules.Repository.User;
 global using KoiCoi.Modules.Repository.ChangePassword;
 global using KoiCoi.Modules.Repository.Channel;
+global using KoiCoi.Modules.Repository.EventFreture;
 
 ///Models
 global using KoiCoi.Models.Login_Models;
