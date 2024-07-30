@@ -23,6 +23,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<ChannelProfile> ChannelProfiles { get; set; }
 
+    public virtual DbSet<ChannelTopic> ChannelTopics { get; set; }
+
     public virtual DbSet<ChannelType> ChannelTypes { get; set; }
 
     public virtual DbSet<CollectPost> CollectPosts { get; set; }
@@ -40,6 +42,10 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<InformMail> InformMails { get; set; }
 
     public virtual DbSet<InviteHistory> InviteHistories { get; set; }
+
+    public virtual DbSet<Notification> Notifications { get; set; }
+
+    public virtual DbSet<NotificationToken> NotificationTokens { get; set; }
 
     public virtual DbSet<Otp> Otps { get; set; }
 
@@ -153,6 +159,19 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.UrlDescription)
                 .HasMaxLength(100)
                 .HasColumnName("Url_Description");
+        });
+
+        modelBuilder.Entity<ChannelTopic>(entity =>
+        {
+            entity.HasKey(e => e.TopicId).HasName("PK__ChannelT__022E0F5DCA02A51F");
+
+            entity.ToTable("ChannelTopic");
+
+            entity.Property(e => e.DateCreated)
+                .HasColumnType("datetime")
+                .HasColumnName("date_created");
+            entity.Property(e => e.Descriptions).HasMaxLength(100);
+            entity.Property(e => e.TopicName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<ChannelType>(entity =>
@@ -300,6 +319,32 @@ public partial class AppDbContext : DbContext
 
             entity.Property(e => e.InviteData).HasMaxLength(100);
             entity.Property(e => e.JoinedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E1296EBE1B3");
+
+            entity.Property(e => e.DateCreated)
+                .HasColumnType("datetime")
+                .HasColumnName("date_created");
+            entity.Property(e => e.IsRead).HasDefaultValueSql("((0))");
+            entity.Property(e => e.Title).HasMaxLength(100);
+            entity.Property(e => e.Url).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<NotificationToken>(entity =>
+        {
+            entity.HasKey(e => e.TokenId).HasName("PK__Notifica__658FEEEAED11443F");
+
+            entity.ToTable("NotificationToken");
+
+            entity.Property(e => e.AppVersion).HasMaxLength(30);
+            entity.Property(e => e.IsRooted).HasDefaultValueSql("((0))");
+            entity.Property(e => e.LastActivities).HasColumnType("datetime");
+            entity.Property(e => e.OsVersion).HasMaxLength(30);
+            entity.Property(e => e.PhModel).HasMaxLength(50);
+            entity.Property(e => e.Token).HasMaxLength(255);
         });
 
         modelBuilder.Entity<Otp>(entity =>
