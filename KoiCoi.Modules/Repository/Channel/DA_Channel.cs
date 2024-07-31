@@ -196,6 +196,18 @@ public class DA_Channel
             await _db.ChannelProfiles.AddAsync(viaChannelProfile.ChangeChannelProfile());
             await _db.SaveChangesAsync();
 
+            ///create channel topic
+            var channalTopic = new ChannelTopic
+            {
+                TopicName = Guid.NewGuid().ToString(),
+                Descriptions = $"Topic of {addedChannel.ChannelName} Channel",
+                ChannelId = addedChannel.ChannelId,
+                DateCreated = DateTime.Now
+            };
+
+            await _db.ChannelTopics.AddAsync(channalTopic);
+            await _db.SaveChangesAsync();
+
             ChannelDataResponse? data = await (from _cha in _db.Channels
                                                join ct in _db.ChannelTypes on _cha.ChannelType equals ct.ChannelTypeId
                                                join cur in _db.Currencies on _cha.CurrencyId equals cur.CurrencyId

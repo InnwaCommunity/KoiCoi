@@ -204,7 +204,14 @@ public class TokenProviderMiddleware : IMiddleware
                 await ResponseMessage(new { status = "fail", message = "Invalid login type" }, context, 400);
                 return;
             }
+            string deviceID_InHeader = Convert.ToString(context.Request.Headers["DeviceID"]); // To Check DeviceID for mobile request  
+            string firebaseToken = Convert.ToString(context.Request.Headers["FirebaseToken"]); // Get Device Token
+            string appVersion = Convert.ToString(context.Request.Headers["AppVersion"]); // Get Device App Versoin
+            string osVersion = Convert.ToString(context.Request.Headers["OsVersion"]); // Get Device OS Versoin
+            string phoneModel = Convert.ToString(context.Request.Headers["PhoneModel"]); // Get Device Phone Model
+            bool isRooted = Convert.ToBoolean(context.Request.Headers["IsRooted"]); // Get IsRooted
 
+            SaveFirebaseToken(AdminID,deviceID_InHeader, firebaseToken, appVersion, osVersion, phoneModel, isRooted);
             var now = DateTime.UtcNow;
             var _tokenData = new TokenData
             {
@@ -459,6 +466,37 @@ public class TokenProviderMiddleware : IMiddleware
         return false;
     }
 
+    private async void SaveFirebaseToken(int userId,string deviceID,string firebaseToken,string appVersion,string osVersion,string phoneModel,bool isRooted)
+    {
+        var tokendata = await _repository.NotificationTokens
+                            .Where(x=> x.UserId == userId).FirstOrDefaultAsync();
+        if (tokendata is not null)
+        {
+            tokendata.Token = firebaseToken ?? "";
+            tokendata.UserId = userId;
+            tokendata.LastActivities = DateTime.Now;
+            tokendata.AppVersion = appVersion ?? "";
+            tokendata.OsVersion = osVersion ?? "";
+            tokendata.PhModel = phoneModel ?? "";
+            tokendata.IsRooted = isRooted;
+
+            await _repository.SaveChangesAsync();
+        }
+        else
+        {
+            tokendata = new NotificationToken {
+                Token = firebaseToken ?? "",
+                UserId = userId,
+                LastActivities = DateTime.Now,
+                AppVersion = appVersion ?? "",
+                OsVersion = osVersion ?? "",
+                PhModel = phoneModel ?? "",
+                IsRooted = isRooted
+            };
+            await _repository.NotificationTokens.AddAsync(tokendata);
+            await _repository.SaveChangesAsync();
+        }
+}
 
     private string CreateEncryptedJWTToken(Claim[] claims)
     {

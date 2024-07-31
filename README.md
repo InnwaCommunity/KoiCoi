@@ -24,4 +24,18 @@ Result<T>.Success(data);
 Result<T>.Error(error);
 ```
 
+Notification Url flow
+
+Form/Details
+
+
+
+                    Types
+    RequestChannelMember/channelMembershipId
+    ActionByChannelAdmin/channelMembershipId
+    JoinedNewMember/channelMembershipId
+    LeaveChannel/
+    RemoveMember/
+
+
 

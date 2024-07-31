@@ -1,5 +1,8 @@
-﻿using KoiCoi.Backend.CustomTokenAuthProvider;
-using KoiCoi.Modules.Repository.EventFreture;
+﻿using Google.Apis.Auth.OAuth2;
+using Google.Apis.FirebaseCloudMessaging.v1;
+using Google.Apis.Services;
+using KoiCoi.Backend.CustomTokenAuthProvider;
+using KoiCoi.Operational.Services;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -60,6 +63,23 @@ public static class ModularService
         builder.Services.AddScoped<DA_ChangePassword>();
         builder.Services.AddScoped<DA_Channel>();
         builder.Services.AddScoped<DA_Event>();
+        return builder;
+    }
+
+    public static WebApplicationBuilder SetupFirebase(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddSingleton<FirebaseMessagingService>(serviceProvider =>
+        {
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+
+            var projectId = configuration["Firebase:ProjectId"];
+            var credential = GoogleCredential.FromFile("serviceaccountkey.json");
+            var fcmService = new FirebaseCloudMessagingService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential
+            });
+            return new FirebaseMessagingService(projectId!, fcmService);
+        });
         return builder;
     }
 

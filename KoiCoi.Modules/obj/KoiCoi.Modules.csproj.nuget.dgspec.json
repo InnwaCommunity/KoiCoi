@@ -391,6 +391,14 @@
               "target": "Package",
               "version": "[2.1.35, )"
             },
+            "Google.Apis.Auth": {
+              "target": "Package",
+              "version": "[1.68.0, )"
+            },
+            "Google.Apis.FirebaseCloudMessaging.v1": {
+              "target": "Package",
+              "version": "[1.68.0.3431, )"
+            },
             "MailKit": {
               "target": "Package",
               "version": "[4.7.1.1, )"
