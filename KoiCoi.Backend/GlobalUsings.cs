@@ -20,7 +20,7 @@ global using KoiCoi.Models.Otp_Dtos;
 global using KoiCoi.Models.ChannelDtos;
 global using KoiCoi.Models;
 global using KoiCoi.Models.Currency;
-
+global using KoiCoi.Models.EventDto;
 
 //Operational
 global using KoiCoi.Operational.Encrypt;

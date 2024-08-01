@@ -32,10 +32,11 @@ Form/Details
 
                     Types
     RequestChannelMember/channelMembershipId
-    ActionByChannelAdmin/channelMembershipId
-    JoinedNewMember/channelMembershipId
-    LeaveChannel/
-    RemoveMember/
+    ActionByChannelAdminToJoinedMember/channelMembershipId ///show in channel member
+    JoinedNewMember/channelMembershipId ///show in admins
+    ApproveOrRejectByAdmin ///show in admins and User
+    LeaveChannel/ ///show all members
+    RemoveMember/             ///show all members
 
 
 

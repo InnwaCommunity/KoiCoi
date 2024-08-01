@@ -1,10 +1,12 @@
 ﻿using Azure;
+using KoiCoi.Database.AppDbContextModels;
 using KoiCoi.Models.Via;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Channels;
 
 namespace KoiCoi.Modules.Repository.Channel;
 
@@ -506,6 +508,37 @@ public class DA_Channel
                 await _db.ChannelMemberships.AddAsync(meship);
                 await _db.SaveChangesAsync();
                 model = Result<string>.Success("Joined Success");
+
+
+                ///Save to Notification
+                var NotiInfo = await (from chann in _db.ChannelMemberships
+                                      join user in _db.Users on chann.UserId equals user.UserId
+                                      join inviter in _db.Users on chann.InviterId equals inviter.UserId
+                                      join channel in _db.Channels on chann.ChannelId equals channel.ChannelId
+                                      where channel.ChannelId == channelId && user.UserId == LoginUserId
+                                      select new
+                                      {
+                                          MembershipId = chann.MembershipId,
+                                          UserName = user.Name,
+                                          InviterName = user.Name,
+                                          ChannelName = channel.ChannelName,
+                                          JoinDate = Globalfunction.CalculateDateTime(chann.JoinedDate) 
+                                      }).FirstOrDefaultAsync();
+                List<int> admins = await (from chan in _db.ChannelMemberships
+                                          join admin in _db.Users on chan.UserId equals admin.UserId
+                                          join userType in _db.UserTypes on chan.UserTypeId equals userType.TypeId
+                                          where chan.ChannelId == channelId && 
+                                          (userType.Name.ToLower() == "admin" || userType.Name.ToLower() == "owner")
+                                          select admin.UserId).ToListAsync();
+                if(NotiInfo is not null)
+                {
+                    SaveNotification(
+                        admins,
+                        LoginUserId,
+                        $"Join New Member to {NotiInfo.ChannelName}",
+                        $"{NotiInfo.UserName} who invited by ${NotiInfo.InviterName} Joined the {NotiInfo.ChannelName}",
+                        $"JoinedNewMember/{NotiInfo.MembershipId}");
+                }
             }
             else
             {
@@ -649,17 +682,17 @@ public class DA_Channel
                     {
                         int ApproveStatus = await _db.StatusTypes.Where(x => x.StatusName.ToLower() == "approved")
                             .Select(x => x.StatusId).FirstOrDefaultAsync();
-                        var membership = await _db.ChannelMemberships.Where(x => x.MembershipId == MembershipId)
+                        var membershi = await _db.ChannelMemberships.Where(x => x.MembershipId == MembershipId)
                                                 .FirstOrDefaultAsync();
-                        if (membership is not null && membership.StatusId != ApproveStatus)
+                        if (membershi is not null && membershi.StatusId != ApproveStatus)
                         {
-                            membership.StatusId = ApproveStatus;
-                            membership.UserTypeId = userTypeId;
-                            _db.ChannelMemberships.Update(membership);
+                            membershi.StatusId = ApproveStatus;
+                            membershi.UserTypeId = userTypeId;
+                            _db.ChannelMemberships.Update(membershi);
                             await _db.SaveChangesAsync();
 
                             //update channel member count
-                            var channel = await _db.Channels.Where(x => x.ChannelId == membership.ChannelId)
+                            var channel = await _db.Channels.Where(x => x.ChannelId == membershi.ChannelId)
                                                 .FirstOrDefaultAsync();
 
                             if (channel is not null)
@@ -668,20 +701,103 @@ public class DA_Channel
                                 _db.Channels.Update(channel);
                                 await _db.SaveChangesAsync();
                             }
+                            ///Save Notification
+                            ///Welcome New Member
+                            List<int> users = await (from meship in _db.ChannelMemberships
+                                                  join chan in _db.Channels on meship.ChannelId equals chan.ChannelId
+                                                  join status in _db.StatusTypes on meship.StatusId equals status.StatusId
+                                                  where meship.ChannelId == membershi.ChannelId
+                                                  && status.StatusName.ToLower() == "approved"
+                                                  select meship.UserId).ToListAsync();
+                            var UserName = await (from me in _db.ChannelMemberships
+                                                  join user in _db.Users on me.UserId equals user.UserId
+                                                  join inviter in _db.Users on me.InviterId equals inviter.UserId
+                                                  join channl in _db.Channels on me.ChannelId equals channl.ChannelId
+                                                  where me.MembershipId == membershi.MembershipId
+                                                  select new
+                                                  {
+                                                     UserName = user.Name,
+                                                     ChannelName = channl.ChannelName,
+                                                     inviterName = inviter.Name,
+                                                     JoinedDate = Globalfunction.CalculateDateTime(me.JoinedDate)
+                                                  }).FirstOrDefaultAsync();
+                            if (users.Contains(LoginUserId))
+                            {
+                                users.Remove(LoginUserId);
+                            }
+
+                            SaveNotification(
+                                users,
+                                LoginUserId,
+                                $"{UserName?.UserName} Joined the channel {UserName?.ChannelName}",
+                                $"{UserName?.UserName} who invited by {UserName?.inviterName} Joined the {UserName?.ChannelName}",
+                                $"ActionByChannelAdminToJoinedMember/{membershi.MembershipId}"
+                                );
                         }
+
                     }
                     ///2 to reject
                     else if(item.ApproveStatus == 2)
                     {
                         int RejectStatus = await _db.StatusTypes.Where(x => x.StatusName.ToLower() == "rejected")
                             .Select(x => x.StatusId).FirstOrDefaultAsync();
-                        var membership = await _db.ChannelMemberships.Where(x => x.MembershipId == MembershipId)
+                        var membersh = await _db.ChannelMemberships.Where(x => x.MembershipId == MembershipId)
                                                 .FirstOrDefaultAsync();
-                        if (membership is not null)
+                        if (membersh is not null)
                         {
-                            membership.StatusId = RejectStatus;
-                            _db.ChannelMemberships.Update(membership);
+                            membersh.StatusId = RejectStatus;
+                            _db.ChannelMemberships.Update(membersh);
                             await _db.SaveChangesAsync();
+                        }
+                    }
+                    ///Save Notification
+                    ///Inform to User and Admins for Action
+                    var membership = await _db.ChannelMemberships.Where(x => x.MembershipId == MembershipId)
+                                                .FirstOrDefaultAsync();
+                    if(membership is not null)
+                    {
+                        var NotiInfo = await (from chann in _db.ChannelMemberships
+                                              join user in _db.Users on chann.UserId equals user.UserId
+                                              join inviter in _db.Users on chann.InviterId equals inviter.UserId
+                                              join channel in _db.Channels on chann.ChannelId equals channel.ChannelId
+                                              where channel.ChannelId == membership.ChannelId && user.UserId == membership.UserId
+                                              select new
+                                              {
+                                                  MembershipId = chann.MembershipId,
+                                                  UserName = user.Name,
+                                                  InviterName = user.Name,
+                                                  ChannelName = channel.ChannelName,
+                                                  JoinDate = Globalfunction.CalculateDateTime(chann.JoinedDate)
+                                              }).FirstOrDefaultAsync();
+                        List<int> admins = await (from chan in _db.ChannelMemberships
+                                                  join admin in _db.Users on chan.UserId equals admin.UserId
+                                                  join userType in _db.UserTypes on chan.UserTypeId equals userType.TypeId
+                                                  where chan.ChannelId == membership.ChannelId &&
+                                                  (userType.Name.ToLower() == "admin" || userType.Name.ToLower() == "owner")
+                                                  select admin.UserId).ToListAsync();
+                        admins.Add(membership.UserId);
+                        if (admins.Contains(LoginUserId))
+                        {
+                            admins.Remove(LoginUserId);
+                        }
+                        string? LoginName = await _db.Users.Where(x => x.UserId == LoginUserId)
+                            .Select(x => x.Name).FirstOrDefaultAsync();
+                        string actionN = "";
+                        if(item.ApproveStatus == 1)
+                        {
+                            actionN = "Approved";
+                        }else if(item.ApproveStatus == 2)
+                        {
+                            actionN = "Rejected";
+                        }
+                        if (NotiInfo is not null)
+                        {
+                            SaveNotification(
+                                admins,
+                                LoginUserId,
+                                $"{LoginName} {actionN} to {NotiInfo.UserName} in {NotiInfo.ChannelName}",
+                                $"{NotiInfo.UserName} who invited by ${NotiInfo.InviterName} was {actionN} by {LoginName}",
+                                $"JoinedNewMember/{NotiInfo.MembershipId}");
                         }
                     }
                 }
@@ -804,6 +920,19 @@ public class DA_Channel
                 _db.ChannelMemberships.Remove(membership);
                 await _db.SaveChangesAsync();
                 model = Result<string>.Success("Success");
+
+
+                ///Save Notification
+                List<int> users = await (from _me in _db.ChannelMemberships
+                                   join chan in _db.Channels on _me.ChannelId equals chan.ChannelId
+                                   where chan.ChannelId == channel.ChannelId
+                                   select _me.UserId).ToListAsync();
+                string? Name = await _db.Users.Where(x => x.UserId == LoginUserId).Select(x => x.Name).FirstOrDefaultAsync();
+                SaveNotification(users,
+                    LoginUserId,
+                    $"{Name} leaved from {channel.ChannelName}",
+                    $"{Name} leaved from {channel.ChannelName}",
+                    $"LeaveChannel/{LoginUserId}");
             }
         }
         catch (Exception ex)
@@ -853,6 +982,25 @@ public class DA_Channel
                     };
                     await _db.RemoveMemberHistories.AddAsync(data);
                     await _db.SaveChangesAsync();
+
+                    List<int> users = await _db.ChannelMemberships.Where(x => x.ChannelId == channelId)
+                        .Select(x => x.UserId).ToListAsync();
+                    string? userName = await _db.Users.Where(x => x.UserId == LoginUserId)
+                        .Select(x => x.Name).FirstOrDefaultAsync();
+                    string? memberName = await _db.Users.Where(x => x.UserId == memberId)
+                        .Select(x => x.Name).FirstOrDefaultAsync();
+                    users.Add(membership.UserId);
+                    if (users.Contains(LoginUserId))
+                    {
+                        users.Remove(LoginUserId);
+                    }
+                    SaveNotification(
+                        users,
+                        LoginUserId,
+                        $"{userName} removed {memberName}",
+                        $"{userName} removed {memberName} because {memberdata.Reason ?? ""}",
+                        $"RemoveMember/{memberId}"
+                        );
                 }
             }
 
@@ -864,5 +1012,24 @@ public class DA_Channel
             model = Result<string>.Error(ex);
         }
         return model;
+    }
+
+    private async void SaveNotification(List<int> users,int SenderId,string Title,string? message,string url)
+    {
+        foreach (var UserId in users)
+        {
+            Notification notipayload = new Notification
+            {
+                UserId = UserId,
+                SenderId = SenderId,
+                Title = Title,
+                Message = message,
+                Url = url,
+                IsRead = false,
+                DateCreated = DateTime.Now,
+            };
+            await _db.Notifications.AddAsync(notipayload);
+            await _db.SaveChangesAsync();
+        }
     }
 }

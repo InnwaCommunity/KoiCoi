@@ -1,4 +1,6 @@
-﻿namespace KoiCoi.Backend.Controllers.Events;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+
+namespace KoiCoi.Backend.Controllers.Events;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -11,5 +13,11 @@ public class EventController : BaseController
     {
         _blEvent = blEvent;
         _configuration = configuration;
+    }
+
+    [HttpPost("CreateEvent",Name = "CreateEvent")]
+    public IActionResult CreateEvent(CreateEventPayload paylod)
+    {
+        return Ok(paylod);
     }
 }
