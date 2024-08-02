@@ -50,7 +50,7 @@ public class BaseDataAccess
         }
         catch (Exception ex)
         {
-            Console.WriteLine("CreateDbCommand failed: " + DateTime.Now + ex.Message);
+            Console.WriteLine("CreateDbCommand failed: " + DateTime.UtcNow + ex.Message);
             throw;
         }
     }
@@ -90,7 +90,7 @@ public class BaseDataAccess
         }
         catch (Exception ex)
         {
-            Console.WriteLine("ExecuteReader " + DateTime.Now + ex.Message);
+            Console.WriteLine("ExecuteReader " + DateTime.UtcNow + ex.Message);
         }
         return retObject;
     }
@@ -144,7 +144,7 @@ public class BaseDataAccess
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(DateTime.Now + " Error in ExecuteQuery" + ex.Message + ex.StackTrace);
+                    Console.WriteLine(DateTime.UtcNow + " Error in ExecuteQuery" + ex.Message + ex.StackTrace);
                 }
                 finally
                 {
@@ -222,7 +222,7 @@ public class BaseDataAccess
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(DateTime.Now + ex.Message + ex.StackTrace);
+                    Console.WriteLine(DateTime.UtcNow + ex.Message + ex.StackTrace);
                     conn.Close();
                 }
                 finally
@@ -271,7 +271,7 @@ public class BaseDataAccess
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(DateTime.Now + ex.Message + ex.StackTrace);
+                    Console.WriteLine(DateTime.UtcNow + ex.Message + ex.StackTrace);
                     conn.Close();
                 }
                 finally
@@ -314,7 +314,7 @@ public class BaseDataAccess
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(DateTime.Now + ex.Message + ex.StackTrace);
+                    Console.WriteLine(DateTime.UtcNow + ex.Message + ex.StackTrace);
                     conn.Close();
                 }
                 finally
@@ -415,7 +415,7 @@ public class BaseDataAccess
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(DateTime.Now + " Error in ExecuteQuery" + ex.Message + ex.StackTrace);
+                    Console.WriteLine(DateTime.UtcNow + " Error in ExecuteQuery" + ex.Message + ex.StackTrace);
                 }
                 finally
                 {
@@ -459,7 +459,7 @@ public class BaseDataAccess
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(DateTime.Now + ex.Message + ex.StackTrace);
+                    Console.WriteLine(DateTime.UtcNow + ex.Message + ex.StackTrace);
                     conn.Close();
                 }
                 finally

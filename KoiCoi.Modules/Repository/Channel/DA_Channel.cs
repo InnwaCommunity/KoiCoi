@@ -204,7 +204,7 @@ public class DA_Channel
                 TopicName = Guid.NewGuid().ToString(),
                 Descriptions = $"Topic of {addedChannel.ChannelName} Channel",
                 ChannelId = addedChannel.ChannelId,
-                DateCreated = DateTime.Now
+                DateCreated = DateTime.UtcNow
             };
 
             await _db.ChannelTopics.AddAsync(channalTopic);
@@ -413,13 +413,13 @@ public class DA_Channel
                         UserId = LoginUserId,
                         InviterId = inviterId,
                         ChannelId = channelId,
-                        ViewedDate = DateTime.Now
+                        ViewedDate = DateTime.UtcNow
                     };
                     await _db.VisitChannelHistories.AddAsync(inviteHist);
                 }
                 else
                 {
-                    visitRecord.ViewedDate = DateTime.Now;
+                    visitRecord.ViewedDate = DateTime.UtcNow;
                     _db.VisitChannelHistories.Update(visitRecord);
                 }
                 await _db.SaveChangesAsync();
@@ -502,7 +502,7 @@ public class DA_Channel
                     UserId = LoginUserId,
                     UserTypeId = memberLevel.Value,
                     StatusId = 1,
-                    JoinedDate = DateTime.Now,
+                    JoinedDate = DateTime.UtcNow,
                     InviterId = inviterId,
                 };
                 await _db.ChannelMemberships.AddAsync(meship);
@@ -586,7 +586,7 @@ public class DA_Channel
             if (chan is null) return Result<List<ChannelMemberResponse>>.Error("Channel Not Found");
             if(statusType is null) return Result<List<ChannelMemberResponse>>.Error("User Type Not Found");
             string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
-            string uploadDirectory = _configuration["appSettings:UserProfile"] ?? throw new Exception("Invalid function upload path.");
+            string uploadDirectory = _configuration["appSettings:ChannelProfile"] ?? throw new Exception("Invalid function upload path.");
             string destDirectory = Path.Combine(baseDirectory, uploadDirectory);
 
 
@@ -978,7 +978,7 @@ public class DA_Channel
                         MemberId = memberId,
                         ChannelId = channelId,
                         Reason = memberdata.Reason ?? "",
-                        RemoveDate = DateTime.Now
+                        RemoveDate = DateTime.UtcNow
                     };
                     await _db.RemoveMemberHistories.AddAsync(data);
                     await _db.SaveChangesAsync();
@@ -1026,7 +1026,7 @@ public class DA_Channel
                 Message = message,
                 Url = url,
                 IsRead = false,
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow,
             };
             await _db.Notifications.AddAsync(notipayload);
             await _db.SaveChangesAsync();

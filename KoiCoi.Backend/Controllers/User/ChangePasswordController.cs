@@ -38,7 +38,7 @@ public class ChangePasswordController : BaseController
         }
         catch (Exception ex)
         {
-            Console.WriteLine("GetApproverSettingWeb" + DateTime.Now + ex.Message);
+            Console.WriteLine("GetApproverSettingWeb" + DateTime.UtcNow + ex.Message);
             return Result<OtpPrefixChar>.Error(ex);
         }
     }
@@ -58,7 +58,7 @@ public class ChangePasswordController : BaseController
         }
         catch (Exception ex)
         {
-            Console.WriteLine("GetApproverSettingWeb" + DateTime.Now + ex.Message);
+            Console.WriteLine("GetApproverSettingWeb" + DateTime.UtcNow + ex.Message);
             return Result<string>.Error(ex);
         }
     }

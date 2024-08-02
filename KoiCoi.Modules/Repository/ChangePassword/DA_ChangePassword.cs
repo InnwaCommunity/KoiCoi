@@ -56,16 +56,16 @@ public class DA_ChangePassword
                 EmailPhone = Email,
                 UserId = userId,
                 Otptoken = "otptoken",
-                SendDateTime = DateTime.Now,
+                SendDateTime = DateTime.UtcNow,
                 FailCount = 0,
                 RetryCount = 0,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.UtcNow
             };
         }
         else
         {
             DateTime value_plus_hrs = otpObject.SendDateTime.AddHours(24);
-            if (DateTime.Now > value_plus_hrs)
+            if (DateTime.UtcNow > value_plus_hrs)
             {
                 otpObject.RetryCount = 0;
                 otpObject.FailCount = 0;
@@ -81,11 +81,11 @@ public class DA_ChangePassword
         if (otpObject.RetryCount < _maxRetryOTPCount)
         {
             otpObject.Passcode = sRandomOTP;
-            otpObject.SendDateTime = DateTime.Now;
+            otpObject.SendDateTime = DateTime.UtcNow;
             otpObject.Ipaddress = ipaddress;
             otpObject.FailCount = 0;
             otpObject.RetryCount = otpObject.RetryCount + 1;
-            otpObject.LastModifiedDate = DateTime.Now;
+            otpObject.LastModifiedDate = DateTime.UtcNow;
             if (otpObject.Otpid > 0)
             {
                 //_repositoryWrapper.OTP.Update(otpObject);
@@ -140,7 +140,7 @@ public class DA_ChangePassword
                     && x.EmailPhone == objPayload.Email).FirstOrDefaultAsync();
                 if (otpObject is not null)
                 {
-                    if (otpObject.SendDateTime.AddMinutes(_otpExpireMinute) < DateTime.Now)
+                    if (otpObject.SendDateTime.AddMinutes(_otpExpireMinute) < DateTime.UtcNow)
                     {
                         return Result<string>.Error("OTP code is expired, please request OTP again.");
                     }
@@ -155,7 +155,7 @@ public class DA_ChangePassword
                     {
                         otpObject.FailCount = 0;
                         otpObject.RetryCount = 0;
-                        otpObject.LastModifiedDate = DateTime.Now;
+                        otpObject.LastModifiedDate = DateTime.UtcNow;
                         _db.Otps.Update(otpObject);
                         await _db.SaveChangesAsync();
 
@@ -174,7 +174,7 @@ public class DA_ChangePassword
                     else
                     {
                         otpObject.FailCount = otpObject.FailCount + 1;
-                        otpObject.LastModifiedDate = DateTime.Now;
+                        otpObject.LastModifiedDate = DateTime.UtcNow;
                          _db.Otps.Update(otpObject);
                         await _db.SaveChangesAsync();
                         model = Result<string>.Error("Your OTP code is wrong, please try again.");
@@ -192,7 +192,7 @@ public class DA_ChangePassword
         }
         catch (Exception ex)
         {
-            Console.WriteLine("GetApproverSettingWeb" + DateTime.Now + ex.Message);
+            Console.WriteLine("GetApproverSettingWeb" + DateTime.UtcNow + ex.Message);
             model = Result<string>.Error(ex);
         }
         return model;
@@ -211,7 +211,7 @@ public class DA_ChangePassword
                     && x.EmailPhone == verEmPay.Email).FirstOrDefaultAsync();
                 if (otpObject is not null)
                 {
-                    if (otpObject.SendDateTime.AddMinutes(_otpExpireMinute) < DateTime.Now)
+                    if (otpObject.SendDateTime.AddMinutes(_otpExpireMinute) < DateTime.UtcNow)
                     {
                         return Result<string>.Error("OTP code is expired, please request OTP again.");
                     }
@@ -226,7 +226,7 @@ public class DA_ChangePassword
                     {
                         otpObject.FailCount = 0;
                         otpObject.RetryCount = 0;
-                        otpObject.LastModifiedDate = DateTime.Now;
+                        otpObject.LastModifiedDate = DateTime.UtcNow;
                         _db.Otps.Update(otpObject);
                         await _db.SaveChangesAsync();
 
@@ -241,7 +241,7 @@ public class DA_ChangePassword
                     else
                     {
                         otpObject.FailCount = otpObject.FailCount + 1;
-                        otpObject.LastModifiedDate = DateTime.Now;
+                        otpObject.LastModifiedDate = DateTime.UtcNow;
                          _db.Otps.Update(otpObject);
                         await _db.SaveChangesAsync();
                         model = Result<string>.Error("Your OTP code is wrong, please try again.");
@@ -259,7 +259,7 @@ public class DA_ChangePassword
         }
         catch (Exception ex)
         {
-            Console.WriteLine("GetApproverSettingWeb" + DateTime.Now + ex.Message);
+            Console.WriteLine("GetApproverSettingWeb" + DateTime.UtcNow + ex.Message);
             model = Result<string>.Error(ex);
         }
 

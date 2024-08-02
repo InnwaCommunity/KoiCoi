@@ -286,7 +286,7 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
         }
         catch (Exception ex)
         {
-            Console.WriteLine(DateTime.Now.ToString() + " - " + "Exception :" + ex.Message);
+            Console.WriteLine(DateTime.UtcNow.ToString() + " - " + "Exception :" + ex.Message);
         }
         return _OldObjString;
     }

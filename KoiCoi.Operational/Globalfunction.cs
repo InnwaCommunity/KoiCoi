@@ -51,7 +51,7 @@ public class Globalfunction
     }
     public static string CalculateDateTime(DateTime inputDateTime)
     {
-        DateTime now = DateTime.Now;
+        DateTime now = DateTime.UtcNow;
         TimeSpan difference = now - inputDateTime;
         if (difference.TotalSeconds < 60)
         {
@@ -254,12 +254,12 @@ public class Globalfunction
     }
     public static void WriteSystemLog(string message)
     {
-        Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " - " + message);
+        Console.WriteLine(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + " - " + message);
     }
 
     public static void WriteSystemErrorLog(Exception ex)
     {
-        Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " - " + ex.Message + ex.StackTrace);
+        Console.WriteLine(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + " - " + ex.Message + ex.StackTrace);
     }
 
     public static DateTime ConvertStringToDateTime(string datetime)

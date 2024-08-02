@@ -17,8 +17,8 @@ public static class ChangeDatabaseModel
                 Phone = viaUser.Phone,
                 PasswordHash = viaUser.PasswordHash!,
                 DeviceId = viaUser.DeviceId,
-                DateCreated = DateTime.Now,
-                ModifiedDate = DateTime.Now,
+                DateCreated = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
                 Inactive = false,
         };
             return user;
@@ -36,8 +36,8 @@ public static class ChangeDatabaseModel
             MemberCount = 1,
             TotalBalance = "0",
             LastBalance = "0",
-            DateCreated = DateTime.Now,
-            ModifiedDate = DateTime.Now,
+            DateCreated = DateTime.UtcNow,
+            ModifiedDate = DateTime.UtcNow,
             Inactive = false
         };
         return channel;
@@ -49,7 +49,7 @@ public static class ChangeDatabaseModel
             Url = viaChannelProfile.Url,
             UrlDescription = viaChannelProfile.UrlDescription,
             ChannelId = viaChannelProfile.ChannelId,
-            CreatedDate = DateTime.Now,
+            CreatedDate = DateTime.UtcNow,
         };
         return channelProfile;
     }
@@ -62,7 +62,7 @@ public static class ChangeDatabaseModel
             UserId = viaChannelMemberShip.UserId,
             UserTypeId = viaChannelMemberShip.UserTypeId,
             StatusId = viaChannelMemberShip.StatusId,
-            JoinedDate = DateTime.Now,
+            JoinedDate = DateTime.UtcNow,
         };
         return newChan;
     }

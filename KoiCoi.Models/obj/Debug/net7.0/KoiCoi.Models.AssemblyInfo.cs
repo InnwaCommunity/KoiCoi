@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KoiCoi.Models")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2db5736a246f8c8bb5b5d4a470254ecc5cb49c9e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+df1c4318007e29fb562d35c6a416e0068d774f71")]
 [assembly: System.Reflection.AssemblyProductAttribute("KoiCoi.Models")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KoiCoi.Models")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

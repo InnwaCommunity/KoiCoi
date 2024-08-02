@@ -76,7 +76,7 @@ public class DA_User
             useData.Name = requestUserDto.Email ?? useData.Email!;
             useData.Phone = requestUserDto.Phone ?? useData.Phone;
             useData.DeviceId = requestUserDto.DeviceId ?? useData.DeviceId;
-            useData.ModifiedDate = DateTime.Now;
+            useData.ModifiedDate = DateTime.UtcNow;
             int result = await _db.SaveChangesAsync();
             if (result == 0)
                 return Result<string>.Error("Update Fail");
@@ -177,7 +177,7 @@ public class DA_User
             if (userData == null)
                 return Result<string>.Error("Login User  not found.");
 
-            userData.ModifiedDate = DateTime.Now;
+            userData.ModifiedDate = DateTime.UtcNow;
             userData.Inactive = true;
             await _db.SaveChangesAsync();
 
@@ -228,7 +228,7 @@ public class DA_User
                 Url = filename,
                 UrlDescription = payload.description,
                 UserId = LoginUserId,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
             };
 
             await _db.UserProfiles.AddAsync(profile);

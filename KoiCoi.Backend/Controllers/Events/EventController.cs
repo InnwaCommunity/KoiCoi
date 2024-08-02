@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-
-namespace KoiCoi.Backend.Controllers.Events;
+﻿namespace KoiCoi.Backend.Controllers.Events;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -16,8 +14,10 @@ public class EventController : BaseController
     }
 
     [HttpPost("CreateEvent",Name = "CreateEvent")]
-    public IActionResult CreateEvent(CreateEventPayload paylod)
+    public async Task<IActionResult> CreateEvent(CreateEventPayload paylod)
     {
-        return Ok(paylod);
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginEmpID);
+        Result<string> response= await _blEvent.CreateEvent(paylod, LoginUserId);
+        return Ok(response);
     }
 }

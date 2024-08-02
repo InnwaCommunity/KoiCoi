@@ -186,7 +186,7 @@ public class ImageFileServiceController : ControllerBase
 
                     if (tempdir == null || tempdir == "-")
                     {  // new temp dir
-                        DateTime date = DateTime.Now;
+                        DateTime date = DateTime.UtcNow;
                         tempdir = date.Year + "-" + date.Month + "-" + date.Day;
                         folderPath = baseDirectory + folderPath + tempdir;
                         Directory.CreateDirectory(folderPath);

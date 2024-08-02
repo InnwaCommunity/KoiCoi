@@ -37,6 +37,8 @@ Form/Details
     ApproveOrRejectByAdmin ///show in admins and User
     LeaveChannel/ ///show all members
     RemoveMember/             ///show all members
+    UpcomingNewEvent/EventId ///show all members
+    RequestedNewEvent/EventId ///show all admins and owner
 
 
-
+Client မှာ UTC time ပဲပေးရမယ်

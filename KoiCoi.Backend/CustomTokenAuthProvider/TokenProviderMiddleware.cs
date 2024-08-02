@@ -211,7 +211,10 @@ public class TokenProviderMiddleware : IMiddleware
             string phoneModel = Convert.ToString(context.Request.Headers["PhoneModel"]); // Get Device Phone Model
             bool isRooted = Convert.ToBoolean(context.Request.Headers["IsRooted"]); // Get IsRooted
 
-            SaveFirebaseToken(AdminID,deviceID_InHeader, firebaseToken, appVersion, osVersion, phoneModel, isRooted);
+            if (deviceID_InHeader is not null && appVersion is not null)
+            {
+                SaveFirebaseToken(AdminID, deviceID_InHeader, firebaseToken, appVersion, osVersion, phoneModel, isRooted);
+            }
             var now = DateTime.UtcNow;
             var _tokenData = new TokenData
             {
@@ -474,7 +477,7 @@ public class TokenProviderMiddleware : IMiddleware
         {
             tokendata.Token = firebaseToken ?? "";
             tokendata.UserId = userId;
-            tokendata.LastActivities = DateTime.Now;
+            tokendata.LastActivities = DateTime.UtcNow;
             tokendata.AppVersion = appVersion ?? "";
             tokendata.OsVersion = osVersion ?? "";
             tokendata.PhModel = phoneModel ?? "";
@@ -487,7 +490,7 @@ public class TokenProviderMiddleware : IMiddleware
             tokendata = new NotificationToken {
                 Token = firebaseToken ?? "",
                 UserId = userId,
-                LastActivities = DateTime.Now,
+                LastActivities = DateTime.UtcNow,
                 AppVersion = appVersion ?? "",
                 OsVersion = osVersion ?? "",
                 PhModel = phoneModel ?? "",
