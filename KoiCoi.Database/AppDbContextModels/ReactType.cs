@@ -9,5 +9,5 @@ public partial class ReactType
 
     public string Description { get; set; } = null!;
 
-    public string? Icon { get; set; }
+    public string? Emoji { get; set; }
 }

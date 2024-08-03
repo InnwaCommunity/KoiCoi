@@ -14,4 +14,8 @@
 	<ProjectReference Include="..\KoiCoi.Operational\KoiCoi.Operational.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repository\ReactFeature\" />
+  </ItemGroup>
+
 </Project>

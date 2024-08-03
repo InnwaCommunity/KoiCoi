@@ -430,10 +430,10 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<ReactType>(entity =>
         {
-            entity.HasKey(e => e.TypeId).HasName("PK__ReactTyp__516F03B539D74810");
+            entity.HasKey(e => e.TypeId).HasName("PK__ReactTyp__516F03B59E0394A9");
 
             entity.Property(e => e.Description).HasMaxLength(50);
-            entity.Property(e => e.Icon).HasMaxLength(30);
+            entity.Property(e => e.Emoji).HasMaxLength(100);
         });
 
         modelBuilder.Entity<RemoveMemberHistory>(entity =>

@@ -38,7 +38,13 @@ Form/Details
     LeaveChannel/ ///show all members
     RemoveMember/             ///show all members
     UpcomingNewEvent/EventId ///show all members
+    RejectedNewEvent/EventId ///show all channel admins and event creator
     RequestedNewEvent/EventId ///show all admins and owner
 
 
 Client မှာ UTC time ပဲပေးရမယ်
+
+
+Approve Reject Status
+Approve => 1
+Reject  => 2

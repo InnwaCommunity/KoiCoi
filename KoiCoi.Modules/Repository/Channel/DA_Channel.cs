@@ -648,7 +648,7 @@ public class DA_Channel
                                         .FirstOrDefaultAsync();
                 if (!string.IsNullOrEmpty(userImageUrl))
                 {
-                    string profileimg = Path.Combine(destDirectory, userImageUrl);
+                    string profileimg = Path.Combine(destDirectory, userImageUrl );
                     byte[] imageBytes = System.IO.File.ReadAllBytes(profileimg);
                     string base64String = Convert.ToBase64String(imageBytes);
                     response.UserImage64 = base64String;

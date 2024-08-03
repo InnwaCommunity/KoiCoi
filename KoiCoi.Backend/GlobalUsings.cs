@@ -21,6 +21,7 @@ global using KoiCoi.Models.ChannelDtos;
 global using KoiCoi.Models;
 global using KoiCoi.Models.Currency;
 global using KoiCoi.Models.EventDto;
+global using KoiCoi.Models.EventDto.Response;
 
 //Operational
 global using KoiCoi.Operational.Encrypt;

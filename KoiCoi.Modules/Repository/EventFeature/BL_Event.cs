@@ -1,5 +1,7 @@
 ﻿using KoiCoi.Models.EventDto;
+using KoiCoi.Models.EventDto.Response;
 using KoiCoi.Modules.Repository.Channel;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +22,15 @@ public class BL_Event
     public async Task<Result<string>> CreateEvent(CreateEventPayload paylod,int LoginUserId)
     {
         return await _daEvent.CreateEvent(paylod, LoginUserId);
+    }
+
+    public async Task<Result<List<GetRequestEventResponse>>> GetEventRequestList(GetEventRequestPayload payload,int LoginUserId)
+    {
+        return await _daEvent.GetEventRequestList(payload, LoginUserId);
+    }
+
+    public async Task<Result<string>> ApproveRejectEvent(List<ApproveRejectEventPayload> payload,int LoginUserId)
+    {
+        return await _daEvent.ApproveRejectEvent(payload, LoginUserId);
     }
 }

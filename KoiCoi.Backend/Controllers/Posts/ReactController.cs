@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
+﻿
 namespace KoiCoi.Backend.Controllers.Posts;
 
 [Route("api/[controller]")]

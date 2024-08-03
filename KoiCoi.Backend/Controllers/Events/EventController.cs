@@ -1,4 +1,6 @@
-﻿namespace KoiCoi.Backend.Controllers.Events;
+﻿using KoiCoi.Models.EventDto.Response;
+
+namespace KoiCoi.Backend.Controllers.Events;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -18,6 +20,22 @@ public class EventController : BaseController
     {
         int LoginUserId = Convert.ToInt32(_tokenData.LoginEmpID);
         Result<string> response= await _blEvent.CreateEvent(paylod, LoginUserId);
+        return Ok(response);
+    }
+
+    [HttpPost("GetEventRequestList",Name = "GetEventRequestList")]
+    public async Task<IActionResult> GetEventRequestList(GetEventRequestPayload payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginEmpID);
+        Result<List<GetRequestEventResponse>> response = await _blEvent.GetEventRequestList(payload,LoginUserId);
+        return Ok(response);
+    }
+
+    [HttpPost("ApproveRejectEvent",Name = "ApproveRejectEvent")]
+    public async Task<IActionResult> ApproveRejectEvent(List<ApproveRejectEventPayload> payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginEmpID);
+        Result<string> response = await _blEvent.ApproveRejectEvent(payload,LoginUserId);
         return Ok(response);
     }
 }
