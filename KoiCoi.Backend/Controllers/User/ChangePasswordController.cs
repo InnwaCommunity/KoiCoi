@@ -30,7 +30,7 @@ public class ChangePasswordController : BaseController
     {
         try
         {
-            int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+            int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
             string Email = payload.Email;
             string ipaddress = Convert.ToString(Globalfunction.GetClientIP(HttpContext));
             Result<OtpPrefixChar> res = await _blChnagePassword.RequestByEmail(Email,LoginEmpID, ipaddress, _maxRetryOTPCount, _maxOTPFailCount, _otpExpireMinute);
@@ -51,7 +51,7 @@ public class ChangePasswordController : BaseController
             if (ObjPayload.Password != ObjPayload.ConfirmPassword)
                 return Result<string>.Error("Password and confirm password not match.");
 
-            int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+            int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
             ObjPayload.LoginId = LoginEmpID;
             return await _blChnagePassword.ChangePasswordByOTP(ObjPayload, _maxRetryOTPCount, _maxOTPFailCount, _otpExpireMinute);
 
@@ -67,7 +67,7 @@ public class ChangePasswordController : BaseController
     [HttpPost("SaveVertifyEmail",Name = "SaveVertifyEmail")]
     public async Task<Result<string>> SaveVertifyEmail(VertifyEmailPayload verEmPay)
     {
-        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
         verEmPay.LoginId = LoginEmpID;
         return await _blChnagePassword.SaveVertifyEmail(verEmPay, _maxRetryOTPCount, _maxOTPFailCount, _otpExpireMinute);
     }

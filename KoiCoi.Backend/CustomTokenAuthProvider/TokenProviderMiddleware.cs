@@ -213,7 +213,7 @@ public class TokenProviderMiddleware : IMiddleware
 
             if (deviceID_InHeader is not null && appVersion is not null)
             {
-                SaveFirebaseToken(AdminID, deviceID_InHeader, firebaseToken, appVersion, osVersion, phoneModel, isRooted);
+                await SaveFirebaseToken(AdminID, deviceID_InHeader, firebaseToken, appVersion, osVersion, phoneModel, isRooted);
             }
             var now = DateTime.UtcNow;
             var _tokenData = new TokenData
@@ -469,7 +469,7 @@ public class TokenProviderMiddleware : IMiddleware
         return false;
     }
 
-    private async void SaveFirebaseToken(int userId,string deviceID,string firebaseToken,string appVersion,string osVersion,string phoneModel,bool isRooted)
+    private async Task<string> SaveFirebaseToken(int userId,string deviceID,string firebaseToken,string appVersion,string osVersion,string phoneModel,bool isRooted)
     {
         var tokendata = await _repository.NotificationTokens
                             .Where(x=> x.UserId == userId).FirstOrDefaultAsync();
@@ -499,6 +499,7 @@ public class TokenProviderMiddleware : IMiddleware
             await _repository.NotificationTokens.AddAsync(tokendata);
             await _repository.SaveChangesAsync();
         }
+        return "success";
 }
 
     private string CreateEncryptedJWTToken(Claim[] claims)

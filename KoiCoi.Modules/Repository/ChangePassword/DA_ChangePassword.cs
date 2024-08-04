@@ -1,7 +1,4 @@
 ﻿
-using Org.BouncyCastle.Bcpg.OpenPgp;
-using System.ComponentModel.DataAnnotations;
-
 namespace KoiCoi.Modules.Repository.ChangePassword;
 
 public class DA_ChangePassword

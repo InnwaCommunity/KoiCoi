@@ -1,15 +1,7 @@
-﻿using KoiCoi.Database.AppDbContextModels;
-using KoiCoi.Models.EventDto;
-using KoiCoi.Models.EventDto.Response;
+﻿
+using KoiCoi.Database.AppDbContextModels;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace KoiCoi.Modules.Repository.EventFreture;
 
@@ -40,6 +32,9 @@ public class DA_Event
                                            UserId = _me.UserId,
                                        })
                                        .FirstOrDefaultAsync();
+            int CurrencyId = await _db.Channels.Where(x=> x.ChannelId == ChannelId)
+                .Select(x=> x.CurrencyId)
+                .FirstOrDefaultAsync();
             if(ownerusertype is not null)
             {
                 status = await _db.StatusTypes.Where(x => x.StatusName.ToLower() == "approved")
@@ -61,6 +56,7 @@ public class DA_Event
                 CreatorId = LoginUserId,
                 ApproverId = ownerusertype is not null ? LoginUserId : null,
                 StatusId = status,
+                CurrencyId = CurrencyId,
                 TotalBalance = "0",
                 LastBalance = "0",
                 StartDate = DateTime.Parse(paylod!.StartDate!),
@@ -116,7 +112,7 @@ public class DA_Event
                 {
                     channelMember.Remove(LoginUserId);
                 }
-                SaveNotification(channelMember,
+                await SaveNotification(channelMember,
                     LoginUserId,
                     $"Upcoming the New Event {newEvent.EventName}",
                     newEvent.EventDescription,
@@ -136,7 +132,7 @@ public class DA_Event
                 }
                 string? LoginUserName= await _db.Users.Where(x=> x.UserId == LoginUserId)
                     .Select(x=> x.Name).FirstOrDefaultAsync();
-                SaveNotification(admins,
+                await SaveNotification(admins,
                     LoginUserId,
                     $"Requested the New Event {newEvent.EventName} by Member {LoginUserName}",
                     newEvent.EventDescription,
@@ -157,24 +153,37 @@ public class DA_Event
         try
         {
             int ChannelId = Convert.ToInt32(Encryption.DecryptID(payload.ChannelIdval!, LoginUserId.ToString()));
+            string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             string status = payload.Status!;
             var query = await (from _ev in _db.Events
                                join _cre in _db.Users on _ev.CreatorId equals _cre.UserId
                                join _sta in _db.StatusTypes on _ev.StatusId equals _sta.StatusId
+                               join _cur in _db.Currencies on _ev.CurrencyId equals _cur.CurrencyId
                                join _meship in _db.ChannelMemberships on _ev.ChannelId equals _meship.ChannelId
                                join _usertype in _db.UserTypes on _meship.UserTypeId equals _usertype.TypeId
                                where _ev.ChannelId == ChannelId
                                && _sta.StatusName.ToLower() == status
                                && _ev.Inactive == false
                                && _meship.UserId == LoginUserId
-                               && (_usertype.Name.ToLower() == "owner" || _usertype.Name.ToLower() == "admin")
+                               && (status.ToLower() == "approved" || 
+                               _usertype.Name.ToLower() == "owner" || 
+                               _usertype.Name.ToLower() == "admin")
                                select new 
                                {
                                    EventIdval = _ev.Eventid,
                                    EventName = _ev.EventName,
                                    EventDescrition = _ev.EventDescription,
                                    CreatorIdval = _cre.UserId,
+                                   Currency = _cur.IsoCode,
                                    CreatorName = _cre.Name,
+                                   TotalBalance = Globalfunction.StringToDecimal(
+                                       _ev.TotalBalance == "0" ||
+                                       _ev.TotalBalance == null ? "0" : 
+                                       Encryption.DecryptID(_ev.TotalBalance.ToString(), balanceSalt)),
+                                   LastBalance = Globalfunction.StringToDecimal(
+                                       _ev.LastBalance == "0" ||
+                                       _ev.LastBalance == null ? "0" :
+                                       Encryption.DecryptID(_ev.LastBalance.ToString(), balanceSalt)),
                                    StartDate = _ev.StartDate.ToString("yyyy-MM-ddTHH:mm:ss"),
                                    EndDate = _ev.EndDate.ToString("yyyy-MM-ddTHH:mm:ss"),
                                    ModifiedDate = _ev.ModifiedDate.ToString("yyyy-MM-ddTHH:mm:ss"),
@@ -196,6 +205,9 @@ public class DA_Event
                     EventDescrition = item.EventDescrition,
                     CreatorIdval = Encryption.EncryptID(item.CreatorIdval.ToString(), LoginUserId.ToString()),
                     CreatorName = item.CreatorName,
+                    Currency = item.Currency,
+                    TotalBalance = item.TotalBalance,
+                    LastBalance = item.LastBalance,
                     StartDate = item.StartDate,
                     EndDate = item.EndDate,
                     ModifiedDate = item.ModifiedDate,
@@ -226,7 +238,8 @@ public class DA_Event
                                                 join _usety in _db.UserTypes on _meme.UserTypeId equals _usety.TypeId
                                                 where _ev.Eventid == EventId
                                                 && _meme.UserId == LoginUserId
-                                                && (_usety.Name.ToLower() == "owner" && _usety.Name.ToLower() == "admin"))
+                                                && (_usety.Name.ToLower() == "owner" || _usety.Name.ToLower() == "admin")
+                                                select _usety.Name)
                                                 .FirstOrDefaultAsync();
                 if (checkloginusertype is not null)
                 {
@@ -266,7 +279,7 @@ public class DA_Event
                                                             .Select(x=> x.UserId)
                                                             .ToListAsync();
                             
-                            SaveNotification(
+                            await SaveNotification(
                                 channelMembers,
                                 LoginUserId,
                                 oldevent.EventName,
@@ -299,7 +312,7 @@ public class DA_Event
                             {
                                 admins.Remove(LoginUserId);
                             }
-                            SaveNotification(
+                            await SaveNotification(
                                 admins,
                                 LoginUserId,
                                 $"Rejected Event {oldevent.EventName}",
@@ -321,7 +334,119 @@ public class DA_Event
         return result;
     }
 
-    private async void SaveNotification(List<int> users, int SenderId, string Title, string? message, string url)
+
+    public async Task<Result<string>> ChangeUserTypeTheEventMemberships(ChangeUserTypeEventMembership payload, int LoginUserId)
+    {
+        Result<string> result = null;
+        try
+        {
+            int EventId = Convert.ToInt32(Encryption.DecryptID(payload.EventIdval!, LoginUserId.ToString()));
+            var checkLoginUserAccess = await (from meship in _db.EventMemberships
+                                              join usertype in _db.UserTypes on meship.UserTypeId equals usertype.TypeId
+                                              where meship.UserId == LoginUserId && meship.EventId == EventId
+                                             && (usertype.Name.ToLower() == "admin" || usertype.Name.ToLower() == "owner")
+                                             select usertype.Name
+                                              ).FirstOrDefaultAsync();
+            List<UserIdAndUserType> userIdAndUserTypes = payload.userIdAndUserTypes!;
+            if (checkLoginUserAccess is not null)
+            {
+                foreach (var item in userIdAndUserTypes)
+                {
+                    int UserId = Convert.ToInt32(Encryption.DecryptID(item.UserIdval!, LoginUserId.ToString()));
+                    int UserTypeId = Convert.ToInt32(Encryption.DecryptID(item.UserTypeIdval!, LoginUserId.ToString()));
+                    var eventme = await _db.EventMemberships
+                        .Where(x => x.EventId == EventId && x.UserId == UserId)
+                        .FirstOrDefaultAsync();
+                    if (eventme is null)
+                    {
+                        eventme = new EventMembership
+                        {
+                            EventId = EventId,
+                            UserId = UserId,
+                            UserTypeId = UserTypeId
+                        };
+                        await _db.EventMemberships.AddAsync(eventme);
+                        await _db.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        eventme.UserTypeId = UserTypeId;
+                        await _db.SaveChangesAsync();
+                    }
+
+
+                    ///Save Noti to admins
+                    var admins = await (from _meme in _db.EventMemberships
+                                        join _ut in _db.UserTypes on _meme.UserTypeId equals _ut.TypeId
+                                        where _meme.EventId == EventId
+                                        && (_ut.Name.ToLower() == "owner" || _ut.Name.ToLower() == "admin")
+                                        select _meme.UserId).ToListAsync();
+                    admins.Add(UserId);
+                    if (admins.Contains(LoginUserId))
+                    {
+                        admins.Remove(LoginUserId);
+                    }
+                    admins.Distinct();
+                    var data = await (from _meme in _db.EventMemberships
+                                      join _user in _db.Users on _meme.UserId equals _user.UserId
+                                      join _ut in _db.UserTypes on _meme.UserTypeId equals _ut.TypeId
+                                      where _meme.EventId == EventId
+                                      && _meme.UserId == UserId
+                                      select new
+                                      {
+                                          UserName = _user.Name,
+                                          UserType = _ut.Name
+                                      }).FirstOrDefaultAsync();
+                    string? loginname = _db.Users.Where(x => x.UserId == LoginUserId).Select(x => x.Name).FirstOrDefault();
+                    if (data is not null && loginname is not null)
+                    {
+                        await SaveNotification(admins,
+                            LoginUserId,
+                            $"Changed the UserType of {data.UserName}",
+                            $"{loginname} Changed {data.UserName} to {data.UserType}",
+                            $"EventUserTypeChange/{eventme.MembershipId}");
+                    }
+                }
+            }
+            result = Result<string>.Success("Success");
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
+        }
+        return result;
+    }
+
+    public async Task<Result<List<EventAdminsResponse>>> GetEventOwnerAndAdmins(GetEventDataPayload payload, int LoginUserId)
+    {
+        Result<List<EventAdminsResponse>> result = null;
+        try
+        {
+            int EventId = Convert.ToInt32(Encryption.DecryptID(payload.EventIdval!, LoginUserId.ToString()));
+            List<EventAdminsResponse> query = await (from _em in _db.EventMemberships
+                               join _ut in _db.UserTypes on _em.UserTypeId equals _ut.TypeId
+                               join _meb in _db.Users on _em.UserId equals _meb.UserId
+                               join _ev in _db.Events on _em.EventId equals _ev.Eventid
+                               join _ms in _db.ChannelMemberships on _ev.ChannelId equals _ms.ChannelId
+                               join _logu in _db.Users on _ms.UserId equals _logu.UserId
+                               where _em.EventId == EventId && _logu.UserId == LoginUserId
+                               && (_ut.Name.ToLower() == "owner" || _ut.Name.ToLower() == "admin")
+                               select new EventAdminsResponse
+                               {
+                                   AdminIdval = Encryption.EncryptID(_meb.UserId.ToString(), LoginUserId.ToString()),
+                                   AdminName = _meb.Name,
+                                   UserTypes = _ut.Name
+                               }).ToListAsync();
+            result = Result<List<EventAdminsResponse>>.Success(query);
+        }
+        catch (Exception ex)
+        {
+            result = Result<List<EventAdminsResponse>>.Error(ex);
+        }
+        return result;
+    }
+
+    private async Task<string> SaveNotification(List<int> users, int SenderId, string Title, string? message, string url)
     {
         foreach (var UserId in users)
         {
@@ -338,5 +463,6 @@ public class DA_Event
             await _db.Notifications.AddAsync(notipayload);
             await _db.SaveChangesAsync();
         }
+        return "Success";
     }
 }

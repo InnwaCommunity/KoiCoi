@@ -1,5 +1,4 @@
-﻿using KoiCoi.Models.EventDto.Response;
-
+﻿
 namespace KoiCoi.Backend.Controllers.Events;
 
 [Route("api/[controller]")]
@@ -18,7 +17,7 @@ public class EventController : BaseController
     [HttpPost("CreateEvent",Name = "CreateEvent")]
     public async Task<IActionResult> CreateEvent(CreateEventPayload paylod)
     {
-        int LoginUserId = Convert.ToInt32(_tokenData.LoginEmpID);
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
         Result<string> response= await _blEvent.CreateEvent(paylod, LoginUserId);
         return Ok(response);
     }
@@ -26,7 +25,7 @@ public class EventController : BaseController
     [HttpPost("GetEventRequestList",Name = "GetEventRequestList")]
     public async Task<IActionResult> GetEventRequestList(GetEventRequestPayload payload)
     {
-        int LoginUserId = Convert.ToInt32(_tokenData.LoginEmpID);
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
         Result<List<GetRequestEventResponse>> response = await _blEvent.GetEventRequestList(payload,LoginUserId);
         return Ok(response);
     }
@@ -34,8 +33,23 @@ public class EventController : BaseController
     [HttpPost("ApproveRejectEvent",Name = "ApproveRejectEvent")]
     public async Task<IActionResult> ApproveRejectEvent(List<ApproveRejectEventPayload> payload)
     {
-        int LoginUserId = Convert.ToInt32(_tokenData.LoginEmpID);
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
         Result<string> response = await _blEvent.ApproveRejectEvent(payload,LoginUserId);
         return Ok(response);
+    }
+
+    [HttpPost("ChangeUserTypeTheEventMemberships",Name = "ChangeUserTypeTheEventMemberships")]
+    public async Task<Result<string>> ChangeUserTypeTheEventMemberships(ChangeUserTypeEventMembership payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.ChangeUserTypeTheEventMemberships(payload, LoginUserID);
+    }
+
+    ///GET Event Owner and admins
+    [HttpPost("GetEventOwnerAndAdmins",Name = "GetEventOwnerAndAdmins")]
+    public async Task<Result<List<EventAdminsResponse>>> GetEventOwnerAndAdmins(GetEventDataPayload payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.GetEventOwnerAndAdmins(payload, LoginUserID);
     }
 }

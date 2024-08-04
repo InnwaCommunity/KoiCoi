@@ -28,8 +28,8 @@ public class ChannelController : BaseController
     [HttpGet("GetCurrencyList", Name = "GetCurrencyList")]
     public async Task<Result<List<CurrencyResponseDto>>> GetCurrencyList()
     {
-        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-        return await _blChannel.GetCurrencyList(LoginEmpID);
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blChannel.GetCurrencyList(LoginUserID);
     }
 
     /*[HttpPost("UploadChannelProfileTemp", Name = "UploadChannelProfileTemp")]
@@ -127,8 +127,8 @@ public class ChannelController : BaseController
             }
                 
 
-                int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-                return await _blChannel.CreateChannel(channelReqeust, LoginEmpID, filename);
+                int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+                return await _blChannel.CreateChannel(channelReqeust, LoginUserID, filename);
         }
         catch (Exception ex)
         {
@@ -140,8 +140,8 @@ public class ChannelController : BaseController
     public async Task<Result<List<ChannelDataResponse>>> GetChannelsList()
     {
 
-        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-        return await _blChannel.GetChannelsList(LoginEmpID);
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blChannel.GetChannelsList(LoginUserID);
 
     }
 
@@ -156,8 +156,8 @@ public class ChannelController : BaseController
             string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
             string uploadDirectory = _configuration["appSettings:ChannelProfile"] ?? throw new Exception("Invalid function upload path.");
             string destinationDirectory = Path.Combine(baseDirectory, uploadDirectory);
-            int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-            int ChannelId = Convert.ToInt32(Encryption.DecryptID(channelIdval, LoginEmpID.ToString()));
+            int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+            int ChannelId = Convert.ToInt32(Encryption.DecryptID(channelIdval, LoginUserID.ToString()));
             return await _blChannel.GetChannelProfile(ChannelId, destinationDirectory);
         }
         catch (Exception ex)
@@ -174,8 +174,8 @@ public class ChannelController : BaseController
         try
         {
             if (string.IsNullOrEmpty(updoadReqeust.ChannelIdval)) throw new Exception("ChannelId can't be null or empty");
-            int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-            int ChannelId = Convert.ToInt32(Encryption.DecryptID(updoadReqeust.ChannelIdval, LoginEmpID.ToString()));
+            int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+            int ChannelId = Convert.ToInt32(Encryption.DecryptID(updoadReqeust.ChannelIdval, LoginUserID.ToString()));
 
             if (!string.IsNullOrEmpty(updoadReqeust.base64data))
             {
@@ -202,7 +202,7 @@ public class ChannelController : BaseController
                     }
                     await System.IO.File.WriteAllBytesAsync(filePath, bytes);
 
-                Result<string> resDa = await _blChannel.UploadProfile(LoginEmpID, ChannelId, filename, updoadReqeust.description);
+                Result<string> resDa = await _blChannel.UploadProfile(LoginUserID, ChannelId, filename, updoadReqeust.description);
                     if (resDa.IsError) return resDa;
 
                     if (!System.IO.File.Exists(filePath))
@@ -234,9 +234,9 @@ public class ChannelController : BaseController
         {
             string? channelIdval = getChannelData.channelIdval;
             if (string.IsNullOrEmpty(channelIdval)) throw new Exception("Channel Id can't null or empty");
-            int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-            int ChannelId = Convert.ToInt32(Encryption.DecryptID(channelIdval, LoginEmpID.ToString()));
-            return await _blChannel.GenerateChannelUrl(ChannelId, LoginEmpID);
+            int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+            int ChannelId = Convert.ToInt32(Encryption.DecryptID(channelIdval, LoginUserID.ToString()));
+            return await _blChannel.GenerateChannelUrl(ChannelId, LoginUserID);
         }
         catch (Exception ex)
         {
@@ -252,9 +252,9 @@ public class ChannelController : BaseController
         {
             string? channelIdval = getChannelData.channelIdval;
             if (string.IsNullOrEmpty(channelIdval)) throw new Exception("Channel Id can't null or empty");
-            int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-            int ChannelId = Convert.ToInt32(Encryption.DecryptID(channelIdval, LoginEmpID.ToString()));
-            Result<string> resData = await _blChannel.GenerateChannelUrl(ChannelId, LoginEmpID);
+            int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+            int ChannelId = Convert.ToInt32(Encryption.DecryptID(channelIdval, LoginUserID.ToString()));
+            Result<string> resData = await _blChannel.GenerateChannelUrl(ChannelId, LoginUserID);
             if (resData.IsError) return resData;
 
             // Create a new instance of the QR Code generator
@@ -285,8 +285,8 @@ public class ChannelController : BaseController
     public async Task<Result<VisitChannelResponse>> VisitChannelByInviteLink(ChannelInviteLinkPayload payload)
     {
         if (string.IsNullOrEmpty(payload.InviteLink)) return Result<VisitChannelResponse>.Error("Invite  Link Can't Null Or Empty");
-        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-        return await _blChannel.VisitChannelByInviteLink(payload.InviteLink, LoginEmpID);
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blChannel.VisitChannelByInviteLink(payload.InviteLink, LoginUserID);
     }
 
 
@@ -294,59 +294,67 @@ public class ChannelController : BaseController
     public async Task<Result<string>> JoinChannelByInviteLink(JoinChannelInviteLinkPayload payload)
     {
         if (string.IsNullOrEmpty(payload.InviteLink)) return Result<string>.Error("Invite  Link Can't Null Or Empty");
-        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-        return await _blChannel.JoinChannelByInviteLink(payload, LoginEmpID);
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blChannel.JoinChannelByInviteLink(payload, LoginUserID);
     }
 
     [HttpPost("GetChannelMember", Name = "GetChannelMember")]
     public async Task<Result<List<ChannelMemberResponse>>> GetChannelMember(GetMembershipPayload payload)
     {
         if (string.IsNullOrEmpty(payload.ChannelIdval) || string.IsNullOrEmpty(payload.MemberState)) return Result< List < ChannelMemberResponse >>.Error("Channel Id can't be empty or null");
-        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-        return await _blChannel.GetChannelMember(payload.ChannelIdval,payload.MemberState.ToLower(), LoginEmpID);
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blChannel.GetChannelMember(payload.ChannelIdval,payload.MemberState.ToLower(), LoginUserID);
     }
 
     [HttpPost("ApproveRejectChannelMember",Name = "ApproveRejectChannelMember")]
     public async Task<Result<string>> ApproveRejectChannelMember(List<AppRejChannelMemberPayload> payload)
     {
-        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
-        return await _blChannel.ApproveRejectChannelMember(payload, LoginEmpID);
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blChannel.ApproveRejectChannelMember(payload, LoginUserID);
     }
     [HttpPost("GetVisitUsersRecords",Name = "VisitUsersRecords")]
     public async Task<Result<List<VisitUserResponse>>> GetVisitUsersRecords(GetVisitUsersPayload payload)
     {
-        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         if (string.IsNullOrEmpty(payload.ChannelIdval) ||
             string.IsNullOrEmpty(payload.Date)) return Result<List<VisitUserResponse>>.Error("ChannelId or Viewed Date can't be null or empty");
-        return await _blChannel.GetVisitUsersRecords(payload,LoginEmpID);
+        return await _blChannel.GetVisitUsersRecords(payload,LoginUserID);
     }
 
     [HttpPost("NewMembersRecords",Name = "NewMembersRecords")]
     public async Task<Result<List<VisitUserResponse>>> NewMembersRecords(GetVisitUsersPayload payload)
     {
-        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         if (string.IsNullOrEmpty(payload.ChannelIdval) ||
             string.IsNullOrEmpty(payload.Date)) return Result<List<VisitUserResponse>>.Error("ChannelId or Viewed Date can't be null or empty");
-        return await _blChannel.NewMembersRecords(payload, LoginEmpID);
+        return await _blChannel.NewMembersRecords(payload, LoginUserID);
     }
 
     
      [HttpPost("LeaveChannel",Name = "LeaveChannel")]
     public async Task<Result<string>> LeaveChannel(GetChannelData payload)
     {
-        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         if (string.IsNullOrEmpty(payload.channelIdval)) return Result<string>.Error("ChannelId can't be null or empty");
-        return await _blChannel.LeaveChannel(payload.channelIdval,LoginEmpID);
+        return await _blChannel.LeaveChannel(payload.channelIdval, LoginUserID);
     }
 
     [HttpPost("RemoveMemberByAdmin",Name = "RemoveMemberByAdmin")]
     public async Task<Result<string>> RemoveMemberByAdmin(RemoveMemberPayload payload)
     {
-        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         if (string.IsNullOrEmpty(payload.ChannelIdval)) return Result<string>.Error("ChannelId Can't be null or empty");
         if (payload.removeMember == null || payload.removeMember.Count == 0) return Result<string>.Error("Please Select one Member");
-        return await _blChannel.RemoveMemberByAdmin(payload.ChannelIdval,payload.removeMember,LoginEmpID);
+        return await _blChannel.RemoveMemberByAdmin(payload.ChannelIdval,payload.removeMember, LoginUserID);
     }
     ///LeaveChannel
     ///remove member by admin or owner
+    [HttpPost("ChangeUserTypeTheChannelMemberships",Name = "ChangeUserTypeTheChannelMemberships")]
+    public async Task<Result<string>> ChangeUserTypeTheChannelMemberships(ChangeUserTypeChannelMembership payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blChannel.ChangeUserTypeTheChannelMemberships(payload, LoginUserID);
+    }
+
+
 }

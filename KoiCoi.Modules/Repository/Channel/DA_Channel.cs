@@ -1,12 +1,7 @@
-﻿using Azure;
-using KoiCoi.Database.AppDbContextModels;
+﻿
 using KoiCoi.Models.Via;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Channels;
 
 namespace KoiCoi.Modules.Repository.Channel;
 
@@ -1012,6 +1007,69 @@ public class DA_Channel
             model = Result<string>.Error(ex);
         }
         return model;
+    }
+
+    public async Task<Result<string>> ChangeUserTypeTheChannelMemberships(ChangeUserTypeChannelMembership payload, int LoginUserId)
+    {
+        Result<string> result = null;
+        try
+        {
+            int ChannelId = Convert.ToInt32(Encryption.DecryptID(payload.ChannelIdval!, LoginUserId.ToString()));
+            List<UserIdAndUserType> userIdAndUserTypes = payload.userIdAndUserTypes!;
+            foreach (var item in userIdAndUserTypes)
+            {
+                int UserId = Convert.ToInt32(Encryption.DecryptID(item.UserIdval!, LoginUserId.ToString()));
+                int UserTypeId = Convert.ToInt32(Encryption.DecryptID(item.UserTypeIdval!, LoginUserId.ToString()));
+                ChannelMembership? ChanelMembership = await _db.ChannelMemberships
+                    .Where(x => x.ChannelId == ChannelId &&
+                    x.UserId == UserId).FirstOrDefaultAsync();
+                if(ChanelMembership is not null)
+                {
+                    ChanelMembership.UserTypeId = UserTypeId;
+                    await _db.SaveChangesAsync();
+
+
+                    ///Save Noti to admins
+                    var admins = await (from _meme in _db.ChannelMemberships
+                                        join _ut in _db.UserTypes on _meme.UserTypeId equals _ut.TypeId
+                                        where _meme.ChannelId == ChannelId
+                                        && (_ut.Name.ToLower() == "owner" || _ut.Name.ToLower() == "admin")
+                                        select _meme.UserId).ToListAsync();
+                    admins.Add(UserId);
+                    if (admins.Contains(LoginUserId))
+                    {
+                        admins.Remove(LoginUserId);
+                    }
+                    var data = await (from _meme in _db.ChannelMemberships
+                                      join _user in _db.Users on _meme.UserId equals _user.UserId
+                                      join _ut in _db.UserTypes on _meme.UserTypeId equals _ut.TypeId
+                                      where _meme.ChannelId == ChannelId
+                                      && _meme.UserId == UserId
+                                      select new
+                                      {
+                                          UserName = _user.Name,
+                                          UserType = _ut.Name
+                                      }).FirstOrDefaultAsync();
+                    string? loginname = _db.Users.Where(x => x.UserId == LoginUserId).Select(x => x.Name).FirstOrDefault();
+                    if(data is not null && loginname is not null)
+                    {
+                        SaveNotification(admins,
+                            LoginUserId,
+                            $"Changed the UserType of {data.UserName}",
+                            $"{loginname} Changed {data.UserName} to {data.UserType}",
+                            $"ChannelUserTypeChange/{ChanelMembership.MembershipId}");
+                    }
+
+                }
+            }
+            result = Result<string>.Success("Success");
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
+        }
+
+        return result;
     }
 
     private async void SaveNotification(List<int> users,int SenderId,string Title,string? message,string url)

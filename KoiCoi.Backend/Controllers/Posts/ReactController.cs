@@ -13,4 +13,6 @@ public class ReactController : ControllerBase
         _blEvent = blEvent;
         _configuration = configuration;
     }
+
+    //[HttpPost("GetAllReact",Name ="GetAllReact")]
 }

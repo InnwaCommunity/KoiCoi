@@ -27,7 +27,7 @@ public class ChannelTypeController : BaseController
     {
         try
         {
-            int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+            int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
             int ChannelTypeId = Convert.ToInt32(Encryption.DecryptID(channelType.ChannelTypeIdval!, LoginEmpID.ToString()));
             return await _blChannel.UpdateChannelType(channelType,ChannelTypeId);
         }
@@ -42,7 +42,7 @@ public class ChannelTypeController : BaseController
     {
         try
         {
-            int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+            int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
             int ChannelTypeId = Convert.ToInt32(Encryption.DecryptID(id, LoginEmpID.ToString()));
             return await _blChannel.DeleteChannelType(ChannelTypeId);
         }
@@ -55,7 +55,7 @@ public class ChannelTypeController : BaseController
     [HttpGet("GetChannelType",Name = "GetChannelType")]
     public async Task<Result<List<ChannelTypeResponseDto>>> GetChannelType()
     {
-        int LoginEmpID = Convert.ToInt32(_tokenData.LoginEmpID);
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blChannel.GetChannelType(LoginEmpID);
     }
 }

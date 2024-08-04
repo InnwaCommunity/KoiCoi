@@ -100,5 +100,8 @@ public class BL_Channel
         return await _daChannel.RemoveMemberByAdmin(channelIdval,members,LoginUserId);
     }
 
-
+    public async Task<Result<string>> ChangeUserTypeTheChannelMemberships(ChangeUserTypeChannelMembership payload,int LoginUserId)
+    {
+        return await _daChannel.ChangeUserTypeTheChannelMemberships(payload,LoginUserId);
+    }
 }

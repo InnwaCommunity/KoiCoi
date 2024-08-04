@@ -39,7 +39,7 @@ public class BaseController : Controller
                 _tokenData.LoginType = objclaim.FindFirst("LoginType").Value ;
                 _tokenData.UserLevelID = objclaim.FindFirst("UserLevelID").Value ?? "";
                 _tokenData.Sub = objclaim.FindFirst(JwtRegisteredClaimNames.Sub).Value ?? "";
-                _tokenData.LoginEmpID = objclaim.FindFirst("UserID").Value ?? "";
+                _tokenData.LoginUserId = objclaim.FindFirst("UserID").Value ?? "";
                 //_tokenData.IPAddress = objclaim.FindFirst("IPAddress").Value;
                 //_tokenData.Browser = objclaim.FindFirst("Browser").Value;
                 //_tokenData.CustomerID = objclaim.FindFirst("CustomerID").Value;

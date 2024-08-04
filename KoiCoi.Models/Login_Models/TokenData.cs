@@ -17,7 +17,7 @@ public class TokenData
     public string CustomerID = "";
     public string Browser = "";
     public string IPAddress = "";
-    public string LoginEmpID = "";
+    public string LoginUserId = "";
     public string Url = "";
 
     public string isMobile = "";

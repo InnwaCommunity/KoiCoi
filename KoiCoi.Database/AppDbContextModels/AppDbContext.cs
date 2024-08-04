@@ -216,7 +216,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Currency>(entity =>
         {
-            entity.HasKey(e => e.CurrencyId).HasName("PK__Currency__85A8F0C82B927B1A");
+            entity.HasKey(e => e.CurrencyId).HasName("PK__Currency__85A8F0C8B4E13574");
 
             entity.ToTable("Currency");
 
@@ -237,7 +237,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Event>(entity =>
         {
-            entity.HasKey(e => e.Eventid).HasName("PK__Events__7945F468AC4D19F4");
+            entity.HasKey(e => e.Eventid).HasName("PK__Events__7945F468FB3CF251");
 
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.EndDate).HasColumnType("datetime");
@@ -430,7 +430,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<ReactType>(entity =>
         {
-            entity.HasKey(e => e.TypeId).HasName("PK__ReactTyp__516F03B59E0394A9");
+            entity.HasKey(e => e.TypeId).HasName("PK__ReactTyp__516F03B502823958");
 
             entity.Property(e => e.Description).HasMaxLength(50);
             entity.Property(e => e.Emoji).HasMaxLength(100);

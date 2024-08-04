@@ -40,6 +40,8 @@ Form/Details
     UpcomingNewEvent/EventId ///show all members
     RejectedNewEvent/EventId ///show all channel admins and event creator
     RequestedNewEvent/EventId ///show all admins and owner
+    ChannelUserTypeChange/membershipid ///show all admins and changed user
+    EventUserTypeChange/membershipid ///show all admins and changed user
 
 
 Client မှာ UTC time ပဲပေးရမယ်
@@ -48,3 +50,7 @@ Client မှာ UTC time ပဲပေးရမယ်
 Approve Reject Status
 Approve => 1
 Reject  => 2
+
+```
+Globalfunction.StringToDecimal(_channel.TotalBalance == "0" || _channel.TotalBalance == null ? "0" : Encryption.DecryptID(_channel.TotalBalance.ToString(), balanceSalt))
+```
