@@ -1,5 +1,5 @@
 ﻿
-namespace KoiCoi.Modules.Repository.User;
+namespace KoiCoi.Modules.Repository.UserFeature;
 
 public class BL_User
 {

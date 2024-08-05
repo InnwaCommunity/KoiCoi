@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace KoiCoi.Database.AppDbContextModels;
 
 public partial class PostImage
 {
-    public int UrlId { get; set; }
+    public int ImageId { get; set; }
 
     public string Url { get; set; } = null!;
 

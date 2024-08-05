@@ -8,12 +8,14 @@ namespace KoiCoi.Modules.Repository.EventFreture;
 public class DA_Event
 {
     private readonly AppDbContext _db;
+    private readonly SaveNotifications _saveNotifications;
     private readonly IConfiguration _configuration;
 
-    public DA_Event(AppDbContext db, IConfiguration configuration)
+    public DA_Event(AppDbContext db, IConfiguration configuration, SaveNotifications saveNotifications)
     {
         _db = db;
         _configuration = configuration;
+        _saveNotifications = saveNotifications;
     }
 
     public async Task<Result<string>> CreateEvent(CreateEventPayload paylod,int LoginUserId)
@@ -112,7 +114,7 @@ public class DA_Event
                 {
                     channelMember.Remove(LoginUserId);
                 }
-                await SaveNotification(channelMember,
+                await _saveNotifications.SaveNotification(channelMember,
                     LoginUserId,
                     $"Upcoming the New Event {newEvent.EventName}",
                     newEvent.EventDescription,
@@ -132,7 +134,7 @@ public class DA_Event
                 }
                 string? LoginUserName= await _db.Users.Where(x=> x.UserId == LoginUserId)
                     .Select(x=> x.Name).FirstOrDefaultAsync();
-                await SaveNotification(admins,
+                await _saveNotifications.SaveNotification(admins,
                     LoginUserId,
                     $"Requested the New Event {newEvent.EventName} by Member {LoginUserName}",
                     newEvent.EventDescription,
@@ -279,7 +281,7 @@ public class DA_Event
                                                             .Select(x=> x.UserId)
                                                             .ToListAsync();
                             
-                            await SaveNotification(
+                            await _saveNotifications.SaveNotification(
                                 channelMembers,
                                 LoginUserId,
                                 oldevent.EventName,
@@ -312,7 +314,7 @@ public class DA_Event
                             {
                                 admins.Remove(LoginUserId);
                             }
-                            await SaveNotification(
+                            await _saveNotifications.SaveNotification(
                                 admins,
                                 LoginUserId,
                                 $"Rejected Event {oldevent.EventName}",
@@ -400,7 +402,7 @@ public class DA_Event
                     string? loginname = _db.Users.Where(x => x.UserId == LoginUserId).Select(x => x.Name).FirstOrDefault();
                     if (data is not null && loginname is not null)
                     {
-                        await SaveNotification(admins,
+                        await _saveNotifications.SaveNotification(admins,
                             LoginUserId,
                             $"Changed the UserType of {data.UserName}",
                             $"{loginname} Changed {data.UserName} to {data.UserType}",
@@ -444,25 +446,5 @@ public class DA_Event
             result = Result<List<EventAdminsResponse>>.Error(ex);
         }
         return result;
-    }
-
-    private async Task<string> SaveNotification(List<int> users, int SenderId, string Title, string? message, string url)
-    {
-        foreach (var UserId in users)
-        {
-            Notification notipayload = new Notification
-            {
-                UserId = UserId,
-                SenderId = SenderId,
-                Title = Title,
-                Message = message,
-                Url = url,
-                IsRead = false,
-                DateCreated = DateTime.UtcNow,
-            };
-            await _db.Notifications.AddAsync(notipayload);
-            await _db.SaveChangesAsync();
-        }
-        return "Success";
     }
 }

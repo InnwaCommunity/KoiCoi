@@ -1,5 +1,5 @@
 ﻿
-namespace KoiCoi.Modules.Repository.Channel;
+namespace KoiCoi.Modules.Repository.ChannelFeature;
 
 public class BL_Channel
 {

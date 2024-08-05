@@ -1,12 +1,8 @@
 ﻿
-using KoiCoi.Database.AppDbContextModels;
-using KoiCoi.Models.Via;
 using Microsoft.Extensions.Configuration;
-using Org.BouncyCastle.Crypto;
 using Serilog;
-using System.ComponentModel.DataAnnotations;
 
-namespace KoiCoi.Modules.Repository.User;
+namespace KoiCoi.Modules.Repository.UserFeature;
 
 public class DA_User
 {

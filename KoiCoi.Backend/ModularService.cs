@@ -63,6 +63,8 @@ public static class ModularService
         builder.Services.AddScoped<DA_ChangePassword>();
         builder.Services.AddScoped<DA_Channel>();
         builder.Services.AddScoped<DA_Event>();
+        builder.Services.AddScoped<DA_Post>();
+        builder.Services.AddScoped<SaveNotifications>();
         return builder;
     }
 
@@ -89,6 +91,7 @@ public static class ModularService
         builder.Services.AddScoped<BL_ChangePassword>();
         builder.Services.AddScoped<BL_Channel>();
         builder.Services.AddScoped<BL_Event>();
+        builder.Services.AddScoped<BL_Post>();
         return builder;
     }
 

@@ -49,6 +49,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Otp> Otps { get; set; }
 
+    public virtual DbSet<Post> Posts { get; set; }
+
     public virtual DbSet<PostCommand> PostCommands { get; set; }
 
     public virtual DbSet<PostImage> PostImages { get; set; }
@@ -191,27 +193,9 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<CollectPost>(entity =>
         {
-            entity.HasKey(e => e.PostId).HasName("PK__Collect___5875F7ADFD5BC384");
+            entity.HasKey(e => e.CollectId).HasName("PK__CollectP__8AAA9E0AF41EF679");
 
-            entity.ToTable("Collect_Posts");
-
-            entity.Property(e => e.PostId).HasColumnName("Post_Id");
-            entity.Property(e => e.ApproverId).HasColumnName("Approver_Id");
-            entity.Property(e => e.CollectAmount)
-                .HasMaxLength(200)
-                .HasColumnName("Collect_Amount");
-            entity.Property(e => e.CreatedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("Created_Date");
-            entity.Property(e => e.CreaterId).HasColumnName("Creater_Id");
-            entity.Property(e => e.EventId).HasColumnName("Event_Id");
-            entity.Property(e => e.Inactive)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("inactive");
-            entity.Property(e => e.ModifiedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("Modified_Date");
-            entity.Property(e => e.StatusId).HasColumnName("Status_Id");
+            entity.Property(e => e.CollectAmount).HasMaxLength(200);
         });
 
         modelBuilder.Entity<Currency>(entity =>
@@ -369,9 +353,25 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.SendDateTime).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<Post>(entity =>
+        {
+            entity.HasKey(e => e.PostId).HasName("PK__Posts__AA12601867B3A264");
+
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Created_Date");
+            entity.Property(e => e.EventId).HasColumnName("Event_Id");
+            entity.Property(e => e.Inactive)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("inactive");
+            entity.Property(e => e.ModifiedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Modified_Date");
+        });
+
         modelBuilder.Entity<PostCommand>(entity =>
         {
-            entity.HasKey(e => e.CommandId).HasName("PK__PostComm__6B410B062B261047");
+            entity.HasKey(e => e.CommandId).HasName("PK__PostComm__6B410B06CE99E604");
 
             entity.ToTable("PostCommand");
 
@@ -381,16 +381,12 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<PostImage>(entity =>
         {
-            entity.HasKey(e => e.UrlId).HasName("PK__Post_Ima__A648537B6D74C9A6");
+            entity.HasKey(e => e.ImageId).HasName("PK__PostImag__7516F70C5FF54E6D");
 
-            entity.ToTable("Post_Images");
-
-            entity.Property(e => e.UrlId).HasColumnName("Url_Id");
             entity.Property(e => e.CreatedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("Created_Date");
             entity.Property(e => e.Description).HasMaxLength(100);
-            entity.Property(e => e.PostId).HasColumnName("Post_Id");
             entity.Property(e => e.Url).HasMaxLength(100);
         });
 

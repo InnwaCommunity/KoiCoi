@@ -32,16 +32,30 @@ Form/Details
 
                     Types
     RequestChannelMember/channelMembershipId
+
     ActionByChannelAdminToJoinedMember/channelMembershipId ///show in channel member
+
     JoinedNewMember/channelMembershipId ///show in admins
+
     ApproveOrRejectByAdmin ///show in admins and User
+
     LeaveChannel/ ///show all members
+
     RemoveMember/             ///show all members
+
     UpcomingNewEvent/EventId ///show all members
+
     RejectedNewEvent/EventId ///show all channel admins and event creator
+
     RequestedNewEvent/EventId ///show all admins and owner
+
     ChannelUserTypeChange/membershipid ///show all admins and changed user
+
     EventUserTypeChange/membershipid ///show all admins and changed user
+
+    RequestedNewCollectPost/postId ///show all event admins
+
+    NewCollectPostAdded/postId ///show all channel members
 
 
 Client မှာ UTC time ပဲပေးရမယ်

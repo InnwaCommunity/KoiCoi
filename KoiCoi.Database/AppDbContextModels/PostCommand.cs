@@ -13,7 +13,7 @@ public partial class PostCommand
 
     public int UserId { get; set; }
 
-    public int? ReplyCommandId { get; set; }
+    public int? ParentCommandId { get; set; }
 
     public DateTime? ModifiedDate { get; set; }
 

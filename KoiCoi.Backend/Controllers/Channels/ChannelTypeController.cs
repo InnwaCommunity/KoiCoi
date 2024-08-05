@@ -1,8 +1,4 @@
 ﻿
-
-using KoiCoi.Database.AppDbContextModels;
-using KoiCoi.Models.Via;
-
 namespace KoiCoi.Backend.Controllers.Channels;
 
 [Route("api/[controller]")]

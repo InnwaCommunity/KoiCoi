@@ -1,14 +1,4 @@
-﻿using KoiCoi.Models.EventDto;
-using KoiCoi.Models.EventDto.Response;
-using KoiCoi.Models.Via;
-using KoiCoi.Modules.Repository.Channel;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace KoiCoi.Modules.Repository.EventFreture;
 
 public class BL_Event

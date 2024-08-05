@@ -3,17 +3,19 @@ using KoiCoi.Models.Via;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel.DataAnnotations;
 
-namespace KoiCoi.Modules.Repository.Channel;
+namespace KoiCoi.Modules.Repository.ChannelFeature;
 
 public class DA_Channel
 {
     private readonly AppDbContext _db;
+    private readonly SaveNotifications _saveNotifications;
     private readonly IConfiguration _configuration;
 
-    public DA_Channel(AppDbContext db, IConfiguration configuration)
+    public DA_Channel(AppDbContext db, IConfiguration configuration, SaveNotifications saveNotifications)
     {
         _db = db;
         _configuration = configuration;
+        _saveNotifications = saveNotifications;
     }
 
     public async Task<Result<string>> CreateChannelType(ViaChannelType viaChanType)
@@ -527,7 +529,7 @@ public class DA_Channel
                                           select admin.UserId).ToListAsync();
                 if(NotiInfo is not null)
                 {
-                    SaveNotification(
+                    await _saveNotifications.SaveNotification(
                         admins,
                         LoginUserId,
                         $"Join New Member to {NotiInfo.ChannelName}",
@@ -721,7 +723,7 @@ public class DA_Channel
                                 users.Remove(LoginUserId);
                             }
 
-                            SaveNotification(
+                            await _saveNotifications.SaveNotification(
                                 users,
                                 LoginUserId,
                                 $"{UserName?.UserName} Joined the channel {UserName?.ChannelName}",
@@ -787,7 +789,7 @@ public class DA_Channel
                         }
                         if (NotiInfo is not null)
                         {
-                            SaveNotification(
+                            await _saveNotifications.SaveNotification(
                                 admins,
                                 LoginUserId,
                                 $"{LoginName} {actionN} to {NotiInfo.UserName} in {NotiInfo.ChannelName}",
@@ -923,7 +925,7 @@ public class DA_Channel
                                    where chan.ChannelId == channel.ChannelId
                                    select _me.UserId).ToListAsync();
                 string? Name = await _db.Users.Where(x => x.UserId == LoginUserId).Select(x => x.Name).FirstOrDefaultAsync();
-                SaveNotification(users,
+                await _saveNotifications.SaveNotification(users,
                     LoginUserId,
                     $"{Name} leaved from {channel.ChannelName}",
                     $"{Name} leaved from {channel.ChannelName}",
@@ -989,7 +991,7 @@ public class DA_Channel
                     {
                         users.Remove(LoginUserId);
                     }
-                    SaveNotification(
+                    await _saveNotifications.SaveNotification(
                         users,
                         LoginUserId,
                         $"{userName} removed {memberName}",
@@ -1053,7 +1055,7 @@ public class DA_Channel
                     string? loginname = _db.Users.Where(x => x.UserId == LoginUserId).Select(x => x.Name).FirstOrDefault();
                     if(data is not null && loginname is not null)
                     {
-                        SaveNotification(admins,
+                       await _saveNotifications.SaveNotification(admins,
                             LoginUserId,
                             $"Changed the UserType of {data.UserName}",
                             $"{loginname} Changed {data.UserName} to {data.UserType}",
@@ -1070,24 +1072,5 @@ public class DA_Channel
         }
 
         return result;
-    }
-
-    private async void SaveNotification(List<int> users,int SenderId,string Title,string? message,string url)
-    {
-        foreach (var UserId in users)
-        {
-            Notification notipayload = new Notification
-            {
-                UserId = UserId,
-                SenderId = SenderId,
-                Title = Title,
-                Message = message,
-                Url = url,
-                IsRead = false,
-                DateCreated = DateTime.UtcNow,
-            };
-            await _db.Notifications.AddAsync(notipayload);
-            await _db.SaveChangesAsync();
-        }
     }
 }
