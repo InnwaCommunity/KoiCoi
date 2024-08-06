@@ -25,13 +25,19 @@ public class DA_Post
         {
             string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             int EventId = Convert.ToInt32(Encryption.DecryptID(payload.EventIdval!, LoginUserId.ToString()));
-            int PostPrivacyId = Convert.ToInt32(Encryption.DecryptID(payload.PrivacyIdval!, LoginUserId.ToString()));
+            if(payload.ViewPolicy == null || 
+                payload.ReactPolicy == null || 
+                payload.CommandPolicy == null || 
+                payload.SharePolicy == null)
+            {
+                return Result<string>.Error("Policy can't be null");
+            }
+            PostPolicyPropertyPayload viewPolicy= payload.ViewPolicy;
             
             Post newPost = new Post
             {
                 Content = payload.Content,
                 EventId = EventId,
-                PrivacyId = PostPrivacyId,
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
             };
@@ -104,7 +110,7 @@ public class DA_Post
                 }
 
                 ///Notifi the members if post privicy is not private
-                if (PostPrivacyId != 2)/// 2 is private
+                if (viewPolicy.MaxCount == 0)/// maxcount(0) mean private
                 {
                     List<int> channelMembers = await (from _ev in _db.Events
                                                       join _chan in _db.Channels on _ev.ChannelId equals _chan.ChannelId
@@ -189,27 +195,6 @@ public class DA_Post
         catch (Exception ex)
         {
             result = Result<string>.Error(ex);
-        }
-        return result;
-    }
-
-    public async Task<Result<List<PostPrivacyResponse>>> GetPostPrivicy(int LoginUserId)
-    {
-        Result<List<PostPrivacyResponse>> result;
-        try
-        {
-            List<PostPrivacyResponse> query = await _db.PostPrivacies
-                .Select(x => new PostPrivacyResponse
-                {
-                    PrivacyIdval = Encryption.EncryptID(x.PrivacyId.ToString(),LoginUserId.ToString()),
-                    Title = x.Title,
-                    Description = x.Description
-                }).ToListAsync();
-            result= Result<List<PostPrivacyResponse>>.Success(query);
-        }
-        catch (Exception ex)
-        {
-            result = Result<List<PostPrivacyResponse>>.Error(ex);
         }
         return result;
     }

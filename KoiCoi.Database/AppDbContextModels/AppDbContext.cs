@@ -49,15 +49,19 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Otp> Otps { get; set; }
 
+    public virtual DbSet<Policy> Policies { get; set; }
+
     public virtual DbSet<Post> Posts { get; set; }
 
     public virtual DbSet<PostCommand> PostCommands { get; set; }
 
     public virtual DbSet<PostImage> PostImages { get; set; }
 
-    public virtual DbSet<PostPrivacy> PostPrivacies { get; set; }
+    public virtual DbSet<PostPolicyProperty> PostPolicyProperties { get; set; }
 
     public virtual DbSet<PostShare> PostShares { get; set; }
+
+    public virtual DbSet<PostTag> PostTags { get; set; }
 
     public virtual DbSet<React> Reacts { get; set; }
 
@@ -353,9 +357,19 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.SendDateTime).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<Policy>(entity =>
+        {
+            entity.HasKey(e => e.PolicyId).HasName("PK__Policy__2E1339A41B48E019");
+
+            entity.ToTable("Policy");
+
+            entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
         modelBuilder.Entity<Post>(entity =>
         {
-            entity.HasKey(e => e.PostId).HasName("PK__Posts__AA12601867B3A264");
+            entity.HasKey(e => e.PostId).HasName("PK__Posts__AA1260183EA9FFD1");
 
             entity.Property(e => e.CreatedDate)
                 .HasColumnType("datetime")
@@ -390,14 +404,12 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Url).HasMaxLength(100);
         });
 
-        modelBuilder.Entity<PostPrivacy>(entity =>
+        modelBuilder.Entity<PostPolicyProperty>(entity =>
         {
-            entity.HasKey(e => e.PrivacyId).HasName("PK__PostPriv__1F7D0E970E2B12DE");
+            entity.HasKey(e => e.PropertyId).HasName("PK__PostPoli__70C9A735F4CA4C25");
 
-            entity.ToTable("PostPrivacy");
-
-            entity.Property(e => e.Description).HasMaxLength(200);
-            entity.Property(e => e.Title).HasMaxLength(50);
+            entity.Property(e => e.EndDate).HasColumnType("datetime");
+            entity.Property(e => e.StartDate).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<PostShare>(entity =>
@@ -411,6 +423,18 @@ public partial class AppDbContext : DbContext
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("inactive");
             entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<PostTag>(entity =>
+        {
+            entity.HasKey(e => e.TagId).HasName("PK__PostTag__657CF9AC0DEB09C2");
+
+            entity.ToTable("PostTag");
+
+            entity.Property(e => e.CreateDate).HasColumnType("datetime");
+            entity.Property(e => e.Inactive).HasDefaultValueSql("((0))");
+            entity.Property(e => e.TagDescription).HasMaxLength(255);
+            entity.Property(e => e.TagName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<React>(entity =>

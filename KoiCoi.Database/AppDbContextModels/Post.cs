@@ -11,7 +11,7 @@ public partial class Post
 
     public int EventId { get; set; }
 
-    public int PrivacyId { get; set; }
+    public int? TagId { get; set; }
 
     public DateTime? CreatedDate { get; set; }
 

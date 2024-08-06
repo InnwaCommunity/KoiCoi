@@ -14,8 +14,4 @@ public  class BL_Post
     {
         return await _daPost.CreatePostFeature(payload, LoginUserId);
     }
-    public async Task<Result<List<PostPrivacyResponse>>> GetPostPrivicy(int LoginUserId)
-    {
-        return await _daPost.GetPostPrivicy(LoginUserId);
-    }
 }

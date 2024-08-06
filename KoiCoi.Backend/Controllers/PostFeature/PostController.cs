@@ -24,13 +24,6 @@ public class PostController : BaseController
     //[HttpPost("ReviewPosts",Name ="ReviewPosts")]
     //public async Task<Result<>> ReviewPosts()
 
-    [HttpGet("GetPostPrivicy",Name = "GetPostPrivicy")]
-    public async Task<Result<List<PostPrivacyResponse>>> GetPostPrivicy()
-    {
-        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
-        return await _blPost.GetPostPrivicy(LoginUserID);
-    }
-
 
     ///CreatePost
     ///ReviewPost
