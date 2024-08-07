@@ -1,5 +1,4 @@
-﻿
-namespace KoiCoi.Backend.Controllers.Posts;
+﻿namespace KoiCoi.Backend.Controllers.PostFeature;
 
 [Route("api/[controller]")]
 [ApiController]

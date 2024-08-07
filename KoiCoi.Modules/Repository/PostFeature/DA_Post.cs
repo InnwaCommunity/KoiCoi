@@ -1,6 +1,4 @@
 ﻿
-using KoiCoi.Models.PostDtos.Payload;
-using KoiCoi.Models.PostDtos.Response;
 using Microsoft.Extensions.Configuration;
 
 namespace KoiCoi.Modules.Repository.PostFeature;
@@ -196,6 +194,67 @@ public class DA_Post
         {
             result = Result<string>.Error(ex);
         }
+        return result;
+    }
+
+    public async Task<Result<string>> CreatePostTags(CreatePostTagListPayload payload, int LoginUserId)
+    {
+        Result<string> result = null;
+        try
+        {
+            int EventId = Convert.ToInt32(Encryption.DecryptID(payload.EventIdval!, LoginUserId.ToString()));
+            var checkChannelMember = await (from _chan in _db.Channels
+                                            join _event in _db.Events on _chan.ChannelId equals _event.ChannelId
+                                            join _meme in _db.ChannelMemberships on _chan.ChannelId equals _meme.ChannelId
+                                            where _event.Eventid == EventId && _meme.UserId == LoginUserId
+                                            select _meme).FirstOrDefaultAsync();
+            if (checkChannelMember == null) return Result<string>.Error("Channel Member Only Can create PostTags");
+            List<PostTagPayload> postTags = payload.PostTags;
+            foreach (var item in postTags)
+            {
+                PostTag newTag = new PostTag
+                {
+                    TagName = item.PostTagName,
+                    TagDescription = item.PostTagDescritpion,
+                    EventId = EventId,
+                    CreatorId = LoginUserId,
+                    CreateDate = DateTime.UtcNow,
+                    Inactive = false
+                };
+                await _db.PostTags.AddAsync(newTag);
+                await _db.SaveChangesAsync();
+            }
+            result = Result<string>.Success("Success");
+        }
+        catch(Exception ex)
+        {
+            result = Result<string>.Error(ex);
+        }
+        return result;
+    }
+
+
+    public async Task<Result<List<PostTagDataResponse>>> GetPostTags(string EventIdval, int LoginUserId)
+    {
+        Result<List<PostTagDataResponse>> result;
+        try
+        {
+            int EventId = Convert.ToInt32(Encryption.DecryptID(EventIdval, LoginUserId.ToString()));
+            List<PostTagDataResponse> query = await _db.PostTags
+                .Where(x => x.EventId == EventId)
+                .Select(x => new PostTagDataResponse
+                {
+                    PostTagIdval = Encryption.EncryptID(x.TagId.ToString(), LoginUserId.ToString()),
+                    PostTagName = x.TagName,
+                    PostTagDescritpion = x.TagDescription
+                }).ToListAsync();
+            result = Result<List<PostTagDataResponse>>.Success(query);
+        }
+        catch (Exception ex)
+        {
+            result = Result<List<PostTagDataResponse>>.Error(ex);
+        }
+
         return result;
     }
 }

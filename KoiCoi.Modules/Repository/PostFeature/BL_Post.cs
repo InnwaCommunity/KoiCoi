@@ -14,4 +14,14 @@ public  class BL_Post
     {
         return await _daPost.CreatePostFeature(payload, LoginUserId);
     }
+
+    public async Task<Result<string>> CreatePostTags(CreatePostTagListPayload payload,int LoginUserId)
+    {
+        return await _daPost.CreatePostTags(payload, LoginUserId);
+    }
+
+    public async Task<Result<List<PostTagDataResponse>>> GetPostTags(string EventIdval,int LoginUserId)
+    {
+        return await _daPost.GetPostTags(EventIdval, LoginUserId);
+    }
 }
