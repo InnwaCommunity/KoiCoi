@@ -68,3 +68,31 @@ Reject  => 2
 ```
 Globalfunction.StringToDecimal(_channel.TotalBalance == "0" || _channel.TotalBalance == null ? "0" : Encryption.DecryptID(_channel.TotalBalance.ToString(), balanceSalt))
 ```
+
+
+DefaultPostPolicies
+
+ViewPolicy -(1)
+            MaxCount null
+            StartDate - PostCreateDate
+            EndDate - null
+            GroupMemberOnly - true
+            FriendOnly - false
+ReactPolciy -(2)
+            MaxCount null
+            StartDate - PostCreateDate
+            EndDate - Event EndDate
+            GroupMemberOnly - true
+            FriendOnly - false
+Command -   (3)
+            MaxCount null
+            StartDate - PostCreateDate
+            EndDate - Event EndDate
+            GroupMemberOnly - true
+            FriendOnly - false
+Share -     (4)
+            MaxCount null
+            StartDate - PostCreateDate
+            EndDate - null
+            GroupMemberOnly - true
+            FriendOnly - false

@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace KoiCoi.Modules.Repository.PostFeature;
 
@@ -23,24 +24,36 @@ public class DA_Post
         {
             string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             int EventId = Convert.ToInt32(Encryption.DecryptID(payload.EventIdval!, LoginUserId.ToString()));
-            if(payload.ViewPolicy == null || 
-                payload.ReactPolicy == null || 
-                payload.CommandPolicy == null || 
-                payload.SharePolicy == null)
-            {
-                return Result<string>.Error("Policy can't be null");
-            }
-            PostPolicyPropertyPayload viewPolicy= payload.ViewPolicy;
+            int? TagId = payload.TagIdval is not null ? Convert.ToInt32(Encryption.DecryptID(payload.TagIdval, LoginUserId.ToString())) : null;
             
+            PostPolicyPropertyPayload viewPolicy= payload.policyProperties[0];
+
             Post newPost = new Post
             {
                 Content = payload.Content,
                 EventId = EventId,
+                TagId = TagId,
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
+                Inactive = false,
             };
             await _db.Posts.AddAsync(newPost);
             await _db.SaveChangesAsync();
+            int policyId = 1;
+            foreach (var policy in payload.policyProperties)
+            {
+                PostPolicyProperty newPostPolicy = new PostPolicyProperty
+                {
+                    PostId =newPost.PostId,
+                    PolicyId = policyId,
+                    MaxCount = policy.MaxCount,
+                    StartDate = policy.StartDate,
+                    EndDate = policy.EndDate,
+                    GroupMemberOnly = policy.GroupMemberOnly,
+                    FriendOnly = policy.FriendOnly
+                };
+                policyId++;
+            }
             var checkEventOwner = await (from _em in _db.EventMemberships
                                          join _ust in _db.UserTypes on _em.UserTypeId equals _ust.TypeId
                                          where _em.EventId == EventId
@@ -51,7 +64,39 @@ public class DA_Post
                                              LoginId = _em.UserId
                                          })
                                          .FirstOrDefaultAsync();
-            if(checkEventOwner is not null)
+            ///Save Post Images
+            string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
+            string uploadDirectory = _configuration["appSettings:PostImages"] ?? throw new Exception("Invalid function upload path.");
+            string destDirectory = Path.Combine(baseDirectory, uploadDirectory);
+            if (!Directory.Exists(destDirectory))
+            {
+                Directory.CreateDirectory(destDirectory);
+            }
+            foreach (var item in payload.imageData)
+            {
+                DateTime now = DateTime.UtcNow;
+                string filename = $"{now.ToString("fffss_")}" + Guid.NewGuid().ToString("N").Substring(0, 8) + $"{now.ToString("-HHmm")}" + ".png";
+                string base64Str = item.imagebase64!;
+                byte[] bytes = Convert.FromBase64String(base64Str!);
+
+                string filePath = Path.Combine(destDirectory, filename);
+                if (filePath.Contains(".."))
+                { //if found .. in the file name or path
+                    Log.Error("Invalid path " + filePath);
+                }
+                await System.IO.File.WriteAllBytesAsync(filePath, bytes);
+
+                var newImage = new PostImage
+                {
+                    Url = filename,
+                    Description = item.description,
+                    PostId = newPost.PostId,
+                    CreatedDate = DateTime.UtcNow,
+                };
+                await _db.PostImages.AddAsync(newImage);
+                await _db.SaveChangesAsync();
+            }
+            if (checkEventOwner is not null)
             {
                 ///Already Approved because Post Creator is event owner
                 int approvedStatus = await _db.StatusTypes
