@@ -1,6 +1,9 @@
 ﻿
+using KoiCoi.Models;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace KoiCoi.Modules.Repository.PostFeature;
 
@@ -300,6 +303,26 @@ public class DA_Post
             result = Result<List<PostTagDataResponse>>.Error(ex);
         }
 
+        return result;
+    }
+
+    public async Task<Result<List<ReactTypeResponse>>> GetAllReactType(int LoginUserId)
+    {
+        Result<List<ReactTypeResponse>> result = null;
+        try
+        {
+            List<ReactTypeResponse> querylist = await _db.ReactTypes.Select(
+                x => new ReactTypeResponse {
+                    TypeIdval = Encryption.EncryptID(x.TypeId.ToString(),LoginUserId.ToString()),
+                    Emoji = x.Emoji,
+                    Description = x.Description
+            }).ToListAsync();
+            result = Result<List<ReactTypeResponse>>.Success(querylist);
+        }
+        catch (Exception ex)
+        {
+            result = Result<List<ReactTypeResponse>>.Error(ex);
+        }
         return result;
     }
 }

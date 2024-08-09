@@ -24,4 +24,9 @@ public  class BL_Post
     {
         return await _daPost.GetPostTags(EventIdval, LoginUserId);
     }
+
+    public async Task<Result<List<ReactTypeResponse>>> GetAllReactType(int LoginUserId)
+    {
+        return await _daPost.GetAllReactType(LoginUserId);
+    }
 }

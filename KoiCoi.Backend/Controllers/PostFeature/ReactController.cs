@@ -1,17 +1,22 @@
-﻿namespace KoiCoi.Backend.Controllers.PostFeature;
+﻿using KoiCoi.Models.Login_Models;
+
+namespace KoiCoi.Backend.Controllers.PostFeature;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ReactController : ControllerBase
+public class ReactController : BaseController
 {
-    private readonly IConfiguration _configuration;
-    private readonly BL_Event _blEvent;
+    private readonly BL_Post _blPost;
 
-    public ReactController(BL_Event blEvent, IConfiguration configuration)
+    public ReactController(BL_Post blPost)
     {
-        _blEvent = blEvent;
-        _configuration = configuration;
+        _blPost = blPost;
     }
 
-    //[HttpPost("GetAllReact",Name ="GetAllReact")]
+    [HttpGet("GetAllReactType",Name = "GetAllReactType")]
+    public async Task<Result<List<ReactTypeResponse>>> GetAllReactType()
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blPost.GetAllReactType(LoginUserID);
+    }
 }
