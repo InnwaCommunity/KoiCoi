@@ -22,6 +22,15 @@ namespace KoiCoi.Operational;
 
 public class Globalfunction
 {
+
+    public static string NewUniqueFileName()
+    {
+        Guid guid = Guid.NewGuid();
+        byte[] guidBytes = guid.ToByteArray();
+        string base64String = Convert.ToBase64String(guidBytes);
+        string shortName = base64String.TrimEnd('=').Replace('/', '_').Replace('+', '-').Replace('.','_');
+        return shortName.Substring(0, 17);
+    }
     public static Result<string> SendEmailAsync(string fromMail,string appPw,string ToEmail,string Subject,string Message)
     {
         try

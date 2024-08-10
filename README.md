@@ -31,6 +31,8 @@ Form/Details
 
 
                     Types
+    if(don't have detail) From/null
+
     RequestChannelMember/channelMembershipId
 
     ActionByChannelAdminToJoinedMember/channelMembershipId ///show in channel member
@@ -56,6 +58,9 @@ Form/Details
     RequestedNewCollectPost/postId ///show all event admins
 
     NewCollectPostAdded/postId ///show all channel members
+
+    ApprovedOrRejectedPosts/postId ///show  login
+    ApprovedOrRjectedPostToAdmin/postId ///show all member
 
 
 Client မှာ UTC time ပဲပေးရမယ်

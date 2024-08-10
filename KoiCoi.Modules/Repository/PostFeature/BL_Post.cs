@@ -1,4 +1,6 @@
 ﻿
+using KoiCoi.Models.Login_Models;
+
 namespace KoiCoi.Modules.Repository.PostFeature;
 
 public  class BL_Post
@@ -14,7 +16,15 @@ public  class BL_Post
     {
         return await _daPost.CreatePostFeature(payload, LoginUserId);
     }
+    public async Task<Result<List<ReviewPostResponse>>> ReviewPostsList(string EventIdval,string Status,int LoginUserId)
+    {
+        return await _daPost.ReviewPostsList(EventIdval,Status, LoginUserId);
+    }
 
+    public async Task<Result<string>> ApproveOrRejectPost(List<ApproveRejectPostPayload> payload,int LoginUserId)
+    {
+        return await _daPost.ApproveOrRejectPost(payload,LoginUserId);
+    }
     public async Task<Result<string>> CreatePostTags(CreatePostTagListPayload payload,int LoginUserId)
     {
         return await _daPost.CreatePostTags(payload, LoginUserId);

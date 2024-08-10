@@ -8,10 +8,10 @@ namespace KoiCoi.Modules.Repository.EventFreture;
 public class DA_Event
 {
     private readonly AppDbContext _db;
-    private readonly SaveNotifications _saveNotifications;
+    private readonly NotificationManager.NotificationManager _saveNotifications;
     private readonly IConfiguration _configuration;
 
-    public DA_Event(AppDbContext db, IConfiguration configuration, SaveNotifications saveNotifications)
+    public DA_Event(AppDbContext db, IConfiguration configuration, NotificationManager.NotificationManager saveNotifications)
     {
         _db = db;
         _configuration = configuration;
@@ -82,7 +82,7 @@ public class DA_Event
                 }
                 foreach (var item in paylod.EventPhotos)
                 {
-                    string filename = Guid.NewGuid().ToString() + "." + ".png";
+                    string filename = Globalfunction.NewUniqueFileName() + ".png";
                     string base64Str = item.base64image!;
                     byte[] bytes = Convert.FromBase64String(base64Str!);
 

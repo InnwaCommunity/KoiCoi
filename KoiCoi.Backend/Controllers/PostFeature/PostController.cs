@@ -1,4 +1,7 @@
 ﻿
+using KoiCoi.Models;
+using System.Collections.Generic;
+
 namespace KoiCoi.Backend.Controllers.PostFeature;
 
 [Route("api/[controller]")]
@@ -21,12 +24,22 @@ public class PostController : BaseController
         return await _blPost.CreatePostFeature(payload, LoginUserID);
     }
 
-    //[HttpPost("ReviewPosts",Name ="ReviewPosts")]
-    //public async Task<Result<>> ReviewPosts()
-
+    [HttpPost("ReviewPostsList",Name ="ReviewPostsList")]
+    public async Task<Result<List<ReviewPostResponse>>> ReviewPostsList(ReviewPostPayload payload)
+    {
+        if (string.IsNullOrEmpty(payload.EventIdval) || string.IsNullOrEmpty(payload.Status)) return Result<List<ReviewPostResponse>>.Error("payload Can't Empty or null");
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blPost.ReviewPostsList(payload.EventIdval,payload.Status, LoginUserID);
+    }
+    [HttpPost("ApproveOrRejectPost",Name = "ApproveOrRejectPost")]
+    public async Task<Result<string>> ApproveOrRejectPost(List<ApproveRejectPostPayload> payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blPost.ApproveOrRejectPost(payload,LoginUserID);
+    }
 
     ///CreatePost
     ///ReviewPost
-    ///ApproveAndRejectPost
+    ///ApproveOrRejectPost
     ///
 }

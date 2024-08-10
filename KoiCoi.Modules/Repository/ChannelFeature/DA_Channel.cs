@@ -8,10 +8,10 @@ namespace KoiCoi.Modules.Repository.ChannelFeature;
 public class DA_Channel
 {
     private readonly AppDbContext _db;
-    private readonly SaveNotifications _saveNotifications;
+    private readonly NotificationManager.NotificationManager _saveNotifications;
     private readonly IConfiguration _configuration;
 
-    public DA_Channel(AppDbContext db, IConfiguration configuration, SaveNotifications saveNotifications)
+    public DA_Channel(AppDbContext db, IConfiguration configuration, NotificationManager.NotificationManager saveNotifications)
     {
         _db = db;
         _configuration = configuration;

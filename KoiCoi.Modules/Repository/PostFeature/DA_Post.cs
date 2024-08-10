@@ -1,6 +1,7 @@
 ﻿
 using KoiCoi.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -10,14 +11,14 @@ namespace KoiCoi.Modules.Repository.PostFeature;
 public class DA_Post
 {
     private readonly AppDbContext _db;
-    private readonly SaveNotifications _saveNotifications;
+    private readonly NotificationManager.NotificationManager _notificationmanager;
     private readonly IConfiguration _configuration;
 
-    public DA_Post(AppDbContext db, IConfiguration configuration,SaveNotifications saveNotifications)
+    public DA_Post(AppDbContext db, IConfiguration configuration, NotificationManager.NotificationManager notificationmanager)
     {
         _db = db;
         _configuration = configuration;
-        _saveNotifications = saveNotifications;
+        _notificationmanager = notificationmanager;
     }
 
     public async Task<Result<string>> CreatePostFeature(CreatePostPayload payload, int LoginUserId)
@@ -28,7 +29,23 @@ public class DA_Post
             string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             int EventId = Convert.ToInt32(Encryption.DecryptID(payload.EventIdval!, LoginUserId.ToString()));
             int? TagId = payload.TagIdval is not null ? Convert.ToInt32(Encryption.DecryptID(payload.TagIdval, LoginUserId.ToString())) : null;
-            
+
+
+            ///Check EventId EndDate
+            DateTime? eventEndDate = _db.Events.Where(x => x.Eventid == EventId)
+                .Select(x => x.EndDate).FirstOrDefault();
+            if(eventEndDate == null || eventEndDate < DateTime.UtcNow)
+            {
+                ///Notifi to Post Uploader that upload success
+                await _notificationmanager.SaveNotification(
+                        new List<int> { LoginUserId },
+                        LoginUserId,
+                        $"Upload Fail",
+                        $"Post Upload fail because Event Ended",
+                        $"NewCollectPostAdded/null"
+                        );
+                return  Result<string>.Error("Can Not Add");
+            }
             PostPolicyPropertyPayload viewPolicy= payload.policyProperties[0];
 
             Post newPost = new Post
@@ -54,19 +71,11 @@ public class DA_Post
                     EndDate = policy.EndDate,
                     GroupMemberOnly = policy.GroupMemberOnly,
                     FriendOnly = policy.FriendOnly
-                };
+                }; 
+                await _db.PostPolicyProperties.AddAsync(newPostPolicy);
+                await _db.SaveChangesAsync();
                 policyId++;
             }
-            var checkEventOwner = await (from _em in _db.EventMemberships
-                                         join _ust in _db.UserTypes on _em.UserTypeId equals _ust.TypeId
-                                         where _em.EventId == EventId
-                                         && _em.UserId == LoginUserId
-                                         && _ust.Name.ToLower() == "owner"
-                                         select new
-                                         {
-                                             LoginId = _em.UserId
-                                         })
-                                         .FirstOrDefaultAsync();
             ///Save Post Images
             string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
             string uploadDirectory = _configuration["appSettings:PostImages"] ?? throw new Exception("Invalid function upload path.");
@@ -77,8 +86,7 @@ public class DA_Post
             }
             foreach (var item in payload.imageData)
             {
-                DateTime now = DateTime.UtcNow;
-                string filename = $"{now.ToString("fffss_")}" + Guid.NewGuid().ToString("N").Substring(0, 8) + $"{now.ToString("-HHmm")}" + ".png";
+                string filename = Globalfunction.NewUniqueFileName() + ".png";
                 string base64Str = item.imagebase64!;
                 byte[] bytes = Convert.FromBase64String(base64Str!);
 
@@ -99,6 +107,16 @@ public class DA_Post
                 await _db.PostImages.AddAsync(newImage);
                 await _db.SaveChangesAsync();
             }
+            var checkEventOwner = await (from _em in _db.EventMemberships
+                                         join _ust in _db.UserTypes on _em.UserTypeId equals _ust.TypeId
+                                         where _em.EventId == EventId
+                                         && _em.UserId == LoginUserId
+                                         && _ust.Name.ToLower() == "owner"
+                                         select new
+                                         {
+                                             LoginId = _em.UserId
+                                         })
+                                         .FirstOrDefaultAsync();
             if (checkEventOwner is not null)
             {
                 ///Already Approved because Post Creator is event owner
@@ -170,14 +188,14 @@ public class DA_Post
                     channelMembers.Distinct();
                     string? LoginName = await _db.Users.Where(x => x.UserId == LoginUserId)
                         .Select(x => x.Name).FirstOrDefaultAsync();
-                    await _saveNotifications.SaveNotification(
+                    await _notificationmanager.SaveNotification(
                         channelMembers, LoginUserId,
                         $"New Post in {parentEvent?.EventName}",
                         $"{LoginName} Collected {payload.CollectAmount} in {parentEvent?.EventName}",
                         $"NewCollectPostAdded/{newPost.PostId}");
 
                     ///Notifi to Post Uploader that upload success
-                    await _saveNotifications.SaveNotification(
+                    await _notificationmanager.SaveNotification(
                             new List<int> { LoginUserId },
                             LoginUserId,
                             $"Upload Posting Success",
@@ -219,7 +237,7 @@ public class DA_Post
                     .FirstOrDefaultAsync();
                 string? LoginName = await _db.Users.Where(x => x.UserId == LoginUserId)
                         .Select(x => x.Name).FirstOrDefaultAsync();
-                await _saveNotifications.SaveNotification(
+                await _notificationmanager.SaveNotification(
                     admins,
                     LoginUserId,
                     $"Requested to Collect Posts in {parentEvent?.EventName}",
@@ -228,7 +246,7 @@ public class DA_Post
                     );
 
                 ///Notifi to Post Uploader that upload success
-                await _saveNotifications.SaveNotification(
+                await _notificationmanager.SaveNotification(
                         new List<int> { LoginUserId },
                         LoginUserId,
                         $"Upload Posting Success",
@@ -244,6 +262,165 @@ public class DA_Post
         }
         return result;
     }
+    public async Task<Result<List<ReviewPostResponse>>> ReviewPostsList(string EventIdval,string StatusName, int LoginUserId)
+    {
+        Result<List<ReviewPostResponse>> result = null;
+        try
+        {
+            string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
+            int EventId = Convert.ToInt32(Encryption.DecryptID(EventIdval, LoginUserId.ToString()));
+            List<ReviewPostResponse> query = await (from _event in _db.Events
+                                                            join _post in _db.Posts on _event.Eventid equals _post.EventId
+                                                            join _cp in _db.CollectPosts on _post.PostId equals _cp.PostId
+                                                            join _creator in _db.Users on _cp.CreatorId equals _creator.UserId
+                                                            join _status in _db.StatusTypes on _cp.StatusId equals _status.StatusId
+                                                            join _em in _db.EventMemberships on _event.Eventid equals _em.EventId
+                                                            join _logu in _db.Users on _em.UserId equals _logu.UserId
+                                                            join _ut in _db.UserTypes on _em.UserTypeId equals _ut.TypeId
+                                                            where _event.Eventid == EventId &&
+                                                            _status.StatusName.ToLower() == StatusName && 
+                                                            _logu.UserId == LoginUserId &&
+                                                            (_ut.Name.ToLower() == "admin" ||
+                                                            _ut.Name.ToLower() == "owner")
+                                                            select new ReviewPostResponse
+                                                            {
+                                                                PostIdval = Encryption.EncryptID(_post.PostId.ToString(),LoginUserId.ToString()),
+                                                                Content = _post.Content ?? "",
+                                                                TagIdval = _post.TagId != null ? Encryption.EncryptID(_post.TagId!.Value.ToString(), LoginUserId.ToString()) : "",
+                                                                TagName = _post.TagId != null ? _db.PostTags.Where(x=> x.TagId == _post.TagId!).Select(x=> x.TagName).FirstOrDefault() : "",
+                                                                CreatorIdval = Encryption.EncryptID(_creator.UserId.ToString(), LoginUserId.ToString()),
+                                                                CreatorName = _creator.Name,
+                                                                CollectAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_cp.CollectAmount,balanceSalt)),
+                                                                CreatedDate = _post.CreatedDate,
+                                                                ImageResponse = _db.PostImages.Where(x => x.PostId == _post.PostId)
+                                                                                            .Select(x => new PostImageResponse
+                                                                                            {
+                                                                                                ImageIdval = Encryption.EncryptID(x.ImageId.ToString(), LoginUserId.ToString()),
+                                                                                                ImageUrl = x.Url,
+                                                                                                Description = x.Description
+                                                                                             }).ToList()
+                                                            }).ToListAsync();
+            result= Result<List<ReviewPostResponse>>.Success(query);
+        }
+        catch (Exception ex)
+        {
+            result = Result<List<ReviewPostResponse>>.Error(ex);
+        }
+        return result;
+    }
+
+
+    public async Task<Result<string>> ApproveOrRejectPost(List<ApproveRejectPostPayload> payload, int LoginUserId)
+    {
+        Result<string> result = null;
+        try
+        {
+            string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
+            foreach (var item in payload)
+            {
+                int PostId = Convert.ToInt32(Encryption.DecryptID(item.PostIdval!, LoginUserId.ToString()));
+                var collectPost = await _db.CollectPosts.Where(x=> x.PostId == PostId).FirstOrDefaultAsync();
+                if(collectPost is not null && collectPost.StatusId == 1)
+                {
+                    if(item.AppRejStatus == 1)///Approve
+                    {
+                        int approvedId = _db.StatusTypes.Where(x=> x.StatusName == "approved").
+                            Select(x=> x.StatusId).FirstOrDefault();
+                        collectPost.StatusId = approvedId;
+                        collectPost.ApproverId = LoginUserId;
+                        await _db.SaveChangesAsync();
+                        ///add amount to event and channel amount
+                        decimal collectAmount = Globalfunction.StringToDecimal(
+                                                            Encryption.DecryptID(collectPost.CollectAmount, balanceSalt));
+                        var eventdata = await (from _post in _db.Posts
+                                               join _eve in _db.Events on _post.EventId equals _eve.Eventid
+                                               where _post.PostId == PostId
+                                               select _eve).FirstOrDefaultAsync();
+                        if(eventdata is not null)
+                        {
+                            decimal oldTotalAmount = Globalfunction.StringToDecimal(
+                                eventdata.TotalBalance == "0" || eventdata.TotalBalance == null ? "0" :
+                                                            Encryption.DecryptID(eventdata.TotalBalance, balanceSalt));
+                            decimal oldLastAmount = Globalfunction.StringToDecimal(
+                                eventdata.LastBalance == "0" || eventdata.LastBalance == null ? "0" :
+                                                            Encryption.DecryptID(eventdata.LastBalance, balanceSalt));
+                            decimal newTotalAmount = oldTotalAmount + collectAmount;
+                            decimal newLastAmount = oldLastAmount + collectAmount;
+                            eventdata.TotalBalance = Encryption.EncryptID(newTotalAmount.ToString(), balanceSalt);
+                            eventdata.LastBalance = Encryption.EncryptID(newLastAmount.ToString(), balanceSalt);
+                            await _db.SaveChangesAsync();
+                        }
+                        var channelData = await (from _post in _db.Posts
+                                               join _eve in _db.Events on _post.EventId equals _eve.Eventid
+                                               join _chn in _db.Channels on _eve.ChannelId equals _chn.ChannelId
+                                               where _post.PostId == PostId
+                                               select _chn).FirstOrDefaultAsync();
+                        if (channelData is not null)
+                        {
+                            decimal oldTotalAmount = Globalfunction.StringToDecimal(
+                                channelData.TotalBalance == "0" || channelData.TotalBalance == null ? "0" :
+                                                            Encryption.DecryptID(channelData.TotalBalance, balanceSalt));
+                            decimal oldLastAmount = Globalfunction.StringToDecimal(
+                                channelData.LastBalance == "0" || channelData.LastBalance == null ? "0" :
+                                                            Encryption.DecryptID(channelData.LastBalance, balanceSalt));
+                            decimal newTotalAmount = oldTotalAmount + collectAmount;
+                            decimal newLastAmount = oldLastAmount + collectAmount;
+                            channelData.TotalBalance = Encryption.EncryptID(newTotalAmount.ToString(), balanceSalt);
+                            channelData.LastBalance = Encryption.EncryptID(newLastAmount.ToString(), balanceSalt);
+                            await _db.SaveChangesAsync();
+                        }
+
+
+                    }
+                    if(item.AppRejStatus == 2)///Reject
+                    {
+                        int rejectId = _db.StatusTypes.Where(x => x.StatusName == "rejected").
+                            Select(x => x.StatusId).FirstOrDefault();
+                        collectPost.StatusId = rejectId;
+                        collectPost.ApproverId = LoginUserId;
+                        await _db.SaveChangesAsync();
+                    }
+                    var notinfo = await (from _col in _db.CollectPosts
+                                         join _creator in _db.Users on _col.CreatorId equals _creator.UserId
+                                         join _approver in _db.Users on _col.ApproverId equals _approver.UserId
+                                         where _col.PostId == PostId
+                                         select new
+                                         {
+                                             CreatorId = _creator.UserId,
+                                             CreatorName = _creator.Name,
+                                             ApproverId = _approver.UserId,
+                                             ApproverName = _approver.Name
+                                         }).FirstOrDefaultAsync();
+                    if(notinfo is not null)
+                    {
+                        string paction = "";
+                        if (item.AppRejStatus == 1)
+                        {
+                            paction = "Approved";
+                        }
+                        else if (item.AppRejStatus == 2)
+                        {
+                            paction = "Rejected";
+                        }
+                        await _notificationmanager.SaveNotification(
+                            new List<int> { LoginUserId },
+                            LoginUserId,
+                            $"{paction} your post by {notinfo.ApproverName}",
+                            $"{paction} your post by {notinfo.ApproverName}",
+                            $"ApprovedOrRejectedPosts/{PostId}"
+                            );
+                    }
+                }
+            }
+            result = Result<string>.Success("Success");
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
+        }
+        return result;
+    }
+
 
     public async Task<Result<string>> CreatePostTags(CreatePostTagListPayload payload, int LoginUserId)
     {

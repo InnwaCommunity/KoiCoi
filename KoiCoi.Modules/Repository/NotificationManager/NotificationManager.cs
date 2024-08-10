@@ -1,10 +1,10 @@
 ﻿namespace KoiCoi.Modules.Repository.NotificationManager;
 
-public class SaveNotifications
+public class NotificationManager
 {
     private readonly AppDbContext _db;
 
-    public SaveNotifications(AppDbContext db)
+    public NotificationManager(AppDbContext db)
     {
         _db = db;
     }

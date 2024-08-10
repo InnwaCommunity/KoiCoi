@@ -113,7 +113,7 @@ public class ChannelController : BaseController
                 string folderPath = Path.Combine(baseDirectory, uploadDirectory);
 
 
-                filename = Guid.NewGuid().ToString() + "." + ".png";
+                filename = Globalfunction.NewUniqueFileName() + ".png";
                 string base64Str = channelReqeust.ProImage64;
                 byte[] bytes = Convert.FromBase64String(base64Str!);
 
@@ -190,7 +190,7 @@ public class ChannelController : BaseController
                         Directory.CreateDirectory(folderPath);
                     }
 
-                    string filename = Guid.NewGuid().ToString() + "." + ".png";
+                    string filename = Globalfunction.NewUniqueFileName() + "." + ".png";
                     string base64Str = updoadReqeust.base64data!;
                     byte[] bytes = Convert.FromBase64String(base64Str!);
 

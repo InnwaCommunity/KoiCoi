@@ -73,6 +73,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<UserPostInteraction> UserPostInteractions { get; set; }
+
     public virtual DbSet<UserProfile> UserProfiles { get; set; }
 
     public virtual DbSet<UserType> UserTypes { get; set; }
@@ -517,6 +519,23 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.UserIdval)
                 .HasMaxLength(100)
                 .HasColumnName("userIdval");
+        });
+
+        modelBuilder.Entity<UserPostInteraction>(entity =>
+        {
+            entity.HasKey(e => e.InteractionId).HasName("PK__UserPost__922C049633BC375D");
+
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getutcdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("Created_Date");
+            entity.Property(e => e.PostType).HasMaxLength(50);
+            entity.Property(e => e.UpdatedDate)
+                .HasDefaultValueSql("(getutcdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("Updated_Date");
+            entity.Property(e => e.ViewedContext).HasMaxLength(50);
+            entity.Property(e => e.VisibilityPercentage).HasColumnType("decimal(5, 2)");
         });
 
         modelBuilder.Entity<UserProfile>(entity =>

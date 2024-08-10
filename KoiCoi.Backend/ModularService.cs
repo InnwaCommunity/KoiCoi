@@ -64,7 +64,7 @@ public static class ModularService
         builder.Services.AddScoped<DA_Channel>();
         builder.Services.AddScoped<DA_Event>();
         builder.Services.AddScoped<DA_Post>();
-        builder.Services.AddScoped<SaveNotifications>();
+        builder.Services.AddScoped<NotificationManager>();
         return builder;
     }
 
