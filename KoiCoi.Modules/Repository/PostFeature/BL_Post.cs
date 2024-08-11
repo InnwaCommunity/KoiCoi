@@ -1,5 +1,6 @@
 ﻿
 using KoiCoi.Models.Login_Models;
+using System.Drawing.Printing;
 
 namespace KoiCoi.Modules.Repository.PostFeature;
 
@@ -25,6 +26,17 @@ public  class BL_Post
     {
         return await _daPost.ApproveOrRejectPost(payload,LoginUserId);
     }
+
+    /// <summary>
+    /// Will Response Posts for Dashboard
+    /// </summary>
+    /// <param name="LoginUserId"></param>
+    /// <returns></returns>
+    /*
+     public async Task<Result<DashboardPostsResponse>> GetDashboardPosts(int LoginUserId,int pageNumber,int pageSize)
+    {
+        return await _daPost.GetDashboardPosts(LoginUserId, pageNumber, pageSize);
+    }*/
     public async Task<Result<string>> CreatePostTags(CreatePostTagListPayload payload,int LoginUserId)
     {
         return await _daPost.CreatePostTags(payload, LoginUserId);

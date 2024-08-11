@@ -23,6 +23,7 @@ public class DA_Event
         Result<string> result = null;
         try
         {
+            string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             int ChannelId = Convert.ToInt32(Encryption.DecryptID(paylod.ChannelIdval!, LoginUserId.ToString()));
             int status = 0;
             var ownerusertype = await (from _me in _db.ChannelMemberships
@@ -50,6 +51,9 @@ public class DA_Event
                     .FirstOrDefaultAsync();
             }
             if (status is 0) return Result<string>.Error("Pending Status Not Found");
+            string TotalBalance = Encryption.EncryptID("0.0", balanceSalt);
+            string LastBalance = Encryption.EncryptID("0.0", balanceSalt);
+            string? TargetBalance = paylod.TargetBalance != null ? Encryption.EncryptID(paylod.TargetBalance.ToString()!, balanceSalt) : null;
             Event newEvent = new Event
             {
                 EventName = paylod.EventName!,
@@ -59,8 +63,9 @@ public class DA_Event
                 ApproverId = ownerusertype is not null ? LoginUserId : null,
                 StatusId = status,
                 CurrencyId = CurrencyId,
-                TotalBalance = "0",
-                LastBalance = "0",
+                TotalBalance = TotalBalance,
+                LastBalance = LastBalance,
+                TargetBalance = TargetBalance,
                 StartDate = DateTime.Parse(paylod!.StartDate!),
                 EndDate = DateTime.Parse(paylod!.EndDate!),
                 CreatedDate = DateTime.UtcNow,
@@ -70,7 +75,21 @@ public class DA_Event
             var res = await _db.Events.AddAsync(newEvent);
             await _db.SaveChangesAsync();
             result = Result<string>.Success("Requested Event Success");
-
+            if (paylod.EventAddresses.Any())
+            {
+                foreach (var address in paylod.EventAddresses)
+                {
+                    int AddressId = Convert.ToInt32(Encryption.EncryptID(address.AddressTypeIdval, LoginUserId.ToString()));
+                    EventAddress newAddress = new EventAddress
+                    {
+                        AddressId = AddressId,
+                        EventId = newEvent.Eventid,
+                        AddressName = address.AddressName,
+                    };
+                    await _db.EventAddresses.AddAsync(newAddress);
+                    await _db.SaveChangesAsync();
+                }
+            }
             if(paylod.EventPhotos.Any())
             {
                 string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");

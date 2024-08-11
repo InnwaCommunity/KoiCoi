@@ -34,4 +34,6 @@ public partial class Event
     public DateTime ModifiedDate { get; set; }
 
     public bool? Inactive { get; set; }
+
+    public string? TargetBalance { get; set; }
 }

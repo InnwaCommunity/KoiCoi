@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Runtime.InteropServices;
 
 namespace KoiCoi.Modules.Repository.PostFeature;
@@ -46,7 +47,6 @@ public class DA_Post
                         );
                 return  Result<string>.Error("Can Not Add");
             }
-            PostPolicyPropertyPayload viewPolicy= payload.policyProperties[0];
 
             Post newPost = new Post
             {
@@ -173,6 +173,7 @@ public class DA_Post
                     await _db.SaveChangesAsync();
                 }
 
+                PostPolicyPropertyPayload viewPolicy = payload.policyProperties[0];
                 ///Notifi the members if post privicy is not private
                 if (viewPolicy.MaxCount == 0)/// maxcount(0) mean private
                 {
@@ -420,8 +421,54 @@ public class DA_Post
         }
         return result;
     }
+    /// <summary>
+    /// Response Posts form dashboard.This posts are posts list that LoginUser can view
+    /// </summary>
+    /// <param name="LoginUserId"></param>
+    /// <returns></returns>
+    /*public async Task<Result<DashboardPostsResponse>> GetDashboardPosts(int LoginUserId,int pageNumber,int pageSize)
+    {
+        Result<DashboardPostsResponse> result = null;
+        try
+        {
 
 
+            ///post must active
+            ///post status must approved
+            ///post view count must less that equeal maxcount or view must null
+            ///
+            var query = await (from _post in _db.Posts
+                               join _coll in _db.CollectPosts on _post.PostId equals _coll.PostId
+                               join _postStatus in _db.StatusTypes on _coll.StatusId equals _postStatus.StatusId
+                               join _pviewpolicy in _db.PostPolicyProperties on _post.PostId equals _pviewpolicy.PostId
+                               join _plikepolicy in _db.PostPolicyProperties on _post.PostId equals _plikepolicy.PostId
+                               join _pcommandpolicy in _db.PostPolicyProperties on _post.PostId equals _pcommandpolicy.PostId
+                               join _psharepolicy in _db.PostPolicyProperties on _post.PostId equals _psharepolicy.PostId
+                               join _event in _db.Events on _post.EventId equals _event.Eventid
+                               join _channel in _db.Channels on _event.ChannelId equals _channel.ChannelId
+                               join _chanme in _db.ChannelMemberships on _channel.ChannelId equals _chanme.ChannelId
+                               join _creator in _db.Users on _coll.CreatorId equals _creator.UserId
+                               join _pview in _db.PostViewers on _post.PostId equals _pview.PostId into pview
+                               join _preact in _db.Reacts on _post.PostId equals _preact.PostId into preact
+                               join _pcommand in _db.PostCommands on _post.PostId equals _pcommand.PostId into pcommand
+                               join _pshare in _db.PostShares on _post.PostId equals _pshare.PostId into pshare
+                               where _post.Inactive == false &&
+                               _event.StartDate < DateTime.UtcNow &&
+                               _postStatus.StatusName.ToLower() == "approved" &&
+                               (_pviewpolicy.GroupMemberOnly != null && _pviewpolicy.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) &&
+                               (_pviewpolicy.MaxCount != null ? _pviewpolicy.MaxCount < (pview != null ? pview.Count() : 0) : true)
+                               select new DashboardPost
+                               {
+
+                               }).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            result = Result<DashboardPostsResponse>.Error(ex);
+        }
+        return result;
+    }
+     */
     public async Task<Result<string>> CreatePostTags(CreatePostTagListPayload payload, int LoginUserId)
     {
         Result<string> result = null;

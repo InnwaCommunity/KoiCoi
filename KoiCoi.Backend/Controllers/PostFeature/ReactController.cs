@@ -19,4 +19,10 @@ public class ReactController : BaseController
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blPost.GetAllReactType(LoginUserID);
     }
+
+
+    ///Like
+    ///Command
+    ///Share
+    ///View
 }

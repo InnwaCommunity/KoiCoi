@@ -15,6 +15,8 @@ public partial class AppDbContext : DbContext
     {
     }
 
+    public virtual DbSet<AddressType> AddressTypes { get; set; }
+
     public virtual DbSet<Channel> Channels { get; set; }
 
     public virtual DbSet<ChannelBalanceRecord> ChannelBalanceRecords { get; set; }
@@ -29,9 +31,15 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<CollectPost> CollectPosts { get; set; }
 
+    public virtual DbSet<CommandReact> CommandReacts { get; set; }
+
+    public virtual DbSet<CommandViewer> CommandViewers { get; set; }
+
     public virtual DbSet<Currency> Currencies { get; set; }
 
     public virtual DbSet<Event> Events { get; set; }
+
+    public virtual DbSet<EventAddress> EventAddresses { get; set; }
 
     public virtual DbSet<EventBalanceRecord> EventBalanceRecords { get; set; }
 
@@ -63,6 +71,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<PostTag> PostTags { get; set; }
 
+    public virtual DbSet<PostViewer> PostViewers { get; set; }
+
     public virtual DbSet<React> Reacts { get; set; }
 
     public virtual DbSet<ReactType> ReactTypes { get; set; }
@@ -87,6 +97,16 @@ public partial class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AddressType>(entity =>
+        {
+            entity.HasKey(e => e.AddressId).HasName("PK__AddressT__091C2AFB8E1652D9");
+
+            entity.ToTable("AddressType");
+
+            entity.Property(e => e.Address).HasMaxLength(100);
+            entity.Property(e => e.Description).HasMaxLength(100);
+        });
+
         modelBuilder.Entity<Channel>(entity =>
         {
             entity.HasKey(e => e.ChannelId).HasName("PK__Channels__0548C1A0AACFB706");
@@ -204,6 +224,28 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.CollectAmount).HasMaxLength(200);
         });
 
+        modelBuilder.Entity<CommandReact>(entity =>
+        {
+            entity.HasKey(e => e.ReactId).HasName("PK__CommandR__7661AD2F06907B4E");
+
+            entity.ToTable("CommandReact");
+
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Created_Date");
+        });
+
+        modelBuilder.Entity<CommandViewer>(entity =>
+        {
+            entity.HasKey(e => e.ViewId).HasName("PK__CommandV__1E371CF69E3DCD8D");
+
+            entity.ToTable("CommandViewer");
+
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Created_Date");
+        });
+
         modelBuilder.Entity<Currency>(entity =>
         {
             entity.HasKey(e => e.CurrencyId).HasName("PK__Currency__85A8F0C8B4E13574");
@@ -236,7 +278,17 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.LastBalance).HasMaxLength(200);
             entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
             entity.Property(e => e.StartDate).HasColumnType("datetime");
+            entity.Property(e => e.TargetBalance).HasMaxLength(255);
             entity.Property(e => e.TotalBalance).HasMaxLength(200);
+        });
+
+        modelBuilder.Entity<EventAddress>(entity =>
+        {
+            entity.HasKey(e => e.EventAddressId).HasName("PK__EventAdd__AAD5E9C2F7F26E2E");
+
+            entity.ToTable("EventAddress");
+
+            entity.Property(e => e.AddressName).HasMaxLength(255);
         });
 
         modelBuilder.Entity<EventBalanceRecord>(entity =>
@@ -437,6 +489,17 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Inactive).HasDefaultValueSql("((0))");
             entity.Property(e => e.TagDescription).HasMaxLength(255);
             entity.Property(e => e.TagName).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<PostViewer>(entity =>
+        {
+            entity.HasKey(e => e.ViewerId).HasName("PK__PostView__6DA5554DDE318377");
+
+            entity.ToTable("PostViewer");
+
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Created_Date");
         });
 
         modelBuilder.Entity<React>(entity =>

@@ -38,6 +38,15 @@ public class PostController : BaseController
         return await _blPost.ApproveOrRejectPost(payload,LoginUserID);
     }
 
+    /*///[Spiecal Get For Dashboard]///
+    [HttpGet("{pageNumber}/{pageSize}")]
+    public async Task<Result<DashboardPostsResponse>> GetDashboardPosts(int pageNumber, int pageSize)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blPost.GetDashboardPosts(LoginUserID, pageNumber, pageSize);
+    }
+     */
+
     ///CreatePost
     ///ReviewPost
     ///ApproveOrRejectPost
