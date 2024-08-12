@@ -112,15 +112,16 @@ public class DA_Event
                     }
                     await System.IO.File.WriteAllBytesAsync(filePath, bytes);
 
-                    var newImage = new EventImage
+                    var newImage = new EventFile
                     {
                         Url = filename,
                         UrlDescription = item.Description,
                         EventId= newEvent.Eventid,
                         CreatedDate = DateTime.UtcNow,
                         ModifiedDate = DateTime.UtcNow,
+                        Extension = "png",
                     }; 
-                    await _db.EventImages.AddAsync(newImage);
+                    await _db.EventFiles.AddAsync(newImage);
                     await _db.SaveChangesAsync();
                 }
             }
@@ -212,7 +213,7 @@ public class DA_Event
             List<GetRequestEventResponse> responseList = new List<GetRequestEventResponse>();
             foreach (var item in query)
             {
-                var imgquery = await _db.EventImages.Where(x => x.EventId == item.EventIdval)
+                var imgquery = await _db.EventFiles.Where(x => x.EventId == item.EventIdval)
                     .Select(x=> new EventImageInfo
                     {
                         imgfilename = x.Url,
@@ -425,7 +426,7 @@ public class DA_Event
                             LoginUserId,
                             $"Changed the UserType of {data.UserName}",
                             $"{loginname} Changed {data.UserName} to {data.UserType}",
-                            $"EventUserTypeChange/{eventme.MembershipId}");
+                            $"EventUserTypeChange/{eventme.Membershipid}");
                     }
                 }
             }

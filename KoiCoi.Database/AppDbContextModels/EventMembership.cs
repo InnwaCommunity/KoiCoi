@@ -5,7 +5,7 @@ namespace KoiCoi.Database.AppDbContextModels;
 
 public partial class EventMembership
 {
-    public int MembershipId { get; set; }
+    public int Membershipid { get; set; }
 
     public int EventId { get; set; }
 

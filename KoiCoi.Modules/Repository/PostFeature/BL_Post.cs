@@ -32,11 +32,11 @@ public  class BL_Post
     /// </summary>
     /// <param name="LoginUserId"></param>
     /// <returns></returns>
-    /*
-     public async Task<Result<DashboardPostsResponse>> GetDashboardPosts(int LoginUserId,int pageNumber,int pageSize)
+    
+     public async Task<Result<List<DashboardPostsResponse>>> GetDashboardPosts(int LoginUserId,int pageNumber,int pageSize)
     {
         return await _daPost.GetDashboardPosts(LoginUserId, pageNumber, pageSize);
-    }*/
+    }
     public async Task<Result<string>> CreatePostTags(CreatePostTagListPayload payload,int LoginUserId)
     {
         return await _daPost.CreatePostTags(payload, LoginUserId);

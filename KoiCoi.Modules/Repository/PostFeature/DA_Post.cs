@@ -426,49 +426,92 @@ public class DA_Post
     /// </summary>
     /// <param name="LoginUserId"></param>
     /// <returns></returns>
-    /*public async Task<Result<DashboardPostsResponse>> GetDashboardPosts(int LoginUserId,int pageNumber,int pageSize)
+    public async Task<Result<List<DashboardPostsResponse>>> GetDashboardPosts(int LoginUserId,int pageNumber,int pageSize)
     {
-        Result<DashboardPostsResponse> result = null;
+        Result<List<DashboardPostsResponse>> result = null;
         try
         {
+            string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
 
 
             ///post must active
             ///post status must approved
             ///post view count must less that equeal maxcount or view must null
-            ///
-            var query = await (from _post in _db.Posts
-                               join _coll in _db.CollectPosts on _post.PostId equals _coll.PostId
-                               join _postStatus in _db.StatusTypes on _coll.StatusId equals _postStatus.StatusId
-                               join _pviewpolicy in _db.PostPolicyProperties on _post.PostId equals _pviewpolicy.PostId
-                               join _plikepolicy in _db.PostPolicyProperties on _post.PostId equals _plikepolicy.PostId
-                               join _pcommandpolicy in _db.PostPolicyProperties on _post.PostId equals _pcommandpolicy.PostId
-                               join _psharepolicy in _db.PostPolicyProperties on _post.PostId equals _psharepolicy.PostId
-                               join _event in _db.Events on _post.EventId equals _event.Eventid
-                               join _channel in _db.Channels on _event.ChannelId equals _channel.ChannelId
-                               join _chanme in _db.ChannelMemberships on _channel.ChannelId equals _chanme.ChannelId
-                               join _creator in _db.Users on _coll.CreatorId equals _creator.UserId
-                               join _pview in _db.PostViewers on _post.PostId equals _pview.PostId into pview
-                               join _preact in _db.Reacts on _post.PostId equals _preact.PostId into preact
-                               join _pcommand in _db.PostCommands on _post.PostId equals _pcommand.PostId into pcommand
-                               join _pshare in _db.PostShares on _post.PostId equals _pshare.PostId into pshare
-                               where _post.Inactive == false &&
-                               _event.StartDate < DateTime.UtcNow &&
-                               _postStatus.StatusName.ToLower() == "approved" &&
-                               (_pviewpolicy.GroupMemberOnly != null && _pviewpolicy.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) &&
-                               (_pviewpolicy.MaxCount != null ? _pviewpolicy.MaxCount < (pview != null ? pview.Count() : 0) : true)
-                               select new DashboardPost
+            ///Check User Post Interactions
+            var posts = await (from _post in _db.Posts
+                               where _post.Inactive == false
+                               select new
                                {
+                                   Post = _post,
+                                   ViewPolicies = _db.PostPolicyProperties.Where(p => p.PostId == _post.PostId && p.PolicyId == 1).FirstOrDefault(),
+                                   LikePolicies = _db.PostPolicyProperties.Where(p => p.PostId == _post.PostId && p.PolicyId == 2).FirstOrDefault(),
+                                   CommandPolicies = _db.PostPolicyProperties.Where(p => p.PostId == _post.PostId && p.PolicyId == 3).FirstOrDefault(),
+                                   SharePolicies = _db.PostPolicyProperties.Where(p => p.PostId == _post.PostId && p.PolicyId == 4).FirstOrDefault(),
+                                   UserInteractions = _db.UserPostInteractions.Where(p=> p.PostId == _post.PostId && p.UserId == LoginUserId).FirstOrDefault(),
+                                   Views = _db.PostViewers.Where(p => p.PostId == _post.PostId).Count(),
+                                   Likes = _db.Reacts.Where(p => p.PostId == _post.PostId).Count(),
+                                   Commands = _db.PostCommands.Where(p => p.PostId == _post.PostId).Count(),
+                                   Shares = _db.PostShares.Where(p => p.PostId == _post.PostId).Count(),
+                               })
+                   .ToListAsync();
 
-                               }).ToListAsync();
+            var query = (from _post in posts
+                         join _coll in _db.CollectPosts on _post.Post.PostId equals _coll.PostId
+                         join _postStatus in _db.StatusTypes on _coll.StatusId equals _postStatus.StatusId
+                         join _event in _db.Events on _post.Post.EventId equals _event.Eventid
+                         join _channel in _db.Channels on _event.ChannelId equals _channel.ChannelId
+                         join _chanme in _db.ChannelMemberships on _event.ChannelId equals _chanme.ChannelId
+                         join _creator in _db.Users on _coll.CreatorId equals _creator.UserId
+                         join _poimg in _db.PostImages on _post.Post.PostId equals _poimg.PostId into postImages
+                         where _event.StartDate < DateTime.UtcNow && _event.EndDate > DateTime.UtcNow &&
+                         _postStatus.StatusName.ToLower() == "approved" &&
+                         (_post.UserInteractions != null ? _post.UserInteractions.VisibilityPercentage < 70 : true) &&
+                         (_post.ViewPolicies.GroupMemberOnly != null && _post.ViewPolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) &&
+                         (_post.ViewPolicies.MaxCount != null ? _post.ViewPolicies.MaxCount > _post.Views : true)
+                         select new DashboardPostsResponse
+                         {
+                             PostIdval = Encryption.EncryptID(_post.Post.PostId.ToString(), LoginUserId.ToString()),
+                             Content = _post.Post.Content,
+                             ChannelIdval = Encryption.EncryptID(_channel.ChannelId.ToString(), LoginUserId.ToString()),
+                             ChannelName = _channel.ChannelName,
+                             EventIdval = Encryption.EncryptID(_event.Eventid.ToString(), LoginUserId.ToString()),
+                             EventName = _event.EventName,
+                             TagIdval = _post.Post.TagId != null ? Encryption.EncryptID(_post.Post.TagId.ToString()!, LoginUserId.ToString()) : null,
+                             TagName = _post.Post.TagId != null ? _db.PostTags.Where(x => x.TagId == _post.Post.TagId).Select(x => x.TagName).FirstOrDefault() : null,
+                             CreatorIdval = Encryption.EncryptID(_creator.UserId.ToString(), LoginUserId.ToString()),
+                             CreatorName = _creator.Name,
+                             CollectAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_coll.CollectAmount, balanceSalt)),
+                             ModifiedDate = _post.Post.ModifiedDate,
+                             CreatedDate = _post.Post.CreatedDate,
+                             ViewTotalCount = _post.Views,
+                             LikeTotalCount = _post.Likes,
+                             CommandTotalCount = _post.Commands,
+                             ShareTotalCount = _post.Shares,
+                             CanLike = (_post.LikePolicies.GroupMemberOnly != null && _post.LikePolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) &&
+                              (_post.LikePolicies.MaxCount != null ? _post.LikePolicies.MaxCount > _post.Likes : true),
+                             CanCommand = (_post.CommandPolicies.GroupMemberOnly != null && _post.CommandPolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) &&
+                             (_post.CommandPolicies.MaxCount != null ? _post.CommandPolicies.MaxCount > _post.Commands : true),
+                             CanShare = (_post.SharePolicies.GroupMemberOnly != null && _post.SharePolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) &&
+                             (_post.SharePolicies.MaxCount != null ? _post.SharePolicies.MaxCount > _post.Shares : true),
+                             ImageResponse = postImages.Select(img => new PostImageResponse
+                             {
+                                 ImageIdval = Encryption.EncryptID(img.PostId.ToString(), LoginUserId.ToString()),
+                                 ImageUrl = img.Url,
+                                 Description = img.Description
+                             }).ToList()
+                         })
+                               .Skip((pageNumber - 1) * pageSize)
+                               .Take(pageSize)
+                               .ToList();
+            result = Result<List<DashboardPostsResponse>>.Success(query);
+
         }
         catch (Exception ex)
         {
-            result = Result<DashboardPostsResponse>.Error(ex);
+            result = Result<List<DashboardPostsResponse>>.Error(ex);
         }
         return result;
     }
-     */
     public async Task<Result<string>> CreatePostTags(CreatePostTagListPayload payload, int LoginUserId)
     {
         Result<string> result = null;

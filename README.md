@@ -8,7 +8,7 @@ Features
 
 
 ```bash
-dotnet ef dbcontext scaffold "Server=NYEINCHANNMOE;Database=Koi_Coi;User Id=sa;Password=nyein@8834;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -o AppDbContextModels -c AppDbContext -f
+dotnet ef dbcontext scaffold "Server=NYEINCHANNMOE;Database=KoiCoi;User Id=sa;Password=nyein@8834;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -o AppDbContextModels -c AppDbContext -f
 
 Scaffold-DbContext "Server=NYEINCHANNMOE;Database=Koi_Coi;User ID=sa; Password=nyein@8834;Integrated Security=True;Trusted_Connection=true;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir AppDbContext -Tables Tbl_AdminUserLogin -f
 ```

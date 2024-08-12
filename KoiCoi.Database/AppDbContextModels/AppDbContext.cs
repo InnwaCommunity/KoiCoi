@@ -43,7 +43,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<EventBalanceRecord> EventBalanceRecords { get; set; }
 
-    public virtual DbSet<EventImage> EventImages { get; set; }
+    public virtual DbSet<EventFile> EventFiles { get; set; }
 
     public virtual DbSet<EventMembership> EventMemberships { get; set; }
 
@@ -93,7 +93,7 @@ public partial class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=NYEINCHANNMOE;Database=Koi_Coi;User Id=sa;Password=nyein@8834;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=NYEINCHANNMOE;Database=KoiCoi;User Id=sa;Password=nyein@8834;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -175,8 +175,6 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<ChannelProfile>(entity =>
         {
             entity.HasKey(e => e.ProfileId).HasName("PK__Channel___A60ECB4281D05A08");
-
-            entity.ToTable("Channel_Profiles");
 
             entity.Property(e => e.ProfileId).HasColumnName("Profile_Id");
             entity.Property(e => e.ChannelId).HasColumnName("Channel_Id");
@@ -310,17 +308,16 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("Total_Balance");
         });
 
-        modelBuilder.Entity<EventImage>(entity =>
+        modelBuilder.Entity<EventFile>(entity =>
         {
             entity.HasKey(e => e.UrlId).HasName("PK__Event_Im__A648537B1AC35B3D");
-
-            entity.ToTable("Event_Image");
 
             entity.Property(e => e.UrlId).HasColumnName("Url_Id");
             entity.Property(e => e.CreatedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("Created_Date");
             entity.Property(e => e.EventId).HasColumnName("Event_Id");
+            entity.Property(e => e.Extension).HasMaxLength(30);
             entity.Property(e => e.ModifiedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("Modified_Date");
@@ -332,14 +329,9 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<EventMembership>(entity =>
         {
-            entity.HasKey(e => e.MembershipId).HasName("PK__Event_Me__0C6CB69F9503A6AF");
+            entity.HasKey(e => e.Membershipid).HasName("PK__Event_Me__0C6CB69F9503A6AF");
 
-            entity.ToTable("Event_Membership");
-
-            entity.Property(e => e.MembershipId).HasColumnName("Membership_id");
-            entity.Property(e => e.EventId).HasColumnName("Event_Id");
-            entity.Property(e => e.UserId).HasColumnName("User_Id");
-            entity.Property(e => e.UserTypeId).HasColumnName("User_Type_Id");
+            entity.ToTable("EventMembership");
         });
 
         modelBuilder.Entity<InformMail>(entity =>
