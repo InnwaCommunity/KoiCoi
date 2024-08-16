@@ -15,6 +15,8 @@ public partial class AppDbContext : DbContext
     {
     }
 
+    public virtual DbSet<AccountLoginHistory> AccountLoginHistories { get; set; }
+
     public virtual DbSet<AddressType> AddressTypes { get; set; }
 
     public virtual DbSet<Channel> Channels { get; set; }
@@ -97,6 +99,20 @@ public partial class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AccountLoginHistory>(entity =>
+        {
+            entity.HasKey(e => e.HistoryId).HasName("PK__AccountL__4D7B4ABD320026D0");
+
+            entity.ToTable("AccountLoginHistory");
+
+            entity.Property(e => e.AppVersion).HasMaxLength(30);
+            entity.Property(e => e.CreatedData).HasColumnType("datetime");
+            entity.Property(e => e.DeviceId).HasMaxLength(30);
+            entity.Property(e => e.ModifiedData).HasColumnType("datetime");
+            entity.Property(e => e.OsVersion).HasMaxLength(30);
+            entity.Property(e => e.PhoneModel).HasMaxLength(30);
+        });
+
         modelBuilder.Entity<AddressType>(entity =>
         {
             entity.HasKey(e => e.AddressId).HasName("PK__AddressT__091C2AFB8E1652D9");

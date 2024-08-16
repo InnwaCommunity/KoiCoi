@@ -57,6 +57,11 @@ public class BL_User
         }
     }
 
+    public async Task<Result<List<UserLoginAccounts>>> AccountsWithDeviceId(string deviceId)
+    {
+        return await _daUser.AccountsWithDeviceId(deviceId);
+    }
+
     public async Task<Result<string>> UpdateUserInfo(RequestUserDto requestUserDto,int LoginUserId)
     {
         return await _daUser.UpdateUserInfo(requestUserDto, LoginUserId);

@@ -18,6 +18,7 @@ global using KoiCoi.Modules.Repository.NotificationManager;
 ///Models
 global using KoiCoi.Models.Login_Models;
 global using KoiCoi.Models.User_Dto;
+global using KoiCoi.Models.User_Dto.Response;
 global using KoiCoi.Models.Otp_Dtos;
 global using KoiCoi.Models.ChannelDtos;
 global using KoiCoi.Models;
@@ -28,7 +29,6 @@ global using KoiCoi.Models.EventDto.Response;
 global using KoiCoi.Models.PostDtos.Payload;
 global using KoiCoi.Models.PostDtos.Response;
 global using KoiCoi.Models.PostTagDto.Payload;
-global using KoiCoi.Models.PostDtos.Response;
 
 
 //Operational

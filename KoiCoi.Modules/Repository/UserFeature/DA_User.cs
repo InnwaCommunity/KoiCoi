@@ -1,4 +1,5 @@
 ﻿
+using KoiCoi.Models.Via;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
@@ -58,6 +59,39 @@ public class DA_User
             unique = true;///There is no account by this email.
         }
         return unique;
+    }
+
+    public async Task<Result<List<UserLoginAccounts>>> AccountsWithDeviceId(string deviceId)
+    {
+        Result<List<UserLoginAccounts>> result = null;
+        try
+        {
+            
+
+            List<UserLoginAccounts> query = await (from _ah in _db.AccountLoginHistories
+                                                   join _user in _db.Users on _ah.UserId equals _user.UserId
+                                                   where _ah.DeviceId == deviceId
+                                                   select new UserLoginAccounts
+                                                   {
+                                                       UserId = _ah.UserId,
+                                                       UserName = _user.Name,
+                                                   }).ToListAsync();
+            foreach (var item in query)
+            {
+                string? img = await _db.UserProfiles.Where(x => x.UserId == item.UserId)
+                    .OrderByDescending(up => up.CreatedDate)
+                    .Select(x=> x.Url)
+                    .FirstOrDefaultAsync();
+                item.UserImage = img ?? "";
+            }
+            result = Result<List<UserLoginAccounts>>.Success(query);
+
+        }
+        catch (Exception ex)
+        {
+            result = Result<List<UserLoginAccounts>>.Error(ex);
+        }
+        return result;
     }
 
     public async Task<Result<string>> UpdateUserInfo(RequestUserDto requestUserDto,int LoginUserId)

@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="xhCNFaJ6cEggg91gEb-8" name="SQL-TABLES">
-        <mxGraphModel dx="563" dy="1339" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="470" dy="1263" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -1579,6 +1579,35 @@
                             <mxPoint x="140" y="-300"/>
                         </Array>
                     </mxGeometry>
+                </mxCell>
+                <mxCell id="382" value="&lt;font style=&quot;font-size: 6px;&quot;&gt;AccountLoginHistory&lt;/font&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="-360" width="80" height="190" as="geometry">
+                        <mxRectangle x="160" y="-1080" width="50" height="30" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="383" value="&lt;font style=&quot;font-size: 6px;&quot;&gt;HistoryId&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="382" vertex="1">
+                    <mxGeometry y="30" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="384" value="&lt;font style=&quot;font-size: 6px;&quot;&gt;UserId&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="382" vertex="1">
+                    <mxGeometry y="50" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="385" value="&lt;span style=&quot;font-size: 6px;&quot;&gt;DeviceId&lt;/span&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="382" vertex="1">
+                    <mxGeometry y="70" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="386" value="&lt;span style=&quot;font-size: 6px;&quot;&gt;AppVersion&lt;/span&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="382" vertex="1">
+                    <mxGeometry y="90" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="388" value="&lt;div style=&quot;color: rgb(204, 204, 204); background-color: rgb(31, 31, 31); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; line-height: 19px;&quot;&gt;&lt;font style=&quot;font-size: 8px;&quot;&gt;OsVersion&lt;/font&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="382" vertex="1">
+                    <mxGeometry y="110" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="389" value="&lt;span style=&quot;font-size: 6px;&quot;&gt;PhoneModel&lt;/span&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="382">
+                    <mxGeometry y="130" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="390" value="&lt;span style=&quot;font-size: 6px;&quot;&gt;ModifiedDate&lt;/span&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="382">
+                    <mxGeometry y="150" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="391" value="&lt;span style=&quot;font-size: 6px;&quot;&gt;CreatedDate&lt;/span&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="382">
+                    <mxGeometry y="170" width="80" height="20" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

@@ -18,7 +18,11 @@ public class UserController : BaseController
         return Ok(respo);
     }
 
-    
+    [HttpGet("AccountsWithDeviceId/{deviceId}",Name = "AccountsWithDeviceId")]
+    public async Task<Result<List<UserLoginAccounts>>> AccountsWithDeviceId(string deviceId)
+    {
+        return await _bLUser.AccountsWithDeviceId(deviceId);
+    }
 
     [HttpPost("UpdateUserInfo", Name = "UpdateUserInfo")]
     public async Task<IActionResult> UpdateUserInfo(RequestUserDto requestUser)

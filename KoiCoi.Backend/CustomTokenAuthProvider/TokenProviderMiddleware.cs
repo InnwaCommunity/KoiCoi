@@ -77,6 +77,7 @@ public class TokenProviderMiddleware : IMiddleware
             context.Request.Path.ToString().ToLower().Contains("forgotpassword/changepasswordbyotp") ||
             context.Request.Path.ToString().ToLower().Contains("swagger/") ||
             context.Request.Path.ToString().ToLower().Contains("/api/v1/user/registeraccount") ||
+            context.Request.Path.ToString().ToLower().Contains("/api/v1/user/accountswithdeviceid") ||
             context.Request.Path.ToString().ToLower().Contains("api/imagefileservice")
         )
         {
@@ -497,6 +498,31 @@ public class TokenProviderMiddleware : IMiddleware
                 IsRooted = isRooted
             };
             await _repository.NotificationTokens.AddAsync(tokendata);
+            await _repository.SaveChangesAsync();
+        }
+        var loginHistory = await _repository.AccountLoginHistories
+            .Where(x=> x.UserId == userId && x.DeviceId == deviceID).FirstOrDefaultAsync();
+        if(loginHistory is not null)
+        {
+            loginHistory.AppVersion = appVersion;
+            loginHistory.OsVersion = osVersion;
+            loginHistory.PhoneModel = phoneModel;
+            loginHistory.ModifiedData = DateTime.UtcNow;
+            await _repository.SaveChangesAsync();
+        }
+        else
+        {
+            AccountLoginHistory newAccount = new AccountLoginHistory
+            {
+                UserId = userId,
+                DeviceId = deviceID,
+                AppVersion = appVersion,
+                OsVersion = osVersion,
+                PhoneModel = phoneModel,
+                CreatedData = DateTime.UtcNow,
+                ModifiedData = DateTime.UtcNow
+            };
+            await _repository.AccountLoginHistories.AddAsync(newAccount);
             await _repository.SaveChangesAsync();
         }
         return "success";
