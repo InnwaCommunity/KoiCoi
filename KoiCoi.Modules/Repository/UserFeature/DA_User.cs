@@ -66,25 +66,37 @@ public class DA_User
         Result<List<UserLoginAccounts>> result = null;
         try
         {
-            
+            string aseKey = _configuration.GetSection("AesEncryption:AseKey").Get<string>()!;
+            string aseIv = _configuration.GetSection("AesEncryption:AseIV").Get<string>()!;
+            String decriptdeviceId = AesEncryption.Decrypt(deviceId, aseKey, aseIv);
 
-            List<UserLoginAccounts> query = await (from _ah in _db.AccountLoginHistories
+            var query = await (from _ah in _db.AccountLoginHistories
                                                    join _user in _db.Users on _ah.UserId equals _user.UserId
-                                                   where _ah.DeviceId == deviceId
-                                                   select new UserLoginAccounts
+                                                   where _ah.DeviceId == decriptdeviceId
+                                                   select new //UserLoginAccounts
                                                    {
                                                        UserId = _ah.UserId,
+                                                       UserIdval = _user.UserIdval,
                                                        UserName = _user.Name,
+                                                       Contact = _user.Email ?? _user.Phone ?? ""
                                                    }).ToListAsync();
+            List<UserLoginAccounts> loginUserList = new List<UserLoginAccounts>();
             foreach (var item in query)
             {
                 string? img = await _db.UserProfiles.Where(x => x.UserId == item.UserId)
                     .OrderByDescending(up => up.CreatedDate)
                     .Select(x=> x.Url)
                     .FirstOrDefaultAsync();
-                item.UserImage = img ?? "";
+                UserLoginAccounts newuser = new UserLoginAccounts
+                {
+                    UserIdval = item.UserIdval,
+                    UserName = item.UserName,
+                    Contact = item.Contact,
+                    UserImage = img ?? ""
+                };
+                loginUserList.Add(newuser);
             }
-            result = Result<List<UserLoginAccounts>>.Success(query);
+            result = Result<List<UserLoginAccounts>>.Success(loginUserList);
 
         }
         catch (Exception ex)
