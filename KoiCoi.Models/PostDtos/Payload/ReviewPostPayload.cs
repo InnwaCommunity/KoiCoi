@@ -8,6 +8,6 @@ namespace KoiCoi.Models.PostDtos.Payload;
 
 public partial class ReviewPostPayload
 {
-    public string? EventIdval { get; set; }
+    public string? EventPostIdval { get; set; }
     public string? Status { get; set; }
 }

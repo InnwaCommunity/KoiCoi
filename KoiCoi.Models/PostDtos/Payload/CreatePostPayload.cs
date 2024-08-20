@@ -3,10 +3,14 @@
 public partial class CreatePostPayload
 {
     public string? Content { get; set; }
-    public string? EventIdval { get; set; }
+    public string? EventPostIdval { get; set; }
     public string? TagIdval { get; set; }
     public decimal CollectAmount { get; set; }
-    public List<PostPolicyPropertyPayload> policyProperties { get; set; } = new List<PostPolicyPropertyPayload>();
+    public PostPolicyPropertyPayload viewPolicy { get; set; } = new PostPolicyPropertyPayload();
+    public PostPolicyPropertyPayload reactPolicy { get; set; } = new PostPolicyPropertyPayload();
+    public PostPolicyPropertyPayload commandPolicy { get; set; } = new PostPolicyPropertyPayload();
+    public PostPolicyPropertyPayload sharePolicy { get; set; } = new PostPolicyPropertyPayload();
+    //public List<PostPolicyPropertyPayload> policyProperties { get; set; } = new List<PostPolicyPropertyPayload>();
     public List<PostImagePayload> imageData { get; set; } = new List<PostImagePayload>();
 }
 

@@ -11,7 +11,7 @@ public partial class EventFile
 
     public string? UrlDescription { get; set; }
 
-    public int EventId { get; set; }
+    public int EventPostId { get; set; }
 
     public DateTime? CreatedDate { get; set; }
 

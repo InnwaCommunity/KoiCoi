@@ -54,9 +54,19 @@ public class DA_Event
             string TotalBalance = Encryption.EncryptID("0.0", balanceSalt);
             string LastBalance = Encryption.EncryptID("0.0", balanceSalt);
             string? TargetBalance = paylod.TargetBalance != null ? Encryption.EncryptID(paylod.TargetBalance.ToString()!, balanceSalt) : null;
+            var neweventPost = new Post
+            {
+                PostType = "eventpost",
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                Inactive = false
+            };
+            await _db.Posts.AddAsync(neweventPost);
+            await _db.SaveChangesAsync();
             Event newEvent = new Event
             {
                 EventName = paylod.EventName!,
+                PostId = neweventPost.PostId,
                 EventDescription = paylod.EventDescription,
                 ChannelId = ChannelId,
                 CreatorId = LoginUserId,
@@ -67,14 +77,16 @@ public class DA_Event
                 LastBalance = LastBalance,
                 TargetBalance = TargetBalance,
                 StartDate = DateTime.Parse(paylod!.StartDate!),
-                EndDate = DateTime.Parse(paylod!.EndDate!),
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow,
-                Inactive = false
+                EndDate = DateTime.Parse(paylod!.EndDate!)
             };
             var res = await _db.Events.AddAsync(newEvent);
             await _db.SaveChangesAsync();
             result = Result<string>.Success("Requested Event Success");
+            ///Save Policies
+            SavePostPolicies(neweventPost.PostId, 1, paylod.viewPolicy);//Save View Policy
+            SavePostPolicies(neweventPost.PostId, 2, paylod.reactPolicy);//Save React Policy
+            SavePostPolicies(neweventPost.PostId, 3, paylod.commandPolicy);//Save Command Policy
+            SavePostPolicies(neweventPost.PostId, 4, paylod.sharePolicy);//Save Share Policy
             if (paylod.EventAddresses.Any())
             {
                 foreach (var address in paylod.EventAddresses)
@@ -83,7 +95,7 @@ public class DA_Event
                     EventAddress newAddress = new EventAddress
                     {
                         AddressId = AddressId,
-                        EventId = newEvent.Eventid,
+                        EventPostId = newEvent.PostId,
                         AddressName = address.AddressName,
                     };
                     await _db.EventAddresses.AddAsync(newAddress);
@@ -116,7 +128,7 @@ public class DA_Event
                     {
                         Url = filename,
                         UrlDescription = item.Description,
-                        EventId= newEvent.Eventid,
+                        EventPostId= newEvent.PostId,
                         CreatedDate = DateTime.UtcNow,
                         ModifiedDate = DateTime.UtcNow,
                         Extension = "png",
@@ -138,7 +150,7 @@ public class DA_Event
                     LoginUserId,
                     $"Upcoming the New Event {newEvent.EventName}",
                     newEvent.EventDescription,
-                    $"UpcomingNewEvent/{newEvent.Eventid}");
+                    $"UpcomingNewEvent/{newEvent.PostId}");
             }
             else
             {
@@ -158,7 +170,7 @@ public class DA_Event
                     LoginUserId,
                     $"Requested the New Event {newEvent.EventName} by Member {LoginUserName}",
                     newEvent.EventDescription,
-                    $"RequestedNewEvent/{newEvent.Eventid}");
+                    $"RequestedNewEvent/{newEvent.PostId}");
             }
         }
         catch (Exception ex)
@@ -167,6 +179,23 @@ public class DA_Event
         }
 
         return result;
+    }
+
+    private void SavePostPolicies(int postid,int policyId, PostPolicyPropertyPayload policy)
+    {
+
+        PostPolicyProperty newPostPolicy = new PostPolicyProperty
+        {
+            PostId = postid,
+            PolicyId = policyId,
+            MaxCount = policy.MaxCount,
+            StartDate = policy.StartDate,
+            EndDate = policy.EndDate,
+            GroupMemberOnly = policy.GroupMemberOnly,
+            FriendOnly = policy.FriendOnly
+        };
+        _db.PostPolicyProperties.AddAsync(newPostPolicy);
+        _db.SaveChangesAsync();
     }
 
     public async Task<Result<List<GetRequestEventResponse>>> GetEventRequestList(GetEventRequestPayload payload, int LoginUserId)
@@ -178,21 +207,23 @@ public class DA_Event
             string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             string status = payload.Status!;
             var query = await (from _ev in _db.Events
+                               join _post in _db.Posts on _ev.PostId equals _post.PostId
                                join _cre in _db.Users on _ev.CreatorId equals _cre.UserId
                                join _sta in _db.StatusTypes on _ev.StatusId equals _sta.StatusId
                                join _cur in _db.Currencies on _ev.CurrencyId equals _cur.CurrencyId
                                join _meship in _db.ChannelMemberships on _ev.ChannelId equals _meship.ChannelId
                                join _usertype in _db.UserTypes on _meship.UserTypeId equals _usertype.TypeId
-                               where _ev.ChannelId == ChannelId
+                               where _ev.ChannelId == ChannelId &&
+                               _post.PostType == "eventpost" 
                                && _sta.StatusName.ToLower() == status
-                               && _ev.Inactive == false
+                               && _post.Inactive == false
                                && _meship.UserId == LoginUserId
                                && (status.ToLower() == "approved" || 
                                _usertype.Name.ToLower() == "owner" || 
                                _usertype.Name.ToLower() == "admin")
                                select new 
                                {
-                                   EventIdval = _ev.Eventid,
+                                   EventPostId = _ev.PostId,
                                    EventName = _ev.EventName,
                                    EventDescrition = _ev.EventDescription,
                                    CreatorIdval = _cre.UserId,
@@ -208,12 +239,12 @@ public class DA_Event
                                        Encryption.DecryptID(_ev.LastBalance.ToString(), balanceSalt)),
                                    StartDate = _ev.StartDate.ToString("yyyy-MM-ddTHH:mm:ss"),
                                    EndDate = _ev.EndDate.ToString("yyyy-MM-ddTHH:mm:ss"),
-                                   ModifiedDate = _ev.ModifiedDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                                   ModifiedDate = _post.ModifiedDate.ToString("yyyy-MM-ddTHH:mm:ss"),
                                }).ToListAsync();
             List<GetRequestEventResponse> responseList = new List<GetRequestEventResponse>();
             foreach (var item in query)
             {
-                var imgquery = await _db.EventFiles.Where(x => x.EventId == item.EventIdval)
+                var imgquery = await _db.EventFiles.Where(x => x.EventPostId == item.EventPostId)
                     .Select(x=> new EventImageInfo
                     {
                         imgfilename = x.Url,
@@ -222,7 +253,7 @@ public class DA_Event
                     .ToListAsync();
                 GetRequestEventResponse newres= new GetRequestEventResponse
                 {
-                    EventIdval = Encryption.EncryptID(item.EventIdval.ToString(), LoginUserId.ToString()),
+                    EventPostIdval = Encryption.EncryptID(item.EventPostId.ToString(), LoginUserId.ToString()),
                     EventName = item.EventName,
                     EventDescrition = item.EventDescrition,
                     CreatorIdval = Encryption.EncryptID(item.CreatorIdval.ToString(), LoginUserId.ToString()),
@@ -254,18 +285,18 @@ public class DA_Event
         {
             foreach (var item in payload)
             {
-                int EventId = Convert.ToInt32(Encryption.DecryptID(item.EventIdval!, LoginUserId.ToString()));
+                int EventPostId = Convert.ToInt32(Encryption.DecryptID(item.EventPostIdval!, LoginUserId.ToString()));
                 var checkloginusertype = await (from _ev in _db.Events
                                                 join _meme in _db.ChannelMemberships on _ev.ChannelId equals _meme.ChannelId
                                                 join _usety in _db.UserTypes on _meme.UserTypeId equals _usety.TypeId
-                                                where _ev.Eventid == EventId
+                                                where _ev.PostId == EventPostId
                                                 && _meme.UserId == LoginUserId
                                                 && (_usety.Name.ToLower() == "owner" || _usety.Name.ToLower() == "admin")
                                                 select _usety.Name)
                                                 .FirstOrDefaultAsync();
                 if (checkloginusertype is not null)
                 {
-                    var oldevent = await _db.Events.Where(x => x.Eventid == EventId).FirstOrDefaultAsync();
+                    var oldevent = await _db.Events.Where(x => x.PostId == EventPostId).FirstOrDefaultAsync();
                     if(oldevent is not null)
                     {
                         if (item.Status == 1)
@@ -287,7 +318,7 @@ public class DA_Event
                             {
                                 EventMembership newme = new EventMembership
                                 {
-                                    EventId = oldevent.Eventid,
+                                    EventPostId = oldevent.PostId,
                                     UserId = oldevent.CreatorId,
                                     UserTypeId = ownerusertype.TypeId,
                                 };
@@ -306,7 +337,7 @@ public class DA_Event
                                 LoginUserId,
                                 oldevent.EventName,
                                 oldevent.EventDescription,
-                                $"UpcomingNewEvent/{oldevent.Eventid}");
+                                $"UpcomingNewEvent/{oldevent.PostId}");
                         }
                         else if (item.Status == 2)
                         {
@@ -339,7 +370,7 @@ public class DA_Event
                                 LoginUserId,
                                 $"Rejected Event {oldevent.EventName}",
                                 $"{loginName} Rejected Event {oldevent.EventName}",
-                                $"RejectedNewEvent/{oldevent.Eventid}");
+                                $"RejectedNewEvent/{oldevent.PostId}");
                         }
 
                     }
@@ -362,10 +393,10 @@ public class DA_Event
         Result<string> result = null;
         try
         {
-            int EventId = Convert.ToInt32(Encryption.DecryptID(payload.EventIdval!, LoginUserId.ToString()));
+            int EventPostId = Convert.ToInt32(Encryption.DecryptID(payload.EventPostIdval!, LoginUserId.ToString()));
             var checkLoginUserAccess = await (from meship in _db.EventMemberships
                                               join usertype in _db.UserTypes on meship.UserTypeId equals usertype.TypeId
-                                              where meship.UserId == LoginUserId && meship.EventId == EventId
+                                              where meship.UserId == LoginUserId && meship.EventPostId == EventPostId
                                              && (usertype.Name.ToLower() == "admin" || usertype.Name.ToLower() == "owner")
                                              select usertype.Name
                                               ).FirstOrDefaultAsync();
@@ -377,13 +408,13 @@ public class DA_Event
                     int UserId = Convert.ToInt32(Encryption.DecryptID(item.UserIdval!, LoginUserId.ToString()));
                     int UserTypeId = Convert.ToInt32(Encryption.DecryptID(item.UserTypeIdval!, LoginUserId.ToString()));
                     var eventme = await _db.EventMemberships
-                        .Where(x => x.EventId == EventId && x.UserId == UserId)
+                        .Where(x => x.EventPostId == EventPostId && x.UserId == UserId)
                         .FirstOrDefaultAsync();
                     if (eventme is null)
                     {
                         eventme = new EventMembership
                         {
-                            EventId = EventId,
+                            EventPostId = EventPostId,
                             UserId = UserId,
                             UserTypeId = UserTypeId
                         };
@@ -400,7 +431,7 @@ public class DA_Event
                     ///Save Noti to admins
                     var admins = await (from _meme in _db.EventMemberships
                                         join _ut in _db.UserTypes on _meme.UserTypeId equals _ut.TypeId
-                                        where _meme.EventId == EventId
+                                        where _meme.EventPostId == EventPostId
                                         && (_ut.Name.ToLower() == "owner" || _ut.Name.ToLower() == "admin")
                                         select _meme.UserId).ToListAsync();
                     admins.Add(UserId);
@@ -412,7 +443,7 @@ public class DA_Event
                     var data = await (from _meme in _db.EventMemberships
                                       join _user in _db.Users on _meme.UserId equals _user.UserId
                                       join _ut in _db.UserTypes on _meme.UserTypeId equals _ut.TypeId
-                                      where _meme.EventId == EventId
+                                      where _meme.EventPostId == EventPostId
                                       && _meme.UserId == UserId
                                       select new
                                       {
@@ -444,14 +475,14 @@ public class DA_Event
         Result<List<EventAdminsResponse>> result = null;
         try
         {
-            int EventId = Convert.ToInt32(Encryption.DecryptID(payload.EventIdval!, LoginUserId.ToString()));
+            int EventPostId = Convert.ToInt32(Encryption.DecryptID(payload.EventPostIdval!, LoginUserId.ToString()));
             List<EventAdminsResponse> query = await (from _em in _db.EventMemberships
                                join _ut in _db.UserTypes on _em.UserTypeId equals _ut.TypeId
                                join _meb in _db.Users on _em.UserId equals _meb.UserId
-                               join _ev in _db.Events on _em.EventId equals _ev.Eventid
+                               join _ev in _db.Events on _em.EventPostId equals _ev.PostId
                                join _ms in _db.ChannelMemberships on _ev.ChannelId equals _ms.ChannelId
                                join _logu in _db.Users on _ms.UserId equals _logu.UserId
-                               where _em.EventId == EventId && _logu.UserId == LoginUserId
+                               where _em.EventPostId == EventPostId && _logu.UserId == LoginUserId
                                && (_ut.Name.ToLower() == "owner" || _ut.Name.ToLower() == "admin")
                                select new EventAdminsResponse
                                {

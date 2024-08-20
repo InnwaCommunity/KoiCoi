@@ -14,6 +14,7 @@ global using KoiCoi.Modules.Repository.ChannelFeature;
 global using KoiCoi.Modules.Repository.EventFreture;
 global using KoiCoi.Modules.Repository.PostFeature;
 global using KoiCoi.Modules.Repository.NotificationManager;
+global using KoiCoi.Modules.Repository.ReactFeature;
 
 ///Models
 global using KoiCoi.Models.Login_Models;

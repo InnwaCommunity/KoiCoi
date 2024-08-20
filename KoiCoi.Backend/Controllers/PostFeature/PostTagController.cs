@@ -25,7 +25,7 @@ public class PostTagController : BaseController
     public async Task<Result<List<PostTagDataResponse>>> GetPostTags(GetEventDataPayload payload)
     {
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
-        return await _blPost.GetPostTags(payload.EventIdval!, LoginUserID);
+        return await _blPost.GetPostTags(payload.EventPostIdval!, LoginUserID);
     }
 
 }

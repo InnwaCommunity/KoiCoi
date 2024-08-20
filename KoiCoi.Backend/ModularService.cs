@@ -65,6 +65,7 @@ public static class ModularService
         builder.Services.AddScoped<DA_Event>();
         builder.Services.AddScoped<DA_Post>();
         builder.Services.AddScoped<NotificationManager>();
+        builder.Services.AddScoped<DA_React>();
         return builder;
     }
 
@@ -92,6 +93,7 @@ public static class ModularService
         builder.Services.AddScoped<BL_Channel>();
         builder.Services.AddScoped<BL_Event>();
         builder.Services.AddScoped<BL_Post>();
+        builder.Services.AddScoped<BL_React>();
         return builder;
     }
 

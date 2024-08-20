@@ -8,13 +8,14 @@ public partial class DashboardPostsResponse
     public string? Content { get; set; }
     public string ChannelIdval { get; set; } = string.Empty;
     public string ChannelName { get; set;} = string.Empty;
-    public string EventIdval { get; set; } = string.Empty;
+    public string EventPostIdval { get; set; } = string.Empty;
     public string EventName { get; set; } = string.Empty;
     public string? TagIdval { get; set; }
     public string? TagName { get; set; }
     public string CreatorIdval { get; set; } = string.Empty;
     public string CreatorName { get; set; } = string.Empty;
     public decimal CollectAmount { get; set; } = 0;
+    public decimal EventTotalAmount { get; set; } = 0;
     public DateTime? ModifiedDate { get; set; }
     public DateTime? CreatedDate { get; set; }
     public int LikeTotalCount { get; set; }
@@ -25,4 +26,10 @@ public partial class DashboardPostsResponse
     public bool CanCommand { get; set; }
     public bool CanShare { get; set; }
     public List<PostImageResponse>? ImageResponse { get; set; }
+}
+
+public partial class PostReactStatus { 
+    public string? reactIdval { get; set; }
+    public string? reacttypeIdval { get; set; }
+    public string? reactTypeName { get; set; }
 }

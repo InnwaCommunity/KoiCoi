@@ -14,6 +14,6 @@ public partial class UserIdAndUserType
 
 public partial class ChangeUserTypeEventMembership
 {
-    public string? EventIdval { get; set; }
+    public string? EventPostIdval { get; set; }
     public List<UserIdAndUserType>? userIdAndUserTypes { get; set; }
 }

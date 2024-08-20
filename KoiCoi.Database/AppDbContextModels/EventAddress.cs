@@ -9,7 +9,7 @@ public partial class EventAddress
 
     public int AddressId { get; set; }
 
-    public int EventId { get; set; }
+    public int EventPostId { get; set; }
 
     public string? AddressName { get; set; }
 }

@@ -27,9 +27,9 @@ public class PostController : BaseController
     [HttpPost("ReviewPostsList",Name ="ReviewPostsList")]
     public async Task<Result<List<ReviewPostResponse>>> ReviewPostsList(ReviewPostPayload payload)
     {
-        if (string.IsNullOrEmpty(payload.EventIdval) || string.IsNullOrEmpty(payload.Status)) return Result<List<ReviewPostResponse>>.Error("payload Can't Empty or null");
+        if (string.IsNullOrEmpty(payload.EventPostIdval) || string.IsNullOrEmpty(payload.Status)) return Result<List<ReviewPostResponse>>.Error("payload Can't Empty or null");
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
-        return await _blPost.ReviewPostsList(payload.EventIdval,payload.Status, LoginUserID);
+        return await _blPost.ReviewPostsList(payload.EventPostIdval,payload.Status, LoginUserID);
     }
     [HttpPost("ApproveOrRejectPost",Name = "ApproveOrRejectPost")]
     public async Task<Result<string>> ApproveOrRejectPost(List<ApproveRejectPostPayload> payload)

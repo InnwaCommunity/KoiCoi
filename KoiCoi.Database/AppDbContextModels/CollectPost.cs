@@ -9,6 +9,12 @@ public partial class CollectPost
 
     public int PostId { get; set; }
 
+    public string? Content { get; set; }
+
+    public int? TagId { get; set; }
+
+    public int EventPostId { get; set; }
+
     public string CollectAmount { get; set; } = null!;
 
     public int CreatorId { get; set; }

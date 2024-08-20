@@ -101,3 +101,5 @@ Share -     (4)
             EndDate - null
             GroupMemberOnly - true
             FriendOnly - false
+
+PostTypes(use lower case) - eventpost,collectpost,usagecollect

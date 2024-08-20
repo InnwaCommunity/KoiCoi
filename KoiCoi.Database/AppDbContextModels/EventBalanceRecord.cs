@@ -7,7 +7,7 @@ public partial class EventBalanceRecord
 {
     public int BalanceRecordId { get; set; }
 
-    public int EventId { get; set; }
+    public int EventPostId { get; set; }
 
     public string? TotalBalance { get; set; }
 

@@ -1,4 +1,6 @@
-﻿namespace KoiCoi.Models.EventDto;
+﻿using KoiCoi.Models.PostDtos.Payload;
+
+namespace KoiCoi.Models.EventDto;
 
 public partial class CreateEventPayload
 {
@@ -10,6 +12,10 @@ public partial class CreateEventPayload
     public string? EndDate { get; set; }
     public List<EventAddressPayload> EventAddresses { get; set; }
     public List<EventPhotoPayload> EventPhotos { get; set; }
+    public PostPolicyPropertyPayload viewPolicy { get; set; } = new PostPolicyPropertyPayload();
+    public PostPolicyPropertyPayload reactPolicy { get; set; } = new PostPolicyPropertyPayload();
+    public PostPolicyPropertyPayload commandPolicy { get; set; } = new PostPolicyPropertyPayload();
+    public PostPolicyPropertyPayload sharePolicy { get; set; } = new PostPolicyPropertyPayload();
 }
 
 public partial class EventAddressPayload

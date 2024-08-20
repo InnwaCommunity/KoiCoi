@@ -7,6 +7,8 @@ public partial class Event
 {
     public int Eventid { get; set; }
 
+    public int PostId { get; set; }
+
     public string EventName { get; set; } = null!;
 
     public string? EventDescription { get; set; }
@@ -25,15 +27,9 @@ public partial class Event
 
     public string LastBalance { get; set; } = null!;
 
+    public string? TargetBalance { get; set; }
+
     public DateTime StartDate { get; set; }
 
     public DateTime EndDate { get; set; }
-
-    public DateTime CreatedDate { get; set; }
-
-    public DateTime ModifiedDate { get; set; }
-
-    public bool? Inactive { get; set; }
-
-    public string? TargetBalance { get; set; }
 }

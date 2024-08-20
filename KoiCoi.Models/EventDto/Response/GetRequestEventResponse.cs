@@ -2,7 +2,7 @@
 namespace KoiCoi.Models.EventDto.Response;
 public partial class GetRequestEventResponse
 {
-   public string? EventIdval { get; set; }
+   public string? EventPostIdval { get; set; }
    public string? EventName { get; set; }
    public string? EventDescrition { get; set; }
    public string? CreatorIdval { get; set; }

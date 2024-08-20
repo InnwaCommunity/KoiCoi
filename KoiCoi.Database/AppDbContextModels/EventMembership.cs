@@ -7,7 +7,7 @@ public partial class EventMembership
 {
     public int Membershipid { get; set; }
 
-    public int EventId { get; set; }
+    public int EventPostId { get; set; }
 
     public int UserId { get; set; }
 

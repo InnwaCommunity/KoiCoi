@@ -1,0 +1,96 @@
+﻿
+
+using KoiCoi.Database.AppDbContextModels;
+using Microsoft.Extensions.Configuration;
+
+namespace KoiCoi.Modules.Repository.ReactFeature;
+
+public class DA_React
+{
+    private readonly AppDbContext _db;
+    private readonly NotificationManager.NotificationManager _saveNotifications;
+    private readonly IConfiguration _configuration;
+
+    public DA_React(AppDbContext db, IConfiguration configuration, NotificationManager.NotificationManager saveNotifications)
+    {
+        _db = db;
+        _configuration = configuration;
+        _saveNotifications = saveNotifications;
+    }
+
+
+    public async Task<Result<List<ReactTypeResponse>>> GetAllReactType(int LoginUserId)
+    {
+        Result<List<ReactTypeResponse>> result = null;
+        try
+        {
+            List<ReactTypeResponse> querylist = await _db.ReactTypes.Select(
+                x => new ReactTypeResponse
+                {
+                    TypeIdval = Encryption.EncryptID(x.TypeId.ToString(), LoginUserId.ToString()),
+                    Emoji = x.Emoji,
+                    Description = x.Description
+                }).ToListAsync();
+            result = Result<List<ReactTypeResponse>>.Success(querylist);
+        }
+        catch (Exception ex)
+        {
+            result = Result<List<ReactTypeResponse>>.Error(ex);
+        }
+        return result;
+    }
+
+    public async Task<Result<string>> ReactPost(ReactPostPayload payload, int LoginUserID)
+    {
+        Result<string> result = null;
+        try
+        {
+            int postId = Convert.ToInt32(Encryption.DecryptID(payload.postIdval!, LoginUserID.ToString()));
+            var react = await _db.Reacts.Where(
+                x => x.PostId == postId && x.UserId == LoginUserID)
+                .FirstOrDefaultAsync();
+            if (!string.IsNullOrEmpty(payload.reacttypeIdval))
+            {
+                int reacttypeid = Convert.ToInt32(Encryption.DecryptID(payload.reacttypeIdval, LoginUserID.ToString()));
+                if(react is null)
+                {
+                    ///create React
+                    React newreact = new React
+                    {
+                        PostId = postId,
+                        UserId = LoginUserID,
+                        ReactTypeId = reacttypeid,
+                        CreatedDate = DateTime.UtcNow
+                    };
+
+                    await _db.Reacts.AddAsync(newreact);
+                    await _db.SaveChangesAsync();
+                    result = Result<string>.Success("React Success");
+}
+                else
+                {
+                    ///update React
+                    react.ReactTypeId = reacttypeid;
+                    await _db.SaveChangesAsync();
+                    result = Result<string>.Success("Update React Success");
+                }
+            }
+            else
+            {
+                ///Delete React
+                 if(react is not null)
+                {
+                    _db.Reacts.Remove(react);
+                    await _db.SaveChangesAsync();
+                }
+                result = Result<string>.Success("Delete React Success");
+
+            }
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
+        }
+        return result;
+    }
+}

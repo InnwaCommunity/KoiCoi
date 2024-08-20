@@ -7,15 +7,11 @@ public partial class Post
 {
     public int PostId { get; set; }
 
-    public string? Content { get; set; }
+    public string PostType { get; set; } = null!;
 
-    public int EventId { get; set; }
+    public DateTime ModifiedDate { get; set; }
 
-    public int? TagId { get; set; }
+    public DateTime CreatedDate { get; set; }
 
-    public DateTime? CreatedDate { get; set; }
-
-    public DateTime? ModifiedDate { get; set; }
-
-    public bool? Inactive { get; set; }
+    public bool Inactive { get; set; }
 }

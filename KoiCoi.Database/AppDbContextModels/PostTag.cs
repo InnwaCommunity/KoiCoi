@@ -11,7 +11,7 @@ public partial class PostTag
 
     public string? TagDescription { get; set; }
 
-    public int EventId { get; set; }
+    public int EventPostId { get; set; }
 
     public int CreatorId { get; set; }
 

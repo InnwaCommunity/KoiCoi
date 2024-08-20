@@ -4,7 +4,7 @@
 
 public partial class CreatePostTagListPayload
 {
-    public string? EventIdval { get; set; }
+    public string? EventPostIdval { get; set; }
     public List<PostTagPayload> PostTags { get; set; } = new List<PostTagPayload>();
 
 }

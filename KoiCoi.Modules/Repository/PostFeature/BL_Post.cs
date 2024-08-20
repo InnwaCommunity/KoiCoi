@@ -17,9 +17,9 @@ public  class BL_Post
     {
         return await _daPost.CreatePostFeature(payload, LoginUserId);
     }
-    public async Task<Result<List<ReviewPostResponse>>> ReviewPostsList(string EventIdval,string Status,int LoginUserId)
+    public async Task<Result<List<ReviewPostResponse>>> ReviewPostsList(string EventPostIdval,string Status,int LoginUserId)
     {
-        return await _daPost.ReviewPostsList(EventIdval,Status, LoginUserId);
+        return await _daPost.ReviewPostsList(EventPostIdval,Status, LoginUserId);
     }
 
     public async Task<Result<string>> ApproveOrRejectPost(List<ApproveRejectPostPayload> payload,int LoginUserId)
@@ -42,13 +42,9 @@ public  class BL_Post
         return await _daPost.CreatePostTags(payload, LoginUserId);
     }
 
-    public async Task<Result<List<PostTagDataResponse>>> GetPostTags(string EventIdval,int LoginUserId)
+    public async Task<Result<List<PostTagDataResponse>>> GetPostTags(string EventPostIdval,int LoginUserId)
     {
-        return await _daPost.GetPostTags(EventIdval, LoginUserId);
+        return await _daPost.GetPostTags(EventPostIdval, LoginUserId);
     }
 
-    public async Task<Result<List<ReactTypeResponse>>> GetAllReactType(int LoginUserId)
-    {
-        return await _daPost.GetAllReactType(LoginUserId);
-    }
 }
