@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "D:\\published\\AwsDeployment\\KoiCoi\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\koicoi.backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\koicoi.backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\koicoi.backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\koicoi.backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\customtokenauthprovider\\tokenprovidermiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -349,7 +349,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -360,16 +360,21 @@
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\appsettings.json",
               "RelativeDocumentMoniker": "KoiCoi.Backend\\appsettings.json",
               "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\appsettings.json",
               "RelativeToolTip": "KoiCoi.Backend\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAACSAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-07-27T08:25:12.967Z"
+              "WhenOpened": "2024-07-27T08:25:12.967Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -393,7 +398,8 @@
               "RelativeToolTip": "KoiCoi.Modules\\Repository\\UserFeature\\DA_User.cs",
               "ViewState": "AQIAADwAAAAAAAAAAAAMwEcAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-23T11:18:33.074Z"
+              "WhenOpened": "2024-07-23T11:18:33.074Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -421,7 +427,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "KoiCoi.Backend.csproj",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\KoiCoi.Backend.csproj",
               "RelativeDocumentMoniker": "KoiCoi.Backend\\KoiCoi.Backend.csproj",
@@ -433,10 +439,6 @@
               "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
-            },
-            {
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "TokenProviderMiddleware.cs",
@@ -446,7 +448,8 @@
               "RelativeToolTip": "KoiCoi.Backend\\CustomTokenAuthProvider\\TokenProviderMiddleware.cs",
               "ViewState": "AQIAAB0BAAAAAAAAAIAwwCsBAAA+AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-19T02:41:51.897Z"
+              "WhenOpened": "2024-07-19T02:41:51.897Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -542,7 +545,8 @@
               "RelativeToolTip": "KoiCoi.Modules\\Repository\\EventFeature\\DA_Event.cs",
               "ViewState": "AQIAAG4AAAAAAAAAAAAjwIMAAAA2AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-28T12:17:38.614Z"
+              "WhenOpened": "2024-07-28T12:17:38.614Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -614,7 +618,8 @@
               "RelativeToolTip": "KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
               "ViewState": "AQIAABAAAAAAAAAAAAAWwCIAAABZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-03T09:41:21.594Z"
+              "WhenOpened": "2024-08-03T09:41:21.594Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -626,7 +631,8 @@
               "RelativeToolTip": "KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
               "ViewState": "AQIAADEBAAAAAAAAAAAjwEQBAACDAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-03T09:43:13.453Z"
+              "WhenOpened": "2024-08-03T09:43:13.453Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -710,7 +716,8 @@
               "RelativeToolTip": "KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-22T12:48:42.617Z"
+              "WhenOpened": "2024-07-22T12:48:42.617Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -770,7 +777,8 @@
               "RelativeToolTip": "KoiCoi.Backend\\Controllers\\Channels\\ChannelController.cs",
               "ViewState": "AQIAAHgAAAAAAAAAAAAowIoAAAA3AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-19T08:28:31.363Z"
+              "WhenOpened": "2024-07-19T08:28:31.363Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -902,7 +910,8 @@
               "RelativeToolTip": "KoiCoi.Mapper\\ChangeDatabaseModel.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAFAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-19T10:04:08.929Z"
+              "WhenOpened": "2024-07-19T10:04:08.929Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -1250,7 +1259,8 @@
               "RelativeToolTip": "KoiCoi.Backend\\Controllers\\FileControl\\ImageFileServiceController.cs",
               "ViewState": "AQIAAJoAAAAAAAAAAAAwwKQAAABCAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-19T15:58:59.269Z"
+              "WhenOpened": "2024-07-19T15:58:59.269Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",

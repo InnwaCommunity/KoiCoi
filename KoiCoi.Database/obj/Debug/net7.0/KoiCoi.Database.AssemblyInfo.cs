@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KoiCoi.Database")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+16a42268f40d0ebc27e148fa13ac962f8ce7418f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bfc6074cddee2ac896f2e6b211130021db322c6f")]
 [assembly: System.Reflection.AssemblyProductAttribute("KoiCoi.Database")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KoiCoi.Database")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
