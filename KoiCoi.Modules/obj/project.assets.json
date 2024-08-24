@@ -12865,11 +12865,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\published\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
+      "projectUniqueName": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
       "projectName": "KoiCoi.Modules",
-      "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
+      "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
       "packagesPath": "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\",
-      "outputPath": "D:\\published\\KoiCoi\\KoiCoi.Modules\\obj\\",
+      "outputPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\KTZ Myanmar Group 2\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -12887,20 +12887,20 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
-              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
+            "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
+              "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
             },
-            "D:\\published\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj": {
-              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj"
+            "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj": {
+              "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj"
             },
-            "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {
-              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj"
+            "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {
+              "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj"
             },
-            "D:\\published\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj": {
-              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj"
+            "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj": {
+              "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj"
             },
-            "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
-              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj"
+            "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
+              "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj"
             }
           }
         }
@@ -12938,5 +12938,13 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.304\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
+    }
+  ]
 }

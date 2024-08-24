@@ -75,7 +75,8 @@ public class TokenProviderMiddleware : IMiddleware
             context.Request.Path.ToString().ToLower().Contains("testapi/getinfo") ||
             context.Request.Path.ToString().ToLower().Contains("forgotpassword/requestbyemail") ||
             context.Request.Path.ToString().ToLower().Contains("forgotpassword/changepasswordbyotp") ||
-            context.Request.Path.ToString().ToLower().Contains("swagger/") ||
+            context.Request.Path.ToString().ToLower().Contains("swagger/") ||//api/v1/User/Testing
+            context.Request.Path.ToString().ToLower().Contains("/api/v1/user/testing") ||
             context.Request.Path.ToString().ToLower().Contains("/api/v1/user/registeraccount") ||
             context.Request.Path.ToString().ToLower().Contains("/api/v1/user/accountswithdeviceid") ||
             context.Request.Path.ToString().ToLower().Contains("api/imagefileservice")
@@ -296,7 +297,7 @@ public class TokenProviderMiddleware : IMiddleware
         catch (Exception ex)
         {
             Logger.LogError(ex, "Login Fail");
-            return new { error = 1, message = "Login Fail" };
+            return new { error = 1, message = ex.ToString() };
         }
     }
 

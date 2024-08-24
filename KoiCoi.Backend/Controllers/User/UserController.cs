@@ -11,6 +11,12 @@ public class UserController : BaseController
         _bLUser = blUser;
     }
 
+    [HttpGet("Testing", Name = "Testing")]
+    public IActionResult Testing()
+    {
+        return Ok(new { data = "Hello, this is a DB testing response!" });
+    }
+
     [HttpPost("RegisterAccount", Name = "RegisterAccount")]
     public async Task<IActionResult> RegisterAccount(RequestUserDto requestUser)
     {

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {}
+    "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {}
   },
   "projects": {
-    "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
+    "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
+        "projectUniqueName": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
         "projectName": "KoiCoi.Database",
-        "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
+        "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
         "packagesPath": "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\",
-        "outputPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\obj\\",
+        "outputPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\KTZ Myanmar Group 2\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -119,14 +119,14 @@
         }
       }
     },
-    "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {
+    "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
+        "projectUniqueName": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
         "projectName": "KoiCoi.Models",
-        "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
+        "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
         "packagesPath": "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\",
-        "outputPath": "D:\\published\\KoiCoi\\KoiCoi.Models\\obj\\",
+        "outputPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\KTZ Myanmar Group 2\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -144,8 +144,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
-                "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
+              "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
+                "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
               }
             }
           }
