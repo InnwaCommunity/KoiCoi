@@ -10,4 +10,5 @@ public partial class UploadUserProfileReqeust
 {
     public string? base64data { get; set; }
     public string? description { get; set; }
+    public string ext { get; set; } = string.Empty;
 }

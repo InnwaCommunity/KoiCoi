@@ -17,11 +17,18 @@ using System.Net.Mail;
 using System.Net;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Globalization;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace KoiCoi.Operational;
 
 public class Globalfunction
 {
+    public static string NewUniqueFileKey(string ext)
+    {
+        string fileName = NewUniqueFileName();
+        return $"{DateTime.UtcNow:yyyy\\/MM\\/dd\\/}{fileName}{ext}";
+    }
 
     public static string NewUniqueFileName()
     {
@@ -29,7 +36,7 @@ public class Globalfunction
         byte[] guidBytes = guid.ToByteArray();
         string base64String = Convert.ToBase64String(guidBytes);
         string shortName = base64String.TrimEnd('=').Replace('/', '_').Replace('+', '-').Replace('.','_');
-        return shortName.Substring(0, 17);
+        return shortName.Substring(0, 15);
     }
     public static Result<string> SendEmailAsync(string fromMail,string appPw,string ToEmail,string Subject,string Message)
     {

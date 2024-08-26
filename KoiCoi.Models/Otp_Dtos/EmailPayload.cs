@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KoiCoi.Models.Otp_Dtos;
 
-public class ForgotPasswordEmailPayload
+public class EmailPayload
 {
     public string Email { get; set; } = string.Empty;
 }

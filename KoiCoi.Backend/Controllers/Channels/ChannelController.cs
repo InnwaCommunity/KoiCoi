@@ -103,32 +103,8 @@ public class ChannelController : BaseController
     {
         try
         {
-            string filename = "";
-            if (!string.IsNullOrEmpty(channelReqeust.ProImage64))
-            {
-                string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
-                //string tempfolderPath = _configuration["appSettings:UploadChannelProfilePath"] ?? throw new Exception("Invalid temp path.");
-                string uploadDirectory = _configuration["appSettings:ChannelProfile"] ?? throw new Exception("Invalid function upload path.");
-
-                string folderPath = Path.Combine(baseDirectory, uploadDirectory);
-
-
-                filename = Globalfunction.NewUniqueFileName() + ".png";
-                string base64Str = channelReqeust.ProImage64;
-                byte[] bytes = Convert.FromBase64String(base64Str!);
-
-                string filePath = Path.Combine(folderPath, filename);
-                if (filePath.Contains(".."))
-                { //if found .. in the file name or path
-                    Log.Error("Invalid path " + filePath);
-                    throw new Exception("Invalid path");
-                }
-                await System.IO.File.WriteAllBytesAsync(filePath, bytes);
-            }
-                
-
                 int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
-                return await _blChannel.CreateChannel(channelReqeust, LoginUserID, filename);
+                return await _blChannel.CreateChannel(channelReqeust, LoginUserID);
         }
         catch (Exception ex)
         {

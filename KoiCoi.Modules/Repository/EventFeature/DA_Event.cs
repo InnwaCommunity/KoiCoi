@@ -10,12 +10,17 @@ public class DA_Event
     private readonly AppDbContext _db;
     private readonly NotificationManager.NotificationManager _saveNotifications;
     private readonly IConfiguration _configuration;
+    private readonly KcAwsS3Service _kcAwsS3Service;
 
-    public DA_Event(AppDbContext db, IConfiguration configuration, NotificationManager.NotificationManager saveNotifications)
+    public DA_Event(AppDbContext db, 
+        IConfiguration configuration, 
+        NotificationManager.NotificationManager saveNotifications,
+        KcAwsS3Service kcAwsS3Service)
     {
         _db = db;
         _configuration = configuration;
         _saveNotifications = saveNotifications;
+        _kcAwsS3Service = kcAwsS3Service;
     }
 
     public async Task<Result<string>> CreateEvent(CreateEventPayload paylod,int LoginUserId)
@@ -104,6 +109,7 @@ public class DA_Event
             }
             if(paylod.EventPhotos.Any())
             {
+                /*
                 string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
                 string uploadDirectory = _configuration["appSettings:EventImages"] ?? throw new Exception("Invalid function upload path.");
                 string destDirectory = Path.Combine(baseDirectory, uploadDirectory);
@@ -111,22 +117,28 @@ public class DA_Event
                 {
                     Directory.CreateDirectory(destDirectory);
                 }
+
+                string filename = Globalfunction.NewUniqueFileName() + ".png";
+                string base64Str = item.base64image!;
+                byte[] bytes = Convert.FromBase64String(base64Str!);
+
+                string filePath = Path.Combine(destDirectory, filename);
+                if (filePath.Contains(".."))
+                { //if found .. in the file name or path
+                    Log.Error("Invalid path " + filePath);
+                }
+                await System.IO.File.WriteAllBytesAsync(filePath, bytes);
+                 */
+
+                string bucketname = _configuration.GetSection("Buckets:EventImages").Get<string>()!;
+
                 foreach (var item in paylod.EventPhotos)
                 {
-                    string filename = Globalfunction.NewUniqueFileName() + ".png";
-                    string base64Str = item.base64image!;
-                    byte[] bytes = Convert.FromBase64String(base64Str!);
-
-                    string filePath = Path.Combine(destDirectory, filename);
-                    if (filePath.Contains(".."))
-                    { //if found .. in the file name or path
-                        Log.Error("Invalid path " + filePath);
-                    }
-                    await System.IO.File.WriteAllBytesAsync(filePath, bytes);
-
+                    string uniquekey = Globalfunction.NewUniqueFileKey(item.ext!);
+                    await _kcAwsS3Service.CreateFileAsync(item.base64image!, bucketname, uniquekey, item.ext!);
                     var newImage = new EventFile
                     {
-                        Url = filename,
+                        Url = uniquekey,
                         UrlDescription = item.Description,
                         EventPostId= newEvent.PostId,
                         CreatedDate = DateTime.UtcNow,

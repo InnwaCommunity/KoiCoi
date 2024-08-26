@@ -65,4 +65,18 @@ public class UserController : BaseController
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _bLUser.GetUserTypes(LoginEmpID);
     }
+
+    /*[HttpPost("Login",Name = "Login")]
+    public async Task<Result<LoginResponse>> UserLogin(LoginPayload paylod)
+    {
+        return await _bLUser.UserLogin(paylod);
+    }
+     */
+
+    //[HttpGet("GetAccountByVertifiedEmail/{email}/{OTPPasscode}/{OTPPrefix}", Name = "GetAccountByVertifiedEmail")]
+    //public async Task<Result<UserInfoResponse>> GetAccountByVertifiedEmail(string email,string OTPPasscode,string OTPPrefix)
+    //{
+    //int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
+    //    return await _bLUser.GetAccountByVertifiedEmail(email, OTPPasscode, OTPPrefix, LoginEmpID);
+    //}
 }

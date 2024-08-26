@@ -37,9 +37,9 @@ public class BL_Channel
         return await _daChannel.GetCurrencyList(LoginUserId);
     }
 
-    public async Task<Result<ChannelDataResponse>> CreateChannel(CreateChannelReqeust channelReqeust ,int LoginUserId,string filename)
+    public async Task<Result<ChannelDataResponse>> CreateChannel(CreateChannelReqeust channelReqeust ,int LoginUserId)
     {
-        return await _daChannel.CreateChannel(channelReqeust, LoginUserId,filename);
+        return await _daChannel.CreateChannel(channelReqeust, LoginUserId);
     }
 
     public async Task<Result<List<ChannelDataResponse>>> GetChannelsList(int LoginUserId)

@@ -519,6 +519,14 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "AWSSDK.Extensions.NETCore.Setup": {
+              "target": "Package",
+              "version": "[3.7.301, )"
+            },
+            "AWSSDK.S3": {
+              "target": "Package",
+              "version": "[3.7.402.2, )"
+            },
             "Dapper": {
               "target": "Package",
               "version": "[2.1.35, )"

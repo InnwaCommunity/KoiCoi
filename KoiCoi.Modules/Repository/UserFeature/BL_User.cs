@@ -1,4 +1,7 @@
 ﻿
+using KoiCoi.Models.Login_Models;
+using KoiCoi.Models.User_Dto.Payload;
+
 namespace KoiCoi.Modules.Repository.UserFeature;
 
 public class BL_User
@@ -28,7 +31,7 @@ public class BL_User
             {
                 string password = passwordGenerator.CreatePassword(11, 3);
                 string temppassword = password;
-                string name = Guid.NewGuid().ToString();
+                string name = "Guest";
                 string salt = SaltedHash.GenerateSalt();
                 string userIdval =Encryption.EncryptID(name,salt);// + passwordGenerator.CreatePassword(name.Length, name.Length/3)
                 viaUser.UserIdval = userIdval;

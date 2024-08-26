@@ -18,7 +18,6 @@ public class ResponseUserDto
 public class RequestUserDto
 {
     public string? Name { get; set; }
-    public string? UserIdval { get; set; }
 
     public string? Email { get; set; }
 

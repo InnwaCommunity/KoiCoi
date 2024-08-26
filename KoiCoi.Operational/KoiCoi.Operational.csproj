@@ -26,6 +26,8 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
 	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.301" />
+	<PackageReference Include="AWSSDK.S3" Version="3.7.402.2" />
   </ItemGroup>	
 	
   <ItemGroup>

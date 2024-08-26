@@ -1,7 +1,7 @@
-﻿
-using KoiCoi.Models.Via;
+﻿using KoiCoi.Models.Via;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel.DataAnnotations;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace KoiCoi.Modules.Repository.ChannelFeature;
 
@@ -10,12 +10,17 @@ public class DA_Channel
     private readonly AppDbContext _db;
     private readonly NotificationManager.NotificationManager _saveNotifications;
     private readonly IConfiguration _configuration;
+    private readonly KcAwsS3Service _kcAwsS3Service;
 
-    public DA_Channel(AppDbContext db, IConfiguration configuration, NotificationManager.NotificationManager saveNotifications)
+    public DA_Channel(AppDbContext db, 
+        IConfiguration configuration, 
+        NotificationManager.NotificationManager saveNotifications,
+        KcAwsS3Service kcAwsS3Service)
     {
         _db = db;
         _configuration = configuration;
         _saveNotifications = saveNotifications;
+        _kcAwsS3Service = kcAwsS3Service;
     }
 
     public async Task<Result<string>> CreateChannelType(ViaChannelType viaChanType)
@@ -141,11 +146,12 @@ public class DA_Channel
         return model;
     }
 
-    public async Task<Result<ChannelDataResponse>> CreateChannel(CreateChannelReqeust channelReqeust, int LoginUserId,string filename)
+    public async Task<Result<ChannelDataResponse>> CreateChannel(CreateChannelReqeust channelReqeust, int LoginUserId)
     {
         Result<ChannelDataResponse> model = null;
         try
         {
+            string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             int ChanneltypeId = Convert.ToInt32(
                                 Encryption.DecryptID(channelReqeust.ChannelTypeval!,
                                 LoginUserId.ToString()));
@@ -153,14 +159,23 @@ public class DA_Channel
                                 Encryption.DecryptID(channelReqeust.CurrencyIdval!,
                                 LoginUserId.ToString()));
 
-            ViaChannel channel = new ViaChannel();
-            channel.ChannelName = channelReqeust.ChannelName;
-            channel.StatusDescription = channelReqeust.StatusDescription;
-            channel.ChannelType = ChanneltypeId;
-            channel.CreatorId = LoginUserId;
-            channel.CurrencyId = CurrencyId;
-
-            var addedChannel = (await _db.Channels.AddAsync(channel.ChangeChannel())).Entity;
+            string TotalBalance = Encryption.EncryptID("0.0", balanceSalt);
+            string LastBalance = Encryption.EncryptID("0.0", balanceSalt);
+            Channel newchannel = new Channel
+            {
+                ChannelName = channelReqeust.ChannelName,
+                StatusDescription = channelReqeust.StatusDescription,
+                ChannelType = ChanneltypeId,
+                CreatorId = LoginUserId,
+                CurrencyId = CurrencyId,
+                MemberCount = 1,
+                TotalBalance = TotalBalance,
+                LastBalance = LastBalance,
+                DateCreated = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                Inactive = false
+            };
+            var addedChannel = await _db.Channels.AddAsync(newchannel);
             int result = await _db.SaveChangesAsync();
             if (result < 1) return Result<ChannelDataResponse>.Error("Create Channel Fail");
 
@@ -178,7 +193,7 @@ public class DA_Channel
             
             ViaChannelMemberShip newViaChanMeShip = new ViaChannelMemberShip
             {
-                ChannelId = addedChannel.ChannelId,
+                ChannelId = addedChannel.Entity.ChannelId,
                 UserId = LoginUserId,
                 UserTypeId = ownerid.Value,
                 StatusId = approvedstatusId.Value
@@ -186,21 +201,50 @@ public class DA_Channel
             await _db.ChannelMemberships.AddAsync(newViaChanMeShip.ChangeChannMemberShip());
             await _db.SaveChangesAsync();
 
-            ///Save Profile Image
-            ViaChannelProfile  viaChannelProfile = new ViaChannelProfile();
-            viaChannelProfile.Url = filename;
-            viaChannelProfile.UrlDescription = channelReqeust.imagedescription;
-            viaChannelProfile.ChannelId = addedChannel.ChannelId;
+            /*
+            string filename = "";
+            if (!string.IsNullOrEmpty(channelReqeust.ProImage64))
+            {
+                string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
+                //string tempfolderPath = _configuration["appSettings:UploadChannelProfilePath"] ?? throw new Exception("Invalid temp path.");
+                string uploadDirectory = _configuration["appSettings:ChannelProfile"] ?? throw new Exception("Invalid function upload path.");
 
-            await _db.ChannelProfiles.AddAsync(viaChannelProfile.ChangeChannelProfile());
+                string folderPath = Path.Combine(baseDirectory, uploadDirectory);
+
+
+                filename = Globalfunction.NewUniqueFileName() + ".png";
+                string base64Str = channelReqeust.ProImage64;
+                byte[] bytes = Convert.FromBase64String(base64Str!);
+
+                string filePath = Path.Combine(folderPath, filename);
+                if (filePath.Contains(".."))
+                { //if found .. in the file name or path
+                    Log.Error("Invalid path " + filePath);
+                    throw new Exception("Invalid path");
+                }
+                await System.IO.File.WriteAllBytesAsync(filePath, bytes);
+            }
+             */
+            string bucketname = _configuration.GetSection("Buckets:ChannelProfile").Get<string>()!;
+            string uniquekey = Globalfunction.NewUniqueFileKey(channelReqeust.ImageExt!);
+            string res = await _kcAwsS3Service.CreateFileAsync(channelReqeust.ProImage64!, bucketname, uniquekey, channelReqeust.ImageExt!);
+            ///Save Profile Image
+            ChannelProfile newchPro =new ChannelProfile{
+                Url = uniquekey,
+                UrlDescription = channelReqeust.imagedescription,
+                ChannelId = addedChannel.Entity.ChannelId,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            await _db.ChannelProfiles.AddAsync(newchPro);
             await _db.SaveChangesAsync();
 
             ///create channel topic
             var channalTopic = new ChannelTopic
             {
-                TopicName = Guid.NewGuid().ToString(),
-                Descriptions = $"Topic of {addedChannel.ChannelName} Channel",
-                ChannelId = addedChannel.ChannelId,
+                TopicName = $"{DateTime.UtcNow:yyyyMMddhhmmssssss}",
+                Descriptions = $"Topic of {addedChannel.Entity.ChannelName} Channel",
+                ChannelId = addedChannel.Entity.ChannelId,
                 DateCreated = DateTime.UtcNow
             };
 
@@ -210,7 +254,7 @@ public class DA_Channel
             ChannelDataResponse? data = await (from _cha in _db.Channels
                                                join ct in _db.ChannelTypes on _cha.ChannelType equals ct.ChannelTypeId
                                                join cur in _db.Currencies on _cha.CurrencyId equals cur.CurrencyId
-                                               where _cha.ChannelId == addedChannel.ChannelId
+                                               where _cha.ChannelId == addedChannel.Entity.ChannelId
                                                select new ChannelDataResponse
                                                {
                                                    ChannelIdval = Encryption.EncryptID(_cha.ChannelId.ToString(), LoginUserId.ToString()),

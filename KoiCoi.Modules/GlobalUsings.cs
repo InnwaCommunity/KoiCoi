@@ -32,3 +32,4 @@ global using KoiCoi.Mapper;
 //Operational
 
 global using KoiCoi.Operational;
+global using KoiCoi.Operational.Services;

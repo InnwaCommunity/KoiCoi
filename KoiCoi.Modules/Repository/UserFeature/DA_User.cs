@@ -1,7 +1,5 @@
 ﻿
-using KoiCoi.Models.Via;
 using Microsoft.Extensions.Configuration;
-using Serilog;
 
 namespace KoiCoi.Modules.Repository.UserFeature;
 
@@ -9,11 +7,13 @@ public class DA_User
 {
     private readonly AppDbContext _db;
     private readonly IConfiguration _configuration;
+    private readonly KcAwsS3Service _awsS3Service;
 
-    public DA_User(AppDbContext db, IConfiguration configuration)
+    public DA_User(AppDbContext db, IConfiguration configuration,KcAwsS3Service awsS3Service)
     {
         _db = db;
         _configuration = configuration;
+        _awsS3Service = awsS3Service;
     }
 
     public async Task<Result<ResponseUserDto>> CreateAccount(ViaUser viaUser,string temppassword)
@@ -27,8 +27,8 @@ public class DA_User
             int result = await _db.SaveChangesAsync();
             if (result == 0)
                 return Result<ResponseUserDto>.Error("Registration Fail");
-            RequestUserDto? userData = await _db.Users.Where(x => x.Name == viaUser.Name && x.Password == viaUser.Password)
-                .Select(x => new RequestUserDto
+            ResponseUserDto? userData = await _db.Users.Where(x => x.Name == viaUser.Name && x.Password == viaUser.Password)
+                .Select(x => new ResponseUserDto
                 {
                     UserIdval = x.UserIdval,
                     Name = x.Name
@@ -172,15 +172,31 @@ public class DA_User
         Result<List<UserInfoResponse>> model = null;
         try
         {
-            List<UserInfoResponse> user = await _db.Users.Where(x => x.Name.Contains(name) && x.Inactive == false)
-                                           .Select(x=> new UserInfoResponse
+            var user = await _db.Users.Where(x => x.Name.Contains(name) && x.Inactive == false)
+                                           .Select(x=> new 
                                            {
+                                               UserId = x.UserId,
                                                UserIdval = Encryption.EncryptID(x.UserId.ToString(), LoginUserId.ToString()),
                                                UserName = x.Name,
                                            })
                                           .ToListAsync();
+            List < UserInfoResponse > info = new List < UserInfoResponse >();
+            foreach (var u in user)
+            {
+                var img = await _db.UserProfiles.Where(x => x.UserId == u.UserId)
+                    .Select(x=> x.Url)
+                    .LastOrDefaultAsync();
+                UserInfoResponse newinfo = new UserInfoResponse
+                {
+                    UserIdval = u.UserIdval,
+                    UserName = u.UserName,
+                    imgname = img
+                };
+                info.Add(newinfo);
 
-            model = Result<List<UserInfoResponse>>.Success(user);
+            }
+
+            model = Result<List<UserInfoResponse>>.Success(info);
         }
         catch (Exception ex)
         {
@@ -239,9 +255,9 @@ public class DA_User
         Result<string> model = null;
         try
         {
-            if (string.IsNullOrEmpty(payload.description)) return Result<string>.Error("Image Not Found");
+            if (string.IsNullOrEmpty(payload.base64data)) return Result<string>.Error("Image Not Found");
 
-            string? folderPath = _configuration["appSettings:UserProfile"];
+            /*string? folderPath = _configuration["appSettings:UserProfile"];
             if(folderPath is null) return Result<string>.Error("Invalid temp path.");
             string? baseDirectory = _configuration["appSettings:UploadPath"];
             if (baseDirectory is null) return Result<string>.Error("Invalid UploadPath");
@@ -263,19 +279,28 @@ public class DA_User
                 return Result<string>.Error("Invalid path");
             }
             await System.IO.File.WriteAllBytesAsync(filePath, bytes);
-
-
-            UserProfile profile = new UserProfile
+             */
+            string bucketname = _configuration.GetSection("Buckets:UserProfile").Get<string>()!;
+            string uniquekey = Globalfunction.NewUniqueFileKey(payload.ext);
+            string res=await _awsS3Service.CreateFileAsync(payload.base64data, bucketname, uniquekey, payload.ext);
+            if(res == "success")
             {
-                Url = filename,
-                UrlDescription = payload.description,
-                UserId = LoginUserId,
-                CreatedDate = DateTime.UtcNow,
-            };
+                UserProfile profile = new UserProfile
+                {
+                    Url = uniquekey,
+                    UrlDescription = payload.description,
+                    UserId = LoginUserId,
+                    CreatedDate = DateTime.UtcNow,
+                };
 
-            await _db.UserProfiles.AddAsync(profile);
-            await _db.SaveChangesAsync();
-            model = Result<string>.Success("Upload Success");
+                await _db.UserProfiles.AddAsync(profile);
+                await _db.SaveChangesAsync();
+                model = Result<string>.Success("Upload Success");
+            }
+            else
+            {
+                model = Result<string>.Error("error");
+            }
 
          }
         catch (Exception ex)
@@ -303,4 +328,60 @@ public class DA_User
         }
         return model;
     }
+
+    /*public async Task<Result<LoginResponse>> UserLogin(LoginPayload paylod)
+    {
+        Result<LoginResponse> result = null;
+        try
+        {
+            var user = await _db.Users.Where(x=> x.Email == paylod.Email).FirstOrDefaultAsync();
+            if(user is null)
+                return Result<LoginResponse>.Error('Email Not Found');
+
+            string oldsalt = user.PasswordHash!;
+            string oldhash = user.Password!;
+            bool flag = SaltedHash.Verify(oldsalt, oldhash, paylod.Password);
+
+            if (flag == false)
+                return Result<LoginResponse>.Error("Incorrect Login Password for user account : " + paylod.Email);
+            TokenProviderOptions _options = new TokenProviderOptions
+            {
+                Path = _configuration.GetSection("TokenAuthentication:TokenPath").Get<string>()!,
+                Audience = _configuration.GetSection("TokenAuthentication:Audience").Get<string>(),
+                Issuer = _configuration.GetSection("TokenAuthentication:Issuer").Get<string>(),
+                SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256),
+                Expiration = expiration
+            };
+            var now = DateTime.UtcNow;
+            var _tokenData = new TokenData
+            {
+                Sub = user.Name,
+                Jti = Guid.NewGuid().ToString(),
+                Iat = new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString(),
+                UserID = user.UserId.ToString(),
+                UserLevelID = "1",
+                LoginType = "1",
+                TicketExpireDate = now.Add(_options.Expiration)
+            };
+            var claims = Globalfunction.GetClaims(_tokenData);
+
+            var appIdentity = new ClaimsIdentity(claims);
+            //context.User.AddIdentity(appIdentity); //add custom identity because default identity has delay to get data in EventLogRepository
+
+            string encodedJwt = CreateEncryptedJWTToken(claims);
+            //int LoginUserID = Convert.ToInt32(_tokenData.UserID);
+
+            var response = new
+            {
+                AccessToken = encodedJwt,
+            };
+        }
+        catch (Exception ex)
+        {
+            result = Result<LoginResponse>.Error(ex);
+        }
+        return result;
+    }
+     */
+
 }

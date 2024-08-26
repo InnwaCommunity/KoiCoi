@@ -25,8 +25,9 @@ public class ChangePasswordController : BaseController
         _maxOTPFailCount = _configuration.GetSection("appSettings:OTPFailCount").Get<int>();
         _otpExpireMinute = _configuration.GetSection("appSettings:OTPExpireMinute").Get<int>();
     }
+
     [HttpPost("RequestByEmail", Name = "RequestByEmail")]
-    public async Task<Result<OtpPrefixChar>> RequestByEmail(ForgotPasswordEmailPayload payload)
+    public async Task<Result<OtpPrefixChar>> RequestByEmail(EmailPayload payload)
     {
         try
         {

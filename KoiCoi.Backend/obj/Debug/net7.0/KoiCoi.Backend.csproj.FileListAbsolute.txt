@@ -671,3 +671,6 @@ D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\obj\Debug\net7.0\KoiCoi.Backend
 D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\obj\Debug\net7.0\KoiCoi.Backend.genruntimeconfig.cache
 D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\obj\Debug\net7.0\ref\KoiCoi.Backend.dll
 D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\aws-beanstalk-tools-defaults.json
+D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\AWSSDK.Core.dll
+D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\AWSSDK.Extensions.NETCore.Setup.dll
+D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\AWSSDK.S3.dll

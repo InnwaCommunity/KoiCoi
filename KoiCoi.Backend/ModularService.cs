@@ -1,8 +1,11 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using Amazon.Extensions.NETCore.Setup;
+using Amazon.S3;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.FirebaseCloudMessaging.v1;
 using Google.Apis.Services;
 using KoiCoi.Backend.CustomTokenAuthProvider;
 using KoiCoi.Operational.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -69,6 +72,7 @@ public static class ModularService
         builder.Services.AddScoped<DA_Post>();
         builder.Services.AddScoped<NotificationManager>();
         builder.Services.AddScoped<DA_React>();
+        builder.Services.AddScoped<KcAwsS3Service>();
         return builder;
     }
 

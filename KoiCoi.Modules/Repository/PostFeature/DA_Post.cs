@@ -1,11 +1,4 @@
-﻿
-using KoiCoi.Models;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using Serilog;
-using System.Collections.Generic;
-using System.Drawing.Printing;
-using System.Runtime.InteropServices;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace KoiCoi.Modules.Repository.PostFeature;
 
@@ -14,12 +7,18 @@ public class DA_Post
     private readonly AppDbContext _db;
     private readonly NotificationManager.NotificationManager _notificationmanager;
     private readonly IConfiguration _configuration;
+    private readonly KcAwsS3Service _kcAwsS3Service;
 
-    public DA_Post(AppDbContext db, IConfiguration configuration, NotificationManager.NotificationManager notificationmanager)
+    public DA_Post(
+        AppDbContext db, 
+        IConfiguration configuration, 
+        NotificationManager.NotificationManager notificationmanager,
+        KcAwsS3Service kcAwsS3Service)
     {
         _db = db;
         _configuration = configuration;
         _notificationmanager = notificationmanager;
+        _kcAwsS3Service = kcAwsS3Service;
     }
 
     public async Task<Result<string>> CreatePostFeature(CreatePostPayload payload, int LoginUserId)
@@ -81,35 +80,41 @@ public class DA_Post
             }
              */
             ///Save Post Images
-            string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
-            string uploadDirectory = _configuration["appSettings:PostImages"] ?? throw new Exception("Invalid function upload path.");
-            string destDirectory = Path.Combine(baseDirectory, uploadDirectory);
-            if (!Directory.Exists(destDirectory))
+            if (payload.imageData.Any())
             {
-                Directory.CreateDirectory(destDirectory);
-            }
-            foreach (var item in payload.imageData)
-            {
-                string filename = Globalfunction.NewUniqueFileName() + ".png";
-                string base64Str = item.imagebase64!;
-                byte[] bytes = Convert.FromBase64String(base64Str!);
-
-                string filePath = Path.Combine(destDirectory, filename);
-                if (filePath.Contains(".."))
-                { //if found .. in the file name or path
-                    Log.Error("Invalid path " + filePath);
-                }
-                await System.IO.File.WriteAllBytesAsync(filePath, bytes);
-
-                var newImage = new PostImage
+                /*string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
+                string uploadDirectory = _configuration["appSettings:PostImages"] ?? throw new Exception("Invalid function upload path.");
+                string destDirectory = Path.Combine(baseDirectory, uploadDirectory);
+                if (!Directory.Exists(destDirectory))
                 {
-                    Url = filename,
-                    Description = item.description,
-                    PostId = newPost.PostId,
-                    CreatedDate = DateTime.UtcNow,
-                };
-                await _db.PostImages.AddAsync(newImage);
-                await _db.SaveChangesAsync();
+                    Directory.CreateDirectory(destDirectory);
+                }
+                string filename = Globalfunction.NewUniqueFileName() + ".png";
+                    string base64Str = item.imagebase64!;
+                    byte[] bytes = Convert.FromBase64String(base64Str!);
+
+                    string filePath = Path.Combine(destDirectory, filename);
+                    if (filePath.Contains(".."))
+                    { //if found .. in the file name or path
+                        Log.Error("Invalid path " + filePath);
+                    }
+                    await System.IO.File.WriteAllBytesAsync(filePath, bytes);
+                 */
+                string bucketname = _configuration.GetSection("Buckets:PostImages").Get<string>()!;
+                foreach (var item in payload.imageData)
+                {
+                    string uniquekey = Globalfunction.NewUniqueFileKey(item.ext!);
+                    await _kcAwsS3Service.CreateFileAsync(item.imagebase64!, bucketname, uniquekey, item.ext!);
+                    var newImage = new PostImage
+                    {
+                        Url = uniquekey,
+                        Description = item.description,
+                        PostId = newPost.PostId,
+                        CreatedDate = DateTime.UtcNow,
+                    };
+                    await _db.PostImages.AddAsync(newImage);
+                    await _db.SaveChangesAsync();
+                }
             }
             var checkEventOwner = await (from _em in _db.EventMemberships
                                          join _ust in _db.UserTypes on _em.UserTypeId equals _ust.TypeId
