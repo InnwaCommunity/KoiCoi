@@ -89,4 +89,8 @@ public class BL_User
     {
         return await _daUser.GetUserTypes(LoginUserId);
     }
+    public async Task<Result<ResponseUserDto>> UserLogin(LoginPayload paylod)
+    {
+        return await _daUser.UserLogin(paylod);
+    }
 }

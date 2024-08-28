@@ -53,13 +53,24 @@ public static class ModularService
 
     public static WebApplicationBuilder AddDbService(this WebApplicationBuilder builder)
     {
+        //builder.Services.AddDbContext<AppDbContext>(opt =>
+        //{
+            //opt.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
+        //    opt.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")
+         //              ?? builder.Configuration["DbConnectionString"]);
+            
+        //}, ServiceLifetime.Transient, ServiceLifetime.Transient);
+        //return builder;
         builder.Services.AddDbContext<AppDbContext>(opt =>
         {
-            //opt.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
-            opt.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")
-                       ?? builder.Configuration["DbConnectionString"]);
-            
+            opt.UseMySql(
+                builder.Configuration.GetConnectionString("DbConnection")
+                ?? builder.Configuration["DbConnectionString"],
+                ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DbConnection")
+                ?? builder.Configuration["DbConnectionString"])
+            );
         }, ServiceLifetime.Transient, ServiceLifetime.Transient);
+
         return builder;
     }
 

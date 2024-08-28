@@ -329,59 +329,38 @@ public class DA_User
         return model;
     }
 
-    /*public async Task<Result<LoginResponse>> UserLogin(LoginPayload paylod)
+    public async Task<Result<ResponseUserDto>> UserLogin(LoginPayload paylod)
     {
-        Result<LoginResponse> result = null;
+        Result<ResponseUserDto> result = null;
         try
         {
             var user = await _db.Users.Where(x=> x.Email == paylod.Email).FirstOrDefaultAsync();
             if(user is null)
-                return Result<LoginResponse>.Error('Email Not Found');
+                return Result<ResponseUserDto>.Error("Email Not Found");
 
             string oldsalt = user.PasswordHash!;
             string oldhash = user.Password!;
             bool flag = SaltedHash.Verify(oldsalt, oldhash, paylod.Password);
 
             if (flag == false)
-                return Result<LoginResponse>.Error("Incorrect Login Password for user account : " + paylod.Email);
-            TokenProviderOptions _options = new TokenProviderOptions
-            {
-                Path = _configuration.GetSection("TokenAuthentication:TokenPath").Get<string>()!,
-                Audience = _configuration.GetSection("TokenAuthentication:Audience").Get<string>(),
-                Issuer = _configuration.GetSection("TokenAuthentication:Issuer").Get<string>(),
-                SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256),
-                Expiration = expiration
-            };
-            var now = DateTime.UtcNow;
-            var _tokenData = new TokenData
-            {
-                Sub = user.Name,
-                Jti = Guid.NewGuid().ToString(),
-                Iat = new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString(),
-                UserID = user.UserId.ToString(),
-                UserLevelID = "1",
-                LoginType = "1",
-                TicketExpireDate = now.Add(_options.Expiration)
-            };
-            var claims = Globalfunction.GetClaims(_tokenData);
+                return Result<ResponseUserDto>.Error("Incorrect Login Password for user account : " + paylod.Email);
 
-            var appIdentity = new ClaimsIdentity(claims);
-            //context.User.AddIdentity(appIdentity); //add custom identity because default identity has delay to get data in EventLogRepository
-
-            string encodedJwt = CreateEncryptedJWTToken(claims);
-            //int LoginUserID = Convert.ToInt32(_tokenData.UserID);
-
-            var response = new
+            string aseKey = _configuration.GetSection("AesEncryption:AseKey").Get<string>()!;
+            string aseIv = _configuration.GetSection("AesEncryption:AseIV").Get<string>()!;
+            result = Result<ResponseUserDto>.Success(new ResponseUserDto
             {
-                AccessToken = encodedJwt,
-            };
+                UserIdval = user.UserIdval!,
+                Name = user.Name!,
+                Password = AesEncryption.Encrypt(user.Password, aseKey, aseIv)
+            });
+
         }
         catch (Exception ex)
         {
-            result = Result<LoginResponse>.Error(ex);
+            result = Result<ResponseUserDto>.Error(ex);
         }
         return result;
     }
-     */
+     
 
 }

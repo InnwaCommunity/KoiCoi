@@ -66,12 +66,12 @@ public class UserController : BaseController
         return await _bLUser.GetUserTypes(LoginEmpID);
     }
 
-    /*[HttpPost("Login",Name = "Login")]
-    public async Task<Result<LoginResponse>> UserLogin(LoginPayload paylod)
+    [HttpPost("Signin", Name = "Signin")]
+    public async Task<Result<ResponseUserDto>> UserLogin(LoginPayload paylod)
     {
         return await _bLUser.UserLogin(paylod);
     }
-     */
+     
 
     //[HttpGet("GetAccountByVertifiedEmail/{email}/{OTPPasscode}/{OTPPrefix}", Name = "GetAccountByVertifiedEmail")]
     //public async Task<Result<UserInfoResponse>> GetAccountByVertifiedEmail(string email,string OTPPasscode,string OTPPrefix)
