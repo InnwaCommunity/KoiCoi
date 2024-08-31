@@ -40,8 +40,8 @@ public class DA_Event
                                            UserId = _me.UserId,
                                        })
                                        .FirstOrDefaultAsync();
-            int CurrencyId = await _db.Channels.Where(x=> x.ChannelId == ChannelId)
-                .Select(x=> x.CurrencyId)
+            int MarkId = await _db.Channels.Where(x=> x.ChannelId == ChannelId)
+                .Select(x=> x.MarkId)
                 .FirstOrDefaultAsync();
             if(ownerusertype is not null)
             {
@@ -77,7 +77,7 @@ public class DA_Event
                 CreatorId = LoginUserId,
                 ApproverId = ownerusertype is not null ? LoginUserId : null,
                 StatusId = status,
-                CurrencyId = CurrencyId,
+                MarkId = MarkId,
                 TotalBalance = TotalBalance,
                 LastBalance = LastBalance,
                 TargetBalance = TargetBalance,
@@ -222,7 +222,7 @@ public class DA_Event
                                join _post in _db.Posts on _ev.PostId equals _post.PostId
                                join _cre in _db.Users on _ev.CreatorId equals _cre.UserId
                                join _sta in _db.StatusTypes on _ev.StatusId equals _sta.StatusId
-                               join _cur in _db.Currencies on _ev.CurrencyId equals _cur.CurrencyId
+                               join _cur in _db.Marks on _ev.MarkId equals _cur.MarkId
                                join _meship in _db.ChannelMemberships on _ev.ChannelId equals _meship.ChannelId
                                join _usertype in _db.UserTypes on _meship.UserTypeId equals _usertype.TypeId
                                where _ev.ChannelId == ChannelId &&
@@ -239,7 +239,7 @@ public class DA_Event
                                    EventName = _ev.EventName,
                                    EventDescrition = _ev.EventDescription,
                                    CreatorIdval = _cre.UserId,
-                                   Currency = _cur.IsoCode,
+                                   Currency = _cur.Isocode,
                                    CreatorName = _cre.Name,
                                    TotalBalance = Globalfunction.StringToDecimal(
                                        _ev.TotalBalance == "0" ||

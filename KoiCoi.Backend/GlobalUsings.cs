@@ -31,7 +31,8 @@ global using KoiCoi.Models.EventDto.Response;
 global using KoiCoi.Models.PostDtos.Payload;
 global using KoiCoi.Models.PostDtos.Response;
 global using KoiCoi.Models.PostTagDto.Payload;
-
+global using KoiCoi.Models.Mark.Payload;
+global using KoiCoi.Models.ChannelDtos.ResponseDtos;
 
 
 //Operational

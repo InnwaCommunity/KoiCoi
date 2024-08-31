@@ -1,7 +1,8 @@
-﻿using KoiCoi.Models.Via;
+﻿
+using KoiCoi.Models.Via;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel.DataAnnotations;
-using static System.Net.Mime.MediaTypeNames;
+using System.Drawing.Printing;
 
 namespace KoiCoi.Modules.Repository.ChannelFeature;
 
@@ -114,48 +115,119 @@ public class DA_Channel
         return model;
     }
 
-    public async Task<Result<List<CurrencyResponseDto>>> GetCurrencyList(int LoginUserId)
+    public async Task<Result<Pagination>> GetMarkList(int LoginUserId, GetMarkPayload payload)
     {
-        Result<List<CurrencyResponseDto>> model = null;
+        Result<Pagination> model = null;
         try
         {
-            var currres = await _db.Currencies.ToListAsync();
-            if (currres == null)
-                throw new ValidationException("Channel Type Not Found");
-            List<CurrencyResponseDto> currData= new List<CurrencyResponseDto>();
-            foreach (var item in currres)
+            int pageNumber = payload.pageNumber;
+            int pageSize = payload.pageSize;
+            if(payload.MarkTypeIdval.ToLower() == "all" || string.IsNullOrEmpty(payload.MarkTypeIdval))
             {
-                CurrencyResponseDto newres = new CurrencyResponseDto
-                {
-                    CurrencyIdval = Encryption.EncryptID(item.CurrencyId.ToString(), LoginUserId.ToString()),
-                    CurrencyName = item.CurrencyName,
-                    CurrencySymbol = item.CurrencySymbol,
-                    IsoCode = item.IsoCode,
-                    FractionalUnit = item.FractionalUnit,
-                };
-                currData.Add(newres);
-
+                List<MarkResponseDto> newlist = await (from _m in _db.Marks
+                                                       join _t in _db.MarkTypes on _m.MarkTypeId equals _t.MarkTypeId
+                                                       select new MarkResponseDto
+                                                       {
+                                                           MarkIdval = Encryption.EncryptID(_m.MarkId.ToString(), LoginUserId.ToString()),
+                                                           MarName = _m.MarkName,
+                                                           MarkSymbol = _m.MarkSymbol,
+                                                           IsoCode = _m.Isocode,
+                                                           TypeIdval = Encryption.EncryptID(_t.MarkTypeId.ToString(), LoginUserId.ToString()),
+                                                           TypeName = _t.TypeName
+                                                       }).ToListAsync();
+                Pagination data = RepoFunService.getWithPagination(pageNumber, pageSize, newlist);
+                model = Result<Pagination>.Success(data);
+            }
+            else
+            {
+                int markTypeId = Convert.ToInt32(Encryption.DecryptID(payload.MarkTypeIdval.ToString(), LoginUserId.ToString()));
+                List<MarkResponseDto> newlist = await (from _m in _db.Marks
+                                                       join _t in _db.MarkTypes on _m.MarkTypeId equals _t.MarkTypeId
+                                                       where _m.MarkTypeId == markTypeId
+                                                       select new MarkResponseDto
+                                                       {
+                                                           MarkIdval = Encryption.EncryptID(_m.MarkId.ToString(), LoginUserId.ToString()),
+                                                           MarName = _m.MarkName,
+                                                           MarkSymbol = _m.MarkSymbol,
+                                                           IsoCode = _m.Isocode,
+                                                           TypeIdval = Encryption.EncryptID(_t.MarkTypeId.ToString(), LoginUserId.ToString()),
+                                                           TypeName = _t.TypeName
+                                                       }).ToListAsync();
+                Pagination data = RepoFunService.getWithPagination(pageNumber, pageSize, newlist);
+                model = Result<Pagination>.Success(data);
+            }
+            /*
+                List<MarkResponseDto> newlist = await _db.Marks
+                    .J
+                    .Select(x => new MarkResponseDto
+                    {
+                        MarkIdval = Encryption.EncryptID(x.MarkId.ToString(), LoginUserId.ToString()),
+                        MarName = x.MarkName,
+                        MarkSymbol = x.MarkSymbol,
+                        IsoCode = x.Isocode,
+                        TypeIdval = Encryption.EncryptID(item.MarkTypeId.ToString(), LoginUserId.ToString()),
+                        TypeName = item.TypeName
+                    }).ToListAsync();
+                marks.Add(newlist);
+             * List<List<MarkResponseDto>> marks = new List<List<MarkResponseDto>>();
+            var marttype = await _db.MarkTypes.ToListAsync();
+            foreach (var item in marttype)
+            {
+                List<MarkResponseDto> newlist = await _db.Marks.
+                    Where(x => x.MarkTypeId == item.MarkTypeId)
+                    .Select(x => new MarkResponseDto
+                    {
+                        MarkIdval = Encryption.EncryptID(x.MarkId.ToString(), LoginUserId.ToString()),
+                        MarName = x.MarkName,
+                        MarkSymbol = x.MarkSymbol,
+                        IsoCode = x.Isocode,
+                        TypeIdval = Encryption.EncryptID(item.MarkTypeId.ToString(),LoginUserId.ToString()),
+                        TypeName = item.TypeName
+                    }).ToListAsync();
+                marks.Add(newlist);
             }
 
-            model = Result<List<CurrencyResponseDto>>.Success(currData);
+            model = Result<Pagination>.Success(marks); //Result<List<List<MarkResponseDto>>>
+             */
         }
         catch (Exception ex)
         {
-            model =Result<List<CurrencyResponseDto>>.Error(ex);
+            model = Result<Pagination>.Error(ex);
         }
         return model;
     }
 
-    public async Task<Result<ChannelDataResponse>> CreateChannel(CreateChannelReqeust channelReqeust, int LoginUserId)
+    public async Task<Result<Pagination>> GetMarkType(int LoginUserId, int pageNumber, int pageSize)
     {
-        Result<ChannelDataResponse> model = null;
+        Result<Pagination> resutl = null;
+        try
+        {
+            var types = await _db.MarkTypes
+                .Select(x => new
+                {
+                    TypeId = Encryption.EncryptID(x.MarkTypeId.ToString(),LoginUserId.ToString()),
+                    TypeName = x.TypeName
+                }).ToListAsync();
+            Pagination data = RepoFunService.getWithPagination(pageNumber, pageSize, types);
+            resutl = Result<Pagination>.Success(data);
+        }
+        catch (Exception ex)
+        {
+            resutl = Result<Pagination>.Error(ex);
+        }
+        return resutl;
+    }
+
+    public async Task<Result<string>> CreateChannel(CreateChannelReqeust channelReqeust, int LoginUserId)
+    {
+        Result<string> model = null;
         try
         {
             string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             int ChanneltypeId = Convert.ToInt32(
                                 Encryption.DecryptID(channelReqeust.ChannelTypeval!,
                                 LoginUserId.ToString()));
-            int CurrencyId = Convert.ToInt32(
+            int MarkId = Convert.ToInt32(
                                 Encryption.DecryptID(channelReqeust.CurrencyIdval!,
                                 LoginUserId.ToString()));
 
@@ -167,7 +239,7 @@ public class DA_Channel
                 StatusDescription = channelReqeust.StatusDescription,
                 ChannelType = ChanneltypeId,
                 CreatorId = LoginUserId,
-                CurrencyId = CurrencyId,
+                MarkId = MarkId,
                 MemberCount = 1,
                 TotalBalance = TotalBalance,
                 LastBalance = LastBalance,
@@ -177,7 +249,7 @@ public class DA_Channel
             };
             var addedChannel = await _db.Channels.AddAsync(newchannel);
             int result = await _db.SaveChangesAsync();
-            if (result < 1) return Result<ChannelDataResponse>.Error("Create Channel Fail");
+            if (result < 1) return Result<string>.Error("Create Channel Fail");
 
             ///Create MemberShip
             int? ownerid = await _db.UserTypes
@@ -187,9 +259,9 @@ public class DA_Channel
             int? approvedstatusId = await _db.StatusTypes
                     .Where(x=> x.StatusName == "Approved")
                     .Select(x=> x.StatusId) .FirstOrDefaultAsync();
-            if (ownerid == null) return Result<ChannelDataResponse>.Error("Owner UserType Not Found");
+            if (ownerid == null) return Result<string>.Error("Owner UserType Not Found");
 
-            if (approvedstatusId == null) return Result<ChannelDataResponse>.Error("Approved Staus Not Found");
+            if (approvedstatusId == null) return Result<string>.Error("Approved Staus Not Found");
             
             ViaChannelMemberShip newViaChanMeShip = new ViaChannelMemberShip
             {
@@ -225,19 +297,23 @@ public class DA_Channel
                 await System.IO.File.WriteAllBytesAsync(filePath, bytes);
             }
              */
-            string bucketname = _configuration.GetSection("Buckets:ChannelProfile").Get<string>()!;
-            string uniquekey = Globalfunction.NewUniqueFileKey(channelReqeust.ImageExt!);
-            string res = await _kcAwsS3Service.CreateFileAsync(channelReqeust.ProImage64!, bucketname, uniquekey, channelReqeust.ImageExt!);
-            ///Save Profile Image
-            ChannelProfile newchPro =new ChannelProfile{
-                Url = uniquekey,
-                UrlDescription = channelReqeust.imagedescription,
-                ChannelId = addedChannel.Entity.ChannelId,
-                CreatedDate = DateTime.UtcNow
-            };
+            if (!string.IsNullOrEmpty(channelReqeust.ProImage64))
+            {
+                string bucketname = _configuration.GetSection("Buckets:ChannelProfile").Get<string>()!;
+                string uniquekey = Globalfunction.NewUniqueFileKey(channelReqeust.ImageExt!);
+                string res = await _kcAwsS3Service.CreateFileAsync(channelReqeust.ProImage64, bucketname, uniquekey, channelReqeust.ImageExt!);
+                ///Save Profile Image
+                ChannelProfile newchPro = new ChannelProfile
+                {
+                    Url = uniquekey,
+                    UrlDescription = channelReqeust.imagedescription,
+                    ChannelId = addedChannel.Entity.ChannelId,
+                    CreatedDate = DateTime.UtcNow
+                };
 
-            await _db.ChannelProfiles.AddAsync(newchPro);
-            await _db.SaveChangesAsync();
+                await _db.ChannelProfiles.AddAsync(newchPro);
+                await _db.SaveChangesAsync();
+            }
 
             ///create channel topic
             var channalTopic = new ChannelTopic
@@ -251,9 +327,9 @@ public class DA_Channel
             await _db.ChannelTopics.AddAsync(channalTopic);
             await _db.SaveChangesAsync();
 
-            ChannelDataResponse? data = await (from _cha in _db.Channels
+            /*ChannelDataResponse? data = await (from _cha in _db.Channels
                                                join ct in _db.ChannelTypes on _cha.ChannelType equals ct.ChannelTypeId
-                                               join cur in _db.Currencies on _cha.CurrencyId equals cur.CurrencyId
+                                               join cur in _db.Marks on _cha.MarkId equals cur.MarkId
                                                where _cha.ChannelId == addedChannel.Entity.ChannelId
                                                select new ChannelDataResponse
                                                {
@@ -261,17 +337,18 @@ public class DA_Channel
                                                    ChannelName = _cha.ChannelName,
                                                    ChannelDescription = _cha.StatusDescription,
                                                    ChannelType = ct.ChannelTypeName,
-                                                   ISOCode = cur.IsoCode,
+                                                   ISOCode = cur.Isocode,
                                                    MemberCount = _cha.MemberCount,
                                                    TotalBalance = 0,
                                                    LastBalance = 0,
                                                }).FirstOrDefaultAsync();
             if (data is null) return Result<ChannelDataResponse>.Error("Channel Not Found");
-            return Result<ChannelDataResponse>.Success(data);
+             */
+            return Result<string>.Success("Create Success");
         }
         catch (Exception ex)
         {
-            return Result<ChannelDataResponse>.Error(ex);
+            return Result<string>.Error(ex);
         }
     }
 
@@ -287,7 +364,7 @@ public class DA_Channel
             string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             List<ChannelDataResponse> Channels = await ( from _channel in _db.Channels 
                                                join _chantype in _db.ChannelTypes on _channel.ChannelType equals _chantype.ChannelTypeId
-                                               join _curr in _db.Currencies on _channel.CurrencyId equals _curr.CurrencyId
+                                               join _curr in _db.Marks on _channel.MarkId equals _curr.MarkId
                                                join _mem in _db.ChannelMemberships on _channel.ChannelId equals _mem.ChannelId
                                                where _mem.UserId == LoginUserId && _mem.StatusId == ApprovedStatus
                                                          orderby _channel.ChannelName
@@ -298,7 +375,7 @@ public class DA_Channel
                                                    ChannelDescription = _channel.StatusDescription,
                                                    ChannelType = _chantype.ChannelTypeName,
                                                    MemberCount = _channel.MemberCount,
-                                                   ISOCode = _curr.IsoCode,
+                                                   ISOCode = _curr.Isocode,
                                                    TotalBalance = Globalfunction.StringToDecimal(_channel.TotalBalance == "0" || _channel.TotalBalance == null ? "0" :
                                                             Encryption.DecryptID(_channel.TotalBalance.ToString(), balanceSalt)),
                                                    LastBalance = Globalfunction.StringToDecimal(_channel.LastBalance == "0" || _channel.LastBalance == null ? "0" :
@@ -422,7 +499,7 @@ public class DA_Channel
                 VisitChannelResponse? reData = await (from ch in _db.Channels
                                                       join ct in _db.ChannelTypes on ch.ChannelType equals ct.ChannelTypeId
                                                       join user in _db.Users on ch.CreatorId equals user.UserId
-                                                      join cr in _db.Currencies on ch.CurrencyId equals cr.CurrencyId
+                                                      join cr in _db.Marks on ch.MarkId equals cr.MarkId
                                                       where ch.ChannelId == channelId
                                                       select new VisitChannelResponse
                                                       {
@@ -472,7 +549,7 @@ public class DA_Channel
                 VisitChannelResponse? reData = await (from ch in _db.Channels
                                     join ct in _db.ChannelTypes on ch.ChannelType equals ct.ChannelTypeId
                                     join user in _db.Users on ch.CreatorId equals user.UserId
-                                    join cr in _db.Currencies on ch.CurrencyId equals cr.CurrencyId
+                                    join cr in _db.Marks on ch.MarkId equals cr.MarkId
                                     where ch.ChannelId == channelId
                                     select new VisitChannelResponse
                                     {
@@ -482,7 +559,7 @@ public class DA_Channel
                                         ChannelType = ct.ChannelTypeName,
                                         CreatorIdval = Encryption.EncryptID(user.UserId.ToString(), LoginUserId.ToString()),
                                         CreatorName = user.Name,
-                                        ISOCode = cr.IsoCode,
+                                        ISOCode = cr.Isocode,
                                         MemberCount = ch.MemberCount,
                                         TotalBalance=Globalfunction.StringToDecimal(ch.TotalBalance == "0" || ch.TotalBalance == null ? "0" :
                                                             Encryption.DecryptID(ch.TotalBalance.ToString(), balanceSalt)),

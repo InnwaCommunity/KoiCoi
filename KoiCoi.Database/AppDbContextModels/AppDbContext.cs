@@ -37,8 +37,6 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<CommandViewer> CommandViewers { get; set; }
 
-    public virtual DbSet<Currency> Currencies { get; set; }
-
     public virtual DbSet<Event> Events { get; set; }
 
     public virtual DbSet<EventAddress> EventAddresses { get; set; }
@@ -52,6 +50,10 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<InformMail> InformMails { get; set; }
 
     public virtual DbSet<InviteHistory> InviteHistories { get; set; }
+
+    public virtual DbSet<Mark> Marks { get; set; }
+
+    public virtual DbSet<MarkType> MarkTypes { get; set; }
 
     public virtual DbSet<Notification> Notifications { get; set; }
 
@@ -121,7 +123,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Channel>(entity =>
         {
-            entity.HasKey(e => e.ChannelId).HasName("PK__Channels__0548C1A0AACFB706");
+            entity.HasKey(e => e.ChannelId).HasName("PK__Channels__0548C1A0701CB1CC");
 
             entity.Property(e => e.ChannelId).HasColumnName("Channel_Id");
             entity.Property(e => e.ChannelName)
@@ -129,7 +131,6 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("Channel_Name");
             entity.Property(e => e.ChannelType).HasColumnName("Channel_Type");
             entity.Property(e => e.CreatorId).HasColumnName("Creator_id");
-            entity.Property(e => e.CurrencyId).HasColumnName("Currency_id");
             entity.Property(e => e.DateCreated)
                 .HasColumnType("datetime")
                 .HasColumnName("date_created");
@@ -137,7 +138,7 @@ public partial class AppDbContext : DbContext
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("inactive");
             entity.Property(e => e.LastBalance)
-                .HasMaxLength(200)
+                .HasMaxLength(255)
                 .HasColumnName("Last_Balance");
             entity.Property(e => e.MemberCount).HasColumnName("Member_Count");
             entity.Property(e => e.ModifiedDate)
@@ -145,7 +146,7 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("modifiedDate");
             entity.Property(e => e.StatusDescription).HasColumnName("Status_Description");
             entity.Property(e => e.TotalBalance)
-                .HasMaxLength(200)
+                .HasMaxLength(255)
                 .HasColumnName("Total_Balance");
         });
 
@@ -256,30 +257,9 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("Created_Date");
         });
 
-        modelBuilder.Entity<Currency>(entity =>
-        {
-            entity.HasKey(e => e.CurrencyId).HasName("PK__Currency__85A8F0C8B4E13574");
-
-            entity.ToTable("Currency");
-
-            entity.Property(e => e.CurrencyId).HasColumnName("Currency_Id");
-            entity.Property(e => e.CurrencyName)
-                .HasMaxLength(50)
-                .HasColumnName("Currency_Name");
-            entity.Property(e => e.CurrencySymbol)
-                .HasMaxLength(15)
-                .HasColumnName("Currency_Symbol");
-            entity.Property(e => e.FractionalUnit)
-                .HasMaxLength(30)
-                .HasColumnName("Fractional_unit");
-            entity.Property(e => e.IsoCode)
-                .HasMaxLength(15)
-                .HasColumnName("ISO_code");
-        });
-
         modelBuilder.Entity<Event>(entity =>
         {
-            entity.HasKey(e => e.Eventid).HasName("PK__Events__7945F468F10CBA56");
+            entity.HasKey(e => e.Eventid).HasName("PK__Events__7945F46808A9A89B");
 
             entity.Property(e => e.EndDate).HasColumnType("datetime");
             entity.Property(e => e.EventName).HasMaxLength(100);
@@ -318,7 +298,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<EventFile>(entity =>
         {
-            entity.HasKey(e => e.UrlId).HasName("PK__EventFil__A648537BFB9C2BAD");
+            entity.HasKey(e => e.UrlId).HasName("PK__EventFil__A648537BD1C1FACF");
 
             entity.Property(e => e.UrlId).HasColumnName("Url_Id");
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
@@ -358,9 +338,32 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.JoinedDate).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<Mark>(entity =>
+        {
+            entity.HasKey(e => e.MarkId).HasName("PK__Mark__4E30D366F2649C53");
+
+            entity.ToTable("Mark");
+
+            entity.Property(e => e.Isocode)
+                .HasMaxLength(15)
+                .HasColumnName("ISOcode");
+            entity.Property(e => e.MarkName).HasMaxLength(50);
+            entity.Property(e => e.MarkSymbol).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<MarkType>(entity =>
+        {
+            entity.HasKey(e => e.MarkTypeId).HasName("PK__MarkType__1C224AF691E27537");
+
+            entity.ToTable("MarkType");
+
+            entity.Property(e => e.TypeDescription).HasMaxLength(100);
+            entity.Property(e => e.TypeName).HasMaxLength(50);
+        });
+
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E1296EBE1B3");
+            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E121AB1EC56");
 
             entity.Property(e => e.DateCreated)
                 .HasColumnType("datetime")
@@ -471,7 +474,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<PostTag>(entity =>
         {
-            entity.HasKey(e => e.TagId).HasName("PK__PostTag__657CF9AC0DEB09C2");
+            entity.HasKey(e => e.TagId).HasName("PK__PostTag__657CF9AC53BA1C14");
 
             entity.ToTable("PostTag");
 
@@ -505,7 +508,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<ReactType>(entity =>
         {
-            entity.HasKey(e => e.TypeId).HasName("PK__ReactTyp__516F03B502823958");
+            entity.HasKey(e => e.TypeId).HasName("PK__ReactTyp__516F03B5651AE0A9");
 
             entity.Property(e => e.Description).HasMaxLength(50);
             entity.Property(e => e.Emoji).HasMaxLength(100);

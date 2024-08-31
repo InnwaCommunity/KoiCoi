@@ -32,12 +32,17 @@ public class BL_Channel
 
     
     
-    public async Task<Result<List<CurrencyResponseDto>>> GetCurrencyList(int LoginUserId)
+    public async Task<Result<Pagination>> GetMarkList(int LoginUserId,GetMarkPayload payload)
     {
-        return await _daChannel.GetCurrencyList(LoginUserId);
+        return await _daChannel.GetMarkList(LoginUserId,payload);
     }
 
-    public async Task<Result<ChannelDataResponse>> CreateChannel(CreateChannelReqeust channelReqeust ,int LoginUserId)
+    public async Task<Result<Pagination>> GetMarkType(int LoginUserId,int PageNumber, int PageSize)
+    {
+        return await _daChannel.GetMarkType(LoginUserId,PageNumber,PageSize);
+    }
+
+    public async Task<Result<string>> CreateChannel(CreateChannelReqeust channelReqeust ,int LoginUserId)
     {
         return await _daChannel.CreateChannel(channelReqeust, LoginUserId);
     }

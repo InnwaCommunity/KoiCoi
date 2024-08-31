@@ -21,7 +21,7 @@ public partial class Event
 
     public int StatusId { get; set; }
 
-    public int CurrencyId { get; set; }
+    public int MarkId { get; set; }
 
     public string TotalBalance { get; set; } = null!;
 

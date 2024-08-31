@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Extensions.Configuration;
+using System.Text;
 
 namespace KoiCoi.Modules.Repository.UserFeature;
 
@@ -66,13 +67,12 @@ public class DA_User
         Result<List<UserLoginAccounts>> result = null;
         try
         {
-            string aseKey = _configuration.GetSection("AesEncryption:AseKey").Get<string>()!;
-            string aseIv = _configuration.GetSection("AesEncryption:AseIV").Get<string>()!;
-            String decriptdeviceId = AesEncryption.Decrypt(deviceId, aseKey, aseIv);
+            byte[] data = Convert.FromBase64String(deviceId);
+            string decodeddeviceId = Encoding.UTF8.GetString(data);
 
             var query = await (from _ah in _db.AccountLoginHistories
                                                    join _user in _db.Users on _ah.UserId equals _user.UserId
-                                                   where _ah.DeviceId == decriptdeviceId
+                                                   where _ah.DeviceId == decodeddeviceId
                                                    select new //UserLoginAccounts
                                                    {
                                                        UserId = _ah.UserId,
@@ -329,7 +329,7 @@ public class DA_User
         return model;
     }
 
-    public async Task<Result<ResponseUserDto>> UserLogin(LoginPayload paylod)
+    public async Task<Result<ResponseUserDto>> Signin(LoginPayload paylod)
     {
         Result<ResponseUserDto> result = null;
         try

@@ -15,7 +15,7 @@ public partial class Channel
 
     public int CreatorId { get; set; }
 
-    public int CurrencyId { get; set; }
+    public int MarkId { get; set; }
 
     public long MemberCount { get; set; }
 

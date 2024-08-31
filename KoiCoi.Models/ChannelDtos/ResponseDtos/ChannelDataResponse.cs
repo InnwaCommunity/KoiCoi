@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KoiCoi.Models.ChannelDtos.ResponseDtos;
+﻿namespace KoiCoi.Models.ChannelDtos.ResponseDtos;
 
 public partial class ChannelDataResponse
 {

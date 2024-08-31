@@ -67,9 +67,9 @@ public class UserController : BaseController
     }
 
     [HttpPost("Signin", Name = "Signin")]
-    public async Task<Result<ResponseUserDto>> UserLogin(LoginPayload paylod)
+    public async Task<Result<ResponseUserDto>> Signin(LoginPayload paylod)
     {
-        return await _bLUser.UserLogin(paylod);
+        return await _bLUser.Signin(paylod);
     }
      
 

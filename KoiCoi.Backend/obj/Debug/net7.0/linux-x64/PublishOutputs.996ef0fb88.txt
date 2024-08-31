@@ -320,6 +320,9 @@ D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\publish\libhos
 D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\publish\libhostpolicy.so
 D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\publish\libmscordaccore.so
 D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\publish\libmscordbi.so
+D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\publish\AWSSDK.Core.dll
+D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\publish\AWSSDK.Extensions.NETCore.Setup.dll
+D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\publish\AWSSDK.S3.dll
 D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\publish\Azure.Core.dll
 D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\publish\Azure.Identity.dll
 D:\published\AwsDeployment\KoiCoi\KoiCoi.Backend\bin\Debug\net7.0\publish\BouncyCastle.Cryptography.dll

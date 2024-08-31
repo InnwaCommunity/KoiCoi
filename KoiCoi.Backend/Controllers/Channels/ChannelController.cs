@@ -1,14 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using QRCoder;
+﻿using QRCoder;
 using Serilog;
-using System.Configuration;
 using System.Drawing.Imaging;
 using System.Drawing;
-using KoiCoi.Models.ChannelDtos.ResponseDtos;
-using static QRCoder.PayloadGenerator;
-using System.Collections.Generic;
-
 namespace KoiCoi.Backend.Controllers.Channels;
 
 [Route("api/[controller]")]
@@ -25,11 +18,18 @@ public class ChannelController : BaseController
     }
 
 
-    [HttpGet("GetCurrencyList", Name = "GetCurrencyList")]
-    public async Task<Result<List<CurrencyResponseDto>>> GetCurrencyList()
+    [HttpPost("GetMarkList", Name = "GetMarkList")]
+    public async Task<Result<Pagination>> GetMarkList(GetMarkPayload payload)
     {
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
-        return await _blChannel.GetCurrencyList(LoginUserID);
+        return await _blChannel.GetMarkList(LoginUserID,payload);
+    }
+
+    [HttpGet("GetMarkType/{PageNumber}/{PageSize}",Name = "GetMarkType")]
+    public async Task<Result<Pagination>> GetMarkType(int PageNumber,int PageSize)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blChannel.GetMarkType(LoginUserID,PageNumber,PageSize);
     }
 
     /*[HttpPost("UploadChannelProfileTemp", Name = "UploadChannelProfileTemp")]
@@ -99,7 +99,7 @@ public class ChannelController : BaseController
      */
 
     [HttpPost("CreateChannel",Name = "CreateChannel")]
-    public async Task<Result<ChannelDataResponse>> CreateChannel(CreateChannelReqeust channelReqeust)
+    public async Task<Result<string>> CreateChannel(CreateChannelReqeust channelReqeust)
     {
         try
         {
@@ -108,7 +108,7 @@ public class ChannelController : BaseController
         }
         catch (Exception ex)
         {
-            return Result<ChannelDataResponse>.Error(ex);
+            return Result<string>.Error(ex);
         }
     }
 

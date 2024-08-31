@@ -32,7 +32,7 @@ public static class ChangeDatabaseModel
             StatusDescription = viaChannel.StatusDescription,
             ChannelType = viaChannel.ChannelType,
             CreatorId = viaChannel.CreatorId,
-            CurrencyId = viaChannel.CurrencyId,
+            MarkId = viaChannel.MarkId,
             MemberCount = 1,
             TotalBalance = "0",
             LastBalance = "0",
