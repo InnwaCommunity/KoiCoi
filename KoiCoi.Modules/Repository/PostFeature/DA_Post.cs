@@ -55,12 +55,14 @@ public class DA_Post
             };
             await _db.Posts.AddAsync(newPost);
             await _db.SaveChangesAsync();
+            string postIdval = Encryption.EncryptID(newPost.PostId.ToString(), LoginUserId.ToString());
+            result = Result<string>.Success(postIdval);
 
             ///Save Policies
-            SavePostPolicies(newPost.PostId, 1, payload.viewPolicy);//Save View Policy
-            SavePostPolicies(newPost.PostId, 2, payload.reactPolicy);//Save React Policy
-            SavePostPolicies(newPost.PostId, 3, payload.commandPolicy);//Save Command Policy
-            SavePostPolicies(newPost.PostId, 4, payload.sharePolicy);//Save Share Policy
+            await SavePostPolicies(newPost.PostId, 1, payload.viewPolicy);//Save View Policy
+            await SavePostPolicies(newPost.PostId, 2, payload.reactPolicy);//Save React Policy
+            await SavePostPolicies(newPost.PostId, 3, payload.commandPolicy);//Save Command Policy
+            await SavePostPolicies(newPost.PostId, 4, payload.sharePolicy);//Save Share Policy
             /*int policyId = 1;
             foreach (var policy in payload.policyProperties)
             {
@@ -80,9 +82,9 @@ public class DA_Post
             }
              */
             ///Save Post Images
-            if (payload.imageData.Any())
+            /*if (payload.imageData.Any())
             {
-                /*string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
+                string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
                 string uploadDirectory = _configuration["appSettings:PostImages"] ?? throw new Exception("Invalid function upload path.");
                 string destDirectory = Path.Combine(baseDirectory, uploadDirectory);
                 if (!Directory.Exists(destDirectory))
@@ -99,23 +101,24 @@ public class DA_Post
                         Log.Error("Invalid path " + filePath);
                     }
                     await System.IO.File.WriteAllBytesAsync(filePath, bytes);
-                 */
-                string bucketname = _configuration.GetSection("Buckets:PostImages").Get<string>()!;
-                foreach (var item in payload.imageData)
+                 
+            string bucketname = _configuration.GetSection("Buckets:PostImages").Get<string>()!;
+            foreach (var item in payload.imageData)
+            {
+                string uniquekey = Globalfunction.NewUniqueFileKey(item.ext!);
+                await _kcAwsS3Service.CreateFileAsync(item.imagebase64!, bucketname, uniquekey, item.ext!);
+                var newImage = new PostImage
                 {
-                    string uniquekey = Globalfunction.NewUniqueFileKey(item.ext!);
-                    await _kcAwsS3Service.CreateFileAsync(item.imagebase64!, bucketname, uniquekey, item.ext!);
-                    var newImage = new PostImage
-                    {
-                        Url = uniquekey,
-                        Description = item.description,
-                        PostId = newPost.PostId,
-                        CreatedDate = DateTime.UtcNow,
-                    };
-                    await _db.PostImages.AddAsync(newImage);
-                    await _db.SaveChangesAsync();
-                }
+                    Url = uniquekey,
+                    Description = item.description,
+                    PostId = newPost.PostId,
+                    CreatedDate = DateTime.UtcNow,
+                };
+                await _db.PostImages.AddAsync(newImage);
+                await _db.SaveChangesAsync();
             }
+        }
+             */
             var checkEventOwner = await (from _em in _db.EventMemberships
                                          join _ust in _db.UserTypes on _em.UserTypeId equals _ust.TypeId
                                          where _em.EventPostId == EventPostId
@@ -154,10 +157,8 @@ public class DA_Post
                 if (parentEvent is not null)
                 {
                     decimal EventTotalBalance = Globalfunction.StringToDecimal(
-                        parentEvent.TotalBalance == "0" || parentEvent.TotalBalance == null ? "0" :
                         Encryption.DecryptID(parentEvent.TotalBalance.ToString(), balanceSalt));
                     decimal EventLastBalance = Globalfunction.StringToDecimal(
-                            parentEvent.LastBalance == "0" || parentEvent.LastBalance == null ? "0" :
                             Encryption.DecryptID(parentEvent.LastBalance.ToString(), balanceSalt));
                     EventTotalBalance = EventTotalBalance + payload.CollectAmount;
                     EventLastBalance = EventLastBalance + payload.CollectAmount;
@@ -175,11 +176,9 @@ public class DA_Post
                 if(parentChannel is not null)
                 {
                     decimal ChannelTotalBalance = Globalfunction.StringToDecimal(
-                        parentChannel.TotalBalance == "0" || parentChannel.TotalBalance == null ? "0" :
-                        Encryption.DecryptID(parentChannel.TotalBalance.ToString(), balanceSalt));
+                        Encryption.DecryptID(parentChannel.TotalBalance!.ToString(), balanceSalt));
                     decimal ChannelLastBalance = Globalfunction.StringToDecimal(
-                            parentChannel.LastBalance == "0" || parentChannel.LastBalance == null ? "0" :
-                            Encryption.DecryptID(parentChannel.LastBalance.ToString(), balanceSalt));
+                            Encryption.DecryptID(parentChannel.LastBalance!.ToString(), balanceSalt));
                     ChannelTotalBalance = ChannelTotalBalance + payload.CollectAmount;
                     ChannelLastBalance = ChannelLastBalance + payload.CollectAmount;
                     parentChannel.TotalBalance = Encryption.EncryptID(ChannelTotalBalance.ToString(), balanceSalt);
@@ -272,7 +271,6 @@ public class DA_Post
                         $"RequestedNewCollectPost/{newPost.PostId}"
                         );
             }
-            result = Result<string>.Success("Posting Success");
         }
         catch (Exception ex)
         {
@@ -281,7 +279,7 @@ public class DA_Post
         return result;
     }
 
-    private void SavePostPolicies(int postid, int policyId, PostPolicyPropertyPayload policy)
+    private async Task SavePostPolicies(int postid, int policyId, PostPolicyPropertyPayload policy)
     {
 
         PostPolicyProperty newPostPolicy = new PostPolicyProperty
@@ -294,8 +292,51 @@ public class DA_Post
             GroupMemberOnly = policy.GroupMemberOnly,
             FriendOnly = policy.FriendOnly
         };
-        _db.PostPolicyProperties.AddAsync(newPostPolicy);
-        _db.SaveChangesAsync();
+        await _db.PostPolicyProperties.AddAsync(newPostPolicy);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task<Result<string>> UploadCollectAttachFile(PostImagePayload payload, int LoginUserID)
+    {
+        Result<string> result = null;
+        try
+        {
+            if(!string.IsNullOrEmpty(payload.PostIdval) &&
+                !string.IsNullOrEmpty(payload.imagebase64) && !string.IsNullOrEmpty(payload.ext))
+            {
+                int PostId = Convert.ToInt32(Encryption.DecryptID(payload.PostIdval, LoginUserID.ToString()));
+                var post = await _db.Posts.Where(x => x.PostId == PostId).FirstOrDefaultAsync();
+                if(post is not null)
+                {
+                    string bucketname = _configuration.GetSection("Buckets:PostImages").Get<string>()!;
+                    string uniquekey = Globalfunction.NewUniqueFileKey(payload.ext!);
+                    await _kcAwsS3Service.CreateFileAsync(payload.imagebase64!, bucketname, uniquekey, payload.ext!);
+                    var newImage = new PostImage
+                    {
+                        Url = uniquekey,
+                        Description = payload.description,
+                        PostId = post.PostId,
+                        CreatedDate = DateTime.UtcNow,
+                    };
+                    await _db.PostImages.AddAsync(newImage);
+                    await _db.SaveChangesAsync();
+                    result = Result<string>.Success("Upload Success");
+                }
+                else
+                {
+                    result = Result<string>.Error("Post Not Found");
+                }
+            }
+            else
+            {
+                result = Result<string>.Error("Post Id and Image is Null Or Empty");
+            }
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
+        }
+        return result;
     }
     public async Task<Result<List<ReviewPostResponse>>> ReviewPostsList(string EventPostIdval,string StatusName, int LoginUserId)
     {
@@ -375,10 +416,8 @@ public class DA_Post
                         if(eventdata is not null)
                         {
                             decimal oldTotalAmount = Globalfunction.StringToDecimal(
-                                eventdata.TotalBalance == "0" || eventdata.TotalBalance == null ? "0" :
                                                             Encryption.DecryptID(eventdata.TotalBalance, balanceSalt));
                             decimal oldLastAmount = Globalfunction.StringToDecimal(
-                                eventdata.LastBalance == "0" || eventdata.LastBalance == null ? "0" :
                                                             Encryption.DecryptID(eventdata.LastBalance, balanceSalt));
                             decimal newTotalAmount = oldTotalAmount + collectAmount;
                             decimal newLastAmount = oldLastAmount + collectAmount;
@@ -395,11 +434,9 @@ public class DA_Post
                         if (channelData is not null)
                         {
                             decimal oldTotalAmount = Globalfunction.StringToDecimal(
-                                channelData.TotalBalance == "0" || channelData.TotalBalance == null ? "0" :
-                                                            Encryption.DecryptID(channelData.TotalBalance, balanceSalt));
+                                                            Encryption.DecryptID(channelData.TotalBalance!, balanceSalt));
                             decimal oldLastAmount = Globalfunction.StringToDecimal(
-                                channelData.LastBalance == "0" || channelData.LastBalance == null ? "0" :
-                                                            Encryption.DecryptID(channelData.LastBalance, balanceSalt));
+                                                            Encryption.DecryptID(channelData.LastBalance!, balanceSalt));
                             decimal newTotalAmount = oldTotalAmount + collectAmount;
                             decimal newLastAmount = oldLastAmount + collectAmount;
                             channelData.TotalBalance = Encryption.EncryptID(newTotalAmount.ToString(), balanceSalt);

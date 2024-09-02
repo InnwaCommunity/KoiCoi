@@ -10,4 +10,5 @@ public partial class ChannelDataResponse
     public long? MemberCount { get; set; }
     public decimal? TotalBalance { get; set; }
     public decimal? LastBalance { get; set; }
+    public string? ChannelProfile { get; set; }
 }

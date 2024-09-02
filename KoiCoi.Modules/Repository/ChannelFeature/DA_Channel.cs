@@ -366,8 +366,10 @@ public class DA_Channel
                                                join _chantype in _db.ChannelTypes on _channel.ChannelType equals _chantype.ChannelTypeId
                                                join _curr in _db.Marks on _channel.MarkId equals _curr.MarkId
                                                join _mem in _db.ChannelMemberships on _channel.ChannelId equals _mem.ChannelId
+                                               join cp in _db.ChannelProfiles on _channel.ChannelId equals cp.ChannelId into chanPro
+                                               from cp in chanPro.OrderByDescending(p => p.CreatedDate).Take(1).DefaultIfEmpty()
                                                where _mem.UserId == LoginUserId && _mem.StatusId == ApprovedStatus
-                                                         orderby _channel.ChannelName
+                                               orderby _channel.ChannelName
                                                select new ChannelDataResponse
                                                {
                                                    ChannelIdval = Encryption.EncryptID(_channel.ChannelId.ToString(), LoginUserId.ToString()),
@@ -376,10 +378,9 @@ public class DA_Channel
                                                    ChannelType = _chantype.ChannelTypeName,
                                                    MemberCount = _channel.MemberCount,
                                                    ISOCode = _curr.Isocode,
-                                                   TotalBalance = Globalfunction.StringToDecimal(_channel.TotalBalance == "0" || _channel.TotalBalance == null ? "0" :
-                                                            Encryption.DecryptID(_channel.TotalBalance.ToString(), balanceSalt)),
-                                                   LastBalance = Globalfunction.StringToDecimal(_channel.LastBalance == "0" || _channel.LastBalance == null ? "0" :
-                                                           Encryption.DecryptID(_channel.LastBalance.ToString(), balanceSalt)),
+                                                   TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_channel.TotalBalance!.ToString(), balanceSalt)),
+                                                   LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_channel.LastBalance!.ToString(), balanceSalt)),
+                                                   ChannelProfile = cp != null ? cp.Url : null
                                                }).ToListAsync();
 
             model= Result<List<ChannelDataResponse>>.Success(Channels);
@@ -468,7 +469,7 @@ public class DA_Channel
 
             string channeldata = $"{LoginUserId}/{ChannelId}";
             string encryptdata = Encryption.EncryptID(channeldata, urlSalt);
-            string url = domainUrl +"Channel/" + encryptdata;
+            string url = domainUrl +"c/" + encryptdata;
             model = Result<string>.Success(url);
 
         }
@@ -487,6 +488,10 @@ public class DA_Channel
             string urlSalt = _configuration["appSettings:UrlSalt"] ?? throw new Exception("Invalid UrlSalt"); 
             string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             string desdata=Encryption.DecryptID(inviteLink, urlSalt);
+            if (!desdata.Contains("/"))
+            {
+                return Result<VisitChannelResponse>.Error("Incorrect");
+            }
             string[] splidata = desdata.Split('/');
             int inviterId = Convert.ToInt32(splidata[0]);
             int channelId = Convert.ToInt32(splidata[1]);
@@ -500,6 +505,8 @@ public class DA_Channel
                                                       join ct in _db.ChannelTypes on ch.ChannelType equals ct.ChannelTypeId
                                                       join user in _db.Users on ch.CreatorId equals user.UserId
                                                       join cr in _db.Marks on ch.MarkId equals cr.MarkId
+                                                      join cp in _db.ChannelProfiles on ch.ChannelId equals cp.ChannelId into chanPro
+                                                      from cp in chanPro.OrderByDescending(p => p.CreatedDate).Take(1).DefaultIfEmpty()
                                                       where ch.ChannelId == channelId
                                                       select new VisitChannelResponse
                                                       {
@@ -514,7 +521,7 @@ public class DA_Channel
                                                           MemberCount = ch.MemberCount,
                                                           TotalBalance = null,
                                                           LastBalance = null,
-
+                                                          ChannelProfile = cp.Url
 
                                                       }).FirstOrDefaultAsync();
 
@@ -550,6 +557,8 @@ public class DA_Channel
                                     join ct in _db.ChannelTypes on ch.ChannelType equals ct.ChannelTypeId
                                     join user in _db.Users on ch.CreatorId equals user.UserId
                                     join cr in _db.Marks on ch.MarkId equals cr.MarkId
+                                    join cp in _db.ChannelProfiles on ch.ChannelId equals cp.ChannelId into chanPro
+                                    from cp in chanPro.OrderByDescending(p => p.CreatedDate).Take(1).DefaultIfEmpty()
                                     where ch.ChannelId == channelId
                                     select new VisitChannelResponse
                                     {
@@ -561,10 +570,10 @@ public class DA_Channel
                                         CreatorName = user.Name,
                                         ISOCode = cr.Isocode,
                                         MemberCount = ch.MemberCount,
-                                        TotalBalance=Globalfunction.StringToDecimal(ch.TotalBalance == "0" || ch.TotalBalance == null ? "0" :
-                                                            Encryption.DecryptID(ch.TotalBalance.ToString(), balanceSalt)),
-                                        LastBalance = Globalfunction.StringToDecimal(ch.LastBalance == "0" || ch.LastBalance == null ? "0" :
-                                                           Encryption.DecryptID(ch.LastBalance.ToString(), balanceSalt)),
+                                        TotalBalance=Globalfunction.StringToDecimal(
+                                                            Encryption.DecryptID(ch.TotalBalance!.ToString(), balanceSalt)),
+                                        LastBalance = Globalfunction.StringToDecimal(
+                                                           Encryption.DecryptID(ch.LastBalance!.ToString(), balanceSalt)),
                                         
                                     }).FirstOrDefaultAsync();
 

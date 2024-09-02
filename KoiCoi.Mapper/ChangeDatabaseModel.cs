@@ -24,7 +24,7 @@ public static class ChangeDatabaseModel
             return user;
     }
 
-    public static Channel ChangeChannel(this ViaChannel viaChannel)
+    /*public static Channel ChangeChannel(this ViaChannel viaChannel)
     {
         Channel channel = new Channel
         {
@@ -34,14 +34,15 @@ public static class ChangeDatabaseModel
             CreatorId = viaChannel.CreatorId,
             MarkId = viaChannel.MarkId,
             MemberCount = 1,
-            TotalBalance = "0",
-            LastBalance = "0",
+            TotalBalance = "0.0",
+            LastBalance = "0.0",
             DateCreated = DateTime.UtcNow,
             ModifiedDate = DateTime.UtcNow,
             Inactive = false
         };
         return channel;
     }
+     */
     public static ChannelProfile ChangeChannelProfile(this ViaChannelProfile viaChannelProfile)
     {
         ChannelProfile channelProfile = new ChannelProfile

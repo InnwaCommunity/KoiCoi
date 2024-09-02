@@ -10,4 +10,8 @@
     <ProjectReference Include="..\KoiCoi.Database\KoiCoi.Database.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="FileDto\Response\" />
+  </ItemGroup>
+
 </Project>

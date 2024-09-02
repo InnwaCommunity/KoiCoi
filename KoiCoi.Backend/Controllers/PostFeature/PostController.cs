@@ -23,6 +23,12 @@ public class PostController : BaseController
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blPost.CreatePostFeature(payload, LoginUserID);
     }
+    [HttpPost("UploadCollectAttachFile",Name = "UploadCollectAttachFile")]
+    public async Task<Result<string>> UploadCollectAttachFile(PostImagePayload payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blPost.UploadCollectAttachFile(payload, LoginUserID);
+    }
 
     [HttpPost("ReviewPostsList",Name ="ReviewPostsList")]
     public async Task<Result<List<ReviewPostResponse>>> ReviewPostsList(ReviewPostPayload payload)

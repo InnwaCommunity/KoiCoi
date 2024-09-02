@@ -86,6 +86,7 @@ public static class ModularService
         builder.Services.AddScoped<NotificationManager>();
         builder.Services.AddScoped<DA_React>();
         builder.Services.AddScoped<KcAwsS3Service>();
+        builder.Services.AddScoped<DA_File>();
         return builder;
     }
 
@@ -114,6 +115,7 @@ public static class ModularService
         builder.Services.AddScoped<BL_Event>();
         builder.Services.AddScoped<BL_Post>();
         builder.Services.AddScoped<BL_React>();
+        builder.Services.AddScoped<BL_File>();
         return builder;
     }
 

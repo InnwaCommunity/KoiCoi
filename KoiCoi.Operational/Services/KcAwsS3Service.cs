@@ -3,7 +3,9 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using KoiCoi.Database.AppDbContextModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
+using NuGet.ProjectModel;
 using System.Text.RegularExpressions;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -101,4 +103,39 @@ public class KcAwsS3Service
         base64 = base64.Trim();
         return (base64.Length % 4 == 0) && Regex.IsMatch(base64, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None);
     }
+
+    public async Task<Result<string>> GetFile(string bucketName, string key)
+    {
+        try
+        {
+            var bucketExists = await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketName);
+            if (!bucketExists) return Result<string>.Error($"Bucket {bucketName} does not exist.");
+            var request = new GetPreSignedUrlRequest
+            {
+                BucketName = bucketName,
+                Key = key,
+                Expires = DateTime.UtcNow.AddMinutes(10)
+            };
+
+            var url = _s3Client.GetPreSignedURL(request);
+            return Result<string>.Success(url);
+
+            /*var s3Object = await _s3Client.GetObjectAsync(bucketName, key);
+            var file= File(s3Object.ResponseStream, s3Object.Headers.ContentType);
+            return Resu
+              using (var memoryStream = new MemoryStream())
+            {
+                await s3Object.ResponseStream.CopyToAsync(memoryStream);
+                var fileBytes = memoryStream.ToArray();
+                var base64String = Convert.ToBase64String(fileBytes);
+                return Result<string>.Success(base64String);
+            }
+             */
+        }
+        catch (Exception ex)
+        {
+            return Result<string>.Error($"Error occurred while retrieving file: {ex.Message}");
+        }
+    }
+
 }

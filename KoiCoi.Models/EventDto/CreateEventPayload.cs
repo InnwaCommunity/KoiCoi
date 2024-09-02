@@ -10,8 +10,7 @@ public partial class CreateEventPayload
     public decimal? TargetBalance { get; set; }
     public string? StartDate { get; set; }
     public string? EndDate { get; set; }
-    public List<EventAddressPayload> EventAddresses { get; set; }
-    public List<EventPhotoPayload> EventPhotos { get; set; }
+    public List<EventAddressPayload> EventAddresses { get; set; } = new List<EventAddressPayload>();
     public PostPolicyPropertyPayload viewPolicy { get; set; } = new PostPolicyPropertyPayload();
     public PostPolicyPropertyPayload reactPolicy { get; set; } = new PostPolicyPropertyPayload();
     public PostPolicyPropertyPayload commandPolicy { get; set; } = new PostPolicyPropertyPayload();

@@ -1,4 +1,7 @@
 ﻿
+using KoiCoi.Models.EventDto.Payload;
+using System.Drawing.Printing;
+
 namespace KoiCoi.Backend.Controllers.Events;
 
 [Route("api/[controller]")]
@@ -20,6 +23,12 @@ public class EventController : BaseController
         int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
         Result<string> response= await _blEvent.CreateEvent(paylod, LoginUserId);
         return Ok(response);
+    }
+    [HttpPost("UploadEventAttachFile",Name = "UploadEventAttachFile")]
+    public async Task<Result<string>> UploadEventAttachFile(EventPhotoPayload payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.UploadEventAttachFile(payload, LoginUserId);
     }
 
     [HttpPost("GetEventRequestList",Name = "GetEventRequestList")]
@@ -51,5 +60,18 @@ public class EventController : BaseController
     {
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blEvent.GetEventOwnerAndAdmins(payload, LoginUserID);
+    }
+
+    [HttpGet("GetAddressTypes/{PageNumber}/{PageSize}",Name = "GetAddressTypes")]
+    public async Task<Result<Pagination>> GetAddressTypes(int PageNumber,int PageSize)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.GetAddressTypes(LoginUserID,PageNumber,PageSize);
+    }
+    [HttpPost("EditStartDateandEndDate",Name = "EditStartDateandEndDate")]
+    public async Task<Result<string>> EditStartDateandEndDate(EditStardEndDate payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.EditStartDateandEndDate(payload,LoginUserID);
     }
 }

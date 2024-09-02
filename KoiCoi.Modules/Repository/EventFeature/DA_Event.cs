@@ -1,7 +1,7 @@
-﻿
-using KoiCoi.Database.AppDbContextModels;
+﻿using KoiCoi.Models.EventDto.Payload;
 using Microsoft.Extensions.Configuration;
-using Serilog;
+using System.Collections.Generic;
+using System.Drawing.Printing;
 
 namespace KoiCoi.Modules.Repository.EventFreture;
 
@@ -86,17 +86,19 @@ public class DA_Event
             };
             var res = await _db.Events.AddAsync(newEvent);
             await _db.SaveChangesAsync();
-            result = Result<string>.Success("Requested Event Success");
+            string PostIdval = Encryption.EncryptID(neweventPost.PostId.ToString(), LoginUserId.ToString());
+            
+            result = Result<string>.Success(PostIdval);
             ///Save Policies
-            SavePostPolicies(neweventPost.PostId, 1, paylod.viewPolicy);//Save View Policy
-            SavePostPolicies(neweventPost.PostId, 2, paylod.reactPolicy);//Save React Policy
-            SavePostPolicies(neweventPost.PostId, 3, paylod.commandPolicy);//Save Command Policy
-            SavePostPolicies(neweventPost.PostId, 4, paylod.sharePolicy);//Save Share Policy
+            await SavePostPolicies(neweventPost.PostId, 1, paylod.viewPolicy);//Save View Policy
+            await SavePostPolicies(neweventPost.PostId, 2, paylod.reactPolicy);//Save React Policy
+            await SavePostPolicies(neweventPost.PostId, 3, paylod.commandPolicy);//Save Command Policy
+            await SavePostPolicies(neweventPost.PostId, 4, paylod.sharePolicy);//Save Share Policy
             if (paylod.EventAddresses.Any())
             {
                 foreach (var address in paylod.EventAddresses)
                 {
-                    int AddressId = Convert.ToInt32(Encryption.EncryptID(address.AddressTypeIdval, LoginUserId.ToString()));
+                    int AddressId = Convert.ToInt32(Encryption.DecryptID(address.AddressTypeIdval, LoginUserId.ToString()));
                     EventAddress newAddress = new EventAddress
                     {
                         AddressId = AddressId,
@@ -107,9 +109,25 @@ public class DA_Event
                     await _db.SaveChangesAsync();
                 }
             }
-            if(paylod.EventPhotos.Any())
+            if(ownerusertype is not null)
             {
-                /*
+                var ownertype = await _db.UserTypes
+                                      .Where(x => x.Name.ToLower() == "owner")
+                                       .FirstOrDefaultAsync();
+                if (ownertype is not null)
+                {
+                    EventMembership newme = new EventMembership
+                    {
+                        EventPostId = neweventPost.PostId,
+                        UserId = LoginUserId,
+                        UserTypeId = ownertype.TypeId,
+                    };
+                    await _db.EventMemberships.AddAsync(newme);
+                    await _db.SaveChangesAsync();
+                }
+            }
+            /*if(paylod.EventPhotos.Any())
+            {
                 string baseDirectory = _configuration["appSettings:UploadPath"] ?? throw new Exception("Invalid UploadPath");
                 string uploadDirectory = _configuration["appSettings:EventImages"] ?? throw new Exception("Invalid function upload path.");
                 string destDirectory = Path.Combine(baseDirectory, uploadDirectory);
@@ -128,27 +146,28 @@ public class DA_Event
                     Log.Error("Invalid path " + filePath);
                 }
                 await System.IO.File.WriteAllBytesAsync(filePath, bytes);
-                 */
+                 
 
-                string bucketname = _configuration.GetSection("Buckets:EventImages").Get<string>()!;
+            string bucketname = _configuration.GetSection("Buckets:EventImages").Get<string>()!;
 
-                foreach (var item in paylod.EventPhotos)
+            foreach (var item in paylod.EventPhotos)
+            {
+                string uniquekey = Globalfunction.NewUniqueFileKey(item.ext!);
+                await _kcAwsS3Service.CreateFileAsync(item.base64image!, bucketname, uniquekey, item.ext!);
+                var newImage = new EventFile
                 {
-                    string uniquekey = Globalfunction.NewUniqueFileKey(item.ext!);
-                    await _kcAwsS3Service.CreateFileAsync(item.base64image!, bucketname, uniquekey, item.ext!);
-                    var newImage = new EventFile
-                    {
-                        Url = uniquekey,
-                        UrlDescription = item.Description,
-                        EventPostId= newEvent.PostId,
-                        CreatedDate = DateTime.UtcNow,
-                        ModifiedDate = DateTime.UtcNow,
-                        Extension = "png",
-                    }; 
-                    await _db.EventFiles.AddAsync(newImage);
-                    await _db.SaveChangesAsync();
-                }
+                    Url = uniquekey,
+                    UrlDescription = item.Description,
+                    EventPostId = newEvent.PostId,
+                    CreatedDate = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow,
+                    Extension = "png",
+                };
+                await _db.EventFiles.AddAsync(newImage);
+                await _db.SaveChangesAsync();
             }
+        }
+             */
             if (ownerusertype is not null)
             {
                 ///Created the Event by owner
@@ -193,7 +212,52 @@ public class DA_Event
         return result;
     }
 
-    private void SavePostPolicies(int postid,int policyId, PostPolicyPropertyPayload policy)
+    public async Task<Result<string>> UploadEventAttachFile(EventPhotoPayload payload, int LoginUserId)
+    {
+        Result<string> result = null;
+        try
+        {
+            if(!string.IsNullOrEmpty(payload.base64image) && !string.IsNullOrEmpty(payload.eventPostIdval)
+                && !string.IsNullOrEmpty(payload.ext))
+            {
+                int PostId = Convert.ToInt32(Encryption.DecryptID(payload.eventPostIdval, LoginUserId.ToString()));
+                var kcevent = await _db.Posts.Where(x=> x.PostId == PostId).FirstOrDefaultAsync();
+                if (kcevent is not null)
+                {
+                       string bucketname = _configuration.GetSection("Buckets:EventImages").Get<string>()!;
+
+                        string uniquekey = Globalfunction.NewUniqueFileKey(payload.ext!);
+                        await _kcAwsS3Service.CreateFileAsync(payload.base64image!, bucketname, uniquekey, payload.ext!);
+                        var newImage = new EventFile
+                        {
+                            Url = uniquekey,
+                            UrlDescription = payload.Description,
+                            EventPostId = kcevent.PostId,
+                            CreatedDate = DateTime.UtcNow,
+                            ModifiedDate = DateTime.UtcNow,
+                            Extension = payload.ext,
+                        };
+                        await _db.EventFiles.AddAsync(newImage);
+                        await _db.SaveChangesAsync();
+                    result = Result<string>.Success("Upload Success");
+                }
+                else
+                {
+                    result = Result<string>.Error("Event Not Found");
+                }
+            }
+            else
+            {
+                result = Result<string>.Error("Image Not Null or Event Not Null");
+            }
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
+        }
+        return result;
+    }
+    private async Task SavePostPolicies(int postid,int policyId, PostPolicyPropertyPayload policy)
     {
 
         PostPolicyProperty newPostPolicy = new PostPolicyProperty
@@ -206,8 +270,8 @@ public class DA_Event
             GroupMemberOnly = policy.GroupMemberOnly,
             FriendOnly = policy.FriendOnly
         };
-        _db.PostPolicyProperties.AddAsync(newPostPolicy);
-        _db.SaveChangesAsync();
+        await _db.PostPolicyProperties.AddAsync(newPostPolicy);
+        await _db.SaveChangesAsync();
     }
 
     public async Task<Result<List<GetRequestEventResponse>>> GetEventRequestList(GetEventRequestPayload payload, int LoginUserId)
@@ -241,14 +305,8 @@ public class DA_Event
                                    CreatorIdval = _cre.UserId,
                                    Currency = _cur.Isocode,
                                    CreatorName = _cre.Name,
-                                   TotalBalance = Globalfunction.StringToDecimal(
-                                       _ev.TotalBalance == "0" ||
-                                       _ev.TotalBalance == null ? "0" : 
-                                       Encryption.DecryptID(_ev.TotalBalance.ToString(), balanceSalt)),
-                                   LastBalance = Globalfunction.StringToDecimal(
-                                       _ev.LastBalance == "0" ||
-                                       _ev.LastBalance == null ? "0" :
-                                       Encryption.DecryptID(_ev.LastBalance.ToString(), balanceSalt)),
+                                   TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_ev.TotalBalance.ToString(), balanceSalt)),
+                                   LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_ev.LastBalance.ToString(), balanceSalt)),
                                    StartDate = _ev.StartDate.ToString("yyyy-MM-ddTHH:mm:ss"),
                                    EndDate = _ev.EndDate.ToString("yyyy-MM-ddTHH:mm:ss"),
                                    ModifiedDate = _post.ModifiedDate.ToString("yyyy-MM-ddTHH:mm:ss"),
@@ -257,8 +315,9 @@ public class DA_Event
             foreach (var item in query)
             {
                 var imgquery = await _db.EventFiles.Where(x => x.EventPostId == item.EventPostId)
-                    .Select(x=> new EventImageInfo
+                    .Select(x=> new EventFileInfo
                     {
+                        fileIdval = Encryption.EncryptID(x.UrlId.ToString(),LoginUserId.ToString()),
                         imgfilename = x.Url,
                         imgDescription = x.UrlDescription
                     } )
@@ -507,6 +566,92 @@ public class DA_Event
         catch (Exception ex)
         {
             result = Result<List<EventAdminsResponse>>.Error(ex);
+        }
+        return result;
+    }
+
+    public async Task<Result<Pagination>> GetAddressTypes(int LoginUserID,int PageNumber,int PageSize)
+    {
+        Result<Pagination> result = null;
+        try
+        {
+            List<AddressTypeResponse> query = await _db.AddressTypes
+                .Select(x => new AddressTypeResponse
+                {
+                    AddressTypeIdval = Encryption.EncryptID(x.AddressId.ToString(),LoginUserID.ToString()),
+                    Address = x.Address,
+                    Description = x.Description
+                }).ToListAsync();
+            Pagination data = RepoFunService.getWithPagination(PageNumber, PageSize, query);
+            result = Result<Pagination>.Success(data);
+        }
+        catch (Exception ex)
+        {
+            result = Result<Pagination>.Error(ex);
+        }
+        return result;
+    }
+    public async Task<Result<string>> EditStartDateandEndDate(EditStardEndDate payload, int LoginUserID)
+    {
+        Result<string> result = null;
+        try
+        {
+            if (payload.EventPostIdval is not null && payload.StardDate is not null && payload.EndDate is not null)
+            {
+                int EventPostId = Convert.ToInt32(Encryption.DecryptID(payload.EventPostIdval, LoginUserID.ToString()));
+                var post = await _db.Posts.Where(x => x.PostId == EventPostId).FirstOrDefaultAsync();
+                if (post is not null)
+                {
+
+                    var owner = await (from _p in _db.Posts
+                                       join _ms in _db.EventMemberships on _p.PostId equals _ms.EventPostId
+                                       join _ut in _db.UserTypes on _ms.UserTypeId equals _ut.TypeId
+                                       where _p.PostId == EventPostId && _ms.UserId == LoginUserID && (_ut.Name.ToLower() == "owner" || _ut.Name.ToLower() == "admin")
+                                       select _ms).FirstOrDefaultAsync();
+                    ///Check Owner or Admin
+                    if(owner is not null)
+                    {
+                        var pevent = await _db.Events.Where(x => x.PostId == post.PostId).FirstOrDefaultAsync();
+                        if (pevent is not null)
+                        {
+                            ///Check Collect Posts that have been upload in this event
+                            var cpost = await _db.CollectPosts.Where(x => x.EventPostId == EventPostId).FirstOrDefaultAsync();
+                            if (cpost is null)
+                            {
+                                pevent.StartDate = DateTime.Parse(payload.StardDate);
+                                pevent.EndDate = DateTime.Parse(payload.EndDate);
+                                post.ModifiedDate = DateTime.UtcNow;
+                                await _db.SaveChangesAsync();
+                                result = Result<string>.Success("Success");
+                            }
+                            else
+                            {
+                                ///Don't Allow to edit Stard Date because Some Collect Posts Have Been Posted.
+                                pevent.EndDate = DateTime.Parse(payload.EndDate);
+                                post.ModifiedDate = DateTime.UtcNow;
+                                await _db.SaveChangesAsync();
+                                result = Result<string>.Success("Success,But can't edit start date because some collect post have been posted");
+                            }
+                        }
+                        else
+                        {
+                            result = Result<string>.Error("Event Not Found");
+                        }
+                    }
+                    else
+                    {
+                        result = Result<string>.Error("Can't Access To Edit");
+                    }
+                }
+                else
+                {
+                    result = Result<string>.Error("Event Post Not Found");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
         }
         return result;
     }

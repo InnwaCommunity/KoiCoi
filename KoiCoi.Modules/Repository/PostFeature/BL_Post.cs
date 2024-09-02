@@ -17,6 +17,10 @@ public  class BL_Post
     {
         return await _daPost.CreatePostFeature(payload, LoginUserId);
     }
+    public async Task<Result<string>> UploadCollectAttachFile(PostImagePayload payload,int LoginUserID)
+    {
+        return await _daPost.UploadCollectAttachFile(payload, LoginUserID);
+    }
     public async Task<Result<List<ReviewPostResponse>>> ReviewPostsList(string EventPostIdval,string Status,int LoginUserId)
     {
         return await _daPost.ReviewPostsList(EventPostIdval,Status, LoginUserId);

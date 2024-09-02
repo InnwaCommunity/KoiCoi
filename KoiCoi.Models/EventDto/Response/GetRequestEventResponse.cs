@@ -13,11 +13,12 @@ public partial class GetRequestEventResponse
    public string? StartDate { get; set; }
    public string? EndDate { get; set; }
    public string? ModifiedDate { get; set; }
-   public List<EventImageInfo>? EventImageList { get; set; }
+   public List<EventFileInfo>? EventImageList { get; set; }
 }
 
-public partial class EventImageInfo
+public partial class EventFileInfo
 {
+    public string? fileIdval { get; set; }
     public string? imgfilename { get; set; }
     public string? imgDescription { get; set; }
 }
