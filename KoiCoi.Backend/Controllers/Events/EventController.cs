@@ -1,6 +1,4 @@
 ﻿
-using KoiCoi.Models.EventDto.Payload;
-using System.Drawing.Printing;
 
 namespace KoiCoi.Backend.Controllers.Events;
 
@@ -73,5 +71,12 @@ public class EventController : BaseController
     {
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blEvent.EditStartDateandEndDate(payload,LoginUserID);
+    }
+    [HttpPost("GetEventByMonth", Name = "GetEventByMonth")]
+    public async Task<IActionResult> GetEventByMonth(OrderByMonthPayload payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+        Result<Pagination> response = await _blEvent.GetEventByMonth(payload, LoginUserId);
+        return Ok(response);//List<GetRequestEventResponse>
     }
 }

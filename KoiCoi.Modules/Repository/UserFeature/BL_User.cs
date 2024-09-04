@@ -93,4 +93,8 @@ public class BL_User
     {
         return await _daUser.Signin(paylod);
     }
+    public async Task<Result<LoginUserInfo>> GetLoginUserInfo(int LoginEmpID)
+    {
+        return await _daUser.GetLoginUserInfo(LoginEmpID);
+    }
 }

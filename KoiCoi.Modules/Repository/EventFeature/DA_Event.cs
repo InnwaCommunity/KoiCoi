@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Drawing.Printing;
+using System.Globalization;
 
 namespace KoiCoi.Modules.Repository.EventFreture;
 
@@ -290,12 +291,12 @@ public class DA_Event
                                join _meship in _db.ChannelMemberships on _ev.ChannelId equals _meship.ChannelId
                                join _usertype in _db.UserTypes on _meship.UserTypeId equals _usertype.TypeId
                                where _ev.ChannelId == ChannelId &&
-                               _post.PostType == "eventpost" 
+                               _post.PostType == "eventpost"
                                && _sta.StatusName.ToLower() == status
                                && _post.Inactive == false
                                && _meship.UserId == LoginUserId
-                               && (status.ToLower() == "approved" || 
-                               _usertype.Name.ToLower() == "owner" || 
+                               && (status.ToLower() == "approved" ||
+                               _usertype.Name.ToLower() == "owner" ||
                                _usertype.Name.ToLower() == "admin")
                                select new 
                                {
@@ -307,9 +308,18 @@ public class DA_Event
                                    CreatorName = _cre.Name,
                                    TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_ev.TotalBalance.ToString(), balanceSalt)),
                                    LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_ev.LastBalance.ToString(), balanceSalt)),
+                                   TargetBalance = !string.IsNullOrEmpty(_ev.TargetBalance) ? Globalfunction.StringToDecimal(Encryption.DecryptID(_ev.TargetBalance!.ToString(), balanceSalt)) : 0,
                                    StartDate = _ev.StartDate.ToString("yyyy-MM-ddTHH:mm:ss"),
                                    EndDate = _ev.EndDate.ToString("yyyy-MM-ddTHH:mm:ss"),
                                    ModifiedDate = _post.ModifiedDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                                   AddressResponse = (from _add in _db.EventAddresses
+                                                      join _atype in _db.AddressTypes on _add.AddressId equals _atype.AddressId
+                                                      where _add.EventPostId == _ev.PostId
+                                                      select new EventAddressResponse
+                                                      {
+                                                          Address = _add.AddressName,
+                                                          AddresstypeName = _atype.Address
+                                                      }).ToList(),
                                }).ToListAsync();
             List<GetRequestEventResponse> responseList = new List<GetRequestEventResponse>();
             foreach (var item in query)
@@ -329,12 +339,14 @@ public class DA_Event
                     EventDescrition = item.EventDescrition,
                     CreatorIdval = Encryption.EncryptID(item.CreatorIdval.ToString(), LoginUserId.ToString()),
                     CreatorName = item.CreatorName,
-                    Currency = item.Currency,
+                    IsoCode = item.Currency,
                     TotalBalance = item.TotalBalance,
                     LastBalance = item.LastBalance,
+                    TargetBalance = item.TargetBalance,
                     StartDate = item.StartDate,
                     EndDate = item.EndDate,
                     ModifiedDate = item.ModifiedDate,
+                    AddressResponse = item.AddressResponse,
                     EventImageList = imgquery
                 };
                 responseList.Add(newres);
@@ -648,10 +660,85 @@ public class DA_Event
                     result = Result<string>.Error("Event Post Not Found");
                 }
             }
+            else
+            {
+                result = Result<string>.Error("EventPostId can't null");
+            }
         }
         catch (Exception ex)
         {
             result = Result<string>.Error(ex);
+        }
+        return result;
+    }
+
+    public async Task<Result<Pagination>> GetEventByMonth(OrderByMonthPayload payload, int LoginUserId)
+    {
+        //List<GetRequestEventResponse>
+        Result<Pagination> result = null;
+        try
+        {
+            if(payload.Month is not null && payload.Idval is not null && payload.PageNumber >= 1 && payload.PageSize >= 1)
+            {
+                CultureInfo provider = CultureInfo.InvariantCulture;
+                DateTime dateTime = DateTime.ParseExact(payload.Month, "yyyy-MM", provider);
+                int ChannelId = Convert.ToInt32(Encryption.DecryptID(payload.Idval!, LoginUserId.ToString()));
+                string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
+                
+                var query = await (from _ev in _db.Events
+                                   join _post in _db.Posts on _ev.PostId equals _post.PostId
+                                   join _cre in _db.Users on _ev.CreatorId equals _cre.UserId
+                                   join _sta in _db.StatusTypes on _ev.StatusId equals _sta.StatusId
+                                   join _cur in _db.Marks on _ev.MarkId equals _cur.MarkId
+                                   join _meship in _db.ChannelMemberships on _ev.ChannelId equals _meship.ChannelId
+                                   join _usertype in _db.UserTypes on _meship.UserTypeId equals _usertype.TypeId
+                                   where _ev.ChannelId == ChannelId &&
+                                   _post.PostType == "eventpost"
+                                   && _sta.StatusName.ToLower() == "approved"
+                                   && _post.Inactive == false
+                                   && _meship.UserId == LoginUserId
+                                   && (_ev.StartDate >= dateTime && _ev.EndDate >= dateTime)
+                                   select new GetRequestEventResponse
+                                   {
+                                       EventPostIdval = Encryption.EncryptID(_ev.PostId.ToString(), LoginUserId.ToString()),
+                                       EventName = _ev.EventName,
+                                       EventDescrition = _ev.EventDescription,
+                                       CreatorIdval = Encryption.EncryptID(_cre.UserId.ToString(), LoginUserId.ToString()),
+                                       IsoCode = _cur.Isocode,
+                                       CreatorName = _cre.Name,
+                                       TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_ev.TotalBalance.ToString(), balanceSalt)),
+                                       LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_ev.LastBalance.ToString(), balanceSalt)),
+                                       TargetBalance = !string.IsNullOrEmpty(_ev.TargetBalance) ? Globalfunction.StringToDecimal(Encryption.DecryptID(_ev.TargetBalance!.ToString(), balanceSalt)) : 0,
+                                       StartDate = _ev.StartDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                                       EndDate = _ev.EndDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                                       ModifiedDate = _post.ModifiedDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                                       AddressResponse = (from _add in _db.EventAddresses
+                                                          join _atype in _db.AddressTypes on _add.AddressId equals _atype.AddressId
+                                                          where _add.EventPostId == _ev.PostId
+                                                          select new EventAddressResponse
+                                                          {
+                                                              Address = _add.AddressName,
+                                                              AddresstypeName = _atype.Address
+                                                          }).ToList(),
+                                       EventImageList = _db.EventFiles.Where(x => x.EventPostId == _ev.PostId)
+                                                        .Select(x => new EventFileInfo
+                                                        {
+                                                            fileIdval = Encryption.EncryptID(x.UrlId.ToString(), LoginUserId.ToString()),
+                                                            imgfilename = x.Url,
+                                                            imgDescription = x.UrlDescription
+                                                        }).ToList(),
+                                   }).ToListAsync();
+                Pagination pagination = RepoFunService.getWithPagination(payload.PageNumber, payload.PageSize, query);
+                result = Result<Pagination>.Success(pagination);
+            }
+            else
+            {
+                result = Result<Pagination>.Error("Input Formot is Wrong");
+            }
+        }
+        catch (Exception ex)
+        {
+            result = Result<Pagination>.Error(ex);
         }
         return result;
     }

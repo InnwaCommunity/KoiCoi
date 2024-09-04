@@ -33,6 +33,7 @@ global using KoiCoi.Models.PostTagDto.Payload;
 global using KoiCoi.Models.Mark.Payload;
 global using KoiCoi.Models.ChannelDtos.ResponseDtos;
 global using KoiCoi.Models.FileDto.Payload;
+global using KoiCoi.Models.EventDto.Payload;
 
 
 //Operational

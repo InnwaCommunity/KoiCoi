@@ -1,5 +1,7 @@
 ﻿
+using KoiCoi.Models.Via;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 namespace KoiCoi.Modules.Repository.UserFeature;
@@ -115,7 +117,8 @@ public class DA_User
                                         .Where(x => x.UserId == LoginUserId).FirstOrDefaultAsync();
             if (useData == null)
                 return Result<string>.Error("User Not Found");
-            useData.Name = requestUserDto.Email ?? useData.Email!;
+            useData.Name = requestUserDto.Name ?? useData.Name!;
+            useData.Email = requestUserDto.Email ?? useData.Email!;
             useData.Phone = requestUserDto.Phone ?? useData.Phone;
             useData.DeviceId = requestUserDto.DeviceId ?? useData.DeviceId;
             useData.ModifiedDate = DateTime.UtcNow;
@@ -361,6 +364,53 @@ public class DA_User
         }
         return result;
     }
-     
+    public async Task<Result<LoginUserInfo>> GetLoginUserInfo(int LoginEmpID)
+    {
+        Result<LoginUserInfo> result;
+        try
+        {
+            var user = await (from us in _db.Users
+                              join up in _db.UserProfiles on us.UserId equals up.UserId into profiles
+                              where us.UserId == LoginEmpID
+                              select new
+                              {
+                                  us.Name,
+                                  us.Email,
+                                  us.Phone,
+                                  LatestProfile = profiles.OrderByDescending(p => p.CreatedDate).FirstOrDefault()
+                              })
+                  .AsNoTracking()
+                  .FirstOrDefaultAsync();
+
+            if (user is null)
+                return Result<LoginUserInfo>.Error("User Not Found");
+            string purl = "";
+            if (!string.IsNullOrEmpty(user.LatestProfile?.Url))
+            {
+                string url = user.LatestProfile.Url!;
+                string bucketname = _configuration.GetSection("Buckets:UserProfile").Get<string>()!;
+                Result<string> res= await _awsS3Service.GetFile(bucketname, url);
+                if (res.IsSuccess)
+                {
+                    purl = res.Data;
+                }
+            }
+
+            var loginUserInfo = new LoginUserInfo
+            {
+                Name = user.Name,
+                Email = user.Email,
+                Phone = user.Phone,
+                UserImage = purl
+            };
+            result = Result<LoginUserInfo>.Success(loginUserInfo);
+
+        }
+        catch (Exception ex)
+        {
+            result = Result<LoginUserInfo>.Error(ex);
+        }
+        return result;
+    }
 
 }

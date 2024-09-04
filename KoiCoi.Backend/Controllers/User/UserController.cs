@@ -71,7 +71,13 @@ public class UserController : BaseController
     {
         return await _bLUser.Signin(paylod);
     }
-     
+    [HttpGet("GetLoginUserInfo",Name = "GetLoginUserInfo")]
+    public async Task<Result<LoginUserInfo>> GetLoginUserInfo()
+    {
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _bLUser.GetLoginUserInfo(LoginEmpID);
+    }
+
 
     //[HttpGet("GetAccountByVertifiedEmail/{email}/{OTPPasscode}/{OTPPrefix}", Name = "GetAccountByVertifiedEmail")]
     //public async Task<Result<UserInfoResponse>> GetAccountByVertifiedEmail(string email,string OTPPasscode,string OTPPrefix)

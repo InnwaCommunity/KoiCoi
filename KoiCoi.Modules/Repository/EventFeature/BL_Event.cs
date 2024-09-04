@@ -1,6 +1,7 @@
 ﻿
 using KoiCoi.Models.EventDto.Payload;
 using KoiCoi.Models.Login_Models;
+using Microsoft.AspNetCore.Mvc;
 using MimeKit.Tnef;
 
 namespace KoiCoi.Modules.Repository.EventFreture;
@@ -50,4 +51,9 @@ public class BL_Event
     {
         return await _daEvent.EditStartDateandEndDate(payload, LoginUserID);
     }
+    public async Task<Result<Pagination>> GetEventByMonth(OrderByMonthPayload payload,int LoginUserId)
+    {
+        return await _daEvent.GetEventByMonth(payload, LoginUserId);//List<GetRequestEventResponse>
+    }
+
 }
