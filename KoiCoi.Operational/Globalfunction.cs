@@ -52,7 +52,7 @@ public class Globalfunction
             var smtpClient = new System.Net.Mail.SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
-                Credentials = new NetworkCredential(fromMail, appPw),
+                Credentials = new NetworkCredential(fromMail, "urfk ijaq zkdp orho"),
                 EnableSsl = true,
             };
 

@@ -23,6 +23,4 @@ public class BL_ChangePassword
     {
         return await _daChangePassword.SaveVertifyEmail(varEmPay, maxRetryOTPCount, maxOTPFailCount, otpExpireMinute);
     }
-
-
 }

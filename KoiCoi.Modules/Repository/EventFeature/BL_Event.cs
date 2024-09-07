@@ -51,9 +51,9 @@ public class BL_Event
     {
         return await _daEvent.EditStartDateandEndDate(payload, LoginUserID);
     }
-    public async Task<Result<Pagination>> GetEventByMonth(OrderByMonthPayload payload,int LoginUserId)
+    public async Task<Result<Pagination>> GetEventByStatusAndDate(OrderByMonthPayload payload,int LoginUserId)
     {
-        return await _daEvent.GetEventByMonth(payload, LoginUserId);//List<GetRequestEventResponse>
+        return await _daEvent.GetEventByStatusAndDate(payload, LoginUserId);
     }
 
 }

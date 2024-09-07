@@ -1,4 +1,5 @@
-﻿using KoiCoi.Models.EventDto.Payload;
+﻿using Humanizer;
+using KoiCoi.Models.EventDto.Payload;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Drawing.Printing;
@@ -672,17 +673,26 @@ public class DA_Event
         return result;
     }
 
-    public async Task<Result<Pagination>> GetEventByMonth(OrderByMonthPayload payload, int LoginUserId)
+    public async Task<Result<Pagination>> GetEventByStatusAndDate(OrderByMonthPayload payload, int LoginUserId)
     {
         //List<GetRequestEventResponse>
         Result<Pagination> result = null;
         try
         {
+            if (payload.Status is null || payload is null)
+                return Result<Pagination>.Error("Please add Stauts");
+
+            if (payload.Status.ToLower() != "active" && payload.Status.ToLower() != "last" && payload.Status.ToLower() != "upcoming")
+                return Result<Pagination>.Error("Invalide Status");
+
             if(payload.Month is not null && payload.Idval is not null && payload.PageNumber >= 1 && payload.PageSize >= 1)
             {
                 CultureInfo provider = CultureInfo.InvariantCulture;
-                DateTime dateTime = DateTime.ParseExact(payload.Month, "yyyy-MM", provider);
+                DateTime dateTime = DateTime.ParseExact(payload.Month, "yyyy-MM-dd", provider);
                 int ChannelId = Convert.ToInt32(Encryption.DecryptID(payload.Idval!, LoginUserId.ToString()));
+                string status = payload.Status;
+                DateTime now = DateTime.UtcNow;
+                bool currentDate = dateTime.Year == now.Year && dateTime.Month == now.Month;
                 string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
                 
                 var query = await (from _ev in _db.Events
@@ -696,8 +706,20 @@ public class DA_Event
                                    _post.PostType == "eventpost"
                                    && _sta.StatusName.ToLower() == "approved"
                                    && _post.Inactive == false
-                                   && _meship.UserId == LoginUserId
-                                   && (_ev.StartDate >= dateTime && _ev.EndDate >= dateTime)
+                                   && _meship.UserId == LoginUserId && (
+                                   status=="active" ? 
+                                   _ev.StartDate <= dateTime && 
+                                   _ev.EndDate >= dateTime : 
+                                   status == "last" ?  
+                                   //(currentDate ? _ev.EndDate.Day < dateTime.Day : true) &&
+                                   _ev.EndDate.Year == dateTime.Year &&
+                                   _ev.EndDate.Month == dateTime.Month &&
+                                   _ev.EndDate.Day == dateTime.Day :
+                                   status == "upcoming" ?
+                                   //(currentDate ? _ev.StartDate.Day > dateTime.Day : true) &&
+                                   _ev.StartDate.Year == dateTime.Year &&
+                                   _ev.StartDate.Month == dateTime.Month &&
+                                   _ev.StartDate.Day == dateTime.Day : false )
                                    select new GetRequestEventResponse
                                    {
                                        EventPostIdval = Encryption.EncryptID(_ev.PostId.ToString(), LoginUserId.ToString()),
