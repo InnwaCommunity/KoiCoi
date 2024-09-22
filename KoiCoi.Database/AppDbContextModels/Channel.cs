@@ -15,13 +15,7 @@ public partial class Channel
 
     public int CreatorId { get; set; }
 
-    public int MarkId { get; set; }
-
     public long MemberCount { get; set; }
-
-    public string? TotalBalance { get; set; }
-
-    public string? LastBalance { get; set; }
 
     public DateTime DateCreated { get; set; }
 

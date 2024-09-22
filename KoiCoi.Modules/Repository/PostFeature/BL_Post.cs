@@ -1,4 +1,5 @@
 ﻿
+using KoiCoi.Models.EventDto.Payload;
 using KoiCoi.Models.Login_Models;
 using System.Drawing.Printing;
 
@@ -21,9 +22,9 @@ public  class BL_Post
     {
         return await _daPost.UploadCollectAttachFile(payload, LoginUserID);
     }
-    public async Task<Result<List<ReviewPostResponse>>> ReviewPostsList(string EventPostIdval,string Status,int LoginUserId)
+    public async Task<Result<Pagination>> ReviewPostsList(ReviewPostPayload payload, int LoginUserId)
     {
-        return await _daPost.ReviewPostsList(EventPostIdval,Status, LoginUserId);
+        return await _daPost.ReviewPostsList(payload, LoginUserId);
     }
 
     public async Task<Result<string>> ApproveOrRejectPost(List<ApproveRejectPostPayload> payload,int LoginUserId)
@@ -40,6 +41,11 @@ public  class BL_Post
      public async Task<Result<List<DashboardPostsResponse>>> GetDashboardPosts(int LoginUserId,int pageNumber,int pageSize)
     {
         return await _daPost.GetDashboardPosts(LoginUserId, pageNumber, pageSize);
+    }
+
+    public async Task<Result<Pagination>> GetPostsOrderByEvent(GetEventData payload,int LoginUserID)
+    {
+        return await _daPost.GetPostsOrderByEvent(payload, LoginUserID);
     }
     public async Task<Result<string>> CreatePostTags(CreatePostTagListPayload payload,int LoginUserId)
     {

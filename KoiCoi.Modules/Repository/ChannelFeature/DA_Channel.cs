@@ -1,8 +1,10 @@
 ﻿
+using KoiCoi.Models;
 using KoiCoi.Models.Via;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing.Printing;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace KoiCoi.Modules.Repository.ChannelFeature;
 
@@ -227,22 +229,13 @@ public class DA_Channel
             int ChanneltypeId = Convert.ToInt32(
                                 Encryption.DecryptID(channelReqeust.ChannelTypeval!,
                                 LoginUserId.ToString()));
-            int MarkId = Convert.ToInt32(
-                                Encryption.DecryptID(channelReqeust.CurrencyIdval!,
-                                LoginUserId.ToString()));
-
-            string TotalBalance = Encryption.EncryptID("0.0", balanceSalt);
-            string LastBalance = Encryption.EncryptID("0.0", balanceSalt);
             Channel newchannel = new Channel
             {
                 ChannelName = channelReqeust.ChannelName,
                 StatusDescription = channelReqeust.StatusDescription,
                 ChannelType = ChanneltypeId,
                 CreatorId = LoginUserId,
-                MarkId = MarkId,
                 MemberCount = 1,
-                TotalBalance = TotalBalance,
-                LastBalance = LastBalance,
                 DateCreated = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
                 Inactive = false
@@ -352,42 +345,65 @@ public class DA_Channel
         }
     }
 
-    public async Task<Result<List<ChannelDataResponse>>> GetChannelsList(int LoginUserId)
+    public async Task<Result<Pagination>> GetChannelsList(int LoginUserId,int PageNumber,int PageSize)
     {
-        Result<List<ChannelDataResponse>> model = null;
+        Result<Pagination> model = null;
         try
         {
             int? ApprovedStatus = await _db.StatusTypes.Where(x=> x.StatusName.ToLower() == "approved")
                             .Select(x=> x.StatusId)
                             .FirstOrDefaultAsync();
-            if (ApprovedStatus == null) return Result<List<ChannelDataResponse>>.Error("Status Type Not Found");
+            if (ApprovedStatus == null) return Result<Pagination>.Error("Status Type Not Found");
             string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
-            List<ChannelDataResponse> Channels = await ( from _channel in _db.Channels 
+            var  query = await ( from _channel in _db.Channels 
                                                join _chantype in _db.ChannelTypes on _channel.ChannelType equals _chantype.ChannelTypeId
-                                               join _curr in _db.Marks on _channel.MarkId equals _curr.MarkId
                                                join _mem in _db.ChannelMemberships on _channel.ChannelId equals _mem.ChannelId
                                                join cp in _db.ChannelProfiles on _channel.ChannelId equals cp.ChannelId into chanPro
                                                from cp in chanPro.OrderByDescending(p => p.CreatedDate).Take(1).DefaultIfEmpty()
                                                where _mem.UserId == LoginUserId && _mem.StatusId == ApprovedStatus
                                                orderby _channel.ChannelName
-                                               select new ChannelDataResponse
+                                               select new 
                                                {
-                                                   ChannelIdval = Encryption.EncryptID(_channel.ChannelId.ToString(), LoginUserId.ToString()),
-                                                   ChannelName= _channel.ChannelName,
+                                                   ChannelId=_channel.ChannelId,
+                                                   //ChannelIdval = Encryption.EncryptID(_channel.ChannelId.ToString(), LoginUserId.ToString()),
+                                                   ChannelName = _channel.ChannelName,
                                                    ChannelDescription = _channel.StatusDescription,
                                                    ChannelType = _chantype.ChannelTypeName,
                                                    MemberCount = _channel.MemberCount,
-                                                   ISOCode = _curr.Isocode,
-                                                   TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_channel.TotalBalance!.ToString(), balanceSalt)),
-                                                   LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_channel.LastBalance!.ToString(), balanceSalt)),
                                                    ChannelProfile = cp != null ? cp.Url : null
                                                }).ToListAsync();
-
-            model= Result<List<ChannelDataResponse>>.Success(Channels);
+            List<ChannelDataResponse> Channels = new List<ChannelDataResponse> { };
+            foreach (var item in query)
+            {
+                List<ChannelBalanceData> bala = await (from _chbal in _db.ChannelMarkBalances
+                                                       join _mk in _db.Marks on _chbal.MarkId equals _mk.MarkId
+                                                       where _chbal.ChannelId == item.ChannelId
+                                                       select new ChannelBalanceData
+                                                       {
+                                                           MarkIdval = Encryption.EncryptID(_mk.MarkId.ToString(), LoginUserId.ToString()),
+                                                           MarkName = _mk.MarkName,
+                                                           IsoCode = _mk.Isocode,
+                                                           TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_chbal.TotalBalance, balanceSalt)),
+                                                           LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_chbal.LastBalance, balanceSalt)),
+                                                        }).ToListAsync();
+                ChannelDataResponse newChannel = new ChannelDataResponse
+                {
+                    ChannelIdval = Encryption.EncryptID(item.ChannelId.ToString(), LoginUserId.ToString()),
+                    ChannelName = item.ChannelName,
+                    ChannelDescription = item.ChannelDescription,
+                    ChannelType = item.ChannelType,
+                    MemberCount = item.MemberCount,
+                    ChannelProfile = item.ChannelProfile,
+                    BalanceDatas = bala
+                };
+                Channels.Add(newChannel);
+            }
+            Pagination data = RepoFunService.getWithPagination(PageNumber, PageSize, Channels);
+            model = Result<Pagination>.Success(data);
         }
         catch (Exception ex)
         {
-            model = Result<List<ChannelDataResponse>>.Error(ex);
+            model = Result<Pagination>.Error(ex);
         }
         return model;
     }
@@ -501,31 +517,51 @@ public class DA_Channel
             if(IsMember is null)
             {
 
-                VisitChannelResponse? reData = await (from ch in _db.Channels
+                var reData = await (from ch in _db.Channels
                                                       join ct in _db.ChannelTypes on ch.ChannelType equals ct.ChannelTypeId
                                                       join user in _db.Users on ch.CreatorId equals user.UserId
-                                                      join cr in _db.Marks on ch.MarkId equals cr.MarkId
                                                       join cp in _db.ChannelProfiles on ch.ChannelId equals cp.ChannelId into chanPro
                                                       from cp in chanPro.OrderByDescending(p => p.CreatedDate).Take(1).DefaultIfEmpty()
                                                       where ch.ChannelId == channelId
-                                                      select new VisitChannelResponse
+                                                      select new 
                                                       {
-                                                          ChannelIdval = Encryption.EncryptID(ch.ChannelId.ToString(), LoginUserId.ToString()),
+                                                          ChannelId = ch.ChannelId,
                                                           ChannelName = ch.ChannelName,
                                                           ChannelDescription = ch.StatusDescription,
-                                                          IsMember = false,
-                                                          MemberStatus = null,
                                                           ChannelType = ct.ChannelTypeName,
                                                           CreatorIdval = Encryption.EncryptID(user.UserId.ToString(), LoginUserId.ToString()),
                                                           CreatorName = user.Name,
                                                           MemberCount = ch.MemberCount,
-                                                          TotalBalance = null,
-                                                          LastBalance = null,
                                                           ChannelProfile = cp.Url
 
                                                       }).FirstOrDefaultAsync();
 
                 if (reData is null) return Result<VisitChannelResponse>.Error("Channel Not Found");
+                List<ChannelBalanceData> bala = await (from _chbal in _db.ChannelMarkBalances
+                                                       join _mk in _db.Marks on _chbal.MarkId equals _mk.MarkId
+                                                       where _chbal.ChannelId == reData.ChannelId
+                                                       select new ChannelBalanceData
+                                                       {
+                                                           MarkIdval = Encryption.EncryptID(_mk.MarkId.ToString(), LoginUserId.ToString()),
+                                                           MarkName = _mk.MarkName,
+                                                           IsoCode = _mk.Isocode,
+                                                           TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_chbal.TotalBalance, balanceSalt)),
+                                                           LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_chbal.LastBalance, balanceSalt)),
+                                                       }).ToListAsync();
+                VisitChannelResponse newChannel = new VisitChannelResponse
+                {
+                    ChannelIdval = Encryption.EncryptID(reData.ChannelId.ToString(), LoginUserId.ToString()),
+                    ChannelName = reData.ChannelName,
+                    ChannelDescription = reData.ChannelDescription,
+                    ChannelType = reData.ChannelType,
+                    MemberCount = reData.MemberCount,
+                    ChannelProfile = reData.ChannelProfile,
+                    CreatorName = reData.CreatorName,
+                    CreatorIdval = reData.CreatorIdval,
+                    MemberStatus = null,
+                    IsMember = false,
+                    BalanceDatas = bala
+                };
 
                 var visitRecord = await _db.VisitChannelHistories.Where(
                                     x => x.UserId == LoginUserId
@@ -548,36 +584,54 @@ public class DA_Channel
                     _db.VisitChannelHistories.Update(visitRecord);
                 }
                 await _db.SaveChangesAsync();
-                model = Result<VisitChannelResponse>.Success(reData);
+                model = Result<VisitChannelResponse>.Success(newChannel);
             }
             else
             {
 
-                VisitChannelResponse? reData = await (from ch in _db.Channels
+                var reData = await (from ch in _db.Channels
                                     join ct in _db.ChannelTypes on ch.ChannelType equals ct.ChannelTypeId
                                     join user in _db.Users on ch.CreatorId equals user.UserId
-                                    join cr in _db.Marks on ch.MarkId equals cr.MarkId
                                     join cp in _db.ChannelProfiles on ch.ChannelId equals cp.ChannelId into chanPro
                                     from cp in chanPro.OrderByDescending(p => p.CreatedDate).Take(1).DefaultIfEmpty()
                                     where ch.ChannelId == channelId
-                                    select new VisitChannelResponse
+                                    select new 
                                     {
-                                        ChannelIdval = Encryption.EncryptID(ch.ChannelId.ToString(), LoginUserId.ToString()),
+                                        ChannelId = ch.ChannelId,
                                         ChannelName = ch.ChannelName,
                                         ChannelDescription = ch.StatusDescription,
                                         ChannelType = ct.ChannelTypeName,
                                         CreatorIdval = Encryption.EncryptID(user.UserId.ToString(), LoginUserId.ToString()),
                                         CreatorName = user.Name,
-                                        ISOCode = cr.Isocode,
                                         MemberCount = ch.MemberCount,
-                                        TotalBalance=Globalfunction.StringToDecimal(
-                                                            Encryption.DecryptID(ch.TotalBalance!.ToString(), balanceSalt)),
-                                        LastBalance = Globalfunction.StringToDecimal(
-                                                           Encryption.DecryptID(ch.LastBalance!.ToString(), balanceSalt)),
+                                        ChannelProfile = cp.Url
                                         
                                     }).FirstOrDefaultAsync();
 
                 if (reData is null) return Result<VisitChannelResponse>.Error("Channel Not Found");
+                List<ChannelBalanceData> bala = await (from _chbal in _db.ChannelMarkBalances
+                                                       join _mk in _db.Marks on _chbal.MarkId equals _mk.MarkId
+                                                       where _chbal.ChannelId == reData.ChannelId
+                                                       select new ChannelBalanceData
+                                                       {
+                                                           MarkIdval = Encryption.EncryptID(_mk.MarkId.ToString(), LoginUserId.ToString()),
+                                                           MarkName = _mk.MarkName,
+                                                           IsoCode = _mk.Isocode,
+                                                           TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_chbal.TotalBalance, balanceSalt)),
+                                                           LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_chbal.LastBalance, balanceSalt)),
+                                                       }).ToListAsync();
+                VisitChannelResponse newChannel = new VisitChannelResponse
+                {
+                    ChannelIdval = Encryption.EncryptID(reData.ChannelId.ToString(), LoginUserId.ToString()),
+                    ChannelName = reData.ChannelName,
+                    ChannelDescription = reData.ChannelDescription,
+                    ChannelType = reData.ChannelType,
+                    MemberCount = reData.MemberCount,
+                    ChannelProfile = reData.ChannelProfile,
+                    CreatorName = reData.CreatorName,
+                    CreatorIdval = reData.CreatorIdval,
+                    BalanceDatas = bala
+                };
                 var statusdata = await (from cm in _db.ChannelMemberships
                                         join st in _db.StatusTypes on cm.StatusId equals st.StatusId
                                         where cm.ChannelId == channelId && cm.UserId == LoginUserId
@@ -587,9 +641,9 @@ public class DA_Channel
                                             StatusName = st.StatusName,
                                         }).FirstOrDefaultAsync();
                 if (statusdata is null) return Result<VisitChannelResponse>.Error("Member Status Not Found");
-                reData.IsMember = statusdata.StatusName.ToLower() == "approved";
-                reData.MemberStatus = statusdata.StatusName;
-                model = Result<VisitChannelResponse>.Success(reData);
+                newChannel.IsMember = statusdata.StatusName.ToLower() == "approved";
+                newChannel.MemberStatus = statusdata.StatusName;
+                model = Result<VisitChannelResponse>.Success(newChannel);
             }
 
         }
@@ -743,8 +797,8 @@ public class DA_Channel
                                                            UserTypeName = usertype.Name,
                                                            InviterIdval = inv != null ? inv.UserId.ToString() : null,
                                                            InviterName = inv != null ? inv.Name : null,
-                                                           JoinedDate = Globalfunction.CalculateDateTime(ch.JoinedDate) ,
-                                                           UserImage64 = ""
+                                                           JoinedDate = ch.JoinedDate.ToString(),//Globalfunction.CalculateDateTime(ch.JoinedDate) ,
+                                                           UserImageUrl = ""
                                                        }).ToListAsync();
 
             /* List<ChannelMemberResponse> query = await (from ch in _db.ChannelMemberships
@@ -780,6 +834,11 @@ public class DA_Channel
                     string base64String = Convert.ToBase64String(imageBytes);
                     response.UserImage64 = base64String;
                 }*/
+                string? imageUrl = await (from _up in _db.UserProfiles
+                                          where _up.UserId == Convert.ToInt32(response.MemberIdval)
+                                          orderby _up.CreatedDate descending // Assuming UploadDate is the timestamp of the upload
+                                          select _up.Url).FirstOrDefaultAsync();
+                response.UserImageUrl = imageUrl;
                 response.MemberIdval = Encryption.EncryptID(response.MemberIdval!, LoginUserId.ToString());
                 response.InviterIdval = Encryption.EncryptID(response.InviterIdval!, LoginUserId.ToString());
                 resData.Add(response);
@@ -1201,6 +1260,63 @@ public class DA_Channel
             result = Result<string>.Error(ex);
         }
 
+        return result;
+    }
+
+    public async Task<Result<ChannelAccessMenu>> CheckChannelAccessMenu(GetChannelData payload, int LoginUserID)
+    {
+        Result<ChannelAccessMenu> result = null;
+        try
+        {
+            int ChannelId = Convert.ToInt32(Encryption.DecryptID(payload.channelIdval!, LoginUserID.ToString()));
+            ChannelAccessMenu accessMenu = new ChannelAccessMenu {
+                CanMemberReview = false,
+                CanEventReview = false,
+            };
+
+            var admin = await (from _ch in _db.Channels
+                               join _cm in _db.ChannelMemberships on _ch.ChannelId equals _cm.ChannelId
+                               join _ut in _db.UserTypes on _cm.UserTypeId equals _ut.TypeId
+                               where _cm.UserId == LoginUserID && 
+                               _ch.ChannelId == ChannelId &&
+                               (_ut.Name.ToLower() == "admin" || _ut.Name.ToLower() == "owner")
+                               select _cm).FirstOrDefaultAsync();
+            if(admin is not null)
+            {
+                accessMenu.CanMemberReview = true;
+                accessMenu.CanEventReview = true;
+            }
+            result = Result<ChannelAccessMenu>.Success(accessMenu);
+        }
+        catch (Exception ex)
+        {
+            result = Result<ChannelAccessMenu>.Error(ex);
+        }
+        return result;
+    }
+
+    public async Task<Result<Pagination>> FindAccessChannelByName(FindByNamePayload payload, int LoginUserID)
+    {
+        Result<Pagination> result = null;
+        try
+        {
+            string? Name = payload.Name;
+            var query = await (from _ch in _db.Channels
+                                               join _cm in _db.ChannelMemberships on _ch.ChannelId equals _cm.ChannelId
+                                               where _cm.UserId == LoginUserID
+                                               && (string.IsNullOrEmpty(Name) ? true : _ch.ChannelName.Contains(Name))
+                                               select new
+                                               {
+                                                   ChannelIdval = Encryption.EncryptID(_ch.ChannelId.ToString(), LoginUserID.ToString()),
+                                                   ChannelName = _ch.ChannelName
+                                               }).ToListAsync();
+            Pagination data = RepoFunService.getWithPagination(payload.PageNumber, payload.PageSize, query);
+            result = Result<Pagination>.Success(data);
+        }
+        catch (Exception ex)
+        {
+            result = Result<Pagination>.Error(ex);
+        }
         return result;
     }
 }

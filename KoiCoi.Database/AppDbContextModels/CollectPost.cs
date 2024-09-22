@@ -17,6 +17,8 @@ public partial class CollectPost
 
     public string CollectAmount { get; set; } = null!;
 
+    public int MarkId { get; set; }
+
     public int CreatorId { get; set; }
 
     public int? ApproverId { get; set; }

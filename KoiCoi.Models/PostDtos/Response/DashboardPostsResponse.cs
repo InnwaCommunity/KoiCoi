@@ -16,6 +16,8 @@ public partial class DashboardPostsResponse
     public string CreatorName { get; set; } = string.Empty;
     public decimal CollectAmount { get; set; } = 0;
     public decimal EventTotalAmount { get; set; } = 0;
+    public string IsoCode { get; set; } = string.Empty;
+    public string AllowedMarkName { get; set;} = string.Empty;
     public DateTime? ModifiedDate { get; set; }
     public DateTime? CreatedDate { get; set; }
     public int LikeTotalCount { get; set; }

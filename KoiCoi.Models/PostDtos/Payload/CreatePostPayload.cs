@@ -6,6 +6,7 @@ public partial class CreatePostPayload
     public string? EventPostIdval { get; set; }
     public string? TagIdval { get; set; }
     public decimal CollectAmount { get; set; }
+    public string? MarkIdval { get; set; }
     public PostPolicyPropertyPayload viewPolicy { get; set; } = new PostPolicyPropertyPayload();
     public PostPolicyPropertyPayload reactPolicy { get; set; } = new PostPolicyPropertyPayload();
     public PostPolicyPropertyPayload commandPolicy { get; set; } = new PostPolicyPropertyPayload();

@@ -24,7 +24,7 @@ public class BL_Event
         return await _daEvent.UploadEventAttachFile(payload, LoginUserId);
     }
 
-    public async Task<Result<List<GetRequestEventResponse>>> GetEventRequestList(GetEventRequestPayload payload,int LoginUserId)
+    public async Task<Result<Pagination>> GetEventRequestList(GetEventRequestPayload payload,int LoginUserId)
     {
         return await _daEvent.GetEventRequestList(payload, LoginUserId);
     }
@@ -54,6 +54,34 @@ public class BL_Event
     public async Task<Result<Pagination>> GetEventByStatusAndDate(OrderByMonthPayload payload,int LoginUserId)
     {
         return await _daEvent.GetEventByStatusAndDate(payload, LoginUserId);
+    }
+    public async Task<Result<string>> CreateAllowedMarks(CreateAllowedMarkPayload payload,int LoginUserId)
+    {
+        return await _daEvent.CreateAllowedMarks(payload, LoginUserId);
+    }
+
+    public async Task<Result<Pagination>> GetAllowedMarks(GetAllowedMarkPayload payload,int LoginUserId)
+    {
+        return await _daEvent.GetAllowedMarks(payload, LoginUserId);
+    }
+
+    public async Task<Result<Pagination>> GetEventSupervisors(GetEventData payload,int LoginUserId)
+    {
+        return await _daEvent.GetEventSupervisors(payload, LoginUserId);
+    }
+
+    public async Task<Result<EventMenuAccess>> CheckEventAccessMenu(GetEventDataPayload payload,int LoginUserId)
+    {
+        return await _daEvent.CheckEventAccessMenu(payload, LoginUserId);
+    }
+
+    public async Task<Result<Pagination>> FindAccessEventByName(FindByNamePayload payload, int LoginUserId)
+    {
+        return await _daEvent.FindAccessEventByName(payload, LoginUserId);
+    }
+    public async Task<Result<Pagination>> EventContributionFilterMarkId(EventContributionPayload payload,int LoginUserId)
+    {
+        return await _daEvent.EventContributionFilterMarkId(payload, LoginUserId);
     }
 
 }

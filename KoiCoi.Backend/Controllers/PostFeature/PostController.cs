@@ -31,11 +31,11 @@ public class PostController : BaseController
     }
 
     [HttpPost("ReviewPostsList",Name ="ReviewPostsList")]
-    public async Task<Result<List<ReviewPostResponse>>> ReviewPostsList(ReviewPostPayload payload)
+    public async Task<Result<Pagination>> ReviewPostsList(ReviewPostPayload payload)
     {
-        if (string.IsNullOrEmpty(payload.EventPostIdval) || string.IsNullOrEmpty(payload.Status)) return Result<List<ReviewPostResponse>>.Error("payload Can't Empty or null");
+        if (string.IsNullOrEmpty(payload.EventPostIdval) || string.IsNullOrEmpty(payload.Status)) return Result<Pagination>.Error("payload Can't Empty or null");
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
-        return await _blPost.ReviewPostsList(payload.EventPostIdval,payload.Status, LoginUserID);
+        return await _blPost.ReviewPostsList(payload, LoginUserID);
     }
     [HttpPost("ApproveOrRejectPost",Name = "ApproveOrRejectPost")]
     public async Task<Result<string>> ApproveOrRejectPost(List<ApproveRejectPostPayload> payload)
@@ -50,6 +50,12 @@ public class PostController : BaseController
     {
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blPost.GetDashboardPosts(LoginUserID, pageNumber, pageSize);
+    }
+    [HttpPost("GetPostsOrderByEvent", Name = "GetPostsOrderByEvent")]
+    public async Task<Result<Pagination>> GetPostsOrderByEvent(GetEventData payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blPost.GetPostsOrderByEvent(payload, LoginUserID);
     }
      
 

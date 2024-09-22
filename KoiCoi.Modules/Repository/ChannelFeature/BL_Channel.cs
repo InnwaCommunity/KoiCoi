@@ -1,4 +1,6 @@
 ﻿
+using KoiCoi.Models.Login_Models;
+
 namespace KoiCoi.Modules.Repository.ChannelFeature;
 
 public class BL_Channel
@@ -47,9 +49,9 @@ public class BL_Channel
         return await _daChannel.CreateChannel(channelReqeust, LoginUserId);
     }
 
-    public async Task<Result<List<ChannelDataResponse>>> GetChannelsList(int LoginUserId)
+    public async Task<Result<Pagination>> GetChannelsList(int LoginUserId,int PageNumber,int PageSize)
     {
-        return await _daChannel.GetChannelsList(LoginUserId);
+        return await _daChannel.GetChannelsList(LoginUserId,PageNumber,PageSize);
     }
 
     public async Task<Result<string>> GetChannelProfile(int ChannelId,string destDir)
@@ -108,5 +110,14 @@ public class BL_Channel
     public async Task<Result<string>> ChangeUserTypeTheChannelMemberships(ChangeUserTypeChannelMembership payload,int LoginUserId)
     {
         return await _daChannel.ChangeUserTypeTheChannelMemberships(payload,LoginUserId);
+    }
+    public async Task<Result<ChannelAccessMenu>> CheckChannelAccessMenu(GetChannelData payload,int LoginUserID)
+    {
+        return await _daChannel.CheckChannelAccessMenu(payload, LoginUserID);
+    }
+
+    public async Task<Result<Pagination>> FindAccessChannelByName(FindByNamePayload payload,int LoginUserID)
+    {
+        return await _daChannel.FindAccessChannelByName(payload, LoginUserID);
     }
 }

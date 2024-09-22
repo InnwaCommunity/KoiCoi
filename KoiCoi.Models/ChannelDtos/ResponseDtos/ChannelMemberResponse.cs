@@ -16,5 +16,5 @@ public partial class ChannelMemberResponse
     public string? InviterIdval { get; set; }
     public string? InviterName { get; set; }
     public string? JoinedDate { get; set; }
-    public string? UserImage64 { get; set; }
+    public string? UserImageUrl { get; set; }
 }

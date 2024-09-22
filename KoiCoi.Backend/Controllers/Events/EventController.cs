@@ -33,7 +33,7 @@ public class EventController : BaseController
     public async Task<IActionResult> GetEventRequestList(GetEventRequestPayload payload)
     {
         int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
-        Result<List<GetRequestEventResponse>> response = await _blEvent.GetEventRequestList(payload,LoginUserId);
+        Result<Pagination> response = await _blEvent.GetEventRequestList(payload,LoginUserId);
         return Ok(response);
     }
 
@@ -78,5 +78,44 @@ public class EventController : BaseController
         int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
         Result<Pagination> response = await _blEvent.GetEventByStatusAndDate(payload, LoginUserId);
         return Ok(response);
+    }
+
+    [HttpPost("CreateAllowedMarks",Name = "CreateAllowedMarks")]
+    public async Task<Result<string>> CreateAllowedMarks(CreateAllowedMarkPayload payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.CreateAllowedMarks(payload,LoginUserId);
+    }
+
+    [HttpPost("GetAllowedMarks", Name = "GetAllowedMarks")]
+    public async Task<Result<Pagination>> GetAllowedMarks(GetAllowedMarkPayload payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.GetAllowedMarks(payload, LoginUserId);
+    }
+
+    [HttpPost("GetEventSupervisors",Name = "GetEventSupervisors")]
+    public async Task<Result<Pagination>> GetEventSupervisors(GetEventData payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.GetEventSupervisors(payload, LoginUserId);
+    }
+    [HttpPost("CheckEventAccessMenu",Name = "CheckEventAccessMenu")]
+    public async Task<Result<EventMenuAccess>> CheckEventAccessMenu(GetEventDataPayload payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.CheckEventAccessMenu(payload, LoginUserId);
+    }
+    [HttpPost("FindAccessEventByName", Name = "FindAccessEventByName")]
+    public async Task<Result<Pagination>> FindAccessEventByName(FindByNamePayload payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.FindAccessEventByName(payload, LoginUserId);
+    }
+    [HttpPost("EventContributionFilterMarkId", Name = "EventContributionFilterMarkId")]
+    public async Task<Result<Pagination>> EventContributionFilterMarkId(EventContributionPayload payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.EventContributionFilterMarkId(payload, LoginUserId);
     }
 }

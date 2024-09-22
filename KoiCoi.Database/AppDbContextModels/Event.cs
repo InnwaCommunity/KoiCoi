@@ -21,14 +21,6 @@ public partial class Event
 
     public int StatusId { get; set; }
 
-    public int MarkId { get; set; }
-
-    public string TotalBalance { get; set; } = null!;
-
-    public string LastBalance { get; set; } = null!;
-
-    public string? TargetBalance { get; set; }
-
     public DateTime StartDate { get; set; }
 
     public DateTime EndDate { get; set; }

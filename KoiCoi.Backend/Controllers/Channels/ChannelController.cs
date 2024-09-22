@@ -112,13 +112,12 @@ public class ChannelController : BaseController
         }
     }
 
-    [HttpGet("GetChannelsList", Name = "GetChannelsList")]
-    public async Task<Result<List<ChannelDataResponse>>> GetChannelsList()
+    [HttpGet("GetChannelsList/{PageNumber}/{PageSize}", Name = "GetChannelsList")]
+    public async Task<Result<Pagination>> GetChannelsList(int PageNumber,int PageSize)
     {
 
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
-        return await _blChannel.GetChannelsList(LoginUserID);
-
+        return await _blChannel.GetChannelsList(LoginUserID,PageNumber,PageSize);
     }
 
     [HttpPost("GetChannelProfile",Name = "GetChannelProfile")]
@@ -332,5 +331,17 @@ public class ChannelController : BaseController
         return await _blChannel.ChangeUserTypeTheChannelMemberships(payload, LoginUserID);
     }
 
+    [HttpPost("CheckChannelAccessMenu",Name = "CheckChannelAccessMenu")]
+    public async Task<Result<ChannelAccessMenu>> CheckChannelAccessMenu(GetChannelData payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blChannel.CheckChannelAccessMenu(payload, LoginUserID);
+    }
+    [HttpPost("FindAccessChannelByName",Name = "FindAccessChannelByName")]
+    public async Task<Result<Pagination>> FindAccessChannelByName(FindByNamePayload payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blChannel.FindAccessChannelByName(payload, LoginUserID);
+    }
 
 }

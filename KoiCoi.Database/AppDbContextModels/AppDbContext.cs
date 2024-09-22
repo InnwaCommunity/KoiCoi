@@ -23,6 +23,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<ChannelBalanceRecord> ChannelBalanceRecords { get; set; }
 
+    public virtual DbSet<ChannelMarkBalance> ChannelMarkBalances { get; set; }
+
     public virtual DbSet<ChannelMembership> ChannelMemberships { get; set; }
 
     public virtual DbSet<ChannelProfile> ChannelProfiles { get; set; }
@@ -41,9 +43,13 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<EventAddress> EventAddresses { get; set; }
 
+    public virtual DbSet<EventAllowedMark> EventAllowedMarks { get; set; }
+
     public virtual DbSet<EventBalanceRecord> EventBalanceRecords { get; set; }
 
     public virtual DbSet<EventFile> EventFiles { get; set; }
+
+    public virtual DbSet<EventMarkBalance> EventMarkBalances { get; set; }
 
     public virtual DbSet<EventMembership> EventMemberships { get; set; }
 
@@ -137,17 +143,11 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Inactive)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("inactive");
-            entity.Property(e => e.LastBalance)
-                .HasMaxLength(255)
-                .HasColumnName("Last_Balance");
             entity.Property(e => e.MemberCount).HasColumnName("Member_Count");
             entity.Property(e => e.ModifiedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("modifiedDate");
             entity.Property(e => e.StatusDescription).HasColumnName("Status_Description");
-            entity.Property(e => e.TotalBalance)
-                .HasMaxLength(255)
-                .HasColumnName("Total_Balance");
         });
 
         modelBuilder.Entity<ChannelBalanceRecord>(entity =>
@@ -166,6 +166,18 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("Last_Balance");
             entity.Property(e => e.TotalBalance)
                 .HasMaxLength(225)
+                .HasColumnName("Total_Balance");
+        });
+
+        modelBuilder.Entity<ChannelMarkBalance>(entity =>
+        {
+            entity.HasKey(e => e.BalanceId).HasName("PK__ChannelM__A760D5BE6BC90E5A");
+
+            entity.Property(e => e.LastBalance)
+                .HasMaxLength(255)
+                .HasColumnName("Last_Balance");
+            entity.Property(e => e.TotalBalance)
+                .HasMaxLength(255)
                 .HasColumnName("Total_Balance");
         });
 
@@ -230,7 +242,9 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<CollectPost>(entity =>
         {
-            entity.HasKey(e => e.CollectId).HasName("PK__CollectP__8AAA9E0AFB298D6B");
+            entity.HasKey(e => e.CollectId).HasName("PK__CollectP__8AAA9E0A992A15A5");
+
+            entity.ToTable("CollectPost");
 
             entity.Property(e => e.CollectAmount).HasMaxLength(200);
         });
@@ -263,10 +277,7 @@ public partial class AppDbContext : DbContext
 
             entity.Property(e => e.EndDate).HasColumnType("datetime");
             entity.Property(e => e.EventName).HasMaxLength(100);
-            entity.Property(e => e.LastBalance).HasMaxLength(255);
             entity.Property(e => e.StartDate).HasColumnType("datetime");
-            entity.Property(e => e.TargetBalance).HasMaxLength(255);
-            entity.Property(e => e.TotalBalance).HasMaxLength(255);
         });
 
         modelBuilder.Entity<EventAddress>(entity =>
@@ -276,6 +287,15 @@ public partial class AppDbContext : DbContext
             entity.ToTable("EventAddress");
 
             entity.Property(e => e.AddressName).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<EventAllowedMark>(entity =>
+        {
+            entity.HasKey(e => e.AllowedMarkId).HasName("PK__EventAll__959F221805029BA7");
+
+            entity.ToTable("EventAllowedMark");
+
+            entity.Property(e => e.AllowedMarkName).HasMaxLength(200);
         });
 
         modelBuilder.Entity<EventBalanceRecord>(entity =>
@@ -308,6 +328,15 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.UrlDescription)
                 .HasMaxLength(100)
                 .HasColumnName("Url_description");
+        });
+
+        modelBuilder.Entity<EventMarkBalance>(entity =>
+        {
+            entity.HasKey(e => e.BalanceId).HasName("PK__EventMar__A760D5BEEE7A9DF7");
+
+            entity.Property(e => e.LastBalance).HasMaxLength(255);
+            entity.Property(e => e.TargetBalance).HasMaxLength(255);
+            entity.Property(e => e.TotalBalance).HasMaxLength(255);
         });
 
         modelBuilder.Entity<EventMembership>(entity =>

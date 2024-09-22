@@ -16,10 +16,8 @@ public partial class VisitChannelResponse
     public string? ChannelType { get; set; }
     public string? CreatorIdval { get; set; }
     public string? CreatorName { get; set; }
-    public string? ISOCode { get; set; }
     public long? MemberCount { get; set; }
-    public decimal? TotalBalance { get; set; }
-    public decimal? LastBalance { get; set; }
     public string? ChannelProfile { get; set; }
-                                        
+    public List<ChannelBalanceData> BalanceDatas { get; set; } = new List<ChannelBalanceData>();
+
 }
