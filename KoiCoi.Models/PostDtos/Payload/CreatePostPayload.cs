@@ -4,9 +4,11 @@ public partial class CreatePostPayload
 {
     public string? Content { get; set; }
     public string? EventPostIdval { get; set; }
-    public string? TagIdval { get; set; }
-    public decimal CollectAmount { get; set; }
-    public string? MarkIdval { get; set; }
+    //public string? TagIdval { get; set; }
+    //public decimal CollectAmount { get; set; }
+    //public string? MarkIdval { get; set; }
+    public List<CreatePostTag> postTags { get; set; }
+    public List<CreatePostBalance> postBalances { get; set; } = new List<CreatePostBalance>();
     public PostPolicyPropertyPayload viewPolicy { get; set; } = new PostPolicyPropertyPayload();
     public PostPolicyPropertyPayload reactPolicy { get; set; } = new PostPolicyPropertyPayload();
     public PostPolicyPropertyPayload commandPolicy { get; set; } = new PostPolicyPropertyPayload();
@@ -15,6 +17,17 @@ public partial class CreatePostPayload
     //public List<PostImagePayload> imageData { get; set; } = new List<PostImagePayload>();
 }
 
+public partial class CreatePostBalance
+{
+    public decimal Balance { get; set; }
+    public string MarkIdval { get; set; }
+}
+
+public partial class CreatePostTag
+{
+    public string TagIdval { get; set; }
+    public bool IsUser { get; set; } = false;
+}
 
 public partial class PostPolicyPropertyPayload
 {

@@ -47,14 +47,14 @@ public  class BL_Post
     {
         return await _daPost.GetPostsOrderByEvent(payload, LoginUserID);
     }
-    public async Task<Result<string>> CreatePostTags(CreatePostTagListPayload payload,int LoginUserId)
+    public async Task<Result<string>> CreateEventTags(CreateEventTagListPayload payload,int LoginUserId)
     {
-        return await _daPost.CreatePostTags(payload, LoginUserId);
+        return await _daPost.CreateEventTags(payload, LoginUserId);
     }
 
-    public async Task<Result<List<PostTagDataResponse>>> GetPostTags(string EventPostIdval,int LoginUserId)
+    public async Task<Result<List<PostTagDataResponse>>> GetEventTags(string EventPostIdval,int LoginUserId)
     {
-        return await _daPost.GetPostTags(EventPostIdval, LoginUserId);
+        return await _daPost.GetEventTags(EventPostIdval, LoginUserId);
     }
 
 }

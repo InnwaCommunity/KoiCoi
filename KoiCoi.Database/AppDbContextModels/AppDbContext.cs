@@ -53,6 +53,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<EventMembership> EventMemberships { get; set; }
 
+    public virtual DbSet<EventTag> EventTags { get; set; }
+
     public virtual DbSet<InformMail> InformMails { get; set; }
 
     public virtual DbSet<InviteHistory> InviteHistories { get; set; }
@@ -70,6 +72,8 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Policy> Policies { get; set; }
 
     public virtual DbSet<Post> Posts { get; set; }
+
+    public virtual DbSet<PostBalance> PostBalances { get; set; }
 
     public virtual DbSet<PostCommand> PostCommands { get; set; }
 
@@ -242,11 +246,9 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<CollectPost>(entity =>
         {
-            entity.HasKey(e => e.CollectId).HasName("PK__CollectP__8AAA9E0A992A15A5");
+            entity.HasKey(e => e.CollectId).HasName("PK__CollectP__8AAA9E0A4C6DE3DE");
 
             entity.ToTable("CollectPost");
-
-            entity.Property(e => e.CollectAmount).HasMaxLength(200);
         });
 
         modelBuilder.Entity<CommandReact>(entity =>
@@ -344,6 +346,17 @@ public partial class AppDbContext : DbContext
             entity.HasKey(e => e.Membershipid).HasName("PK__Event_Me__0C6CB69F9503A6AF");
 
             entity.ToTable("EventMembership");
+        });
+
+        modelBuilder.Entity<EventTag>(entity =>
+        {
+            entity.HasKey(e => e.EventTagId).HasName("PK__EventTag__1DC94B514BA9F5A2");
+
+            entity.ToTable("EventTag");
+
+            entity.Property(e => e.CreateDate).HasColumnType("datetime");
+            entity.Property(e => e.TagDescription).HasMaxLength(255);
+            entity.Property(e => e.TagName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<InformMail>(entity =>
@@ -459,6 +472,15 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.PostType).HasMaxLength(50);
         });
 
+        modelBuilder.Entity<PostBalance>(entity =>
+        {
+            entity.HasKey(e => e.BalanceId).HasName("PK__PostBala__A760D5BE6F0E7A7D");
+
+            entity.ToTable("PostBalance");
+
+            entity.Property(e => e.Balance).HasMaxLength(255);
+        });
+
         modelBuilder.Entity<PostCommand>(entity =>
         {
             entity.HasKey(e => e.CommandId).HasName("PK__PostComm__6B410B06CE99E604");
@@ -503,14 +525,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<PostTag>(entity =>
         {
-            entity.HasKey(e => e.TagId).HasName("PK__PostTag__657CF9AC53BA1C14");
-
             entity.ToTable("PostTag");
-
-            entity.Property(e => e.CreateDate).HasColumnType("datetime");
-            entity.Property(e => e.Inactive).HasDefaultValueSql("((0))");
-            entity.Property(e => e.TagDescription).HasMaxLength(255);
-            entity.Property(e => e.TagName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<PostViewer>(entity =>

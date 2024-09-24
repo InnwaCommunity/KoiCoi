@@ -11,13 +11,7 @@ public partial class CollectPost
 
     public string? Content { get; set; }
 
-    public int? TagId { get; set; }
-
     public int EventPostId { get; set; }
-
-    public string CollectAmount { get; set; } = null!;
-
-    public int MarkId { get; set; }
 
     public int CreatorId { get; set; }
 

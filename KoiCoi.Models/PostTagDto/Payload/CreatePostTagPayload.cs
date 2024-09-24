@@ -2,16 +2,16 @@
 
 
 
-public partial class CreatePostTagListPayload
+public partial class CreateEventTagListPayload
 {
     public string? EventPostIdval { get; set; }
-    public List<PostTagPayload> PostTags { get; set; } = new List<PostTagPayload>();
+    public List<EventTagPayload> EventTags { get; set; } = new List<EventTagPayload>();
 
 }
 
-public partial class PostTagPayload
+public partial class EventTagPayload
 {
-    public string PostTagName { get; set; } = string.Empty;
-    public string PostTagDescritpion { get; set; } = string.Empty;
+    public string EventTagName { get; set; } = string.Empty;
+    public string EventTagDescritpion { get; set; } = string.Empty;
 }
 

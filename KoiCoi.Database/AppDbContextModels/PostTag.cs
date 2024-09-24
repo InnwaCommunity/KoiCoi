@@ -5,17 +5,11 @@ namespace KoiCoi.Database.AppDbContextModels;
 
 public partial class PostTag
 {
-    public int TagId { get; set; }
+    public int PostTagId { get; set; }
 
-    public string TagName { get; set; } = null!;
+    public int PostId { get; set; }
 
-    public string? TagDescription { get; set; }
+    public int? EventTagId { get; set; }
 
-    public int EventPostId { get; set; }
-
-    public int CreatorId { get; set; }
-
-    public DateTime? CreateDate { get; set; }
-
-    public bool? Inactive { get; set; }
+    public int? UserId { get; set; }
 }

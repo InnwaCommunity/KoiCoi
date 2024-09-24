@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace KoiCoi.Modules.Repository.EventFreture;
@@ -1157,11 +1158,13 @@ public class DA_Event
                                    UserTypeName = _utJoined != null ? _utJoined.Name : null,
             */
 
-            var query = await (from _ev in _db.Events
+            /*
+             var query = await (from _ev in _db.Events
                                join _coll in _db.CollectPosts on _ev.PostId equals _coll.EventPostId
+                               join _colBal in _db.PostBalances on _coll.PostId equals _colBal.PostId
                                join _eb in _db.EventMarkBalances on _ev.PostId equals _eb.EventPostId
                                join _user in _db.Users on _coll.CreatorId equals _user.UserId
-                                where _ev.PostId == EventPostId && _coll.MarkId == MarkId
+                                where _ev.PostId == EventPostId && _colBal.MarkId == MarkId
                                select new
                                {
                                    UserId = _user.UserId,
@@ -1170,7 +1173,24 @@ public class DA_Event
                                    CollectBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_coll.CollectAmount.ToString(), balanceSalt)),
                                    TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eb.TotalBalance.ToString(), balanceSalt))
                                }
-                               ).ToListAsync();
+                               ).ToListAsync();*/
+            var query = await (from _ev in _db.Events
+                               join _coll in _db.CollectPosts on _ev.PostId equals _coll.EventPostId
+                               join _colBal in _db.PostBalances on _coll.PostId equals _colBal.PostId
+                               join _eb in _db.EventMarkBalances on _ev.PostId equals _eb.EventPostId
+                               join _user in _db.Users on _coll.CreatorId equals _user.UserId
+                               where _ev.PostId == EventPostId && _colBal.MarkId == MarkId
+                               select new
+                               {
+                                   UserId = _coll.CreatorId,
+                                   UserName = _user.Name,
+                                   Contact = _user.Email,
+                                   CollectBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_colBal.Balance, balanceSalt)),
+                                   TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eb.TotalBalance, balanceSalt))
+                               }
+                   ).ToListAsync();
+
+
             var groupedResult = query
                                 .GroupBy(x => new { x.UserId, x.UserName, x.Contact,x.TotalBalance })
                                 .Select(g => new

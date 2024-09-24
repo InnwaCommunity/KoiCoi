@@ -10,23 +10,26 @@ public partial class DashboardPostsResponse
     public string ChannelName { get; set;} = string.Empty;
     public string EventPostIdval { get; set; } = string.Empty;
     public string EventName { get; set; } = string.Empty;
-    public string? TagIdval { get; set; }
-    public string? TagName { get; set; }
+    //public string? TagIdval { get; set; }
+    //public string? TagName { get; set; }
     public string CreatorIdval { get; set; } = string.Empty;
     public string CreatorName { get; set; } = string.Empty;
-    public decimal CollectAmount { get; set; } = 0;
-    public decimal EventTotalAmount { get; set; } = 0;
-    public string IsoCode { get; set; } = string.Empty;
-    public string AllowedMarkName { get; set;} = string.Empty;
+    //public decimal CollectAmount { get; set; } = 0;
+    //public decimal EventTotalAmount { get; set; } = 0;
+    //public string IsoCode { get; set; } = string.Empty;
+    //public string AllowedMarkName { get; set;} = string.Empty;
     public DateTime? ModifiedDate { get; set; }
     public DateTime? CreatedDate { get; set; }
     public int LikeTotalCount { get; set; }
     public int CommandTotalCount { get; set; }
     public int ShareTotalCount { get; set; }
     public int ViewTotalCount { get; set; }
+    public bool Selected { get; set; }
     public bool CanLike { get; set; }
     public bool CanCommand { get; set; }
     public bool CanShare { get; set; }
+    public List<PostTagResponse> postTagRes { get; set; } = new List<PostTagResponse>();
+    public List<PostBalanceResponse> postBalanceRes { get; set; } = new List<PostBalanceResponse>();
     public List<PostImageResponse>? ImageResponse { get; set; }
 }
 
