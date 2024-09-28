@@ -16,7 +16,13 @@ public class ChannelController : BaseController
         _blChannel = blChannel;
         _configuration = configuration;
     }
+    [HttpPost("CreateCustomMark",Name = "CreateCustomMark")]
+    public async Task<Result<string>> CreateCustomMark(CreateCustomMarkPayload payload)
+    {
 
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blChannel.CreateCustomMark(payload, LoginUserID);
+    }
 
     [HttpPost("GetMarkList", Name = "GetMarkList")]
     public async Task<Result<Pagination>> GetMarkList(GetMarkPayload payload)

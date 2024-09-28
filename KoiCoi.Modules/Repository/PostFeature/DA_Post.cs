@@ -38,7 +38,7 @@ public class DA_Post
             ///Check EventId EndDate
             DateTime? eventEndDate = _db.Events.Where(x => x.PostId == EventPostId)
                 .Select(x => x.EndDate).FirstOrDefault();
-            if(eventEndDate == null || eventEndDate < DateTime.UtcNow)
+            if (eventEndDate == null || eventEndDate < DateTime.UtcNow)
             {
                 ///Notifi to Post Uploader that upload success
                 await _notificationmanager.SaveNotification(
@@ -136,6 +136,31 @@ public class DA_Post
                 };
                 await _db.PostBalances.AddAsync(newbalance);
                 await _db.SaveChangesAsync();
+
+                if(!string.IsNullOrEmpty(item.ToMarkIdval))
+                {
+                    int ToMarkId = Convert.ToInt32(Encryption.DecryptID(item.ToMarkIdval, LoginUserId.ToString()));
+                    ///Create Exchange Rate
+                    var exchange = await _db.ExchangeRates.Where(x =>
+                        x.FromMarkId == NMarkId
+                        && x.EventPostId == EventPostId
+                        && x.ToMarkId == ToMarkId
+                        && x.MinQuantity <= item.Balance)// Check MinQuantity condition
+                        .OrderByDescending(x => x.MinQuantity)
+                        .FirstOrDefaultAsync();
+                    if(exchange is not null)
+                    {
+                        decimal bal = item.Balance * exchange.Rate;
+                        PostBalance newbal = new PostBalance
+                        {
+                            PostId = newPost.PostId,
+                            Balance = Encryption.EncryptID(bal.ToString(), balanceSalt),
+                            MarkId = ToMarkId
+                        };
+                        await _db.PostBalances.AddAsync(newbal);
+                        await _db.SaveChangesAsync();
+                    }
+                }
             }
             foreach (var item in payload.postTags)
             {
@@ -185,6 +210,25 @@ public class DA_Post
                 {
                     int lMarkId = Convert.ToInt32(Encryption.DecryptID(item.MarkIdval, LoginUserId.ToString()));
                     await UpdateCollectBalance(EventPostId, lMarkId, item.Balance, balanceSalt);
+
+                    if (!string.IsNullOrEmpty(item.ToMarkIdval))
+                    {
+                        int ToMarkId = Convert.ToInt32(Encryption.DecryptID(item.ToMarkIdval, LoginUserId.ToString()));
+                        ///Create Exchange Rate
+                        var exchange = await _db.ExchangeRates
+                                        .Where(x =>
+                                        x.FromMarkId == lMarkId
+                                        && x.EventPostId == EventPostId
+                                        && x.ToMarkId == ToMarkId
+                                        && x.MinQuantity <= item.Balance) // Check MinQuantity condition
+                                        .OrderByDescending(x => x.MinQuantity) // Order by MinQuantity in descending order
+                                        .FirstOrDefaultAsync();
+                        if (exchange is not null)
+                        {
+                            decimal bal = item.Balance * exchange.Rate;
+                            await UpdateCollectBalance(EventPostId, ToMarkId, bal, balanceSalt);
+                        }
+                    }
                 }
 
                 PostPolicyPropertyPayload viewPolicy = payload.viewPolicy;
@@ -293,7 +337,10 @@ public class DA_Post
                 Encryption.DecryptID(eventBalance.TotalBalance.ToString(), balanceSalt));
             decimal EventLastBalance = Globalfunction.StringToDecimal(
                     Encryption.DecryptID(eventBalance.LastBalance.ToString(), balanceSalt));
-            EventTotalBalance = EventTotalBalance + CollectAmount;
+            if (CollectAmount > 0)
+            {
+                EventTotalBalance = EventTotalBalance + CollectAmount;
+            }
             EventLastBalance = EventLastBalance + CollectAmount;
             eventBalance.TotalBalance = Encryption.EncryptID(EventTotalBalance.ToString(), balanceSalt);
             eventBalance.LastBalance = Encryption.EncryptID(EventLastBalance.ToString(), balanceSalt);
@@ -301,18 +348,17 @@ public class DA_Post
         }
         else
         {
-            ///create new
-            EventMarkBalance newBalance = new EventMarkBalance
-            {
-
-                EventPostId = EventPostId,
-                MarkId = MarkId,
-                TotalBalance = Encryption.EncryptID(CollectAmount.ToString(), balanceSalt),
-                LastBalance = Encryption.EncryptID(CollectAmount.ToString(), balanceSalt),
-                TargetBalance = null
-            };
-            await _db.EventMarkBalances.AddAsync(newBalance);
-            await _db.SaveChangesAsync();
+                ///create new
+                EventMarkBalance newBalance = new EventMarkBalance
+                {
+                    EventPostId = EventPostId,
+                    MarkId = MarkId,
+                    TotalBalance = Encryption.EncryptID(CollectAmount > 0 ? CollectAmount.ToString() : "0.0", balanceSalt),
+                    LastBalance = Encryption.EncryptID(CollectAmount.ToString(), balanceSalt),
+                    TargetBalance = null
+                };
+                await _db.EventMarkBalances.AddAsync(newBalance);
+                await _db.SaveChangesAsync();
 
         }
         /*
@@ -347,7 +393,10 @@ public class DA_Post
                 Encryption.DecryptID(chanBalance.TotalBalance!.ToString(), balanceSalt));
             decimal ChannelLastBalance = Globalfunction.StringToDecimal(
                     Encryption.DecryptID(chanBalance.LastBalance!.ToString(), balanceSalt));
-            ChannelTotalBalance = ChannelTotalBalance + CollectAmount;
+            if(CollectAmount > 0)
+            {
+                ChannelTotalBalance = ChannelTotalBalance + CollectAmount;
+            }
             ChannelLastBalance = ChannelLastBalance + CollectAmount;
             chanBalance.TotalBalance = Encryption.EncryptID(ChannelTotalBalance.ToString(), balanceSalt);
             chanBalance.LastBalance = Encryption.EncryptID(ChannelLastBalance.ToString(), balanceSalt);
@@ -355,23 +404,23 @@ public class DA_Post
         }
         else
         {
-            int ChannelId = await (from _chan in _db.Channels
-                                   join _ev in _db.Events on _chan.ChannelId equals _ev.ChannelId
-                                   where _ev.PostId == EventPostId
-                                   select _chan.ChannelId).FirstOrDefaultAsync();
-            if (ChannelId > 0)
-            {
-
-                ChannelMarkBalance newBalance = new ChannelMarkBalance
+                int ChannelId = await (from _chan in _db.Channels
+                                       join _ev in _db.Events on _chan.ChannelId equals _ev.ChannelId
+                                       where _ev.PostId == EventPostId
+                                       select _chan.ChannelId).FirstOrDefaultAsync();
+                if (ChannelId > 0)
                 {
-                    ChannelId = ChannelId,
-                    MarkId = MarkId,
-                    TotalBalance = Encryption.EncryptID(CollectAmount.ToString(), balanceSalt),
-                    LastBalance = Encryption.EncryptID(CollectAmount.ToString(), balanceSalt),
-                };
-                await _db.ChannelMarkBalances.AddAsync(newBalance);
-                await _db.SaveChangesAsync();
-            }
+
+                    ChannelMarkBalance newBalance = new ChannelMarkBalance
+                    {
+                        ChannelId = ChannelId,
+                        MarkId = MarkId,
+                        TotalBalance = Encryption.EncryptID(CollectAmount > 0 ? CollectAmount.ToString() : "0.0", balanceSalt),
+                        LastBalance = Encryption.EncryptID(CollectAmount.ToString(), balanceSalt),
+                    };
+                    await _db.ChannelMarkBalances.AddAsync(newBalance);
+                    await _db.SaveChangesAsync();
+                }
         }
         /*
          * old code

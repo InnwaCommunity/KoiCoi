@@ -64,7 +64,6 @@ public class ChangePasswordController : BaseController
         }
     }
 
-
     [HttpPost("SaveVertifyEmail",Name = "SaveVertifyEmail")]
     public async Task<Result<string>> SaveVertifyEmail(VertifyEmailPayload verEmPay)
     {

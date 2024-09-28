@@ -1,11 +1,15 @@
 ﻿using Amazon;
+using Amazon.S3.Model;
 using Humanizer;
+using KoiCoi.Database.AppDbContextModels;
 using KoiCoi.Models.EventDto.Payload;
 using KoiCoi.Models.EventDto.Response;
 using KoiCoi.Modules.Repository.ChangePassword;
 using KoiCoi.Modules.Repository.UserFeature;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Utilities.Encoders;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Globalization;
@@ -916,48 +920,43 @@ public class DA_Event
                                 await _db.EventAllowedMarks.AddAsync(newMark);
                                 await _db.SaveChangesAsync();
 
-                                ///next check event mark balance
-                                var evbalance = await _db.EventMarkBalances.Where(x => x.MarkId == MarkId && x.EventPostId == EventPostId).FirstOrDefaultAsync();
-                                if(evbalance is null)
-                                {
-                                    string TotalBalance = Encryption.EncryptID("0.0", balanceSalt);
-                                    string LastBalance = Encryption.EncryptID("0.0", balanceSalt);
-                                    string? TargetBalance = item.TargetBalance != null ? Encryption.EncryptID(item.TargetBalance.Value.ToString(), balanceSalt) : null;
-                                    EventMarkBalance newBalance = new EventMarkBalance { 
-                                        EventPostId = EventPostId,
-                                        MarkId = MarkId,
-                                        TotalBalance=TotalBalance,
-                                        LastBalance = LastBalance,
-                                        TargetBalance = TargetBalance
-                                    };
-                                    await _db.EventMarkBalances.AddAsync(newBalance);
-                                    await _db.SaveChangesAsync();
-                                }
 
-                                ///also check channel mark balance
-                                int ChannelId = await _db.Events.Where(x => x.PostId == EventPostId).Select(x => x.ChannelId).FirstOrDefaultAsync();
-                                if(ChannelId > 0)
-                                {
-                                    var chanBalance = await _db.ChannelMarkBalances.Where(x => x.ChannelId == ChannelId && x.MarkId == MarkId).FirstOrDefaultAsync();
-                                    if(chanBalance is null)
-                                    {
-                                        string TotalBalance = Encryption.EncryptID("0.0", balanceSalt);
-                                        string LastBalance = Encryption.EncryptID("0.0", balanceSalt);
-                                        ChannelMarkBalance newBalance = new ChannelMarkBalance
-                                        {
-                                            ChannelId = ChannelId,
-                                            MarkId = MarkId,
-                                            TotalBalance = TotalBalance,
-                                            LastBalance = LastBalance,
-                                        };
-                                        await _db.ChannelMarkBalances.AddAsync(newBalance);
-                                        await _db.SaveChangesAsync();
-                                    }
-                                }
+                                await CreateNewEventAndChannelMarkBalance(MarkId, EventPostId,item.TargetBalance, balanceSalt);
                             }
 
                         }
+
+                        ///Create Exchange Rate
+                        foreach (var newer in item.ExchangeRatePayloads)
+                        {
+                            if (!string.IsNullOrEmpty(newer.ToMarkIdval))
+                            {
+                                int ToMarkId = Convert.ToInt32(
+                                    Encryption.DecryptID(newer.ToMarkIdval, LoginUserId.ToString()));
+                                var oldex = await _db.ExchangeRates.Where(x => x.FromMarkId == MarkId
+                                && x.ToMarkId == ToMarkId
+                                && x.EventPostId == EventPostId
+                                && x.MinQuantity == newer.MinQuantity).FirstOrDefaultAsync();
+                                if (oldex is null)
+                                {
+                                    ExchangeRate newexra = new ExchangeRate
+                                    {
+                                        FromMarkId = MarkId,
+                                        ToMarkId = ToMarkId,
+                                        EventPostId = EventPostId,
+                                        MinQuantity = newer.MinQuantity,
+                                        Rate = newer.Rate
+                                    };
+                                    await _db.ExchangeRates.AddAsync(newexra);
+                                    await _db.SaveChangesAsync();
+
+                                    decimal? ExchTarget = item.TargetBalance * newer.Rate;
+                                    await CreateNewEventAndChannelMarkBalance(ToMarkId, EventPostId, ExchTarget, balanceSalt);
+                                }
+                            };
+                        }
                     }
+
                     result = Result<string>.Success("Create Success");
                 }
                 else
@@ -977,6 +976,71 @@ public class DA_Event
         return result;
     }
 
+    private async Task CreateNewEventAndChannelMarkBalance(int MarkId,int EventPostId, decimal? Targetbalance,string balanceSalt)
+    {
+        ///next check event mark balance
+        var evbalance = await _db.EventMarkBalances.Where(x => x.MarkId == MarkId && x.EventPostId == EventPostId).FirstOrDefaultAsync();
+        if (evbalance is null)
+        {
+            string TotalBalance = Encryption.EncryptID("0.0", balanceSalt);
+            string LastBalance = Encryption.EncryptID("0.0", balanceSalt);
+            string? TargetBalance = Targetbalance != null ? Encryption.EncryptID(Targetbalance.Value.ToString(), balanceSalt) : null;
+            EventMarkBalance newBalance = new EventMarkBalance
+            {
+                EventPostId = EventPostId,
+                MarkId = MarkId,
+                TotalBalance = TotalBalance,
+                LastBalance = LastBalance,
+                TargetBalance = TargetBalance
+            };
+            await _db.EventMarkBalances.AddAsync(newBalance);
+            await _db.SaveChangesAsync();
+        }
+        else
+        {
+            if(Targetbalance is not null)
+            {
+
+                string? TagBal = evbalance.TargetBalance;
+                if (TagBal is not null)
+                {
+                    decimal Target = Globalfunction.StringToDecimal(Encryption.DecryptID(TagBal, balanceSalt));
+                    decimal NewTarget = Target + Targetbalance.Value;
+                    string NewTargetString = Encryption.EncryptID(NewTarget.ToString(), balanceSalt);
+                    evbalance.TargetBalance = NewTargetString;
+                    await _db.SaveChangesAsync();
+                }
+                else
+                {
+                    string NewTargetString = Encryption.EncryptID(Targetbalance.Value.ToString(), balanceSalt);
+                    evbalance.TargetBalance = NewTargetString;
+                    await _db.SaveChangesAsync();
+                }
+            }
+        }
+
+        ///also check channel mark balance
+        int ChannelId = await _db.Events.Where(x => x.PostId == EventPostId).Select(x => x.ChannelId).FirstOrDefaultAsync();
+        if (ChannelId > 0)
+        {
+            var chanBalance = await _db.ChannelMarkBalances.Where(x => x.ChannelId == ChannelId && x.MarkId == MarkId).FirstOrDefaultAsync();
+            if (chanBalance is null)
+            {
+                string TotalBalance = Encryption.EncryptID("0.0", balanceSalt);
+                string LastBalance = Encryption.EncryptID("0.0", balanceSalt);
+                ChannelMarkBalance newBalance = new ChannelMarkBalance
+                {
+                    ChannelId = ChannelId,
+                    MarkId = MarkId,
+                    TotalBalance = TotalBalance,
+                    LastBalance = LastBalance,
+                };
+                await _db.ChannelMarkBalances.AddAsync(newBalance);
+                await _db.SaveChangesAsync();
+            }
+        }
+    }
+
     public async Task<Result<Pagination>> GetAllowedMarks(GetAllowedMarkPayload payload, int LoginUserId)
     {
         Result<Pagination> result = null;
@@ -985,17 +1049,52 @@ public class DA_Event
             int EventPostId = Convert.ToInt32(Encryption.DecryptID(payload.EventIdval!, LoginUserId.ToString()));
             if (string.IsNullOrEmpty(payload.MarkTypeIdval) || payload.MarkTypeIdval.ToLower() == "all")
             {
-                var allowedMark = await (from _evmk in _db.EventAllowedMarks
-                                         join _mark in _db.Marks on _evmk.MarkId equals _mark.MarkId
-                                         where _evmk.EventPostId == EventPostId
-                                         select new
-                                         {
-                                             MarkIdval = Encryption.EncryptID(_mark.MarkId.ToString(), LoginUserId.ToString()),
-                                             IsoCode = _mark.Isocode,
-                                             AllowedMarkName = _evmk.AllowedMarkName,
-                                         }).ToListAsync();
+                var query = await (from _evmk in _db.EventAllowedMarks
+                                   join _mark in _db.Marks on _evmk.MarkId equals _mark.MarkId
+                                   where _evmk.EventPostId == EventPostId
+                                   select new
+                                   {
+                                       AllowedMarkId = _evmk.AllowedMarkId,
+                                       MarkId = _mark.MarkId,
+                                       IsoCode = _mark.Isocode,
+                                       AllowedMarkName = _evmk.AllowedMarkName,
+                                   }).ToListAsync();
 
-                Pagination pagination = RepoFunService.getWithPagination(payload.PageNumber, payload.PageSize, allowedMark);
+                List<AllowedMarkResponse> allowedMarks = new List<AllowedMarkResponse>();
+
+                foreach (var item in query)
+                {
+                    // Get exchange rates for the current mark
+                    var newexchange = await (from _ex in _db.ExchangeRates
+                                             join _mks in _db.Marks on _ex.ToMarkId equals _mks.MarkId
+                                             where _ex.FromMarkId == item.MarkId
+                                             && _ex.EventPostId == EventPostId
+                                             orderby _ex.MinQuantity descending
+                                             select new ExchangeRateResponse
+                                             {
+                                                 ToMarkIdval = Encryption.EncryptID(_mks.MarkId.ToString(), LoginUserId.ToString()),
+                                                 MarkName = _mks.MarkName,
+                                                 IsoCode = _mks.Isocode,
+                                                 MinQuantiry = _ex.MinQuantity,
+                                                 Rate = _ex.Rate
+                                             }).ToListAsync();
+
+                    // Create new AllowedMarkResponse and attach exchange rates
+                    AllowedMarkResponse newallow = new AllowedMarkResponse
+                    {
+                        AllowedMarkIdval = Encryption.EncryptID(item.AllowedMarkId.ToString(), LoginUserId.ToString()),
+                        MarkIdval = Encryption.EncryptID(item.MarkId.ToString(), LoginUserId.ToString()),
+                        AllowedMarkName = item.AllowedMarkName,
+                        IsoCode = item.IsoCode,
+                        ExchangeRates = newexchange // Add exchange rates here
+                    };
+
+                    allowedMarks.Add(newallow);
+                }
+
+
+                //AllowedMarkResponse
+                Pagination pagination = RepoFunService.getWithPagination(payload.PageNumber, payload.PageSize, allowedMarks);
                 result = Result<Pagination>.Success(pagination);
             }
             else

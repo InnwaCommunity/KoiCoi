@@ -21,4 +21,9 @@ public class BL_React
     {
         return await _daReact.ReactPost(payload, LoginUserID);
     }
+
+    public async Task<Result<string>> CommentPost(CommentPostPayload payload,int LoginUserID)
+    {
+        return await _daReact.CommentPost(payload, LoginUserID);
+    }
 }

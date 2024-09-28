@@ -1,6 +1,7 @@
 ﻿
 
 using KoiCoi.Database.AppDbContextModels;
+using KoiCoi.Models;
 using Microsoft.Extensions.Configuration;
 
 namespace KoiCoi.Modules.Repository.ReactFeature;
@@ -86,6 +87,62 @@ public class DA_React
                 result = Result<string>.Success("Delete React Success");
 
             }
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
+        }
+        return result;
+    }
+
+    public async Task<Result<string>> CommentPost(CommentPostPayload payload, int LoginUserID)
+    {
+        Result<string> result = null;
+        try
+        {
+            if (payload.PostIdval is null && payload.ParentIdval is null)
+                return Result<string>.Error("Post can be null");
+
+            if(payload.PostIdval is not null)
+            {
+                int PostId = Convert.ToInt32(Encryption.DecryptID(payload.PostIdval, LoginUserID.ToString()));
+                var post = await _db.Posts.Where(x=> x.PostId== PostId).FirstOrDefaultAsync();
+                if(post is null)
+                    return Result<string>.Error("Post can't found");
+                PostCommand newCommand = new PostCommand
+                {
+                    Content = payload.Content,
+                    PostId = PostId,
+                    UserId = LoginUserID,
+                    ModifiedDate = DateTime.UtcNow,
+                    CreatedDate = DateTime.UtcNow,
+                };
+                await _db.PostCommands.AddAsync(newCommand);
+                await _db.SaveChangesAsync();
+                result = Result<string>.Success("Success");
+            }
+            else if(payload.ParentIdval is not null)
+            {
+                int ParentCommandId = Convert.ToInt32(Encryption.DecryptID(payload.ParentIdval, LoginUserID.ToString()));
+                var post = await (from _pt in _db.Posts
+                                  join _cop in _db.PostCommands on _pt.PostId equals _cop.PostId
+                                  where _cop.CommandId == ParentCommandId
+                                  select _pt).FirstOrDefaultAsync();
+                if (post is null)
+                    return Result<string>.Error("Post can't found");
+                PostCommand newCommand = new PostCommand
+                {
+                    Content = payload.Content,
+                    PostId = post.PostId,
+                    UserId = LoginUserID,
+                    ModifiedDate = DateTime.UtcNow,
+                    CreatedDate = DateTime.UtcNow,
+                };
+                await _db.PostCommands.AddAsync(newCommand);
+                await _db.SaveChangesAsync();
+                result = Result<string>.Success("Success");
+            }
+            result = Result<string>.Error("Fail");
         }
         catch (Exception ex)
         {

@@ -1,6 +1,8 @@
 ﻿
 using KoiCoi.Models;
+using KoiCoi.Models.ChannelDtos.PayloadDtos;
 using KoiCoi.Models.Via;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing.Printing;
@@ -117,6 +119,51 @@ public class DA_Channel
         return model;
     }
 
+    public async Task<Result<string>> CreateCustomMark(CreateCustomMarkPayload payload, int LoginUserID)
+    {
+        Result<string> result = null;
+        try
+        {
+            if (string.IsNullOrEmpty(payload.ChannelIdval))
+                return Result<string>.Error("Channel Id Can't Null");
+            int ChannelId = Convert.ToInt32(Encryption.DecryptID(payload.ChannelIdval, LoginUserID.ToString()));
+            foreach (var item in payload.MarkPayloads)
+            {
+                int? MarkTypeId = null;
+                if (!string.IsNullOrEmpty(item.MarkTypeIdval))
+                {
+                    MarkTypeId = Convert.ToInt32(Encryption.DecryptID(item.MarkTypeIdval, LoginUserID.ToString()));
+                }
+                int? UserId = null;
+                if (!string.IsNullOrEmpty(item.UserIdval))
+                {
+                    UserId = Convert.ToInt32(Encryption.DecryptID(item.UserIdval, LoginUserID.ToString()));
+                    var user = await _db.Users.Where(x => x.UserId == UserId).FirstOrDefaultAsync();
+                    if(user is null)
+                        return Result<string>.Error("User Id Can't Null");
+                }
+                Mark newMark = new Mark
+                {
+                    MarkName = item.MarkName,
+                    MarkSymbol = item.MarkSymbol,
+                    Isocode = item.Isocode,
+                    MarkTypeId = MarkTypeId,
+                    ChannelId = ChannelId,
+                    UserId = UserId,
+                };
+                await _db.Marks.AddAsync(newMark);
+                await _db.SaveChangesAsync();
+            }
+            result = Result<string>.Success("Create Success");
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
+        }
+
+        return result;
+    }
+
     public async Task<Result<Pagination>> GetMarkList(int LoginUserId, GetMarkPayload payload)
     {
         Result<Pagination> model = null;
@@ -124,10 +171,32 @@ public class DA_Channel
         {
             int pageNumber = payload.pageNumber;
             int pageSize = payload.pageSize;
-            if(payload.MarkTypeIdval.ToLower() == "all" || string.IsNullOrEmpty(payload.MarkTypeIdval))
+            int ChannelId = Convert.ToInt32(Encryption.DecryptID(payload.ChannelIdval.ToString(), LoginUserId.ToString()));
+
+            if (string.IsNullOrEmpty(payload.MarkTypeIdval))
+            {
+
+                List<MarkResponseDto> newlist = await (from _m in _db.Marks
+                                                       join _t in _db.MarkTypes on _m.MarkTypeId equals _t.MarkTypeId
+                                                       where  _m.ChannelId == ChannelId
+                                                       select new MarkResponseDto
+                                                       {
+                                                           MarkIdval = Encryption.EncryptID(_m.MarkId.ToString(), LoginUserId.ToString()),
+                                                           MarName = _m.MarkName,
+                                                           MarkSymbol = _m.MarkSymbol,
+                                                           IsoCode = _m.Isocode,
+                                                           TypeIdval = Encryption.EncryptID(_t.MarkTypeId.ToString(), LoginUserId.ToString()),
+                                                           TypeName = _t.TypeName
+                                                       }).ToListAsync();
+                Pagination data = RepoFunService.getWithPagination(pageNumber, pageSize, newlist);
+                model = Result<Pagination>.Success(data);
+            }
+            else
+            if (payload.MarkTypeIdval.ToLower() == "all")
             {
                 List<MarkResponseDto> newlist = await (from _m in _db.Marks
                                                        join _t in _db.MarkTypes on _m.MarkTypeId equals _t.MarkTypeId
+                                                       where ( _m.ChannelId != null ? _m.ChannelId == ChannelId : true)
                                                        select new MarkResponseDto
                                                        {
                                                            MarkIdval = Encryption.EncryptID(_m.MarkId.ToString(), LoginUserId.ToString()),
@@ -145,7 +214,7 @@ public class DA_Channel
                 int markTypeId = Convert.ToInt32(Encryption.DecryptID(payload.MarkTypeIdval.ToString(), LoginUserId.ToString()));
                 List<MarkResponseDto> newlist = await (from _m in _db.Marks
                                                        join _t in _db.MarkTypes on _m.MarkTypeId equals _t.MarkTypeId
-                                                       where _m.MarkTypeId == markTypeId
+                                                       where _m.MarkTypeId == markTypeId && (_m.ChannelId != null ? _m.ChannelId == ChannelId : true)
                                                        select new MarkResponseDto
                                                        {
                                                            MarkIdval = Encryption.EncryptID(_m.MarkId.ToString(), LoginUserId.ToString()),

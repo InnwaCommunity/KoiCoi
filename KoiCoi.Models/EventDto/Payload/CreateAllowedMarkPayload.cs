@@ -11,6 +11,13 @@ public class AllowMarkPayload
 {
     public string MarkIdval { get; set; } = string.Empty;
     public string MarkName { get; set;} = string.Empty;
-    public double? TargetBalance { get; set; }
+    public decimal? TargetBalance { get; set; }
+    public List<ExchangeRatePayload> ExchangeRatePayloads { get; set; } = new List<ExchangeRatePayload> { };
+}
 
+public partial class ExchangeRatePayload
+{
+    public string ToMarkIdval { get; set; }= string.Empty;
+    public decimal MinQuantity { get; set; }
+    public decimal Rate { get; set; }
 }

@@ -20,7 +20,8 @@ public partial class CreatePostPayload
 public partial class CreatePostBalance
 {
     public decimal Balance { get; set; }
-    public string MarkIdval { get; set; }
+    public string MarkIdval { get; set; } = string.Empty;
+    public string? ToMarkIdval { get; set; } = null;
 }
 
 public partial class CreatePostTag

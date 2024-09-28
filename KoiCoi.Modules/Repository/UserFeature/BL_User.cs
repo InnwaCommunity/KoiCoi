@@ -97,4 +97,9 @@ public class BL_User
     {
         return await _daUser.GetLoginUserInfo(LoginEmpID);
     }
+
+    public async Task<Result<string>> ChangeLoginPassword(ChangePasswordPayload paylod,int LoginUserId)
+    {
+        return await _daUser.ChangeLoginPassword(paylod, LoginUserId);
+    }
 }

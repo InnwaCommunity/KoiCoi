@@ -26,4 +26,6 @@ public partial class User
     public DateTime ModifiedDate { get; set; }
 
     public bool? Inactive { get; set; }
+
+    public virtual ICollection<Mark> Marks { get; set; } = new List<Mark>();
 }

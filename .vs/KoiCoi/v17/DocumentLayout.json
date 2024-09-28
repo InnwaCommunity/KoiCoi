@@ -3,72 +3,144 @@
   "WorkspaceRootPath": "D:\\published\\AwsDeployment\\KoiCoi\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\eventfeature\\da_event.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\eventfeature\\da_event.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\channelfeature\\da_channel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\channelfeature\\da_channel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\channelfeature\\bl_channel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\channelfeature\\bl_channel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\channels\\channelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\channels\\channelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.database\\appdbcontextmodels\\mark.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|solutionrelative:koicoi.database\\appdbcontextmodels\\mark.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.database\\appdbcontextmodels\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|solutionrelative:koicoi.database\\appdbcontextmodels\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\customtokenauthprovider\\tokenprovidermiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\customtokenauthprovider\\tokenprovidermiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\postfeature\\bl_post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\postfeature\\bl_post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\postfeature\\eventtagcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\postfeature\\eventtagcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\postfeature\\da_post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\postfeature\\da_post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\postdtos\\response\\dashboardpostsresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\postdtos\\response\\dashboardpostsresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\events\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\events\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\postdtos\\payload\\createpostpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\postdtos\\payload\\createpostpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\postfeature\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\postfeature\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{57E1EEB6-A3B6-43C5-BA2D-EFEC1E6DC7F1}|_Documents{57E1EEB6-A3B6-43C5-BA2D-EFEC1E6DC7F1}|D:\\published\\AwsDeployment\\KoiCoi\\README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
       "RelativeMoniker": "D:0:0:{57E1EEB6-A3B6-43C5-BA2D-EFEC1E6DC7F1}|_Documents{57E1EEB6-A3B6-43C5-BA2D-EFEC1E6DC7F1}|solutionrelative:README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.database\\appdbcontextmodels\\react.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|solutionrelative:koicoi.database\\appdbcontextmodels\\react.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\channeldtos\\payloaddtos\\createcustommarkpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\channeldtos\\payloaddtos\\createcustommarkpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\userfeature\\da_user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\userfeature\\da_user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\eventfeature\\da_event.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\eventfeature\\da_event.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\eventfeature\\bl_event.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\eventfeature\\bl_event.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\events\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\events\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\eventdto\\response\\allowedmarkresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\eventdto\\response\\allowedmarkresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\postfeature\\da_post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\postfeature\\da_post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\postfeature\\bl_post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\postfeature\\bl_post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\postfeature\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\postfeature\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\channels\\channeltypecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\channels\\channeltypecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\globalusings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\globalusings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\channeldtos\\payloaddtos\\createsystemmarkpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\channeldtos\\payloaddtos\\createsystemmarkpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\mark\\payload\\getmarkpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\mark\\payload\\getmarkpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\customtokenauthprovider\\tokenprovidermiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\customtokenauthprovider\\tokenprovidermiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\koicoi.backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\koicoi.backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\reactfeature\\da_react.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\reactfeature\\da_react.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\postfeature\\reactcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\postfeature\\reactcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\reactfeature\\bl_react.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\reactfeature\\bl_react.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\eventdto\\payload\\eventcontributionpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\eventdto\\payload\\eventcontributionpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\userfeature\\da_user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\userfeature\\da_user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\userfeature\\bl_user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\userfeature\\bl_user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\user\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\user\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\user\\changepasswordcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\user\\changepasswordcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\changepassword\\da_changepassword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\changepassword\\da_changepassword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\user_dto\\payload\\changepasswordpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\user_dto\\payload\\changepasswordpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\postfeature\\eventtagcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\postfeature\\eventtagcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\postdtos\\response\\dashboardpostsresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\postdtos\\response\\dashboardpostsresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.database\\appdbcontextmodels\\react.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|solutionrelative:koicoi.database\\appdbcontextmodels\\react.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\eventdto\\payload\\eventcontributionpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\eventdto\\payload\\eventcontributionpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6ADBAF6B-5F50-4883-AB8D-91A5EDC7E01B}|KoiCoi.Operational\\KoiCoi.Operational.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.operational\\services\\kcawss3service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -83,31 +155,11 @@
       "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\filecontrol\\kcfileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\koicoi.backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\koicoi.backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\channelfeature\\da_channel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\channelfeature\\da_channel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\channelfeature\\bl_channel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\channelfeature\\bl_channel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\channels\\channelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\channels\\channelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\8.0.304\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\eventdto\\response\\getrequesteventresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\eventdto\\response\\getrequesteventresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\userfeature\\bl_user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\userfeature\\bl_user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\channeldtos\\responsedtos\\channelmemberresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -126,14 +178,6 @@
       "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\channeldtos\\responsedtos\\channelaccessmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\globalusings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\globalusings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\postfeature\\reactcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\postfeature\\reactcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\eventdto\\createeventpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\eventdto\\createeventpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -150,16 +194,8 @@
       "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.database\\appdbcontextmodels\\eventaddress.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|solutionrelative:koicoi.database\\appdbcontextmodels\\eventaddress.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\user\\changepasswordcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\user\\changepasswordcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\customtokenauthprovider\\middlewareextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -216,10 +252,6 @@
       "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\koicoi.modules.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\mark\\payload\\getmarkpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\mark\\payload\\getmarkpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\via\\viachannel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\via\\viachannel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -244,24 +276,12 @@
       "RelativeMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|solutionrelative:koicoi.database\\appdbcontextmodels\\accountloginhistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\reactfeature\\da_react.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\reactfeature\\da_react.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.modules\\repository\\reactfeature\\bl_react.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\reactfeature\\bl_react.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\postdtos\\payload\\approverejectpostpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\postdtos\\payload\\approverejectpostpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.database\\appdbcontextmodels\\userpostinteraction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9FD96778-3FF4-44EA-9383-EF560A22730D}|KoiCoi.Database\\KoiCoi.Database.csproj|solutionrelative:koicoi.database\\appdbcontextmodels\\userpostinteraction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.backend\\controllers\\channels\\channeltypecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\channels\\channeltypecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6ADBAF6B-5F50-4883-AB8D-91A5EDC7E01B}|KoiCoi.Operational\\KoiCoi.Operational.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.operational\\globalusing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -316,10 +336,6 @@
       "RelativeMoniker": "D:0:0:{6ADBAF6B-5F50-4883-AB8D-91A5EDC7E01B}|KoiCoi.Operational\\KoiCoi.Operational.csproj|solutionrelative:koicoi.operational\\extensions\\httpcontextextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6ADBAF6B-5F50-4883-AB8D-91A5EDC7E01B}|KoiCoi.Operational\\KoiCoi.Operational.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.operational\\encrypt\\aesencryption.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6ADBAF6B-5F50-4883-AB8D-91A5EDC7E01B}|KoiCoi.Operational\\KoiCoi.Operational.csproj|solutionrelative:koicoi.operational\\encrypt\\aesencryption.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\awsdeployment\\koicoi\\koicoi.models\\channeldtos\\responsedtos\\joinchannelresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|solutionrelative:koicoi.models\\channeldtos\\responsedtos\\joinchannelresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -361,6 +377,45 @@
           "SelectedChildIndex": 8,
           "Children": [
             {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Mark.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\Mark.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\Mark.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\Mark.cs",
+              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\Mark.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAA1wBMAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-28T15:35:53.209Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\AppDbContext.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\AppDbContext.cs",
+              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\AppDbContext.cs",
+              "ViewState": "AQIAAGcAAAAAAAAAAAAcwHAAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-28T15:35:24.545Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "CreateCustomMarkPayload.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\PayloadDtos\\CreateCustomMarkPayload.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\ChannelDtos\\PayloadDtos\\CreateCustomMarkPayload.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\PayloadDtos\\CreateCustomMarkPayload.cs",
+              "RelativeToolTip": "KoiCoi.Models\\ChannelDtos\\PayloadDtos\\CreateCustomMarkPayload.cs",
+              "ViewState": "AQIAAAQAAAAAAAAAAAAzwA4AAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-28T15:28:21.32Z",
+              "EditorCaption": ""
+            },
+            {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
@@ -373,803 +428,161 @@
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\AppDbContext.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\AppDbContext.cs",
-              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\AppDbContext.cs",
-              "ViewState": "AQIAAGUAAAAAAAAAAAAUwHUAAAA+AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T15:38:25.533Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "EventController.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
-              "ViewState": "AQIAABEAAAAAAAAAAAAswGQAAAAxAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-28T12:16:08.02Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "BL_Post.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
-              "ViewState": "AQIAACMAAAAAAAAAAAD4vzgAAABHAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-03T09:42:25.056Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "EventTagController.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\EventTagController.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\PostFeature\\EventTagController.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\EventTagController.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\PostFeature\\EventTagController.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAA7wBUAAAAsAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-06T12:13:18.472Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "DA_Event.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\EventFeature\\DA_Event.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\EventFeature\\DA_Event.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\EventFeature\\DA_Event.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\EventFeature\\DA_Event.cs",
-              "ViewState": "AQIAAJ4EAAAAAAAAAAAwwK8EAAA8AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-28T12:17:38.614Z",
-              "EditorCaption": ""
-            },
-            {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "TokenProviderMiddleware.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\CustomTokenAuthProvider\\TokenProviderMiddleware.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\CustomTokenAuthProvider\\TokenProviderMiddleware.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\CustomTokenAuthProvider\\TokenProviderMiddleware.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\CustomTokenAuthProvider\\TokenProviderMiddleware.cs",
-              "ViewState": "AQIAAB8BAAAAAAAAAIAwwCgBAAA8AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-19T02:41:51.897Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "DA_Post.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
-              "ViewState": "AQIAAKIAAAAAAAAAAAAYwLAAAAAsAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-22T08:23:44.722Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "DashboardPostsResponse.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\PostDtos\\Response\\DashboardPostsResponse.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\PostDtos\\Response\\DashboardPostsResponse.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\PostDtos\\Response\\DashboardPostsResponse.cs",
-              "RelativeToolTip": "KoiCoi.Models\\PostDtos\\Response\\DashboardPostsResponse.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T13:26:59.529Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "CreatePostPayload.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\PostDtos\\Payload\\CreatePostPayload.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\PostDtos\\Payload\\CreatePostPayload.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\PostDtos\\Payload\\CreatePostPayload.cs",
-              "RelativeToolTip": "KoiCoi.Models\\PostDtos\\Payload\\CreatePostPayload.cs",
-              "ViewState": "AQIAABMAAAAAAAAAAIA7wBsAAAAoAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T01:56:09.049Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "PostController.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
-              "ViewState": "AQIAAAcAAAAAAAAAAAAawBcAAAAuAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-03T09:41:21.594Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "README.md",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\README.md",
-              "RelativeDocumentMoniker": "README.md",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\README.md",
-              "RelativeToolTip": "README.md",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAABBAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
-              "WhenOpened": "2024-09-24T01:50:37.967Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "BL_Event.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\EventFeature\\BL_Event.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\EventFeature\\BL_Event.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\EventFeature\\BL_Event.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\EventFeature\\BL_Event.cs",
-              "ViewState": "AQIAADgAAAAAAAAAAAAlwEUAAAAxAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-11T16:07:51.163Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "React.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\React.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\React.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\React.cs",
-              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\React.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAoAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-22T08:24:27.365Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "DA_User.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\UserFeature\\DA_User.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\UserFeature\\DA_User.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\UserFeature\\DA_User.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\UserFeature\\DA_User.cs",
-              "ViewState": "AQIAAGcBAAAAAAAAAAAtwHoBAAArAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-03T16:01:23.573Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "launchSettings.json",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Properties\\launchSettings.json",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Properties\\launchSettings.json",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Properties\\launchSettings.json",
-              "RelativeToolTip": "KoiCoi.Backend\\Properties\\launchSettings.json",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAABwAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-07-28T07:14:07.726Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "EventContributionPayload.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Payload\\EventContributionPayload.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\EventDto\\Payload\\EventContributionPayload.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Payload\\EventContributionPayload.cs",
-              "RelativeToolTip": "KoiCoi.Models\\EventDto\\Payload\\EventContributionPayload.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAtAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-21T12:44:52.755Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\User\\UserController.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\User\\UserController.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\User\\UserController.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\User\\UserController.cs",
-              "ViewState": "AQIAAEIAAAAAAAAAAAArwEEAAAApAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-18T07:52:26.454Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "KcFileService.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\FileControl\\KcFileService.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\FileControl\\KcFileService.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\FileControl\\KcFileService.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\FileControl\\KcFileService.cs",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAABMAAAA4AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-01T14:56:34.6Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "KcAwsS3Service.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\Services\\KcAwsS3Service.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Operational\\Services\\KcAwsS3Service.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\Services\\KcAwsS3Service.cs",
-              "RelativeToolTip": "KoiCoi.Operational\\Services\\KcAwsS3Service.cs",
-              "ViewState": "AQIAAGIAAAAAAAAAAAD4v3AAAAAtAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-16T03:15:38.683Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "DA_File.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\FileManager\\DA_File.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\FileManager\\DA_File.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\FileManager\\DA_File.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\FileManager\\DA_File.cs",
-              "ViewState": "AQIAAD0AAAAAAAAAAAAQwE0AAAAqAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-01T15:02:15.144Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "KoiCoi.Backend.csproj",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\KoiCoi.Backend.csproj",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\KoiCoi.Backend.csproj",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\KoiCoi.Backend.csproj",
-              "RelativeToolTip": "KoiCoi.Backend\\KoiCoi.Backend.csproj",
-              "ViewState": "AQIAAA4AAAAAAAAAAAAmwBwAAABIAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-07-19T16:38:10.975Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "DA_Channel.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
-              "ViewState": "AQIAAFEDAAAAAAAAAAAiwFkDAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-22T12:48:42.617Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "BL_Channel.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\BL_Channel.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\ChannelFeature\\BL_Channel.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\BL_Channel.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\ChannelFeature\\BL_Channel.cs",
-              "ViewState": "AQIAAEsAAAAAAAAAAAAlwFgAAAA6AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-30T02:53:05.316Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
               "Title": "ChannelController.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\Channels\\ChannelController.cs",
               "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\Channels\\ChannelController.cs",
               "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\Channels\\ChannelController.cs",
               "RelativeToolTip": "KoiCoi.Backend\\Controllers\\Channels\\ChannelController.cs",
-              "ViewState": "AQIAABIBAAAAAAAAAAAkwB8BAAA6AAAA",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAIwBcAAAAwAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-19T08:28:31.363Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "Microsoft.NET.Sdk.targets",
-              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\8.0.304\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.targets",
-              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\8.0.304\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.targets",
-              "ViewState": "AQIAAP8AAAAAAAAAAAAvwBMBAABiAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
-              "WhenOpened": "2024-09-19T17:06:31.145Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "GetRequestEventResponse.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Response\\GetRequestEventResponse.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\EventDto\\Response\\GetRequestEventResponse.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Response\\GetRequestEventResponse.cs",
-              "RelativeToolTip": "KoiCoi.Models\\EventDto\\Response\\GetRequestEventResponse.cs",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAAA0AAAAnAAAA",
+              "DocumentIndex": 1,
+              "Title": "BL_Channel.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\BL_Channel.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\ChannelFeature\\BL_Channel.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\BL_Channel.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\ChannelFeature\\BL_Channel.cs",
+              "ViewState": "AQIAABcAAAAAAAAAAAApwCUAAAAwAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-13T18:30:41.795Z"
+              "WhenOpened": "2024-08-30T02:53:05.316Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "BL_User.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\UserFeature\\BL_User.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\UserFeature\\BL_User.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\UserFeature\\BL_User.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\UserFeature\\BL_User.cs",
-              "ViewState": "AQIAAEkAAAAAAAAAAAD4v1kAAAApAAAA",
+              "DocumentIndex": 0,
+              "Title": "DA_Channel.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
+              "ViewState": "AQIAAHoAAAAAAAAAAAD4v5EAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-03T15:41:57.062Z"
+              "WhenOpened": "2024-07-22T12:48:42.617Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "ChannelMemberResponse.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelMemberResponse.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelMemberResponse.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelMemberResponse.cs",
-              "RelativeToolTip": "KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelMemberResponse.cs",
-              "ViewState": "AQIAAAQAAAAAAAAAAAD4vwwAAAArAAAA",
+              "DocumentIndex": 7,
+              "Title": "DA_Event.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\EventFeature\\DA_Event.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\EventFeature\\DA_Event.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\EventFeature\\DA_Event.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\EventFeature\\DA_Event.cs",
+              "ViewState": "AQIAAKIDAAAAAAAAAAD4v7QDAAAmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-19T02:15:07.388Z"
+              "WhenOpened": "2024-07-28T12:17:38.614Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
-              "Title": "KoiCoi.Models.csproj",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\KoiCoi.Models.csproj",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
-              "RelativeToolTip": "KoiCoi.Models\\KoiCoi.Models.csproj",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-09-01T14:57:01.272Z"
+              "DocumentIndex": 5,
+              "Title": "README.md",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\README.md",
+              "RelativeDocumentMoniker": "README.md",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\README.md",
+              "RelativeToolTip": "README.md",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2024-09-24T01:50:37.967Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
-              "Title": "EventNameData.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Response\\EventNameData.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\EventDto\\Response\\EventNameData.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Response\\EventNameData.cs",
-              "RelativeToolTip": "KoiCoi.Models\\EventDto\\Response\\EventNameData.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAiAAAA",
+              "DocumentIndex": 12,
+              "Title": "BL_Post.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
+              "ViewState": "AQIAAAIAAAAAAAAAAAD4vxIAAAAuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-18T14:09:05.469Z"
+              "WhenOpened": "2024-08-03T09:42:25.056Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
-              "Title": "ChannelAccessMenu.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelAccessMenu.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelAccessMenu.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelAccessMenu.cs",
-              "RelativeToolTip": "KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelAccessMenu.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAeAAAA",
+              "DocumentIndex": 13,
+              "Title": "PostController.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAlwBcAAAAuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-18T11:42:44.155Z"
+              "WhenOpened": "2024-08-03T09:41:21.594Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 8,
+              "Title": "BL_Event.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\EventFeature\\BL_Event.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\EventFeature\\BL_Event.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\EventFeature\\BL_Event.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\EventFeature\\BL_Event.cs",
+              "ViewState": "AQIAACsAAAAAAAAAAAD4vzsAAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-11T16:07:51.163Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AllowedMarkResponse.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Response\\AllowedMarkResponse.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\EventDto\\Response\\AllowedMarkResponse.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Response\\AllowedMarkResponse.cs",
+              "RelativeToolTip": "KoiCoi.Models\\EventDto\\Response\\AllowedMarkResponse.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-28T04:30:05.2Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "EventController.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
+              "ViewState": "AQIAAEgAAAAAAAAAAAAIwFYAAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-28T12:16:08.02Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "DA_Post.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
+              "ViewState": "AQIAADACAAAAAAAAAAAjwDkCAACXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-22T08:23:44.722Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
               "Title": "GlobalUsings.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\GlobalUsings.cs",
               "RelativeDocumentMoniker": "KoiCoi.Backend\\GlobalUsings.cs",
               "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\GlobalUsings.cs",
               "RelativeToolTip": "KoiCoi.Backend\\GlobalUsings.cs",
-              "ViewState": "AQIAAAsAAAAAAAAAAAAkwCMAAAAsAAAA",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAACQAAAAsAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-18T17:08:00.598Z"
+              "WhenOpened": "2024-09-27T15:55:23.038Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
-              "Title": "ReactController.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\ReactController.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\PostFeature\\ReactController.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\ReactController.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\PostFeature\\ReactController.cs",
-              "ViewState": "AQIAAAUAAAAAAAAAAAAAwBcAAABCAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-29T15:42:04.022Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 33,
-              "Title": "CreateEventPayload.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\CreateEventPayload.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\EventDto\\CreateEventPayload.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\CreateEventPayload.cs",
-              "RelativeToolTip": "KoiCoi.Models\\EventDto\\CreateEventPayload.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAqAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-14T03:56:21.459Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 34,
-              "Title": "ModularService.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\ModularService.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\ModularService.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\ModularService.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\ModularService.cs",
-              "ViewState": "AQIAADcAAAAAAAAAAAAgwEIAAAAZAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-19T03:33:12.577Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 35,
-              "Title": "GetAllowedMarkPayload.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Payload\\GetAllowedMarkPayload.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\EventDto\\Payload\\GetAllowedMarkPayload.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Payload\\GetAllowedMarkPayload.cs",
-              "RelativeToolTip": "KoiCoi.Models\\EventDto\\Payload\\GetAllowedMarkPayload.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAqAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-11T16:12:56.482Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 36,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\appsettings.json",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\appsettings.json",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\appsettings.json",
-              "RelativeToolTip": "KoiCoi.Backend\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAlAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-08-26T16:18:54.826Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 37,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Program.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Program.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Program.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\Program.cs",
-              "ViewState": "AQIAABsAAAAAAAAAAIAwwCwAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-19T02:58:58.858Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 38,
-              "Title": "EventAddress.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\EventAddress.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\EventAddress.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\EventAddress.cs",
-              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\EventAddress.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-09T02:10:35.641Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 39,
-              "Title": "ChangePasswordController.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\User\\ChangePasswordController.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\User\\ChangePasswordController.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\User\\ChangePasswordController.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\User\\ChangePasswordController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAA+AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-18T17:05:59.776Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 40,
-              "Title": "MiddlewareExtensions.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\CustomTokenAuthProvider\\MiddlewareExtensions.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\CustomTokenAuthProvider\\MiddlewareExtensions.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\CustomTokenAuthProvider\\MiddlewareExtensions.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\CustomTokenAuthProvider\\MiddlewareExtensions.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-11T02:31:50.332Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 41,
-              "Title": "BL_ChangePassword.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChangePassword\\BL_ChangePassword.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\ChangePassword\\BL_ChangePassword.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChangePassword\\BL_ChangePassword.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\ChangePassword\\BL_ChangePassword.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAFAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-05T13:26:39.645Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 42,
-              "Title": "LoginUserInfo.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\Response\\LoginUserInfo.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\User_Dto\\Response\\LoginUserInfo.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\Response\\LoginUserInfo.cs",
-              "RelativeToolTip": "KoiCoi.Models\\User_Dto\\Response\\LoginUserInfo.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAlAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-03T15:50:33.363Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 43,
-              "Title": "UserLoginAccounts.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\Response\\UserLoginAccounts.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\User_Dto\\Response\\UserLoginAccounts.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\Response\\UserLoginAccounts.cs",
-              "RelativeToolTip": "KoiCoi.Models\\User_Dto\\Response\\UserLoginAccounts.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAuwAgAAAAbAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-16T14:48:53.568Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 44,
-              "Title": "User.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\User.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\User.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\User.cs",
-              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\User.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAApAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-03T15:34:55.325Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 45,
-              "Title": "DA_Post.cs",
-              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
-              "RelativeDocumentMoniker": "..\\..\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
-              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
-              "RelativeToolTip": "..\\..\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
-              "ViewState": "AQIAAHUBAAAAAAAAAAD4v4IBAABUAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-02T11:47:21.168Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 47,
-              "Title": "ChangeDatabaseModel.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Mapper\\ChangeDatabaseModel.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Mapper\\ChangeDatabaseModel.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Mapper\\ChangeDatabaseModel.cs",
-              "RelativeToolTip": "KoiCoi.Mapper\\ChangeDatabaseModel.cs",
-              "ViewState": "AQIAABAAAAAAAAAAAAAgwCUAAAAeAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-26T15:49:23.247Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 46,
-              "Title": "DA_Channel.cs",
-              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
-              "RelativeDocumentMoniker": "..\\..\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
-              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
-              "RelativeToolTip": "..\\..\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
-              "ViewState": "AQIAAK0BAAAAAAAAAAAkwL0BAAB5AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-02T11:46:24.691Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 48,
-              "Title": "AddressType.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\AddressType.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\AddressType.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\AddressType.cs",
-              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\AddressType.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAswAcAAAAmAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-12T15:40:07.152Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 49,
-              "Title": "BL_File.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\FileManager\\BL_File.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\FileManager\\BL_File.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\FileManager\\BL_File.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\FileManager\\BL_File.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAA7AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-01T15:02:03.08Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 50,
-              "Title": "GlobalUsings.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\GlobalUsings.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\GlobalUsings.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\GlobalUsings.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\GlobalUsings.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAABoAAAArAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-18T17:30:19.892Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 51,
-              "Title": "GetFilePayload.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\FileDto\\Payload\\GetFilePayload.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\FileDto\\Payload\\GetFilePayload.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\FileDto\\Payload\\GetFilePayload.cs",
-              "RelativeToolTip": "KoiCoi.Models\\FileDto\\Payload\\GetFilePayload.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAjAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-01T14:57:58.935Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 52,
-              "Title": "ImageFileServiceController.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\FileControl\\ImageFileServiceController.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\FileControl\\ImageFileServiceController.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\FileControl\\ImageFileServiceController.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\FileControl\\ImageFileServiceController.cs",
-              "ViewState": "AQIAAAsAAAAAAAAAAAAgwKQAAABCAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-19T15:58:59.269Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 53,
-              "Title": "KoiCoi.Modules.csproj",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\KoiCoi.Modules.csproj",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
-              "RelativeToolTip": "KoiCoi.Modules\\KoiCoi.Modules.csproj",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAABPAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-07-18T17:44:54.596Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 54,
-              "Title": "GetMarkPayload.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\Mark\\Payload\\GetMarkPayload.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\Mark\\Payload\\GetMarkPayload.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\Mark\\Payload\\GetMarkPayload.cs",
-              "RelativeToolTip": "KoiCoi.Models\\Mark\\Payload\\GetMarkPayload.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAjAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-30T02:59:01.666Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 55,
-              "Title": "ViaChannel.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\Via\\ViaChannel.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\Via\\ViaChannel.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\Via\\ViaChannel.cs",
-              "RelativeToolTip": "KoiCoi.Models\\Via\\ViaChannel.cs",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAYwBgAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-29T15:06:28.954Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 56,
-              "Title": "BaseDataAccess.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\BaseDataAccess.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Database\\BaseDataAccess.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\BaseDataAccess.cs",
-              "RelativeToolTip": "KoiCoi.Database\\BaseDataAccess.cs",
-              "ViewState": "AQIAAGIAAAAAAAAAAIA0wGoAAAARAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-27T17:09:51.714Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 57,
-              "Title": "UploadUserProfileReqeust.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\UploadUserProfileReqeust.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\User_Dto\\UploadUserProfileReqeust.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\UploadUserProfileReqeust.cs",
-              "RelativeToolTip": "KoiCoi.Models\\User_Dto\\UploadUserProfileReqeust.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-26T15:08:48.369Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 58,
-              "Title": "FirebaseMessagingService.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\Services\\FirebaseMessagingService.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Operational\\Services\\FirebaseMessagingService.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\Services\\FirebaseMessagingService.cs",
-              "RelativeToolTip": "KoiCoi.Operational\\Services\\FirebaseMessagingService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAmAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-30T14:01:57.61Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 59,
-              "Title": "KoiCoi.Operational.csproj",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj",
-              "RelativeDocumentMoniker": "KoiCoi.Operational\\KoiCoi.Operational.csproj",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj",
-              "RelativeToolTip": "KoiCoi.Operational\\KoiCoi.Operational.csproj",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAABkAAABTAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-07-19T16:32:25.374Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 60,
-              "Title": "AccountLoginHistory.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\AccountLoginHistory.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\AccountLoginHistory.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\AccountLoginHistory.cs",
-              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\AccountLoginHistory.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-24T13:05:00.744Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 61,
-              "Title": "DA_React.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ReactFeature\\DA_React.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\ReactFeature\\DA_React.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ReactFeature\\DA_React.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\ReactFeature\\DA_React.cs",
-              "ViewState": "AQIAAB8AAAAAAAAAAAAwwDMAAAA+AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-19T12:04:16.092Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 62,
-              "Title": "BL_React.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ReactFeature\\BL_React.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\ReactFeature\\BL_React.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ReactFeature\\BL_React.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\ReactFeature\\BL_React.cs",
-              "ViewState": "AQIAAAcAAAAAAAAAAAAowBUAAAAnAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-19T12:02:59.903Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 63,
-              "Title": "ApproveRejectPostPayload.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\PostDtos\\Payload\\ApproveRejectPostPayload.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Models\\PostDtos\\Payload\\ApproveRejectPostPayload.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\PostDtos\\Payload\\ApproveRejectPostPayload.cs",
-              "RelativeToolTip": "KoiCoi.Models\\PostDtos\\Payload\\ApproveRejectPostPayload.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-19T12:00:59.657Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 64,
-              "Title": "UserPostInteraction.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\UserPostInteraction.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\UserPostInteraction.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\UserPostInteraction.cs",
-              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\UserPostInteraction.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-11T16:03:43.037Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 65,
+              "DocumentIndex": 14,
               "Title": "ChannelTypeController.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\Channels\\ChannelTypeController.cs",
               "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\Channels\\ChannelTypeController.cs",
@@ -1181,7 +594,669 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "CreateSystemMarkPayload.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\PayloadDtos\\CreateSystemMarkPayload.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\ChannelDtos\\PayloadDtos\\CreateSystemMarkPayload.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\PayloadDtos\\CreateSystemMarkPayload.cs",
+              "RelativeToolTip": "KoiCoi.Models\\ChannelDtos\\PayloadDtos\\CreateSystemMarkPayload.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAzAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-27T15:46:00.703Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "GetMarkPayload.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\Mark\\Payload\\GetMarkPayload.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\Mark\\Payload\\GetMarkPayload.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\Mark\\Payload\\GetMarkPayload.cs",
+              "RelativeToolTip": "KoiCoi.Models\\Mark\\Payload\\GetMarkPayload.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAA8AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-30T02:59:01.666Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "KoiCoi.Backend.csproj",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\KoiCoi.Backend.csproj",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\KoiCoi.Backend.csproj",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\KoiCoi.Backend.csproj",
+              "RelativeToolTip": "KoiCoi.Backend\\KoiCoi.Backend.csproj",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAmwBwAAABIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-07-19T16:38:10.975Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "TokenProviderMiddleware.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\CustomTokenAuthProvider\\TokenProviderMiddleware.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\CustomTokenAuthProvider\\TokenProviderMiddleware.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\CustomTokenAuthProvider\\TokenProviderMiddleware.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\CustomTokenAuthProvider\\TokenProviderMiddleware.cs",
+              "ViewState": "AQIAAB8BAAAAAAAAAIAwwC0BAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-19T02:41:51.897Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Properties\\launchSettings.json",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Properties\\launchSettings.json",
+              "RelativeToolTip": "KoiCoi.Backend\\Properties\\launchSettings.json",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAABwAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-07-28T07:14:07.726Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "DA_React.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ReactFeature\\DA_React.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\ReactFeature\\DA_React.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ReactFeature\\DA_React.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\ReactFeature\\DA_React.cs",
+              "ViewState": "AQIAAIAAAAAAAAAAAIAwwJAAAAAyAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T12:04:16.092Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "BL_React.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ReactFeature\\BL_React.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\ReactFeature\\BL_React.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ReactFeature\\BL_React.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\ReactFeature\\BL_React.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAlwBoAAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T12:02:59.903Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "ReactController.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\ReactController.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\PostFeature\\ReactController.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\ReactController.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\PostFeature\\ReactController.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAYwB4AAABCAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-29T15:42:04.022Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Program.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Program.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Program.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\Program.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAIAwwCsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-19T02:58:58.858Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "ChangePasswordController.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\User\\ChangePasswordController.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\User\\ChangePasswordController.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\User\\ChangePasswordController.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\User\\ChangePasswordController.cs",
+              "ViewState": "AQIAADgAAAAAAAAAAAAgwEAAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-18T17:05:59.776Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "DA_ChangePassword.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChangePassword\\DA_ChangePassword.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\ChangePassword\\DA_ChangePassword.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChangePassword\\DA_ChangePassword.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\ChangePassword\\DA_ChangePassword.cs",
+              "ViewState": "AQIAAJQAAAAAAAAAAAAkwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-25T16:00:15.663Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "DA_User.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\UserFeature\\DA_User.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\UserFeature\\DA_User.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\UserFeature\\DA_User.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\UserFeature\\DA_User.cs",
+              "ViewState": "AQIAAKoBAAAAAAAAAAD4v7wBAAAuAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-03T16:01:23.573Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "BL_User.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\UserFeature\\BL_User.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\UserFeature\\BL_User.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\UserFeature\\BL_User.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\UserFeature\\BL_User.cs",
+              "ViewState": "AQIAAFMAAAAAAAAAAAApwGYAAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-03T15:41:57.062Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\User\\UserController.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\User\\UserController.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\User\\UserController.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\User\\UserController.cs",
+              "ViewState": "AQIAAEoAAAAAAAAAAAA+wE0AAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-18T07:52:26.454Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "ChangePasswordPayload.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\Payload\\ChangePasswordPayload.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\User_Dto\\Payload\\ChangePasswordPayload.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\Payload\\ChangePasswordPayload.cs",
+              "RelativeToolTip": "KoiCoi.Models\\User_Dto\\Payload\\ChangePasswordPayload.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAEAAAAiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-25T15:59:05.922Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "EventTagController.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\EventTagController.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\PostFeature\\EventTagController.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\EventTagController.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\PostFeature\\EventTagController.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAA7wBUAAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-06T12:13:18.472Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "DashboardPostsResponse.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\PostDtos\\Response\\DashboardPostsResponse.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\PostDtos\\Response\\DashboardPostsResponse.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\PostDtos\\Response\\DashboardPostsResponse.cs",
+              "RelativeToolTip": "KoiCoi.Models\\PostDtos\\Response\\DashboardPostsResponse.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-24T13:26:59.529Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "React.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\React.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\React.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\React.cs",
+              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\React.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAoAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-22T08:24:27.365Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "EventContributionPayload.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Payload\\EventContributionPayload.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\EventDto\\Payload\\EventContributionPayload.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Payload\\EventContributionPayload.cs",
+              "RelativeToolTip": "KoiCoi.Models\\EventDto\\Payload\\EventContributionPayload.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T12:44:52.755Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "KcFileService.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\FileControl\\KcFileService.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\FileControl\\KcFileService.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\FileControl\\KcFileService.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\FileControl\\KcFileService.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAABMAAAA4AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-01T14:56:34.6Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "KcAwsS3Service.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\Services\\KcAwsS3Service.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Operational\\Services\\KcAwsS3Service.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\Services\\KcAwsS3Service.cs",
+              "RelativeToolTip": "KoiCoi.Operational\\Services\\KcAwsS3Service.cs",
+              "ViewState": "AQIAAGIAAAAAAAAAAAD4v3AAAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-16T03:15:38.683Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "DA_File.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\FileManager\\DA_File.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\FileManager\\DA_File.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\FileManager\\DA_File.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\FileManager\\DA_File.cs",
+              "ViewState": "AQIAAD0AAAAAAAAAAAAQwE0AAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-01T15:02:15.144Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "Microsoft.NET.Sdk.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\8.0.304\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\8.0.304\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.targets",
+              "ViewState": "AQIAAP8AAAAAAAAAAAAvwBMBAABiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2024-09-19T17:06:31.145Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "GetRequestEventResponse.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Response\\GetRequestEventResponse.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\EventDto\\Response\\GetRequestEventResponse.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Response\\GetRequestEventResponse.cs",
+              "RelativeToolTip": "KoiCoi.Models\\EventDto\\Response\\GetRequestEventResponse.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAA0AAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-13T18:30:41.795Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "ChannelMemberResponse.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelMemberResponse.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelMemberResponse.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelMemberResponse.cs",
+              "RelativeToolTip": "KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelMemberResponse.cs",
+              "ViewState": "AQIAAAQAAAAAAAAAAAD4vwwAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-19T02:15:07.388Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "KoiCoi.Models.csproj",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\KoiCoi.Models.csproj",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj",
+              "RelativeToolTip": "KoiCoi.Models\\KoiCoi.Models.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-09-01T14:57:01.272Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "EventNameData.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Response\\EventNameData.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\EventDto\\Response\\EventNameData.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Response\\EventNameData.cs",
+              "RelativeToolTip": "KoiCoi.Models\\EventDto\\Response\\EventNameData.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T14:09:05.469Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "ChannelAccessMenu.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelAccessMenu.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelAccessMenu.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelAccessMenu.cs",
+              "RelativeToolTip": "KoiCoi.Models\\ChannelDtos\\ResponseDtos\\ChannelAccessMenu.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAeAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T11:42:44.155Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "CreateEventPayload.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\CreateEventPayload.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\EventDto\\CreateEventPayload.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\CreateEventPayload.cs",
+              "RelativeToolTip": "KoiCoi.Models\\EventDto\\CreateEventPayload.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-14T03:56:21.459Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "ModularService.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\ModularService.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\ModularService.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\ModularService.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\ModularService.cs",
+              "ViewState": "AQIAADcAAAAAAAAAAAAgwEIAAAAZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-19T03:33:12.577Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "GetAllowedMarkPayload.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Payload\\GetAllowedMarkPayload.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\EventDto\\Payload\\GetAllowedMarkPayload.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Payload\\GetAllowedMarkPayload.cs",
+              "RelativeToolTip": "KoiCoi.Models\\EventDto\\Payload\\GetAllowedMarkPayload.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-11T16:12:56.482Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\appsettings.json",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\appsettings.json",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\appsettings.json",
+              "RelativeToolTip": "KoiCoi.Backend\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-08-26T16:18:54.826Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "EventAddress.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\EventAddress.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\EventAddress.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\EventAddress.cs",
+              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\EventAddress.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-09T02:10:35.641Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "MiddlewareExtensions.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\CustomTokenAuthProvider\\MiddlewareExtensions.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\CustomTokenAuthProvider\\MiddlewareExtensions.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\CustomTokenAuthProvider\\MiddlewareExtensions.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\CustomTokenAuthProvider\\MiddlewareExtensions.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-11T02:31:50.332Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "BL_ChangePassword.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChangePassword\\BL_ChangePassword.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\ChangePassword\\BL_ChangePassword.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\ChangePassword\\BL_ChangePassword.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\ChangePassword\\BL_ChangePassword.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-05T13:26:39.645Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 51,
+              "Title": "LoginUserInfo.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\Response\\LoginUserInfo.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\User_Dto\\Response\\LoginUserInfo.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\Response\\LoginUserInfo.cs",
+              "RelativeToolTip": "KoiCoi.Models\\User_Dto\\Response\\LoginUserInfo.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-03T15:50:33.363Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 52,
+              "Title": "UserLoginAccounts.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\Response\\UserLoginAccounts.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\User_Dto\\Response\\UserLoginAccounts.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\Response\\UserLoginAccounts.cs",
+              "RelativeToolTip": "KoiCoi.Models\\User_Dto\\Response\\UserLoginAccounts.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAuwAgAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-16T14:48:53.568Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 53,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\User.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\User.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\User.cs",
+              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\User.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-03T15:34:55.325Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 54,
+              "Title": "DA_Post.cs",
+              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
+              "RelativeDocumentMoniker": "..\\..\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
+              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
+              "RelativeToolTip": "..\\..\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
+              "ViewState": "AQIAAHUBAAAAAAAAAAD4v4IBAABUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-02T11:47:21.168Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 56,
+              "Title": "ChangeDatabaseModel.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Mapper\\ChangeDatabaseModel.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Mapper\\ChangeDatabaseModel.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Mapper\\ChangeDatabaseModel.cs",
+              "RelativeToolTip": "KoiCoi.Mapper\\ChangeDatabaseModel.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAgwCUAAAAeAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-26T15:49:23.247Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 55,
+              "Title": "DA_Channel.cs",
+              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
+              "RelativeDocumentMoniker": "..\\..\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
+              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
+              "RelativeToolTip": "..\\..\\KoiCoi\\KoiCoi.Modules\\Repository\\ChannelFeature\\DA_Channel.cs",
+              "ViewState": "AQIAAK0BAAAAAAAAAAAkwL0BAAB5AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-02T11:46:24.691Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 57,
+              "Title": "AddressType.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\AddressType.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\AddressType.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\AddressType.cs",
+              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\AddressType.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAswAcAAAAmAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-12T15:40:07.152Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 58,
+              "Title": "BL_File.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\FileManager\\BL_File.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\FileManager\\BL_File.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\FileManager\\BL_File.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\FileManager\\BL_File.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAA7AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-01T15:02:03.08Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 59,
+              "Title": "GlobalUsings.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\GlobalUsings.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\GlobalUsings.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\GlobalUsings.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\GlobalUsings.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAABoAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-18T17:30:19.892Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 60,
+              "Title": "GetFilePayload.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\FileDto\\Payload\\GetFilePayload.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\FileDto\\Payload\\GetFilePayload.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\FileDto\\Payload\\GetFilePayload.cs",
+              "RelativeToolTip": "KoiCoi.Models\\FileDto\\Payload\\GetFilePayload.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-01T14:57:58.935Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 61,
+              "Title": "ImageFileServiceController.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\FileControl\\ImageFileServiceController.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\FileControl\\ImageFileServiceController.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Controllers\\FileControl\\ImageFileServiceController.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\FileControl\\ImageFileServiceController.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAgwKQAAABCAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-19T15:58:59.269Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 62,
+              "Title": "KoiCoi.Modules.csproj",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\KoiCoi.Modules.csproj",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\KoiCoi.Modules.csproj",
+              "RelativeToolTip": "KoiCoi.Modules\\KoiCoi.Modules.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAABPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-07-18T17:44:54.596Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 63,
+              "Title": "ViaChannel.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\Via\\ViaChannel.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\Via\\ViaChannel.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\Via\\ViaChannel.cs",
+              "RelativeToolTip": "KoiCoi.Models\\Via\\ViaChannel.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAYwBgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-29T15:06:28.954Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 64,
+              "Title": "BaseDataAccess.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\BaseDataAccess.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Database\\BaseDataAccess.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\BaseDataAccess.cs",
+              "RelativeToolTip": "KoiCoi.Database\\BaseDataAccess.cs",
+              "ViewState": "AQIAAGIAAAAAAAAAAIA0wGoAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-27T17:09:51.714Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 65,
+              "Title": "UploadUserProfileReqeust.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\UploadUserProfileReqeust.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\User_Dto\\UploadUserProfileReqeust.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\User_Dto\\UploadUserProfileReqeust.cs",
+              "RelativeToolTip": "KoiCoi.Models\\User_Dto\\UploadUserProfileReqeust.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-26T15:08:48.369Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 66,
+              "Title": "FirebaseMessagingService.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\Services\\FirebaseMessagingService.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Operational\\Services\\FirebaseMessagingService.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\Services\\FirebaseMessagingService.cs",
+              "RelativeToolTip": "KoiCoi.Operational\\Services\\FirebaseMessagingService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAmAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-30T14:01:57.61Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 67,
+              "Title": "KoiCoi.Operational.csproj",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj",
+              "RelativeDocumentMoniker": "KoiCoi.Operational\\KoiCoi.Operational.csproj",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj",
+              "RelativeToolTip": "KoiCoi.Operational\\KoiCoi.Operational.csproj",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAABkAAABTAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-07-19T16:32:25.374Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 68,
+              "Title": "AccountLoginHistory.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\AccountLoginHistory.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\AccountLoginHistory.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\AccountLoginHistory.cs",
+              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\AccountLoginHistory.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-24T13:05:00.744Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 69,
+              "Title": "ApproveRejectPostPayload.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\PostDtos\\Payload\\ApproveRejectPostPayload.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Models\\PostDtos\\Payload\\ApproveRejectPostPayload.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\PostDtos\\Payload\\ApproveRejectPostPayload.cs",
+              "RelativeToolTip": "KoiCoi.Models\\PostDtos\\Payload\\ApproveRejectPostPayload.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T12:00:59.657Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 70,
+              "Title": "UserPostInteraction.cs",
+              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\UserPostInteraction.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\UserPostInteraction.cs",
+              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\UserPostInteraction.cs",
+              "RelativeToolTip": "KoiCoi.Database\\AppDbContextModels\\UserPostInteraction.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-11T16:03:43.037Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 71,
               "Title": "GlobalUsing.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\GlobalUsing.cs",
               "RelativeDocumentMoniker": "KoiCoi.Operational\\GlobalUsing.cs",
@@ -1193,7 +1268,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 67,
+              "DocumentIndex": 72,
               "Title": "PostViewer.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\PostViewer.cs",
               "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\PostViewer.cs",
@@ -1205,7 +1280,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 68,
+              "DocumentIndex": 73,
               "Title": "PostPrivacyResponse.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\PostDtos\\Response\\PostPrivacyResponse.cs",
               "RelativeDocumentMoniker": "KoiCoi.Models\\PostDtos\\Response\\PostPrivacyResponse.cs",
@@ -1217,7 +1292,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 69,
+              "DocumentIndex": 74,
               "Title": "ReactType.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\AppDbContextModels\\ReactType.cs",
               "RelativeDocumentMoniker": "KoiCoi.Database\\AppDbContextModels\\ReactType.cs",
@@ -1229,7 +1304,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 70,
+              "DocumentIndex": 75,
               "Title": "PostTagDataResponse.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\PostTagDto\\Response\\PostTagDataResponse.cs",
               "RelativeDocumentMoniker": "KoiCoi.Models\\PostTagDto\\Response\\PostTagDataResponse.cs",
@@ -1241,7 +1316,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 71,
+              "DocumentIndex": 76,
               "Title": "EventAdminsResponse.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\EventDto\\Response\\EventAdminsResponse.cs",
               "RelativeDocumentMoniker": "KoiCoi.Models\\EventDto\\Response\\EventAdminsResponse.cs",
@@ -1253,7 +1328,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 72,
+              "DocumentIndex": 77,
               "Title": "TokenData.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\Login_Models\\TokenData.cs",
               "RelativeDocumentMoniker": "KoiCoi.Models\\Login_Models\\TokenData.cs",
@@ -1265,7 +1340,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 73,
+              "DocumentIndex": 78,
               "Title": "LoginDataModel.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\Login_Models\\LoginDataModel.cs",
               "RelativeDocumentMoniker": "KoiCoi.Models\\Login_Models\\LoginDataModel.cs",
@@ -1277,7 +1352,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 74,
+              "DocumentIndex": 79,
               "Title": "serviceaccountkey.json",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\serviceaccountkey.json",
               "RelativeDocumentMoniker": "KoiCoi.Backend\\serviceaccountkey.json",
@@ -1289,7 +1364,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 75,
+              "DocumentIndex": 80,
               "Title": "RemoveMemberPayload.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\RemoveMemberPayload.cs",
               "RelativeDocumentMoniker": "KoiCoi.Models\\ChannelDtos\\RemoveMemberPayload.cs",
@@ -1301,7 +1376,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 76,
+              "DocumentIndex": 81,
               "Title": "RandomPassword.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\Encrypt\\RandomPassword.cs",
               "RelativeDocumentMoniker": "KoiCoi.Operational\\Encrypt\\RandomPassword.cs",
@@ -1313,7 +1388,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 77,
+              "DocumentIndex": 82,
               "Title": "SaltedHash.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\Encrypt\\SaltedHash.cs",
               "RelativeDocumentMoniker": "KoiCoi.Operational\\Encrypt\\SaltedHash.cs",
@@ -1325,7 +1400,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 78,
+              "DocumentIndex": 83,
               "Title": "HttpContextExtensions.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\Extensions\\HttpContextExtensions.cs",
               "RelativeDocumentMoniker": "KoiCoi.Operational\\Extensions\\HttpContextExtensions.cs",
@@ -1337,19 +1412,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 79,
-              "Title": "AesEncryption.cs",
-              "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\Encrypt\\AesEncryption.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Operational\\Encrypt\\AesEncryption.cs",
-              "ToolTip": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\Encrypt\\AesEncryption.cs",
-              "RelativeToolTip": "KoiCoi.Operational\\Encrypt\\AesEncryption.cs",
-              "ViewState": "AQIAABYAAAAAAAAAAAAQwCEAAAAFAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-27T08:27:16.26Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 80,
+              "DocumentIndex": 84,
               "Title": "JoinChannelResponse.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\ResponseDtos\\JoinChannelResponse.cs",
               "RelativeDocumentMoniker": "KoiCoi.Models\\ChannelDtos\\ResponseDtos\\JoinChannelResponse.cs",
@@ -1361,7 +1424,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 81,
+              "DocumentIndex": 85,
               "Title": "GlobalUsings.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Mapper\\GlobalUsings.cs",
               "RelativeDocumentMoniker": "KoiCoi.Mapper\\GlobalUsings.cs",
@@ -1373,7 +1436,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 82,
+              "DocumentIndex": 86,
               "Title": "ViaChannelType.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\Via\\ViaChannelType.cs",
               "RelativeDocumentMoniker": "KoiCoi.Models\\Via\\ViaChannelType.cs",
@@ -1385,7 +1448,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 83,
+              "DocumentIndex": 87,
               "Title": "FileService.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Backend\\Services\\FileService.cs",
               "RelativeDocumentMoniker": "KoiCoi.Backend\\Services\\FileService.cs",
@@ -1397,7 +1460,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 84,
+              "DocumentIndex": 88,
               "Title": "ChannelTypePayloads.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\ChannelDtos\\ChannelTypePayloads.cs",
               "RelativeDocumentMoniker": "KoiCoi.Models\\ChannelDtos\\ChannelTypePayloads.cs",
@@ -1409,7 +1472,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 85,
+              "DocumentIndex": 89,
               "Title": "OtpPayload.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\Otp_Dtos\\OtpPayload.cs",
               "RelativeDocumentMoniker": "KoiCoi.Models\\Otp_Dtos\\OtpPayload.cs",
@@ -1421,7 +1484,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 86,
+              "DocumentIndex": 90,
               "Title": "RepositoryBase.cs",
               "DocumentMoniker": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Modules\\Repository\\Base\\RepositoryBase.cs",
               "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\Base\\RepositoryBase.cs",
@@ -1433,7 +1496,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 87,
+              "DocumentIndex": 91,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Dotnet Projects\\awesome\\SendEmailWithGoogleSMTP\\SendEmailWithGoogleSMTP\\Program.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\Dotnet Projects\\awesome\\SendEmailWithGoogleSMTP\\SendEmailWithGoogleSMTP\\Program.cs",

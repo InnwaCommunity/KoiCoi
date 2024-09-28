@@ -25,6 +25,13 @@ public class ReactController : BaseController
         return await _blReact.ReactPost(payload,LoginUserID);
     }
 
+    [HttpPost("CommentPost",Name = "CommentPost")]
+    public async Task<Result<string>> CommentPost(CommentPostPayload payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blReact.CommentPost(payload, LoginUserID);
+    }
+
     ///Like
     ///Command
     ///Share

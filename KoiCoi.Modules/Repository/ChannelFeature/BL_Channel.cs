@@ -1,4 +1,5 @@
 ﻿
+using KoiCoi.Models.ChannelDtos.PayloadDtos;
 using KoiCoi.Models.Login_Models;
 
 namespace KoiCoi.Modules.Repository.ChannelFeature;
@@ -32,8 +33,11 @@ public class BL_Channel
         return await _daChannel.GetChannelType(loginUserid);
     }
 
-    
-    
+    public async Task<Result<string>> CreateCustomMark(CreateCustomMarkPayload payload,int LoginUserID)
+    {
+        return await _daChannel.CreateCustomMark(payload, LoginUserID);
+    }
+
     public async Task<Result<Pagination>> GetMarkList(int LoginUserId,GetMarkPayload payload)
     {
         return await _daChannel.GetMarkList(LoginUserId,payload);

@@ -34,6 +34,8 @@ global using KoiCoi.Models.Mark.Payload;
 global using KoiCoi.Models.ChannelDtos.ResponseDtos;
 global using KoiCoi.Models.FileDto.Payload;
 global using KoiCoi.Models.EventDto.Payload;
+global using KoiCoi.Models.User_Dto.Payload;
+global using KoiCoi.Models.ChannelDtos.PayloadDtos;
 
 
 //Operational

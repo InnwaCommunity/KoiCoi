@@ -1,4 +1,5 @@
 ﻿
+using KoiCoi.Models.User_Dto.Payload;
 using KoiCoi.Models.Via;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -413,4 +414,36 @@ public class DA_User
         return result;
     }
 
+    public async Task<Result<string>> ChangeLoginPassword(ChangePasswordPayload paylod, int LoginUserId)
+    {
+        Result<string> result = null;
+        try
+        {
+            var user = await _db.Users.Where(x => x.UserId == LoginUserId).FirstOrDefaultAsync();
+            if (user is null)
+                return Result<string>.Error("Email Not Found");
+
+            string aseKey = _configuration.GetSection("AesEncryption:AseKey").Get<string>()!;
+            string aseIv = _configuration.GetSection("AesEncryption:AseIV").Get<string>()!;
+            string oldPassword = AesEncryption.Decrypt(paylod.OldPassword, aseKey, aseIv);
+            string newPassword = AesEncryption.Decrypt(paylod.NewPassword, aseKey, aseIv);
+            string oldsalt = user.PasswordHash!;
+            string oldhash = user.Password!;
+            bool flag = SaltedHash.Verify(oldsalt, oldhash, oldPassword);
+
+            if (flag == false)
+                return Result<string>.Error("Incorrect Login Password for user account : ");
+
+            string salt = SaltedHash.GenerateSalt();
+            user.Password = SaltedHash.ComputeHash(salt, newPassword);
+            user.PasswordHash = salt;
+            await _db.SaveChangesAsync();
+            result = Result<string>.Success("Change Success");
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
+        }
+        return result;
+    }
 }

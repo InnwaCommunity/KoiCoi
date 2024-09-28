@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace KoiCoi.Database.AppDbContextModels;
+﻿namespace KoiCoi.Database.AppDbContextModels;
 
 public partial class MarkType
 {

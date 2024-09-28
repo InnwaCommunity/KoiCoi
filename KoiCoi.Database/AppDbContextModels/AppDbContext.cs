@@ -55,6 +55,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<EventTag> EventTags { get; set; }
 
+    public virtual DbSet<ExchangeRate> ExchangeRates { get; set; }
+
     public virtual DbSet<InformMail> InformMails { get; set; }
 
     public virtual DbSet<InviteHistory> InviteHistories { get; set; }
@@ -359,6 +361,31 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.TagName).HasMaxLength(50);
         });
 
+        modelBuilder.Entity<ExchangeRate>(entity =>
+        {
+            entity.HasKey(e => e.ExchangeRateId).HasName("PK__Exchange__B0560449DE4DA664");
+
+            entity.ToTable("ExchangeRate");
+
+            entity.Property(e => e.MinQuantity).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.Rate).HasColumnType("decimal(18, 6)");
+
+            entity.HasOne(d => d.EventPost).WithMany(p => p.ExchangeRates)
+                .HasForeignKey(d => d.EventPostId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ExchangeRate_EventPost");
+
+            entity.HasOne(d => d.FromMark).WithMany(p => p.ExchangeRateFromMarks)
+                .HasForeignKey(d => d.FromMarkId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ExchangeRate_FromMark");
+
+            entity.HasOne(d => d.ToMark).WithMany(p => p.ExchangeRateToMarks)
+                .HasForeignKey(d => d.ToMarkId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ExchangeRate_ToMark");
+        });
+
         modelBuilder.Entity<InformMail>(entity =>
         {
             entity.HasKey(e => e.MailId).HasName("PK__InformMa__09A8749A6D76A451");
@@ -391,6 +418,15 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("ISOcode");
             entity.Property(e => e.MarkName).HasMaxLength(50);
             entity.Property(e => e.MarkSymbol).HasMaxLength(50);
+
+            entity.HasOne(d => d.Channel).WithMany(p => p.Marks)
+                .HasForeignKey(d => d.ChannelId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK_Mark_Channel");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Marks)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_Mark_User");
         });
 
         modelBuilder.Entity<MarkType>(entity =>
