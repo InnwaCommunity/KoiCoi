@@ -38,7 +38,7 @@ public  class BL_Post
     /// <param name="LoginUserId"></param>
     /// <returns></returns>
     
-     public async Task<Result<List<DashboardPostsResponse>>> GetDashboardPosts(int LoginUserId,int pageNumber,int pageSize)
+     public async Task<Result<Pagination>> GetDashboardPosts(int LoginUserId,int pageNumber,int pageSize)
     {
         return await _daPost.GetDashboardPosts(LoginUserId, pageNumber, pageSize);
     }

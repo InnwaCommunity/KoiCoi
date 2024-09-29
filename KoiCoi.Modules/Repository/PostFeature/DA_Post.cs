@@ -1,7 +1,9 @@
 ﻿using KoiCoi.Database.AppDbContextModels;
 using KoiCoi.Models.EventDto.Payload;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Drawing.Printing;
+using System.Threading.Channels;
 
 namespace KoiCoi.Modules.Repository.PostFeature;
 
@@ -752,9 +754,9 @@ public class DA_Post
     /// </summary>
     /// <param name="LoginUserId"></param>
     /// <returns></returns>
-    public async Task<Result<List<DashboardPostsResponse>>> GetDashboardPosts(int LoginUserId,int pageNumber,int pageSize)
+    public async Task<Result<Pagination>> GetDashboardPosts(int LoginUserId,int pageNumber,int pageSize)
     {
-        Result<List<DashboardPostsResponse>> result = null;
+        Result<Pagination> result = null;
         try
         {
             string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
@@ -764,7 +766,9 @@ public class DA_Post
             ///post status must approved
             ///post view count must less that equeal maxcount or view must null
             ///Check User Post Interactions
-            var posts = await (from _post in _db.Posts
+            ///old Code
+            /*
+             var posts = await (from _post in _db.Posts
                                join _colP in _db.CollectPosts on _post.PostId equals _colP.PostId
                                where _post.Inactive == false
                                select new
@@ -851,12 +855,11 @@ public class DA_Post
                                                         }).ToListAsync();
                 List<PostBalanceResponse> postBalances = await (from _pobal in _db.PostBalances
                                                                 join _allow in _db.EventAllowedMarks on _pobal.MarkId equals _allow.MarkId
-                                                                join _po in _db.EventMarkBalances on _allow.EventPostId equals _po.EventPostId
+                                                                join _po in _db.EventMarkBalances on _allow.MarkId equals _po.MarkId
                                                                 join _mark in _db.Marks on _pobal.MarkId equals _mark.MarkId
                                                                 where _pobal.PostId == item.PostId && _allow.EventPostId == item.EventPostId
                                                                 select new PostBalanceResponse
                                                                 {
-
                                                                     CollectAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_pobal.Balance, balanceSalt)),
                                                                     EventTotalAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_po.TotalBalance, balanceSalt)),
                                                                     IsoCode = _mark.Isocode,
@@ -887,12 +890,238 @@ public class DA_Post
                 };
                 dashPost.Add(newPost);
 }
-            result = Result<List<DashboardPostsResponse>>.Success(dashPost);
+            result = Result<List<DashboardPostsResponse>>.Success(dashPost);*/
+            List<dynamic> netResponse = new List<dynamic>();
+            DateTime now = DateTime.UtcNow;
+            var posts = await (from _post in _db.Posts
+                               where _post.Inactive == false
+                               select new
+                               {
+                                   PostId = _post.PostId,
+                                   PostType = _post.PostType,
+                                   ModifiedDate = _post.ModifiedDate,
+                                   CreatedDate = _post.CreatedDate,
+                                   ViewPolicies = _db.PostPolicyProperties.Where(p => p.PostId == _post.PostId && p.PolicyId == 1).FirstOrDefault(),
+                                   LikePolicies = _db.PostPolicyProperties.Where(p => p.PostId == _post.PostId && p.PolicyId == 2).FirstOrDefault(),
+                                   CommandPolicies = _db.PostPolicyProperties.Where(p => p.PostId == _post.PostId && p.PolicyId == 3).FirstOrDefault(),
+                                   SharePolicies = _db.PostPolicyProperties.Where(p => p.PostId == _post.PostId && p.PolicyId == 4).FirstOrDefault(),
+                                   UserInteractions = _db.UserPostInteractions.Where(p => p.PostId == _post.PostId && p.UserId == LoginUserId).FirstOrDefault(),
+                                   Views = _db.PostViewers.Where(p => p.PostId == _post.PostId).Count(),
+                                   Likes = _db.Reacts.Where(p => p.PostId == _post.PostId).Count(),
+                                   Commands = _db.PostCommands.Where(p => p.PostId == _post.PostId).Count(),
+                                   Shares = _db.PostShares.Where(p => p.PostId == _post.PostId).Count(),
+                               })
+                   .ToListAsync();
+            foreach (var apost in posts)
+            {
+                if(apost.PostType == "eventpost")
+                {
+                    var eventQuery = await (from _ev in _db.Events
+                                            join _cre in _db.Users on _ev.CreatorId equals _cre.UserId
+                                            join _sta in _db.StatusTypes on _ev.StatusId equals _sta.StatusId
+                                            join _meship in _db.ChannelMemberships on _ev.ChannelId equals _meship.ChannelId
+                                            join _usertype in _db.UserTypes on _meship.UserTypeId equals _usertype.TypeId
+                                            where apost.PostId == _ev.PostId &&
+                                                  _sta.StatusName.ToLower() == "approved" &&
+                                                  _meship.UserId == LoginUserId && _ev.StartDate <= now && _ev.EndDate >= now
+                                            select new
+                                            {
+                                                Event = _ev,
+                                                Post = apost,
+                                                Creator = _cre,
+                                                CMemberShip = _meship,
+                                                EventMarks = _ev.PostId,
+                                                EventAddresses = _ev.PostId,
+                                                EventFiles = _ev.PostId
+                                            }).ToListAsync();
+                    var eventIds = eventQuery.Select(e => e.Event.PostId).ToList();
+
+                    // Fetch EventMarks
+                    var eventMarks = (from _eventMark in _db.EventMarkBalances
+                                      join _mark in _db.Marks on _eventMark.MarkId equals _mark.MarkId
+                                      join _evall in _db.EventAllowedMarks on _eventMark.MarkId equals _evall.MarkId
+                                      where eventIds.Contains(_eventMark.EventPostId)
+                                      select new
+                                      {
+                                          EventPostId = _eventMark.EventPostId,
+                                          Mark = new EventMarks
+                                          {
+                                              MarkIdval = Encryption.EncryptID(_eventMark.MarkId.ToString(), LoginUserId.ToString()),
+                                              IsoCode = _mark.Isocode,
+                                              MarkName = _mark.MarkName,
+                                              AllowedMarkName = _evall.AllowedMarkName,
+                                              TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.TotalBalance.ToString(), balanceSalt)),
+                                              LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.LastBalance.ToString(), balanceSalt)),
+                                              TargetBalance = _eventMark.TargetBalance != null ? Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.TargetBalance.ToString(), balanceSalt)) : null
+                                          }
+                                      }).ToList();
+
+                    // Fetch EventAddresses
+                    var eventAddresses = (from _add in _db.EventAddresses
+                                          join _atype in _db.AddressTypes on _add.AddressId equals _atype.AddressId
+                                          where eventIds.Contains(_add.EventPostId)
+                                          select new
+                                          {
+                                              EventPostId = _add.EventPostId,
+                                              AddressResponse = new EventAddressResponse
+                                              {
+                                                  EventAddressIdval = Encryption.EncryptID(_add.EventAddressId.ToString(), LoginUserId.ToString()),
+                                                  Address = _add.AddressName,
+                                                  AddresstypeName = _atype.Address
+                                              }
+                                          }).ToList();
+
+                    // Fetch EventFiles
+                    var eventFiles = _db.EventFiles
+                                        .Where(x => eventIds.Contains(x.EventPostId))
+                                        .Select(x => new
+                                        {
+                                            EventPostId = x.EventPostId,
+                                            FileInfo = new EventFileInfo
+                                            {
+                                                fileIdval = Encryption.EncryptID(x.UrlId.ToString(), LoginUserId.ToString()),
+                                                imgfilename = x.Url,
+                                                imgDescription = x.UrlDescription
+                                            }
+                                        }).ToList();
+                    var finalResult = eventQuery.Select(e => new DashboardEventPostResponse
+                    {
+                        EventPostIdval = Encryption.EncryptID(e.Event.PostId.ToString(), LoginUserId.ToString()),
+                        EventName = e.Event.EventName,
+                        EventDescrition = e.Event.EventDescription,
+                        CreatorIdval = Encryption.EncryptID(e.Creator.UserId.ToString(), LoginUserId.ToString()),
+                        CreatorName = e.Creator.Name,
+                        StartDate = e.Event.StartDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                        EndDate = e.Event.EndDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                        //ModifiedDate = e.Post.ModifiedDate,//.ToString("yyyy-MM-ddTHH:mm:ss")
+                        ModifiedDate = apost.ModifiedDate,
+                        CreatedDate = apost.CreatedDate,
+                        ViewTotalCount = apost.Views,
+                        LikeTotalCount = apost.Likes,
+                        CommandTotalCount = apost.Commands,
+                        ShareTotalCount = apost.Shares,
+                        Selected = (_db.Reacts.Where(x => x.UserId == LoginUserId && apost.PostId == x.PostId).FirstOrDefault() != null ? true : false),
+                        CanLike = (apost.LikePolicies.GroupMemberOnly != null && apost.LikePolicies.GroupMemberOnly == true ? e.CMemberShip.UserId == LoginUserId : true) &&
+                                      (apost.LikePolicies.MaxCount != null ? apost.LikePolicies.MaxCount > apost.Likes : true),
+                        CanCommand = (apost.CommandPolicies.GroupMemberOnly != null && apost.CommandPolicies.GroupMemberOnly == true ? e.CMemberShip.UserId == LoginUserId : true) &&
+                                     (apost.CommandPolicies.MaxCount != null ? apost.CommandPolicies.MaxCount > apost.Commands : true),
+                        CanShare = (apost.SharePolicies.GroupMemberOnly != null && apost.SharePolicies.GroupMemberOnly == true ? e.CMemberShip.UserId == LoginUserId : true) &&
+                                     (apost.SharePolicies.MaxCount != null ? apost.SharePolicies.MaxCount > apost.Shares : true),
+
+                        // EventMarks
+                        EventMarks = eventMarks.Where(m => m.EventPostId == e.Event.PostId).Select(m => m.Mark).ToList(),
+
+                        // AddressResponse
+                        AddressResponse = eventAddresses.Where(a => a.EventPostId == e.Event.PostId).Select(a => a.AddressResponse).ToList(),
+
+                        // EventImageList
+                        EventImageList = eventFiles.Where(f => f.EventPostId == e.Event.PostId).Select(f => f.FileInfo).ToList()
+
+                    }).ToList();
+                }
+                else if(apost.PostType == "collectPost")
+                {
+                    var query = (from _coll in _db.CollectPosts
+                                 join _postStatus in _db.StatusTypes on _coll.StatusId equals _postStatus.StatusId
+                                 join _event in _db.Events on _coll.EventPostId equals _event.PostId
+                                 join _channel in _db.Channels on _event.ChannelId equals _channel.ChannelId
+                                 join _chanme in _db.ChannelMemberships on _event.ChannelId equals _chanme.ChannelId
+                                 join _creator in _db.Users on _coll.CreatorId equals _creator.UserId
+                                 join _poimg in _db.PostImages on _coll.PostId equals _poimg.PostId into postImages
+                                 where _event.StartDate < DateTime.UtcNow && _event.EndDate > DateTime.UtcNow &&
+                                 _postStatus.StatusName.ToLower() == "approved" && _coll.PostId == apost.PostId &&
+                                 (apost.UserInteractions != null ? apost.UserInteractions.VisibilityPercentage < 70 : true) &&
+                                 (apost.ViewPolicies.GroupMemberOnly != null && apost.ViewPolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) &&
+                                 (apost.ViewPolicies.MaxCount != null ? apost.ViewPolicies.MaxCount > apost.Views : true)
+                                 select new
+                                 {
+                                     PostId = apost.PostId,
+                                     Content = _coll.Content,
+                                     ChannelIdval = Encryption.EncryptID(_channel.ChannelId.ToString(), LoginUserId.ToString()),
+                                     ChannelName = _channel.ChannelName,
+                                     EventPostId = _event.PostId,
+                                     EventName = _event.EventName,
+                                     CreatorIdval = Encryption.EncryptID(_creator.UserId.ToString(), LoginUserId.ToString()),
+                                     CreatorName = _creator.Name,
+                                     ModifiedDate = apost.ModifiedDate,
+                                     CreatedDate = apost.CreatedDate,
+                                     ViewTotalCount = apost.Views,
+                                     LikeTotalCount = apost.Likes,
+                                     CommandTotalCount = apost.Commands,
+                                     ShareTotalCount = apost.Shares,
+                                     Selected = (_db.Reacts.Where(x => x.UserId == LoginUserId && apost.PostId == x.PostId).FirstOrDefault() != null ? true : false),
+                                     CanLike = (apost.LikePolicies.GroupMemberOnly != null && apost.LikePolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) &&
+                                      (apost.LikePolicies.MaxCount != null ? apost.LikePolicies.MaxCount > apost.Likes : true),
+                                     CanCommand = (apost.CommandPolicies.GroupMemberOnly != null && apost.CommandPolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) &&
+                                     (apost.CommandPolicies.MaxCount != null ? apost.CommandPolicies.MaxCount > apost.Commands : true),
+                                     CanShare = (apost.SharePolicies.GroupMemberOnly != null && apost.SharePolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) &&
+                                     (apost.SharePolicies.MaxCount != null ? apost.SharePolicies.MaxCount > apost.Shares : true),
+                                     ImageResponse = postImages.Select(img => new PostImageResponse
+                                     {
+                                         ImageIdval = Encryption.EncryptID(img.PostId.ToString(), LoginUserId.ToString()),
+                                         ImageUrl = img.Url,
+                                         Description = img.Description
+                                     }).ToList()
+                                 })
+                               .ToList();
+                    List<DashboardPostsResponse> dashPost = new List<DashboardPostsResponse>();
+                    foreach (var item in query)
+                    {
+                        List<PostTagResponse> postTags = await (from _potag in _db.PostTags
+                                                                join _evtag in _db.EventTags on _potag.EventTagId equals _evtag.EventTagId
+                                                                where _potag.PostId == item.PostId
+                                                                select new PostTagResponse
+                                                                {
+                                                                    PostTagIdval = Encryption.EncryptID(_potag.PostTagId.ToString(), LoginUserId.ToString()),
+                                                                    TagName = _evtag.TagName
+                                                                }).ToListAsync();
+                        List<PostBalanceResponse> postBalances = await (from _pobal in _db.PostBalances
+                                                                        join _allow in _db.EventAllowedMarks on _pobal.MarkId equals _allow.MarkId
+                                                                        join _po in _db.EventMarkBalances on _allow.MarkId equals _po.MarkId
+                                                                        join _mark in _db.Marks on _pobal.MarkId equals _mark.MarkId
+                                                                        where _pobal.PostId == item.PostId && _allow.EventPostId == item.EventPostId
+                                                                        select new PostBalanceResponse
+                                                                        {
+                                                                            CollectAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_pobal.Balance, balanceSalt)),
+                                                                            EventTotalAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_po.TotalBalance, balanceSalt)),
+                                                                            IsoCode = _mark.Isocode,
+                                                                            AllowedMarkName = _allow.AllowedMarkName
+                                                                        }).ToListAsync();
+                        DashboardPostsResponse newPost = new DashboardPostsResponse
+                        {
+                            PostIdval = Encryption.EncryptID(item.PostId.ToString(), LoginUserId.ToString()),
+                            Content = item.Content,
+                            ChannelIdval = item.ChannelIdval,
+                            ChannelName = item.ChannelName,
+                            EventPostIdval = Encryption.EncryptID(item.EventPostId.ToString(), LoginUserId.ToString()),
+                            EventName = item.EventName,
+                            CreatorIdval = item.CreatorIdval,
+                            CreatorName = item.CreatorName,
+                            ModifiedDate = item.ModifiedDate,
+                            CreatedDate = item.CreatedDate,
+                            LikeTotalCount = item.LikeTotalCount,
+                            CommandTotalCount = item.CommandTotalCount,
+                            ShareTotalCount = item.ShareTotalCount,
+                            Selected = item.Selected,
+                            CanLike = item.CanLike,
+                            CanCommand = item.CanCommand,
+                            CanShare = item.CanShare,
+                            postTagRes = postTags,
+                            postBalanceRes = postBalances,
+                            ImageResponse = item.ImageResponse
+                        };
+                        dashPost.Add(newPost);
+                    }
+                    netResponse.AddRange(dashPost);
+                }
+            }
+            Pagination pagi = RepoFunService.getWithPagination(pageNumber, pageSize, netResponse);
+            result = Result<Pagination>.Success(pagi);
 
         }
         catch (Exception ex)
         {
-            result = Result<List<DashboardPostsResponse>>.Error(ex);
+            result = Result<Pagination>.Error(ex);
         }
         return result;
     }
@@ -931,22 +1160,19 @@ public class DA_Post
                    .ToListAsync();
 
             var query = (from _post in posts
-                         join _coll in _db.CollectPosts on _post.Post.PostId equals _coll.PostId
-                         join _postStatus in _db.StatusTypes on _coll.StatusId equals _postStatus.StatusId
+                         join _postStatus in _db.StatusTypes on _post.Post.StatusId equals _postStatus.StatusId
                          join _event in _db.Events on _post.Post.EventPostId equals _event.PostId
                          join _channel in _db.Channels on _event.ChannelId equals _channel.ChannelId
                          join _chanme in _db.ChannelMemberships on _event.ChannelId equals _chanme.ChannelId
-                         join _creator in _db.Users on _coll.CreatorId equals _creator.UserId
+                         join _creator in _db.Users on _post.Post.CreatorId equals _creator.UserId
                          join _poimg in _db.PostImages on _post.Post.PostId equals _poimg.PostId into postImages
-                         join _evbalance in _db.EventMarkBalances on _post.Post.EventPostId equals _evbalance.EventPostId
-                         join _mark in _db.Marks on _evbalance.MarkId equals _mark.MarkId
-                         join _allow in _db.EventAllowedMarks on _evbalance.MarkId equals _allow.MarkId
-                         where _event.PostId == EventPostId && _evbalance.EventPostId == EventPostId &&
+                         where _event.PostId == EventPostId &&
                          //_event.StartDate < DateTime.UtcNow && _event.EndDate > DateTime.UtcNow &&
                          _postStatus.StatusName.ToLower() == "approved" &&
                          //(_post.UserInteractions != null ? _post.UserInteractions.VisibilityPercentage < 70 : true) &&
                          (_post.ViewPolicies.GroupMemberOnly != null && _post.ViewPolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) 
                          //(_post.ViewPolicies.MaxCount != null ? _post.ViewPolicies.MaxCount > _post.Views : true)
+                        
                          select new 
                          {
                              PostId = _post.Post.PostId,
@@ -983,7 +1209,7 @@ public class DA_Post
                                  Description = img.Description
                              }).ToList()
                          })
-                               .ToList();
+                         .ToList();
             List<DashboardPostsResponse> dashPost = new List<DashboardPostsResponse>();
             foreach (var item in query)
             {
@@ -997,7 +1223,7 @@ public class DA_Post
                                                         }).ToListAsync();
                 List<PostBalanceResponse> postBalances = await (from _pobal in _db.PostBalances
                                                                 join _allow in _db.EventAllowedMarks on _pobal.MarkId equals _allow.MarkId
-                                                                join _po in _db.EventMarkBalances on _allow.EventPostId equals _po.EventPostId
+                                                                join _po in _db.EventMarkBalances on _allow.MarkId equals _po.MarkId
                                                                 join _mark in _db.Marks on _pobal.MarkId equals _mark.MarkId
                                                                 where _pobal.PostId == item.PostId && _allow.EventPostId == item.EventPostId
                                                                 select new PostBalanceResponse

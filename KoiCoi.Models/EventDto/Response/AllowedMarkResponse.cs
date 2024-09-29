@@ -14,6 +14,12 @@ public partial class ExchangeRateResponse
     public string ToMarkIdval { get; set; } = string.Empty;
     public string MarkName { get; set; } = string.Empty;
     public string IsoCode { get; set; } = string.Empty;
-    public decimal MinQuantiry { get; set; } 
+    public List<RatesResponse> Rates { get; set; } = new List<RatesResponse> { };
+}
+
+
+public partial class RatesResponse
+{
+    public decimal MinQuantity { get; set; }
     public decimal Rate { get; set; }
 }

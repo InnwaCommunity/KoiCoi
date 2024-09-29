@@ -46,7 +46,7 @@ public class PostController : BaseController
 
     ///[Spiecal Get For Dashboard]///
     [HttpGet("{pageNumber}/{pageSize}")]
-    public async Task<Result<List<DashboardPostsResponse>>> GetDashboardPosts(int pageNumber, int pageSize)
+    public async Task<Result<Pagination>> GetDashboardPosts(int pageNumber, int pageSize)
     {
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blPost.GetDashboardPosts(LoginUserID, pageNumber, pageSize);

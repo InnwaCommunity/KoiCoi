@@ -1,5 +1,7 @@
 ﻿
 
+using KoiCoi.Models.EventDto.Response;
+
 namespace KoiCoi.Models.PostDtos.Response;
 
 public partial class DashboardPostsResponse
@@ -37,4 +39,30 @@ public partial class PostReactStatus {
     public string? reactIdval { get; set; }
     public string? reacttypeIdval { get; set; }
     public string? reactTypeName { get; set; }
+}
+
+
+public partial class DashboardEventPostResponse
+{
+    public string? EventPostIdval { get; set; }
+    public string? EventName { get; set; }
+    public string? EventDescrition { get; set; }
+    public string? CreatorIdval { get; set; }
+    public string? CreatorName { get; set; }
+    //public decimal? TotalBalance { get; set; }
+    public string? StartDate { get; set; }
+    public string? EndDate { get; set; }
+    public DateTime? ModifiedDate { get; set; }
+    public DateTime? CreatedDate { get; set; }
+    public int LikeTotalCount { get; set; }
+    public int CommandTotalCount { get; set; }
+    public int ShareTotalCount { get; set; }
+    public int ViewTotalCount { get; set; }
+    public bool Selected { get; set; }
+    public bool CanLike { get; set; }
+    public bool CanCommand { get; set; }
+    public bool CanShare { get; set; }
+    public List<EventMarks>? EventMarks { get; set; }
+    public List<EventAddressResponse>? AddressResponse { get; set; }
+    public List<EventFileInfo>? EventImageList { get; set; }
 }

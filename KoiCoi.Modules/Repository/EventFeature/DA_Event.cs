@@ -924,36 +924,36 @@ public class DA_Event
                                 await CreateNewEventAndChannelMarkBalance(MarkId, EventPostId,item.TargetBalance, balanceSalt);
                             }
 
-                        }
 
-                        ///Create Exchange Rate
-                        foreach (var newer in item.ExchangeRatePayloads)
-                        {
-                            if (!string.IsNullOrEmpty(newer.ToMarkIdval))
+                            ///Create Exchange Rate
+                            foreach (var newer in item.ExchangeRatePayloads)
                             {
-                                int ToMarkId = Convert.ToInt32(
-                                    Encryption.DecryptID(newer.ToMarkIdval, LoginUserId.ToString()));
-                                var oldex = await _db.ExchangeRates.Where(x => x.FromMarkId == MarkId
-                                && x.ToMarkId == ToMarkId
-                                && x.EventPostId == EventPostId
-                                && x.MinQuantity == newer.MinQuantity).FirstOrDefaultAsync();
-                                if (oldex is null)
+                                if (!string.IsNullOrEmpty(newer.ToMarkIdval))
                                 {
-                                    ExchangeRate newexra = new ExchangeRate
+                                    int ToMarkId = Convert.ToInt32(
+                                        Encryption.DecryptID(newer.ToMarkIdval, LoginUserId.ToString()));
+                                    var oldex = await _db.ExchangeRates.Where(x => x.FromMarkId == MarkId
+                                    && x.ToMarkId == ToMarkId
+                                    && x.EventPostId == EventPostId
+                                    && x.MinQuantity == newer.MinQuantity).FirstOrDefaultAsync();
+                                    if (oldex is null)
                                     {
-                                        FromMarkId = MarkId,
-                                        ToMarkId = ToMarkId,
-                                        EventPostId = EventPostId,
-                                        MinQuantity = newer.MinQuantity,
-                                        Rate = newer.Rate
-                                    };
-                                    await _db.ExchangeRates.AddAsync(newexra);
-                                    await _db.SaveChangesAsync();
+                                        ExchangeRate newexra = new ExchangeRate
+                                        {
+                                            FromMarkId = MarkId,
+                                            ToMarkId = ToMarkId,
+                                            EventPostId = EventPostId,
+                                            MinQuantity = newer.MinQuantity,
+                                            Rate = newer.Rate
+                                        };
+                                        await _db.ExchangeRates.AddAsync(newexra);
+                                        await _db.SaveChangesAsync();
 
-                                    decimal? ExchTarget = item.TargetBalance * newer.Rate;
-                                    await CreateNewEventAndChannelMarkBalance(ToMarkId, EventPostId, ExchTarget, balanceSalt);
-                                }
-                            };
+                                        decimal? ExchTarget = item.TargetBalance * newer.Rate;
+                                        await CreateNewEventAndChannelMarkBalance(ToMarkId, EventPostId, ExchTarget, balanceSalt);
+                                    }
+                                };
+                            }
                         }
                     }
 
@@ -1065,7 +1065,7 @@ public class DA_Event
                 foreach (var item in query)
                 {
                     // Get exchange rates for the current mark
-                    var newexchange = await (from _ex in _db.ExchangeRates
+                    /*var newexchange = await (from _ex in _db.ExchangeRates
                                              join _mks in _db.Marks on _ex.ToMarkId equals _mks.MarkId
                                              where _ex.FromMarkId == item.MarkId
                                              && _ex.EventPostId == EventPostId
@@ -1078,6 +1078,29 @@ public class DA_Event
                                                  MinQuantiry = _ex.MinQuantity,
                                                  Rate = _ex.Rate
                                              }).ToListAsync();
+                     */
+                    var newexchange = await (from _ex in _db.ExchangeRates
+                                             join _mks in _db.Marks on _ex.ToMarkId equals _mks.MarkId
+                                             where _ex.FromMarkId == item.MarkId
+                                             && _ex.EventPostId == EventPostId
+                                             group _ex by new
+                                             {
+                                                 _mks.MarkId,
+                                                 _mks.MarkName,
+                                                 _mks.Isocode
+                                             } into g
+                                             select new ExchangeRateResponse
+                                             {
+                                                 ToMarkIdval = Encryption.EncryptID(g.Key.MarkId.ToString(), LoginUserId.ToString()),
+                                                 MarkName = g.Key.MarkName,
+                                                 IsoCode = g.Key.Isocode,
+                                                 Rates = g.Select(x => new RatesResponse
+                                                 {
+                                                     MinQuantity = x.MinQuantity,
+                                                     Rate = x.Rate
+                                                 }).OrderByDescending(x => x.MinQuantity).ToList()
+                                             }).ToListAsync();
+
 
                     // Create new AllowedMarkResponse and attach exchange rates
                     AllowedMarkResponse newallow = new AllowedMarkResponse
@@ -1100,18 +1123,57 @@ public class DA_Event
             else
             {
                 int MarkTypeId = Convert.ToInt32(Encryption.DecryptID(payload.MarkTypeIdval!, LoginUserId.ToString()));
-                var allowedMark = await (from _evmk in _db.EventAllowedMarks
+                var query = await (from _evmk in _db.EventAllowedMarks
                                          join _mark in _db.Marks on _evmk.MarkId equals _mark.MarkId
                                          join _mt in _db.MarkTypes on _mark.MarkTypeId equals _mt.MarkTypeId
                                          where _evmk.EventPostId == EventPostId && _mt.MarkTypeId == MarkTypeId
                                          select new
                                          {
-                                             MarkIdval = Encryption.EncryptID(_mark.MarkId.ToString(), LoginUserId.ToString()),
-                                             Isocode = _mark.Isocode,
+                                             AllowedMarkId = _evmk.AllowedMarkId,
+                                             MarkId = _mark.MarkId,
+                                             IsoCode = _mark.Isocode,
                                              AllowedMarkName = _evmk.AllowedMarkName,
                                          }).ToListAsync();
+                List<AllowedMarkResponse> allowedMarks = new List<AllowedMarkResponse>();
 
-                Pagination pagination = RepoFunService.getWithPagination(payload.PageNumber, payload.PageSize, allowedMark);
+                foreach (var item in query)
+                {
+                    var newexchange = await (from _ex in _db.ExchangeRates
+                                             join _mks in _db.Marks on _ex.ToMarkId equals _mks.MarkId
+                                             where _ex.FromMarkId == item.MarkId
+                                             && _ex.EventPostId == EventPostId
+                                             group _ex by new
+                                             {
+                                                 _mks.MarkId,
+                                                 _mks.MarkName,
+                                                 _mks.Isocode
+                                             } into g
+                                             select new ExchangeRateResponse
+                                             {
+                                                 ToMarkIdval = Encryption.EncryptID(g.Key.MarkId.ToString(), LoginUserId.ToString()),
+                                                 MarkName = g.Key.MarkName,
+                                                 IsoCode = g.Key.Isocode,
+                                                 Rates = g.Select(x => new RatesResponse
+                                                 {
+                                                     MinQuantity = x.MinQuantity,
+                                                     Rate = x.Rate
+                                                 }).OrderByDescending(x => x.MinQuantity).ToList()
+                                             }).ToListAsync();
+
+
+                    // Create new AllowedMarkResponse and attach exchange rates
+                    AllowedMarkResponse newallow = new AllowedMarkResponse
+                    {
+                        AllowedMarkIdval = Encryption.EncryptID(item.AllowedMarkId.ToString(), LoginUserId.ToString()),
+                        MarkIdval = Encryption.EncryptID(item.MarkId.ToString(), LoginUserId.ToString()),
+                        AllowedMarkName = item.AllowedMarkName,
+                        IsoCode = item.IsoCode,
+                        ExchangeRates = newexchange // Add exchange rates here
+                    };
+
+                    allowedMarks.Add(newallow);
+                }
+                Pagination pagination = RepoFunService.getWithPagination(payload.PageNumber, payload.PageSize, allowedMarks);
                 result = Result<Pagination>.Success(pagination);
             }
         }

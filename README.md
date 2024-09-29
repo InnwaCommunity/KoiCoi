@@ -23,6 +23,8 @@ result pattern
 Result<T>.Success(data);
 Result<T>.Error(error);
 ```
+eventpost
+collectPost
 
 Notification Url flow
 
