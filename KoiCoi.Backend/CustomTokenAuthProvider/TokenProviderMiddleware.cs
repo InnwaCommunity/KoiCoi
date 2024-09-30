@@ -79,7 +79,7 @@ public class TokenProviderMiddleware : IMiddleware
             context.Request.Path.ToString().ToLower().Contains("/api/v1/user/testing") ||
             context.Request.Path.ToString().ToLower().Contains("/api/v1/user/registeraccount") ||
             context.Request.Path.ToString().ToLower().Contains("/api/v1/user/accountswithdeviceid") ||
-            context.Request.Path.ToString().ToLower().Contains("api/imagefileservice") ||
+            //context.Request.Path.ToString().ToLower().Contains("api/imagefileservice") ||
             context.Request.Path.ToString().ToLower().Contains("api/v1/user/signin")
 
         )

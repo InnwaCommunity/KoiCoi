@@ -1,6 +1,7 @@
 ﻿
 using KoiCoi.Models.Login_Models;
 using KoiCoi.Models.User_Dto.Payload;
+using Microsoft.AspNetCore.Http;
 
 namespace KoiCoi.Modules.Repository.UserFeature;
 
@@ -80,9 +81,9 @@ public class BL_User
         return await _daUser.DeleteLoginUser(LoginUserId);
     }
 
-    public async Task<Result<string>> UploadUserProfile(UploadUserProfileReqeust payload,int LoginUserId)
+    public async Task<Result<string>> UploadUserProfile(IFormFile file,int LoginUserId)
     {
-        return await _daUser.UploadUserProfile(payload, LoginUserId);
+        return await _daUser.UploadUserProfile(file, LoginUserId);
     }
 
     public async Task<Result<List<UserTypeResponse>>> GetUserTypes(int LoginUserId)

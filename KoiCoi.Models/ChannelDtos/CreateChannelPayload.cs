@@ -15,8 +15,8 @@ public partial class CreateChannelReqeust
 
     public string? ChannelTypeval { get; set; }
 
-    public string? ProImage64 { get; set; }
-    public string? ImageExt { get; set; }
+    //public string? ProImage64 { get; set; }
+    //public string? ImageExt { get; set; }
 
-    public string? imagedescription { get; set; }
+    //public string? imagedescription { get; set; }
 }

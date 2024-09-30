@@ -6,6 +6,7 @@ using KoiCoi.Models.EventDto.Payload;
 using KoiCoi.Models.EventDto.Response;
 using KoiCoi.Modules.Repository.ChangePassword;
 using KoiCoi.Modules.Repository.UserFeature;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -215,44 +216,44 @@ public class DA_Event
         return result;
     }
 
-    public async Task<Result<string>> UploadEventAttachFile(EventPhotoPayload payload, int LoginUserId)
+    public async Task<Result<string>> UploadEventAttachFile(IFormFile file, string eventPostIdval, int LoginUserId)
     {
         Result<string> result = null;
         try
         {
-            if(!string.IsNullOrEmpty(payload.base64image) && !string.IsNullOrEmpty(payload.eventPostIdval)
-                && !string.IsNullOrEmpty(payload.ext))
-            {
-                int PostId = Convert.ToInt32(Encryption.DecryptID(payload.eventPostIdval, LoginUserId.ToString()));
+                int PostId = Convert.ToInt32(Encryption.DecryptID(eventPostIdval, LoginUserId.ToString()));
                 var kcevent = await _db.Posts.Where(x=> x.PostId == PostId).FirstOrDefaultAsync();
                 if (kcevent is not null)
                 {
                        string bucketname = _configuration.GetSection("Buckets:EventImages").Get<string>()!;
 
-                        string uniquekey = Globalfunction.NewUniqueFileKey(payload.ext!);
-                        await _kcAwsS3Service.CreateFileAsync(payload.base64image!, bucketname, uniquekey, payload.ext!);
-                        var newImage = new EventFile
-                        {
-                            Url = uniquekey,
-                            UrlDescription = payload.Description,
-                            EventPostId = kcevent.PostId,
-                            CreatedDate = DateTime.UtcNow,
-                            ModifiedDate = DateTime.UtcNow,
-                            Extension = payload.ext,
-                        };
-                        await _db.EventFiles.AddAsync(newImage);
-                        await _db.SaveChangesAsync();
+                        string ext = Path.GetExtension(file.FileName);
+                        string uniquekey = Globalfunction.NewUniqueFileKey(ext);
+                        Result<string> res= await _kcAwsS3Service.CreateFileAsync(file, bucketname, uniquekey, ext);
+                if (res.IsSuccess)
+                {
+                    var newImage = new EventFile
+                    {
+                        Url = uniquekey,
+                        UrlDescription = "",
+                        EventPostId = kcevent.PostId,
+                        CreatedDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow,
+                        Extension = ext,
+                    };
+                    await _db.EventFiles.AddAsync(newImage);
+                    await _db.SaveChangesAsync();
                     result = Result<string>.Success("Upload Success");
+                }
+                else
+                {
+                    result = res;
+                }
                 }
                 else
                 {
                     result = Result<string>.Error("Event Not Found");
                 }
-            }
-            else
-            {
-                result = Result<string>.Error("Image Not Null or Event Not Null");
-            }
         }
         catch (Exception ex)
         {

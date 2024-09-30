@@ -1,4 +1,7 @@
-﻿namespace KoiCoi.Backend.Controllers.User;
+﻿using KoiCoi.Modules.Repository.EventFreture;
+using KoiCoi.Modules.Repository.PostFeature;
+
+namespace KoiCoi.Backend.Controllers.User;
 
 [Route("api/v1/[controller]")]
 [ApiController]
@@ -53,10 +56,25 @@ public class UserController : BaseController
     }
 
     [HttpPost("UploadUserProfile",Name = "UploadUserProfile")]
-    public async Task<Result<string>> UploadUserProfile(UploadUserProfileReqeust payload)
+    public async Task<Result<string>> UploadUserProfile([FromForm] IFormFile files)
     {
-        int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
-        return await _bLUser.UploadUserProfile(payload,LoginEmpID);
+        try
+        {
+            if (files != null && files.Length > 0)
+            {
+
+                int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
+                return await _bLUser.UploadUserProfile(files, LoginEmpID);
+            }
+            else
+            {
+                return Result<string>.Error("No file uploaded.");
+            }
+        }
+        catch (Exception ex)
+        {
+            return Result<string>.Error(ex.Message);
+        }
     }
 
     [HttpGet("GetUserTypes",Name = "GetUserTypes")]

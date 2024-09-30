@@ -1,6 +1,7 @@
 ﻿
 using KoiCoi.Models.EventDto.Payload;
 using KoiCoi.Models.Login_Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MimeKit.Tnef;
 
@@ -19,9 +20,9 @@ public class BL_Event
     {
         return await _daEvent.CreateEvent(paylod, LoginUserId);
     }
-    public async Task<Result<string>> UploadEventAttachFile(EventPhotoPayload payload,int LoginUserId)
+    public async Task<Result<string>> UploadEventAttachFile(IFormFile file,string eventPostIdval, int LoginUserId)
     {
-        return await _daEvent.UploadEventAttachFile(payload, LoginUserId);
+        return await _daEvent.UploadEventAttachFile(file, eventPostIdval, LoginUserId);
     }
 
     public async Task<Result<Pagination>> GetEventRequestList(GetEventRequestPayload payload,int LoginUserId)

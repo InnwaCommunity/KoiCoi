@@ -1,5 +1,6 @@
 ﻿
 using KoiCoi.Models;
+using Serilog;
 using System.Collections.Generic;
 
 namespace KoiCoi.Backend.Controllers.PostFeature;
@@ -23,12 +24,27 @@ public class PostController : BaseController
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blPost.CreatePostFeature(payload, LoginUserID);
     }
-    [HttpPost("UploadCollectAttachFile",Name = "UploadCollectAttachFile")]
-    public async Task<Result<string>> UploadCollectAttachFile(PostImagePayload payload)
+    [HttpPost("UploadCollectAttachFile", Name = "UploadCollectAttachFile")]
+    public async Task<Result<string>> UploadCollectAttachFile([FromForm] string PostIdval, [FromForm] IFormFile files)
     {
-        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
-        return await _blPost.UploadCollectAttachFile(payload, LoginUserID);
+        try
+        {
+            if (files != null && files.Length > 0)
+            {
+                int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+                return await _blPost.UploadCollectAttachFile(files, PostIdval, LoginUserID);
+            }
+            else
+            {
+               return Result<string>.Error("No file uploaded.");
+            }
+        }
+        catch (Exception ex)
+        {
+            return Result<string>.Error(ex.Message);
+        }
     }
+
 
     [HttpPost("ReviewPostsList",Name ="ReviewPostsList")]
     public async Task<Result<Pagination>> ReviewPostsList(ReviewPostPayload payload)

@@ -1,6 +1,7 @@
 ﻿
 using KoiCoi.Models.User_Dto.Payload;
 using KoiCoi.Models.Via;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -254,13 +255,11 @@ public class DA_User
         return model;
     }
 
-    public async Task<Result<string>> UploadUserProfile(UploadUserProfileReqeust payload, int LoginUserId)
+    public async Task<Result<string>> UploadUserProfile(IFormFile file, int LoginUserId)
     {
         Result<string> model = null;
         try
         {
-            if (string.IsNullOrEmpty(payload.base64data)) return Result<string>.Error("Image Not Found");
-
             /*string? folderPath = _configuration["appSettings:UserProfile"];
             if(folderPath is null) return Result<string>.Error("Invalid temp path.");
             string? baseDirectory = _configuration["appSettings:UploadPath"];
@@ -285,14 +284,15 @@ public class DA_User
             await System.IO.File.WriteAllBytesAsync(filePath, bytes);
              */
             string bucketname = _configuration.GetSection("Buckets:UserProfile").Get<string>()!;
-            string uniquekey = Globalfunction.NewUniqueFileKey(payload.ext);
-            string res=await _awsS3Service.CreateFileAsync(payload.base64data, bucketname, uniquekey, payload.ext);
-            if(res == "success")
+            string ext = Path.GetExtension(file.FileName);
+            string uniquekey = Globalfunction.NewUniqueFileKey(ext);
+            Result<string> res=await _awsS3Service.CreateFileAsync(file, bucketname, uniquekey, ext);
+            if(res.IsSuccess)
             {
                 UserProfile profile = new UserProfile
                 {
                     Url = uniquekey,
-                    UrlDescription = payload.description,
+                    UrlDescription = "",
                     UserId = LoginUserId,
                     CreatedDate = DateTime.UtcNow,
                 };
@@ -303,7 +303,7 @@ public class DA_User
             }
             else
             {
-                model = Result<string>.Error("error");
+                model = res;
             }
 
          }

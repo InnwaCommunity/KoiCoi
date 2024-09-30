@@ -1,5 +1,7 @@
 ﻿
 
+using KoiCoi.Modules.Repository.PostFeature;
+
 namespace KoiCoi.Backend.Controllers.Events;
 
 [Route("api/[controller]")]
@@ -23,10 +25,24 @@ public class EventController : BaseController
         return Ok(response);
     }
     [HttpPost("UploadEventAttachFile",Name = "UploadEventAttachFile")]
-    public async Task<Result<string>> UploadEventAttachFile(EventPhotoPayload payload)
+    public async Task<Result<string>> UploadEventAttachFile([FromForm] string eventPostIdval, [FromForm] IFormFile files)
     {
-        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
-        return await _blEvent.UploadEventAttachFile(payload, LoginUserId);
+        try
+        {
+            if (files != null && files.Length > 0)
+            {
+                int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+                return await _blEvent.UploadEventAttachFile(files, eventPostIdval, LoginUserId);
+            }
+            else
+            {
+                return Result<string>.Error("No file uploaded.");
+            }
+        }
+        catch (Exception ex)
+        {
+            return Result<string>.Error(ex.Message);
+        }
     }
 
     [HttpPost("GetEventRequestList",Name = "GetEventRequestList")]

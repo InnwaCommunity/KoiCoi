@@ -6,6 +6,7 @@ namespace KoiCoi.Models.PostDtos.Response;
 
 public partial class DashboardPostsResponse
 {
+    public string? PostType { get; set; }
     public string PostIdval { get; set; } = string.Empty;
     public string? Content { get; set; }
     public string ChannelIdval { get; set; } = string.Empty;
@@ -20,8 +21,8 @@ public partial class DashboardPostsResponse
     //public decimal EventTotalAmount { get; set; } = 0;
     //public string IsoCode { get; set; } = string.Empty;
     //public string AllowedMarkName { get; set;} = string.Empty;
-    public DateTime? ModifiedDate { get; set; }
-    public DateTime? CreatedDate { get; set; }
+    public string? ModifiedDate { get; set; }
+    public string? CreatedDate { get; set; }
     public int LikeTotalCount { get; set; }
     public int CommandTotalCount { get; set; }
     public int ShareTotalCount { get; set; }
@@ -44,6 +45,7 @@ public partial class PostReactStatus {
 
 public partial class DashboardEventPostResponse
 {
+    public string? PostType { get; set; }
     public string? EventPostIdval { get; set; }
     public string? EventName { get; set; }
     public string? EventDescrition { get; set; }
@@ -52,8 +54,8 @@ public partial class DashboardEventPostResponse
     //public decimal? TotalBalance { get; set; }
     public string? StartDate { get; set; }
     public string? EndDate { get; set; }
-    public DateTime? ModifiedDate { get; set; }
-    public DateTime? CreatedDate { get; set; }
+    public string? ModifiedDate { get; set; }
+    public string? CreatedDate { get; set; }
     public int LikeTotalCount { get; set; }
     public int CommandTotalCount { get; set; }
     public int ShareTotalCount { get; set; }

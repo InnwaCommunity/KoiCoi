@@ -1,6 +1,8 @@
 ﻿using KoiCoi.Database.AppDbContextModels;
 using KoiCoi.Models.EventDto.Payload;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Drawing.Printing;
 using System.Threading.Channels;
@@ -463,25 +465,28 @@ public class DA_Post
         await _db.SaveChangesAsync();
     }
 
-    public async Task<Result<string>> UploadCollectAttachFile(PostImagePayload payload, int LoginUserID)
+    public async Task<Result<string>> UploadCollectAttachFile(IFormFile file, string PostIdval, int LoginUserID)
     {
         Result<string> result = null;
         try
         {
-            if(!string.IsNullOrEmpty(payload.PostIdval) &&
-                !string.IsNullOrEmpty(payload.imagebase64) && !string.IsNullOrEmpty(payload.ext))
-            {
-                int PostId = Convert.ToInt32(Encryption.DecryptID(payload.PostIdval, LoginUserID.ToString()));
+                int PostId = Convert.ToInt32(Encryption.DecryptID(PostIdval, LoginUserID.ToString()));
                 var post = await _db.Posts.Where(x => x.PostId == PostId).FirstOrDefaultAsync();
                 if(post is not null)
                 {
                     string bucketname = _configuration.GetSection("Buckets:PostImages").Get<string>()!;
-                    string uniquekey = Globalfunction.NewUniqueFileKey(payload.ext!);
-                    await _kcAwsS3Service.CreateFileAsync(payload.imagebase64!, bucketname, uniquekey, payload.ext!);
+
+
+                    // Get the file extension
+                    string ext = Path.GetExtension(file.FileName);
+                    string uniquekey = Globalfunction.NewUniqueFileKey(ext);
+                    Result<string> res= await _kcAwsS3Service.CreateFileAsync(file, bucketname, uniquekey, ext);
+                if (res.IsSuccess)
+                {
                     var newImage = new PostImage
                     {
                         Url = uniquekey,
-                        Description = payload.description,
+                        Description = "",
                         PostId = post.PostId,
                         CreatedDate = DateTime.UtcNow,
                     };
@@ -491,13 +496,13 @@ public class DA_Post
                 }
                 else
                 {
+                    result = res;
+                }
+                }
+                else
+                {
                     result = Result<string>.Error("Post Not Found");
                 }
-            }
-            else
-            {
-                result = Result<string>.Error("Post Id and Image is Null Or Empty");
-            }
         }
         catch (Exception ex)
         {
@@ -933,91 +938,95 @@ public class DA_Post
                                                 EventMarks = _ev.PostId,
                                                 EventAddresses = _ev.PostId,
                                                 EventFiles = _ev.PostId
-                                            }).ToListAsync();
-                    var eventIds = eventQuery.Select(e => e.Event.PostId).ToList();
+                                            }).FirstOrDefaultAsync();
 
-                    // Fetch EventMarks
-                    var eventMarks = (from _eventMark in _db.EventMarkBalances
-                                      join _mark in _db.Marks on _eventMark.MarkId equals _mark.MarkId
-                                      join _evall in _db.EventAllowedMarks on _eventMark.MarkId equals _evall.MarkId
-                                      where eventIds.Contains(_eventMark.EventPostId)
-                                      select new
-                                      {
-                                          EventPostId = _eventMark.EventPostId,
-                                          Mark = new EventMarks
-                                          {
-                                              MarkIdval = Encryption.EncryptID(_eventMark.MarkId.ToString(), LoginUserId.ToString()),
-                                              IsoCode = _mark.Isocode,
-                                              MarkName = _mark.MarkName,
-                                              AllowedMarkName = _evall.AllowedMarkName,
-                                              TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.TotalBalance.ToString(), balanceSalt)),
-                                              LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.LastBalance.ToString(), balanceSalt)),
-                                              TargetBalance = _eventMark.TargetBalance != null ? Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.TargetBalance.ToString(), balanceSalt)) : null
-                                          }
-                                      }).ToList();
-
-                    // Fetch EventAddresses
-                    var eventAddresses = (from _add in _db.EventAddresses
-                                          join _atype in _db.AddressTypes on _add.AddressId equals _atype.AddressId
-                                          where eventIds.Contains(_add.EventPostId)
+                    if (eventQuery is not null)
+                    {
+                        // Fetch EventMarks
+                        var eventMarks = (from _eventMark in _db.EventMarkBalances
+                                          join _mark in _db.Marks on _eventMark.MarkId equals _mark.MarkId
+                                          join _evall in _db.EventAllowedMarks on _eventMark.MarkId equals _evall.MarkId
+                                          where eventQuery.Event.PostId == _eventMark.EventPostId
                                           select new
                                           {
-                                              EventPostId = _add.EventPostId,
-                                              AddressResponse = new EventAddressResponse
+                                              EventPostId = _eventMark.EventPostId,
+                                              Mark = new EventMarks
                                               {
-                                                  EventAddressIdval = Encryption.EncryptID(_add.EventAddressId.ToString(), LoginUserId.ToString()),
-                                                  Address = _add.AddressName,
-                                                  AddresstypeName = _atype.Address
+                                                  MarkIdval = Encryption.EncryptID(_eventMark.MarkId.ToString(), LoginUserId.ToString()),
+                                                  IsoCode = _mark.Isocode,
+                                                  MarkName = _mark.MarkName,
+                                                  AllowedMarkName = _evall.AllowedMarkName,
+                                                  TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.TotalBalance.ToString(), balanceSalt)),
+                                                  LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.LastBalance.ToString(), balanceSalt)),
+                                                  TargetBalance = _eventMark.TargetBalance != null ? Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.TargetBalance.ToString(), balanceSalt)) : null
                                               }
                                           }).ToList();
 
-                    // Fetch EventFiles
-                    var eventFiles = _db.EventFiles
-                                        .Where(x => eventIds.Contains(x.EventPostId))
-                                        .Select(x => new
-                                        {
-                                            EventPostId = x.EventPostId,
-                                            FileInfo = new EventFileInfo
+                        // Fetch EventAddresses
+                        var eventAddresses = (from _add in _db.EventAddresses
+                                              join _atype in _db.AddressTypes on _add.AddressId equals _atype.AddressId
+                                              where eventQuery.Event.PostId == _add.EventPostId
+                                              select new
+                                              {
+                                                  EventPostId = _add.EventPostId,
+                                                  AddressResponse = new EventAddressResponse
+                                                  {
+                                                      EventAddressIdval = Encryption.EncryptID(_add.EventAddressId.ToString(), LoginUserId.ToString()),
+                                                      Address = _add.AddressName,
+                                                      AddresstypeName = _atype.Address
+                                                  }
+                                              }).ToList();
+
+                        // Fetch EventFiles
+                        var eventFiles = _db.EventFiles
+                                            .Where(x => eventQuery.Event.PostId == x.EventPostId)
+                                            .Select(x => new
                                             {
-                                                fileIdval = Encryption.EncryptID(x.UrlId.ToString(), LoginUserId.ToString()),
-                                                imgfilename = x.Url,
-                                                imgDescription = x.UrlDescription
-                                            }
-                                        }).ToList();
-                    var finalResult = eventQuery.Select(e => new DashboardEventPostResponse
-                    {
-                        EventPostIdval = Encryption.EncryptID(e.Event.PostId.ToString(), LoginUserId.ToString()),
-                        EventName = e.Event.EventName,
-                        EventDescrition = e.Event.EventDescription,
-                        CreatorIdval = Encryption.EncryptID(e.Creator.UserId.ToString(), LoginUserId.ToString()),
-                        CreatorName = e.Creator.Name,
-                        StartDate = e.Event.StartDate.ToString("yyyy-MM-ddTHH:mm:ss"),
-                        EndDate = e.Event.EndDate.ToString("yyyy-MM-ddTHH:mm:ss"),
-                        //ModifiedDate = e.Post.ModifiedDate,//.ToString("yyyy-MM-ddTHH:mm:ss")
-                        ModifiedDate = apost.ModifiedDate,
-                        CreatedDate = apost.CreatedDate,
-                        ViewTotalCount = apost.Views,
-                        LikeTotalCount = apost.Likes,
-                        CommandTotalCount = apost.Commands,
-                        ShareTotalCount = apost.Shares,
-                        Selected = (_db.Reacts.Where(x => x.UserId == LoginUserId && apost.PostId == x.PostId).FirstOrDefault() != null ? true : false),
-                        CanLike = (apost.LikePolicies.GroupMemberOnly != null && apost.LikePolicies.GroupMemberOnly == true ? e.CMemberShip.UserId == LoginUserId : true) &&
-                                      (apost.LikePolicies.MaxCount != null ? apost.LikePolicies.MaxCount > apost.Likes : true),
-                        CanCommand = (apost.CommandPolicies.GroupMemberOnly != null && apost.CommandPolicies.GroupMemberOnly == true ? e.CMemberShip.UserId == LoginUserId : true) &&
-                                     (apost.CommandPolicies.MaxCount != null ? apost.CommandPolicies.MaxCount > apost.Commands : true),
-                        CanShare = (apost.SharePolicies.GroupMemberOnly != null && apost.SharePolicies.GroupMemberOnly == true ? e.CMemberShip.UserId == LoginUserId : true) &&
-                                     (apost.SharePolicies.MaxCount != null ? apost.SharePolicies.MaxCount > apost.Shares : true),
+                                                EventPostId = x.EventPostId,
+                                                FileInfo = new EventFileInfo
+                                                {
+                                                    fileIdval = Encryption.EncryptID(x.UrlId.ToString(), LoginUserId.ToString()),
+                                                    imgfilename = x.Url,
+                                                    imgDescription = x.UrlDescription
+                                                }
+                                            }).ToList();
+                        var finalResult = new DashboardEventPostResponse
+                        {
+                            PostType = eventQuery.Post.PostType,
+                            EventPostIdval = Encryption.EncryptID(eventQuery.Event.PostId.ToString(), LoginUserId.ToString()),
+                            EventName = eventQuery.Event.EventName,
+                            EventDescrition = eventQuery.Event.EventDescription,
+                            CreatorIdval = Encryption.EncryptID(eventQuery.Creator.UserId.ToString(), LoginUserId.ToString()),
+                            CreatorName = eventQuery.Creator.Name,
+                            StartDate = eventQuery.Event.StartDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                            EndDate = eventQuery.Event.EndDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                            //ModifiedDate = e.Post.ModifiedDate,//.ToString("yyyy-MM-ddTHH:mm:ss")
+                            ModifiedDate = apost.ModifiedDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                            CreatedDate = apost.CreatedDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                            ViewTotalCount = apost.Views,
+                            LikeTotalCount = apost.Likes,
+                            CommandTotalCount = apost.Commands,
+                            ShareTotalCount = apost.Shares,
+                            Selected = (_db.Reacts.Where(x => x.UserId == LoginUserId && apost.PostId == x.PostId).FirstOrDefault() != null ? true : false),
+                            CanLike = (apost.LikePolicies.GroupMemberOnly != null && apost.LikePolicies.GroupMemberOnly == true ? eventQuery.CMemberShip.UserId == LoginUserId : true) &&
+                                          (apost.LikePolicies.MaxCount != null ? apost.LikePolicies.MaxCount > apost.Likes : true),
+                            CanCommand = (apost.CommandPolicies.GroupMemberOnly != null && apost.CommandPolicies.GroupMemberOnly == true ? eventQuery.CMemberShip.UserId == LoginUserId : true) &&
+                                         (apost.CommandPolicies.MaxCount != null ? apost.CommandPolicies.MaxCount > apost.Commands : true),
+                            CanShare = (apost.SharePolicies.GroupMemberOnly != null && apost.SharePolicies.GroupMemberOnly == true ? eventQuery.CMemberShip.UserId == LoginUserId : true) &&
+                                         (apost.SharePolicies.MaxCount != null ? apost.SharePolicies.MaxCount > apost.Shares : true),
 
-                        // EventMarks
-                        EventMarks = eventMarks.Where(m => m.EventPostId == e.Event.PostId).Select(m => m.Mark).ToList(),
+                            // EventMarks
+                            EventMarks = eventMarks.Where(m => m.EventPostId == eventQuery.Event.PostId).Select(m => m.Mark).ToList(),
 
-                        // AddressResponse
-                        AddressResponse = eventAddresses.Where(a => a.EventPostId == e.Event.PostId).Select(a => a.AddressResponse).ToList(),
+                            // AddressResponse
+                            AddressResponse = eventAddresses.Where(a => a.EventPostId == eventQuery.Event.PostId).Select(a => a.AddressResponse).ToList(),
 
-                        // EventImageList
-                        EventImageList = eventFiles.Where(f => f.EventPostId == e.Event.PostId).Select(f => f.FileInfo).ToList()
+                            // EventImageList
+                            EventImageList = eventFiles.Where(f => f.EventPostId == eventQuery.Event.PostId).Select(f => f.FileInfo).ToList()
 
-                    }).ToList();
+                        };
+                        netResponse.Add(finalResult);
+                    }
                 }
                 else if(apost.PostType == "collectPost")
                 {
@@ -1036,6 +1045,7 @@ public class DA_Post
                                  select new
                                  {
                                      PostId = apost.PostId,
+                                     PostType = apost.PostType,
                                      Content = _coll.Content,
                                      ChannelIdval = Encryption.EncryptID(_channel.ChannelId.ToString(), LoginUserId.ToString()),
                                      ChannelName = _channel.ChannelName,
@@ -1064,7 +1074,6 @@ public class DA_Post
                                      }).ToList()
                                  })
                                .ToList();
-                    List<DashboardPostsResponse> dashPost = new List<DashboardPostsResponse>();
                     foreach (var item in query)
                     {
                         List<PostTagResponse> postTags = await (from _potag in _db.PostTags
@@ -1089,6 +1098,7 @@ public class DA_Post
                                                                         }).ToListAsync();
                         DashboardPostsResponse newPost = new DashboardPostsResponse
                         {
+                            PostType=item.PostType,
                             PostIdval = Encryption.EncryptID(item.PostId.ToString(), LoginUserId.ToString()),
                             Content = item.Content,
                             ChannelIdval = item.ChannelIdval,
@@ -1097,8 +1107,8 @@ public class DA_Post
                             EventName = item.EventName,
                             CreatorIdval = item.CreatorIdval,
                             CreatorName = item.CreatorName,
-                            ModifiedDate = item.ModifiedDate,
-                            CreatedDate = item.CreatedDate,
+                            ModifiedDate = item.ModifiedDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                            CreatedDate = item.CreatedDate.ToString("yyyy-MM-ddTHH:mm:ss"),
                             LikeTotalCount = item.LikeTotalCount,
                             CommandTotalCount = item.CommandTotalCount,
                             ShareTotalCount = item.ShareTotalCount,
@@ -1110,9 +1120,8 @@ public class DA_Post
                             postBalanceRes = postBalances,
                             ImageResponse = item.ImageResponse
                         };
-                        dashPost.Add(newPost);
+                        netResponse.Add(newPost);
                     }
-                    netResponse.AddRange(dashPost);
                 }
             }
             Pagination pagi = RepoFunService.getWithPagination(pageNumber, pageSize, netResponse);
@@ -1244,8 +1253,8 @@ public class DA_Post
                     EventName = item.EventName,
                     CreatorIdval = item.CreatorIdval,
                     CreatorName = item.CreatorName,
-                    ModifiedDate = item.ModifiedDate,
-                    CreatedDate = item.CreatedDate,
+                    ModifiedDate = item.ModifiedDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                    CreatedDate = item.CreatedDate.ToString("yyyy-MM-ddTHH:mm:ss"),
                     LikeTotalCount = item.LikeTotalCount,
                     CommandTotalCount = item.CommandTotalCount,
                     ShareTotalCount = item.ShareTotalCount,

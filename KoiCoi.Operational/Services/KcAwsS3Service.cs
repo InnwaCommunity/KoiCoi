@@ -2,6 +2,7 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 using KoiCoi.Database.AppDbContextModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
@@ -24,37 +25,33 @@ public class KcAwsS3Service
         var credentials = new BasicAWSCredentials(accessKey, serectKey);
         _s3Client = new AmazonS3Client(credentials, Amazon.RegionEndpoint.APSoutheast1);
     }
-    public async Task<string> CreateFileAsync(string base64,string bucketname, string key,string ext)
+    public async Task<Result<string>> CreateFileAsync(IFormFile file,string bucketname, string key,string ext)
     {
         try
         {
+            // Check if the bucket exists
             var bucketExists = await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketname);
             if (!bucketExists)
             {
                 await _s3Client.PutBucketAsync(bucketname);
             }
 
-            // Decode the base64 string
-            byte[] fileBytes = Convert.FromBase64String(base64);
-
-            // Validate the base64 string
-            if (string.IsNullOrEmpty(base64) || !IsValidBase64String(base64))
+            // Validate the uploaded file
+            if (file == null || file.Length == 0)
             {
-                return "error";
+                return Result<string>.Error("error");
             }
+
             // Determine the content type based on the file extension
             string? contentType = GetContentType(ext);
 
             if (contentType == null)
             {
-                return "error";
+                return Result<string>.Error("error");
             }
 
-            // Generate a unique file name
-            //string fileName = $"{DateTime.Now:yyyy\\/MM\\/dd\\/}{Globalfunction.NewUniqueFileName}{ext}";
-
-            // Create a MemoryStream from the byte array
-            using (var stream = new MemoryStream(fileBytes))
+            // Upload the file to S3
+            using (var stream = file.OpenReadStream())
             {
                 var putRequest = new PutObjectRequest
                 {
@@ -66,16 +63,16 @@ public class KcAwsS3Service
 
                 var response = await _s3Client.PutObjectAsync(putRequest);
 
-                return "success";
+                return response.HttpStatusCode == System.Net.HttpStatusCode.OK ? Result<string>.Success("success") : Result<string>.Error("error");
             }
         }
         catch (AmazonS3Exception ex)
         {
-            return "error";
+            return Result<string>.Error(ex);
         }
         catch (Exception ex)
         {
-            return "error";
+            return Result<string>.Error(ex);
         }
     }
 
@@ -84,18 +81,49 @@ public class KcAwsS3Service
     {
         return extension.ToLower() switch
         {
+            // Image formats
             ".pdf" => "application/pdf",
             ".jpg" => "image/jpeg",
             ".jpeg" => "image/jpeg",
             ".png" => "image/png",
             ".gif" => "image/gif",
             ".bmp" => "image/bmp",
+            ".svg" => "image/svg+xml",
+            ".tiff" => "image/tiff",
+            ".tif" => "image/tiff",
+            ".ico" => "image/x-icon",
+            ".webp" => "image/webp",
+            ".heic" => "image/heic",
+
+            // Audio formats
+            ".mp3" => "audio/mpeg",
+            ".wav" => "audio/wav",
+            ".ogg" => "audio/ogg",
+            ".aac" => "audio/aac",
+            ".flac" => "audio/flac",
+            ".m4a" => "audio/x-m4a",
+            ".wma" => "audio/x-ms-wma",
+
+            // Video formats
+            ".mp4" => "video/mp4",
+            ".mov" => "video/quicktime",
+            ".avi" => "video/x-msvideo",
+            ".wmv" => "video/x-ms-wmv",
+            ".mkv" => "video/x-matroska",
+            ".webm" => "video/webm",
+            ".flv" => "video/x-flv",
+            ".3gp" => "video/3gpp",
+            ".m4v" => "video/x-m4v",
+
+            // Spreadsheet formats
             ".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             ".xls" => "application/vnd.ms-excel",
             ".csv" => "text/csv",
+
             _ => null,
         };
     }
+
 
     // Helper method to validate a base64 string
     private bool IsValidBase64String(string base64)

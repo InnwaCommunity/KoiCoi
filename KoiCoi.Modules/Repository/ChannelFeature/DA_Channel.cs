@@ -359,23 +359,24 @@ public class DA_Channel
                 await System.IO.File.WriteAllBytesAsync(filePath, bytes);
             }
              */
-            if (!string.IsNullOrEmpty(channelReqeust.ProImage64))
-            {
-                string bucketname = _configuration.GetSection("Buckets:ChannelProfile").Get<string>()!;
-                string uniquekey = Globalfunction.NewUniqueFileKey(channelReqeust.ImageExt!);
-                string res = await _kcAwsS3Service.CreateFileAsync(channelReqeust.ProImage64, bucketname, uniquekey, channelReqeust.ImageExt!);
-                ///Save Profile Image
-                ChannelProfile newchPro = new ChannelProfile
-                {
-                    Url = uniquekey,
-                    UrlDescription = channelReqeust.imagedescription,
-                    ChannelId = addedChannel.Entity.ChannelId,
-                    CreatedDate = DateTime.UtcNow
-                };
+            /*
+             if (!string.IsNullOrEmpty(channelReqeust.ProImage64))
+             {
+                 string bucketname = _configuration.GetSection("Buckets:ChannelProfile").Get<string>()!;
+                 string uniquekey = Globalfunction.NewUniqueFileKey(channelReqeust.ImageExt!);
+                 string res = await _kcAwsS3Service.CreateFileAsync(channelReqeust.ProImage64, bucketname, uniquekey, channelReqeust.ImageExt!);
+                 ///Save Profile Image
+                 ChannelProfile newchPro = new ChannelProfile
+                 {
+                     Url = uniquekey,
+                     UrlDescription = channelReqeust.imagedescription,
+                     ChannelId = addedChannel.Entity.ChannelId,
+                     CreatedDate = DateTime.UtcNow
+                 };
 
-                await _db.ChannelProfiles.AddAsync(newchPro);
-                await _db.SaveChangesAsync();
-            }
+                 await _db.ChannelProfiles.AddAsync(newchPro);
+                 await _db.SaveChangesAsync();
+             }*/
 
             ///create channel topic
             var channalTopic = new ChannelTopic

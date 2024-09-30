@@ -1,6 +1,7 @@
 ﻿
 using KoiCoi.Models.EventDto.Payload;
 using KoiCoi.Models.Login_Models;
+using Microsoft.AspNetCore.Http;
 using System.Drawing.Printing;
 
 namespace KoiCoi.Modules.Repository.PostFeature;
@@ -18,9 +19,9 @@ public  class BL_Post
     {
         return await _daPost.CreatePostFeature(payload, LoginUserId);
     }
-    public async Task<Result<string>> UploadCollectAttachFile(PostImagePayload payload,int LoginUserID)
+    public async Task<Result<string>> UploadCollectAttachFile(IFormFile file,string PostIdval, int LoginUserID)
     {
-        return await _daPost.UploadCollectAttachFile(payload, LoginUserID);
+        return await _daPost.UploadCollectAttachFile(file, PostIdval, LoginUserID);
     }
     public async Task<Result<Pagination>> ReviewPostsList(ReviewPostPayload payload, int LoginUserId)
     {
