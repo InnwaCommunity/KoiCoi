@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {}
+    "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {}
   },
   "projects": {
-    "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
+    "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj",
+        "projectUniqueName": "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj",
         "projectName": "KoiCoi.Shared",
-        "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj",
+        "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj",
         "packagesPath": "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\",
-        "outputPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Shared\\obj\\",
+        "outputPath": "D:\\published\\KoiCoi\\KoiCoi.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\KTZ Myanmar Group 2\\AppData\\Roaming\\NuGet\\NuGet.Config",

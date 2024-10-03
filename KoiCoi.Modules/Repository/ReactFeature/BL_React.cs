@@ -26,4 +26,8 @@ public class BL_React
     {
         return await _daReact.CommentPost(payload, LoginUserID);
     }
+    public async Task<Result<Pagination>> GetComments(GetCommentPayload payload,int LoginUserId)
+    {
+        return await _daReact.GetComments(payload, LoginUserId);
+    }
 }

@@ -31,6 +31,7 @@ public partial class DashboardPostsResponse
     public bool CanLike { get; set; }
     public bool CanCommand { get; set; }
     public bool CanShare { get; set; }
+    public bool CanEdit { get; set; }
     public List<PostTagResponse> postTagRes { get; set; } = new List<PostTagResponse>();
     public List<PostBalanceResponse> postBalanceRes { get; set; } = new List<PostBalanceResponse>();
     public List<PostImageResponse>? ImageResponse { get; set; }
@@ -64,6 +65,7 @@ public partial class DashboardEventPostResponse
     public bool CanLike { get; set; }
     public bool CanCommand { get; set; }
     public bool CanShare { get; set; }
+    public bool CanEdit { get; set; }
     public List<EventMarks>? EventMarks { get; set; }
     public List<EventAddressResponse>? AddressResponse { get; set; }
     public List<EventFileInfo>? EventImageList { get; set; }

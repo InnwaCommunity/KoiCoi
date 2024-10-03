@@ -1,5 +1,6 @@
 ﻿
 
+using Amazon;
 using KoiCoi.Database.AppDbContextModels;
 using KoiCoi.Models;
 using Microsoft.Extensions.Configuration;
@@ -147,6 +148,45 @@ public class DA_React
         catch (Exception ex)
         {
             result = Result<string>.Error(ex);
+        }
+        return result;
+    }
+    public async Task<Result<Pagination>> GetComments(GetCommentPayload payload, int LoginUserId)
+    {
+        Result<Pagination> result = null;
+        try
+        {
+            if (string.IsNullOrEmpty(payload.PostIdval))
+                return Result<Pagination>.Error("Post Not Found");
+            int PostId = Convert.ToInt32(Encryption.DecryptID(payload.PostIdval, LoginUserId.ToString()));
+            int? ParentCommendId = null;
+            if (!string.IsNullOrEmpty(payload.ParentCommandIdval))
+            {
+                ParentCommendId = Convert.ToInt32(Encryption.DecryptID(payload.ParentCommandIdval, LoginUserId.ToString()));
+            }
+
+            var query = await (from _post in _db.Posts
+                               join _com in _db.PostCommands on _post.PostId equals _com.PostId
+                               join _creator in _db.Users on _com.UserId equals _creator.UserId
+                               join pro in _db.UserProfiles on _creator.UserId equals pro.UserId into profiles
+                               where _post.PostId == PostId && ParentCommendId != null ? ParentCommendId == _com.ParentCommandId : true
+                               select new
+                               {
+                                   CommandIdval = Encryption.EncryptID(_com.CommandId.ToString(), LoginUserId.ToString()),
+                                   Content = _com.Content,
+                                   CreatorIdval = Encryption.EncryptID(_creator.UserId.ToString(), LoginUserId.ToString()),
+                                   CreatorName = _creator.Name,
+                                   CreatorEmail = _creator.Email,
+                                   CanEdit = _creator.UserId == LoginUserId,
+                                   CreatorImage = profiles.OrderByDescending(p => p.CreatedDate).Select(x=> x.Url).FirstOrDefault(),
+                                   HaveChildCommand = _db.PostCommands.Where(x=> x.ParentCommandId == _com.CommandId).FirstOrDefault() != null
+                               }).ToListAsync();
+            Pagination pagination = RepoFunService.getWithPagination(payload.pageNumber, payload.pageSize, query);
+            result = Result<Pagination>.Success(pagination);
+        }
+        catch (Exception ex)
+        {
+            result = Result<Pagination>.Error(ex);
         }
         return result;
     }

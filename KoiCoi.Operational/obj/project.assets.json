@@ -13075,11 +13075,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj",
+      "projectUniqueName": "D:\\published\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj",
       "projectName": "KoiCoi.Operational",
-      "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj",
+      "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj",
       "packagesPath": "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\",
-      "outputPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\obj\\",
+      "outputPath": "D:\\published\\KoiCoi\\KoiCoi.Operational\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\KTZ Myanmar Group 2\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -13097,17 +13097,17 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
-              "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
+            "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
+              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj"
             },
-            "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj": {
-              "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj"
+            "D:\\published\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj": {
+              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Mapper\\KoiCoi.Mapper.csproj"
             },
-            "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {
-              "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj"
+            "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj": {
+              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Models\\KoiCoi.Models.csproj"
             },
-            "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
-              "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj"
+            "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj": {
+              "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Shared\\KoiCoi.Shared.csproj"
             }
           }
         }

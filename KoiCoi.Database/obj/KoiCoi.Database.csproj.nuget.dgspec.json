@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {}
+    "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {}
   },
   "projects": {
-    "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
+    "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
+        "projectUniqueName": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
         "projectName": "KoiCoi.Database",
-        "projectPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
+        "projectPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\KoiCoi.Database.csproj",
         "packagesPath": "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\",
-        "outputPath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Database\\obj\\",
+        "outputPath": "D:\\published\\KoiCoi\\KoiCoi.Database\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\KTZ Myanmar Group 2\\AppData\\Roaming\\NuGet\\NuGet.Config",

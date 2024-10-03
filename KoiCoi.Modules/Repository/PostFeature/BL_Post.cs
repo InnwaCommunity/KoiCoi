@@ -57,5 +57,8 @@ public  class BL_Post
     {
         return await _daPost.GetEventTags(EventPostIdval, LoginUserId);
     }
-
+    public async Task<Result<Pagination>> GetEachUserPosts(int LoginUserId, GetEachUserPostsPayload payload)
+    {
+        return await _daPost.GetEachUserPosts(LoginUserId, payload);
+    }
 }

@@ -1341,7 +1341,7 @@ public class DA_Event
                                join _colBal in _db.PostBalances on _coll.PostId equals _colBal.PostId
                                join _eb in _db.EventMarkBalances on _ev.PostId equals _eb.EventPostId
                                join _user in _db.Users on _coll.CreatorId equals _user.UserId
-                               where _ev.PostId == EventPostId && _colBal.MarkId == MarkId
+                               where _ev.PostId == EventPostId && _colBal.MarkId == MarkId && _eb.MarkId == MarkId
                                select new
                                {
                                    UserId = _coll.CreatorId,
@@ -1366,6 +1366,92 @@ public class DA_Event
                                 .OrderByDescending(g => g.TotalCollectBalance)
                                 .ToList();
             Pagination pa = RepoFunService.getWithPagination(payload.pageNumber, payload.pageSize, groupedResult);
+            result = Result<Pagination>.Success(pa);
+        }
+        catch (Exception ex)
+        {
+            result = Result<Pagination>.Error(ex);
+        }
+        return result;
+    }
+    public async Task<Result<Pagination>> GetUserContributons(GetUserContributonsPayload payload, int LoginUserId)
+    {
+        Result<Pagination> result = null;
+        try
+        {
+            string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
+            if (string.IsNullOrEmpty(payload.MarkIdval))
+                return Result<Pagination>.Error("Mark Not Found");
+            int MarkId = Convert.ToInt32(Encryption.DecryptID(payload.MarkIdval, LoginUserId.ToString()));
+            int? UserId = null;
+            if (!string.IsNullOrEmpty(payload.UserIdval))
+            {
+                UserId = Convert.ToInt32(Encryption.DecryptID(payload.UserIdval, LoginUserId.ToString()));
+            }
+
+            
+
+            var evquery = (from _ev in _db.Events
+                                 join _status in _db.StatusTypes on _ev.StatusId equals _status.StatusId
+                                 join _me in _db.EventMemberships on _ev.PostId equals _me.EventPostId
+                                 join _ch in _db.Channels on _ev.ChannelId equals _ch.ChannelId
+                                 join _chme in _db.ChannelMemberships on _ch.ChannelId equals _chme.ChannelId
+                                 where (UserId != null ? _chme.UserId == UserId : _chme.UserId == LoginUserId)
+                                 && _status.StatusName.ToLower() == "approved"
+                                 select _ev).ToList();
+            List<dynamic> lastQuery = new List<dynamic>();
+            foreach (var newevent in evquery)
+            {
+                var query = await (from _coll in _db.CollectPosts
+                                   join _colBal in _db.PostBalances on _coll.PostId equals _colBal.PostId
+                                   join _eb in _db.EventMarkBalances on _coll.EventPostId equals _eb.EventPostId
+                                   join _mk in _db.Marks on _eb.MarkId equals _mk.MarkId
+                                   join _user in _db.Users on _coll.CreatorId equals _user.UserId
+                                   where _colBal.MarkId == _eb.MarkId
+                                         && _coll.EventPostId == newevent.PostId
+                                         && (UserId != null ? _coll.CreatorId == UserId : _coll.CreatorId == LoginUserId)
+                                   group new
+                                   {
+                                       _mk.MarkId,
+                                       _mk.MarkName,
+                                       _mk.Isocode,
+                                       _colBal.Balance, 
+                                       _eb.TotalBalance 
+                                   }
+                                   by new
+                                   {
+                                       _mk.MarkId,
+                                       _mk.MarkName,
+                                       _mk.Isocode,
+                                       _eb.TotalBalance 
+                                   } into grouped
+                                   select new
+                                   {
+                                       MarkIdval = grouped.Key.MarkId.ToString(), 
+                                       MarkName = grouped.Key.MarkName,
+                                       IsoCode = grouped.Key.Isocode,
+                                       CollectBalance = grouped.Select(x => x.Balance).ToList(), 
+                                       TotalBalance = grouped.Key.TotalBalance 
+                                   }).ToListAsync();
+                var queryresult = query.Select(x => new
+                {
+                    MarkIdval = Encryption.EncryptID(x.MarkIdval, LoginUserId.ToString()),
+                    MarkName = x.MarkName,
+                    IsoCode = x.IsoCode,
+                    CollectBalance = x.CollectBalance
+                        .Sum(bal => Globalfunction.StringToDecimal(Encryption.DecryptID(bal, balanceSalt))),
+                    TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(x.TotalBalance, balanceSalt))
+                }).ToList();
+
+                var data = new
+                {
+                    EventPostIdval = Encryption.EncryptID(newevent.PostId.ToString(), LoginUserId.ToString()),
+                    EventName = newevent.EventName,
+                    Balances = queryresult
+                };
+                lastQuery.Add(data);
+            }
+            Pagination pa = RepoFunService.getWithPagination(payload.pageNumber, payload.pageSize, lastQuery);
             result = Result<Pagination>.Success(pa);
         }
         catch (Exception ex)

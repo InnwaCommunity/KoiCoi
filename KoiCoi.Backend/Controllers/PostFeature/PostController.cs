@@ -73,8 +73,13 @@ public class PostController : BaseController
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blPost.GetPostsOrderByEvent(payload, LoginUserID);
     }
-     
 
+    [HttpPost("GetEachUserPosts", Name = "GetEachUserPosts")]
+    public async Task<Result<Pagination>> GetEachUserPosts(GetEachUserPostsPayload payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blPost.GetEachUserPosts(LoginUserID, payload);
+    }
     ///CreatePost
     ///ReviewPost
     ///ApproveOrRejectPost

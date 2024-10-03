@@ -84,5 +84,9 @@ public class BL_Event
     {
         return await _daEvent.EventContributionFilterMarkId(payload, LoginUserId);
     }
+    public async Task<Result<Pagination>> GetUserContributons(GetUserContributonsPayload payload,int LoginUserId)
+    {
+        return await _daEvent.GetUserContributons(payload, LoginUserId);
+    }
 
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "8PgGM+k9QK4=",
+  "dgSpecHash": "Ql96gj8EODI=",
   "success": true,
-  "projectFilePath": "D:\\published\\AwsDeployment\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj",
+  "projectFilePath": "D:\\published\\KoiCoi\\KoiCoi.Operational\\KoiCoi.Operational.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\awssdk.core\\3.7.400.11\\awssdk.core.3.7.400.11.nupkg.sha512",
     "C:\\Users\\KTZ Myanmar Group 2\\.nuget\\packages\\awssdk.extensions.netcore.setup\\3.7.301\\awssdk.extensions.netcore.setup.3.7.301.nupkg.sha512",
