@@ -1380,9 +1380,6 @@ public class DA_Event
         try
         {
             string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
-            if (string.IsNullOrEmpty(payload.MarkIdval))
-                return Result<Pagination>.Error("Mark Not Found");
-            int MarkId = Convert.ToInt32(Encryption.DecryptID(payload.MarkIdval, LoginUserId.ToString()));
             int? UserId = null;
             if (!string.IsNullOrEmpty(payload.UserIdval))
             {
