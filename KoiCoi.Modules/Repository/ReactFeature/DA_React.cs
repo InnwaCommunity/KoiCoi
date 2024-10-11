@@ -42,9 +42,9 @@ public class DA_React
         return result;
     }
 
-    public async Task<Result<string>> ReactPost(ReactPostPayload payload, int LoginUserID)
+    public async Task<Result<int>> ReactPost(ReactPostPayload payload, int LoginUserID)
     {
-        Result<string> result = null;
+        Result<int> result = null;
         try
         {
             int postId = Convert.ToInt32(Encryption.DecryptID(payload.postIdval!, LoginUserID.ToString()));
@@ -67,14 +67,12 @@ public class DA_React
 
                     await _db.Reacts.AddAsync(newreact);
                     await _db.SaveChangesAsync();
-                    result = Result<string>.Success("React Success");
 }
                 else
                 {
                     ///update React
                     react.ReactTypeId = reacttypeid;
                     await _db.SaveChangesAsync();
-                    result = Result<string>.Success("Update React Success");
                 }
             }
             else
@@ -83,71 +81,121 @@ public class DA_React
                  if(react is not null)
                 {
                     _db.Reacts.Remove(react);
+                    _db.Entry(react).State = EntityState.Deleted;
                     await _db.SaveChangesAsync();
                 }
-                result = Result<string>.Success("Delete React Success");
 
             }
+            int reactCount = _db.Reacts.Where(x=> x.PostId == postId).Count();
+            result = Result<int>.Success(reactCount);
+
         }
         catch (Exception ex)
         {
-            result = Result<string>.Error(ex);
+            result = Result<int>.Error(ex);
         }
         return result;
     }
 
-    public async Task<Result<string>> CommentPost(CommentPostPayload payload, int LoginUserID)
+    public async Task<Result<GetCommentResponse>> CommentPost(CommentPostPayload payload, int LoginUserID)
     {
-        Result<string> result = null;
+        Result<GetCommentResponse> result = null;
         try
         {
             if (payload.PostIdval is null && payload.ParentIdval is null)
-                return Result<string>.Error("Post can be null");
+                return Result<GetCommentResponse>.Error("Post can be null");
 
             if(payload.PostIdval is not null)
             {
                 int PostId = Convert.ToInt32(Encryption.DecryptID(payload.PostIdval, LoginUserID.ToString()));
                 var post = await _db.Posts.Where(x=> x.PostId== PostId).FirstOrDefaultAsync();
                 if(post is null)
-                    return Result<string>.Error("Post can't found");
-                PostCommand newCommand = new PostCommand
+                    return Result<GetCommentResponse>.Error("Post can't found");
+                if (payload.ParentIdval is not null)
                 {
-                    Content = payload.Content,
-                    PostId = PostId,
-                    UserId = LoginUserID,
-                    ModifiedDate = DateTime.UtcNow,
-                    CreatedDate = DateTime.UtcNow,
-                };
-                await _db.PostCommands.AddAsync(newCommand);
-                await _db.SaveChangesAsync();
-                result = Result<string>.Success("Success");
+                    int ParentCommandId = Convert.ToInt32(Encryption.DecryptID(payload.ParentIdval, LoginUserID.ToString()));
+                    var parentCommand = await _db.PostCommands.Where(x=> x.CommandId == ParentCommandId).FirstOrDefaultAsync();
+                        
+                    if (parentCommand is null)
+                        return Result<GetCommentResponse>.Error("Parent Command can't found");
+                    PostCommand newCommand = new PostCommand
+                    {
+                        Content = payload.Content,
+                        PostId = post.PostId,
+                        UserId = LoginUserID,
+                        ParentCommandId = ParentCommandId,
+                        ModifiedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.UtcNow,
+                    };
+                    await _db.PostCommands.AddAsync(newCommand);
+                    await _db.SaveChangesAsync();
+                    var query = await (from _com in _db.PostCommands
+                                       join _creator in _db.Users on _com.UserId equals _creator.UserId
+                                       join pro in _db.UserProfiles on _creator.UserId equals pro.UserId into profiles
+                                       join _cmr in _db.CommandReacts on _com.CommandId equals _cmr.CommandId into cmreacts
+                                       where _com.CommandId == newCommand.CommandId
+                                       select new GetCommentResponse
+                                       {
+                                           CommandIdval = Encryption.EncryptID(_com.CommandId.ToString(), LoginUserID.ToString()),
+                                           Content = _com.Content,
+                                           CreatorIdval = Encryption.EncryptID(_creator.UserId.ToString(), LoginUserID.ToString()),
+                                           CreatorName = _creator.Name,
+                                           CreatorEmail = _creator.Email,
+                                           CanEdit = _creator.UserId == LoginUserID,
+                                           CreateData = _com.CreatedDate,
+                                           ReactCount = cmreacts.Count(),
+                                           Selected = _db.CommandReacts.Where(x => x.UserId == LoginUserID && x.CommandId == _com.CommandId).FirstOrDefault() != null,
+                                           CreatorImage = profiles.OrderByDescending(p => p.CreatedDate).Select(x => x.Url).FirstOrDefault(),
+                                           HaveChildCommand = _db.PostCommands.Any(x => x.ParentCommandId == _com.CommandId)
+                                       }).FirstOrDefaultAsync();
+                    if(query is null)
+                        return Result<GetCommentResponse>.Error("Fail"); 
+                    result = Result<GetCommentResponse>.Success(query);
+                }
+                else
+                {
+                    PostCommand newCommand = new PostCommand
+                    {
+                        Content = payload.Content,
+                        PostId = PostId,
+                        UserId = LoginUserID,
+                        ModifiedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.UtcNow,
+                    };
+                    await _db.PostCommands.AddAsync(newCommand);
+                    await _db.SaveChangesAsync();
+                    var query = await (from _com in _db.PostCommands
+                                       join _creator in _db.Users on _com.UserId equals _creator.UserId
+                                       join pro in _db.UserProfiles on _creator.UserId equals pro.UserId into profiles
+                                       join _cmr in _db.CommandReacts on _com.CommandId equals _cmr.CommandId into cmreacts
+                                       where _com.CommandId == newCommand.CommandId
+                                       select new GetCommentResponse
+                                       {
+                                           CommandIdval = Encryption.EncryptID(_com.CommandId.ToString(), LoginUserID.ToString()),
+                                           Content = _com.Content,
+                                           CreatorIdval = Encryption.EncryptID(_creator.UserId.ToString(), LoginUserID.ToString()),
+                                           CreatorName = _creator.Name,
+                                           CreatorEmail = _creator.Email,
+                                           CanEdit = _creator.UserId == LoginUserID,
+                                           CreateData = _com.CreatedDate,
+                                           ReactCount = cmreacts.Count(),
+                                           Selected = _db.CommandReacts.Where(x => x.UserId == LoginUserID && x.CommandId == _com.CommandId).FirstOrDefault() != null,
+                                           CreatorImage = profiles.OrderByDescending(p => p.CreatedDate).Select(x => x.Url).FirstOrDefault(),
+                                           HaveChildCommand = _db.PostCommands.Any(x => x.ParentCommandId == _com.CommandId)
+                                       }).FirstOrDefaultAsync();
+                    if (query is null)
+                        return Result<GetCommentResponse>.Error("Fail");
+                    result = Result<GetCommentResponse>.Success(query);
+                }
             }
-            else if(payload.ParentIdval is not null)
+            else
             {
-                int ParentCommandId = Convert.ToInt32(Encryption.DecryptID(payload.ParentIdval, LoginUserID.ToString()));
-                var post = await (from _pt in _db.Posts
-                                  join _cop in _db.PostCommands on _pt.PostId equals _cop.PostId
-                                  where _cop.CommandId == ParentCommandId
-                                  select _pt).FirstOrDefaultAsync();
-                if (post is null)
-                    return Result<string>.Error("Post can't found");
-                PostCommand newCommand = new PostCommand
-                {
-                    Content = payload.Content,
-                    PostId = post.PostId,
-                    UserId = LoginUserID,
-                    ModifiedDate = DateTime.UtcNow,
-                    CreatedDate = DateTime.UtcNow,
-                };
-                await _db.PostCommands.AddAsync(newCommand);
-                await _db.SaveChangesAsync();
-                result = Result<string>.Success("Success");
+                result = Result<GetCommentResponse>.Error("Fail");
             }
-            result = Result<string>.Error("Fail");
         }
         catch (Exception ex)
         {
-            result = Result<string>.Error(ex);
+            result = Result<GetCommentResponse>.Error(ex);
         }
         return result;
     }
@@ -169,8 +217,9 @@ public class DA_React
                                join _com in _db.PostCommands on _post.PostId equals _com.PostId
                                join _creator in _db.Users on _com.UserId equals _creator.UserId
                                join pro in _db.UserProfiles on _creator.UserId equals pro.UserId into profiles
-                               where _post.PostId == PostId && ParentCommendId != null ? ParentCommendId == _com.ParentCommandId : true
-                               select new
+                               join _cmr in _db.CommandReacts on _com.CommandId equals _cmr.CommandId into cmreacts
+                               where _post.PostId == PostId && (ParentCommendId != null ? ParentCommendId == _com.ParentCommandId : true)
+                               select new GetCommentResponse
                                {
                                    CommandIdval = Encryption.EncryptID(_com.CommandId.ToString(), LoginUserId.ToString()),
                                    Content = _com.Content,
@@ -178,8 +227,11 @@ public class DA_React
                                    CreatorName = _creator.Name,
                                    CreatorEmail = _creator.Email,
                                    CanEdit = _creator.UserId == LoginUserId,
-                                   CreatorImage = profiles.OrderByDescending(p => p.CreatedDate).Select(x=> x.Url).FirstOrDefault(),
-                                   HaveChildCommand = _db.PostCommands.Where(x=> x.ParentCommandId == _com.CommandId).FirstOrDefault() != null
+                                   CreateData = _com.CreatedDate,
+                                   ReactCount = cmreacts.Count(),
+                                   Selected = _db.CommandReacts.Where(x=> x.UserId == LoginUserId && x.CommandId == _com.CommandId).FirstOrDefault() != null,
+                                   CreatorImage = profiles.OrderByDescending(p => p.CreatedDate).Select(x => x.Url).FirstOrDefault(),
+                                   HaveChildCommand = _db.PostCommands.Any(x => x.ParentCommandId == _com.CommandId)
                                }).ToListAsync();
             Pagination pagination = RepoFunService.getWithPagination(payload.pageNumber, payload.pageSize, query);
             result = Result<Pagination>.Success(pagination);
@@ -187,6 +239,110 @@ public class DA_React
         catch (Exception ex)
         {
             result = Result<Pagination>.Error(ex);
+        }
+        return result;
+    }
+
+    public async Task<Result<string>> UpdateComment(UpdateCommentPayload payload, int LoginUserID)
+    {
+        Result<string> result = null;
+        try
+        {
+            if (string.IsNullOrEmpty(payload.CommentIdval))
+                return Result<string>.Error("Invalide Comment Id");
+            int CommentId = Convert.ToInt32(Encryption.DecryptID(payload.CommentIdval, LoginUserID.ToString()));
+            var comment = await _db.PostCommands.Where(x => x.CommandId == CommentId).FirstOrDefaultAsync();
+            if (comment is null)
+                return Result<string>.Error("Comment Not Found");
+
+            comment.Content = payload.Content;
+            comment.ModifiedDate = DateTime.UtcNow;
+            await _db.SaveChangesAsync();
+            result= Result<string>.Success("Success");
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex.Message);
+        }
+        return result;
+    }
+
+    public async Task<Result<string>> DeleteComment(DeleteCommentPayload payload, int LoginUserID)
+    {
+        Result<string> result = null;
+        try
+        {
+            if (string.IsNullOrEmpty(payload.CommentIdval))
+                return Result<string>.Error("Invalide Comment Id");
+            int CommentId = Convert.ToInt32(Encryption.DecryptID(payload.CommentIdval, LoginUserID.ToString()));
+            var comment = await _db.PostCommands.Where(x => x.CommandId == CommentId).FirstOrDefaultAsync();
+            if (comment is null)
+                return Result<string>.Error("Comment Not Found");
+
+            _db.PostCommands.Remove(comment);
+            _db.Entry(comment).State = EntityState.Deleted;
+            await _db.SaveChangesAsync();
+            result = Result<string>.Success("Update Success");
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex.Message);
+        }
+        return result;
+    }
+
+    public async Task<Result<int>> ReactComment(ReactCommentPayload payload, int LoginUserID)
+    {
+
+        Result<int> result = null;
+        try
+        {
+            int commentId = Convert.ToInt32(Encryption.DecryptID(payload.commentIdval!, LoginUserID.ToString()));
+            var react = await _db.CommandReacts.Where(
+                x => x.CommandId == commentId && x.UserId == LoginUserID)
+                .FirstOrDefaultAsync();
+            if (!string.IsNullOrEmpty(payload.reacttypeIdval))
+            {
+                int reacttypeid = Convert.ToInt32(Encryption.DecryptID(payload.reacttypeIdval, LoginUserID.ToString()));
+                if (react is null)
+                {
+                    ///create React
+                    CommandReact newreact = new CommandReact
+                    {
+                        CommandId = commentId,
+                        UserId = LoginUserID,
+                        ReactTypeId = reacttypeid,
+                        CreatedDate = DateTime.UtcNow
+                    };
+
+                    await _db.CommandReacts.AddAsync(newreact);
+                    await _db.SaveChangesAsync();
+                }
+                else
+                {
+                    ///update React
+                    react.ReactTypeId = reacttypeid;
+                    await _db.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                ///Delete React
+                if (react is not null)
+                {
+                    _db.CommandReacts.Remove(react);
+                    _db.Entry(react).State = EntityState.Deleted;
+                    await _db.SaveChangesAsync();
+                }
+
+            }
+            int reactCount = _db.CommandReacts.Where(x => x.CommandId == commentId).Count();
+            result = Result<int>.Success(reactCount);
+
+        }
+        catch (Exception ex)
+        {
+            result = Result<int>.Error(ex);
         }
         return result;
     }

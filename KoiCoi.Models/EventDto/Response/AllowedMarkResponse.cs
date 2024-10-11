@@ -11,6 +11,7 @@ public partial class AllowedMarkResponse
 
 public partial class ExchangeRateResponse
 {
+    public string ExchangeRateIdval { get; set;} = string.Empty;
     public string ToMarkIdval { get; set; } = string.Empty;
     public string MarkName { get; set; } = string.Empty;
     public string IsoCode { get; set; } = string.Empty;

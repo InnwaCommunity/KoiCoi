@@ -2,6 +2,7 @@
 using Serilog;
 using System.Drawing.Imaging;
 using System.Drawing;
+using KoiCoi.Modules.Repository.EventFreture;
 namespace KoiCoi.Backend.Controllers.Channels;
 
 [Route("api/[controller]")]
@@ -118,15 +119,16 @@ public class ChannelController : BaseController
         }
     }
 
-    [HttpGet("GetChannelsList/{PageNumber}/{PageSize}", Name = "GetChannelsList")]
-    public async Task<Result<Pagination>> GetChannelsList(int PageNumber,int PageSize)
+    [HttpGet("GetChannelsList/{PageNumber}/{PageSize}/{Status}", Name = "GetChannelsList")]
+    public async Task<Result<Pagination>> GetChannelsList(int PageNumber,int PageSize,string Status)
     {
 
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
-        return await _blChannel.GetChannelsList(LoginUserID,PageNumber,PageSize);
+        return await _blChannel.GetChannelsList(LoginUserID,PageNumber,PageSize, Status);
     }
 
-    [HttpPost("GetChannelProfile",Name = "GetChannelProfile")]
+    /*
+     [HttpPost("GetChannelProfile",Name = "GetChannelProfile")]
     public async Task<Result<string>> GetChannelProfile(GetChannelData getChannelData)
     {
         try
@@ -146,8 +148,30 @@ public class ChannelController : BaseController
             return Result<string>.Error(ex);
         }
 
+    }*/
+    [HttpPost("UploadChannelProfile",Name = "UploadChannelProfile")]
+    public async Task<Result<string>> UploadChannelProfile([FromForm] string channelIdval, [FromForm] IFormFile files)
+    {
+
+        try
+        {
+            if (files != null && files.Length > 0)
+            {
+                int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+                return await _blChannel.UploadChannelProfile(files, channelIdval, LoginUserId);
+            }
+            else
+            {
+                return Result<string>.Error("No file uploaded.");
+            }
+        }
+        catch (Exception ex)
+        {
+            return Result<string>.Error(ex.Message);
+        }
     }
-    [HttpPost("DirectUploadChannelProfile",Name = "DirectUploadChannelProfile")]
+    /*
+     [HttpPost("DirectUploadChannelProfile",Name = "DirectUploadChannelProfile")]
 
     public async Task<Result<string>> DirectUploadChannelProfile(UploadChannelProfileRequest updoadReqeust)
     {
@@ -206,7 +230,7 @@ public class ChannelController : BaseController
         {
             return Result<string>.Error(ex);
         }
-    }
+    }*/
 
     [HttpPost("GenerateChannelUrl",Name = "GenerateChannelUrl")]
     public async Task<Result<string>> GenerateChannelUrl(GetChannelData getChannelData)

@@ -21,32 +21,56 @@ public class DA_User
         _awsS3Service = awsS3Service;
     }
 
-    public async Task<Result<ResponseUserDto>> CreateAccount(ViaUser viaUser,string temppassword)
+    public async Task<Result<ResponseUserDto>> CreateAccount(RequestUserDto requestUser)
     {
         Result<ResponseUserDto> model = null;
         try
         {
-            if (!(await checkEmailUnique(viaUser.Email ?? "")))
-                return Result<ResponseUserDto>.Error("You Email Have Been Registered");
-            await _db.Users.AddAsync(viaUser.ChangeUser());
-            int result = await _db.SaveChangesAsync();
-            if (result == 0)
-                return Result<ResponseUserDto>.Error("Registration Fail");
-            ResponseUserDto? userData = await _db.Users.Where(x => x.Name == viaUser.Name && x.Password == viaUser.Password)
-                .Select(x => new ResponseUserDto
-                {
-                    UserIdval = x.UserIdval,
-                    Name = x.Name
-                }).FirstOrDefaultAsync();
-            if (userData == null)
-                return Result<ResponseUserDto>.Error("Registration Fail");
+
             string aseKey = _configuration.GetSection("AesEncryption:AseKey").Get<string>()!;
             string aseIv = _configuration.GetSection("AesEncryption:AseIV").Get<string>()!;
-            model = Result<ResponseUserDto>.Success(new ResponseUserDto
+            if (requestUser.Password is null)
+                return Result<ResponseUserDto>.Error("Invalide Password");
+
+            if (!(await checkEmailUnique(requestUser.Email ?? "")))
+                return Result<ResponseUserDto>.Error("Your Email Have Been Registered");
+            string payloadpassword = AesEncryption.Decrypt(requestUser.Password, aseKey, aseIv);
+
+            // Generate a new 12-character password with at least 1 non-alphanumeric character.
+            RandomPassword passwordGenerator = new RandomPassword();
+            string name = "Guest";
+            if (!string.IsNullOrEmpty(requestUser.Name))
             {
-                UserIdval = userData.UserIdval!,
-                Name = userData.Name!,
-                Password = AesEncryption.Encrypt(temppassword,aseKey,aseIv)
+                name = requestUser.Name;
+            }
+            string salt = SaltedHash.GenerateSalt();
+            string password = SaltedHash.ComputeHash(salt, payloadpassword.ToString());
+            string userIdval = Encryption.EncryptID(name, salt) + passwordGenerator.CreatePassword(name.Length, name.Length / 3);
+
+            User user = new User
+            {
+                UserIdval = userIdval,
+                Name = name,
+                Email = requestUser.Email,
+                Password = password,
+                PasswordHash = salt,
+                Phone = requestUser.Phone,
+                DeviceId = requestUser.DeviceId,
+                DateCreated = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                Inactive = false,
+            };
+            var newUserEntry = await _db.Users.AddAsync(user);
+            int result = await _db.SaveChangesAsync();
+            if (result == 0 || newUserEntry.Entity == null)
+                return Result<ResponseUserDto>.Error("Registration Failed");
+
+            // Prepare the success response model
+            return model = Result<ResponseUserDto>.Success(new ResponseUserDto
+            {
+                UserIdval = newUserEntry.Entity.UserIdval,
+                Name = newUserEntry.Entity.Name!,
+                Password = AesEncryption.Encrypt(payloadpassword, aseKey, aseIv)
             });
         }
         catch (Exception ex)

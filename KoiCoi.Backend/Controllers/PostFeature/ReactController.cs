@@ -19,14 +19,14 @@ public class ReactController : BaseController
     }
 
     [HttpPost("ReactPost",Name = "ReactPost")]
-    public async Task<Result<string>> ReactPost(ReactPostPayload payload)
+    public async Task<Result<int>> ReactPost(ReactPostPayload payload)
     {
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blReact.ReactPost(payload,LoginUserID);
     }
 
     [HttpPost("CommentPost",Name = "CommentPost")]
-    public async Task<Result<string>> CommentPost(CommentPostPayload payload)
+    public async Task<Result<GetCommentResponse>> CommentPost(CommentPostPayload payload)
     {
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blReact.CommentPost(payload, LoginUserID);
@@ -39,6 +39,25 @@ public class ReactController : BaseController
         return await _blReact.GetComments(payload, LoginUserID);
     }
 
+    [HttpPut("UpdateComment",Name = "UpdateComment")]
+    public async Task<Result<string>> UpdateComment(UpdateCommentPayload payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blReact.UpdateComment(payload, LoginUserID);
+    }
+
+    [HttpDelete("DeleteComment",Name = "DeleteComment")]
+    public async Task<Result<string>> DeleteComment(DeleteCommentPayload payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blReact.DeleteComment(payload, LoginUserID);
+    }
+    [HttpPost("ReactComment", Name = "ReactComment")]
+    public async Task<Result<int>> ReactComment(ReactCommentPayload payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blReact.ReactComment(payload, LoginUserID);
+    }
     ///Like
     ///Command
     ///Share

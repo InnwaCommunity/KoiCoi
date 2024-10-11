@@ -102,6 +102,13 @@ public class EventController : BaseController
         int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blEvent.CreateAllowedMarks(payload,LoginUserId);
     }
+    [HttpPut("UpdateAllowdedMark",Name = "UpdateAllowdedMark")]
+    public async Task<Result<string>> UpdateAllowdedMark(UpdateAllowdMarkPayload payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.UpdateAllowdedMark(payload, LoginUserId);
+    }
+
 
     [HttpPost("GetAllowedMarks", Name = "GetAllowedMarks")]
     public async Task<Result<Pagination>> GetAllowedMarks(GetAllowedMarkPayload payload)

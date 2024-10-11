@@ -8,6 +8,7 @@ public partial class ChannelDataResponse
     public string? ChannelType { get; set; }
     public long? MemberCount { get; set; }
     public string? ChannelProfile { get; set; }
+    public bool CanEdit { get; set; } = false;
     public List<ChannelBalanceData> BalanceDatas { get; set; }   = new List<ChannelBalanceData>();
 }
 

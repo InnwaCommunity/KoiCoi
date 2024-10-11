@@ -1,6 +1,7 @@
 ﻿
 using KoiCoi.Models.Login_Models;
 using KoiCoi.Models.User_Dto.Payload;
+using KoiCoi.Models.Via;
 using Microsoft.AspNetCore.Http;
 
 namespace KoiCoi.Modules.Repository.UserFeature;
@@ -22,7 +23,9 @@ public class BL_User
     {
         try
         {
-            ViaUser viaUser = new ViaUser();
+            return await _daUser.CreateAccount(requestUser);
+            /*
+             ViaUser viaUser = new ViaUser();
             viaUser.Email = requestUser.Email ?? "";
             viaUser.Phone = requestUser.Phone ?? "";
             viaUser.DeviceId = requestUser.DeviceId ?? "";
@@ -54,7 +57,7 @@ public class BL_User
                 string userIdval = Encryption.EncryptID(requestUser.Name!, salt) + passwordGenerator.CreatePassword(requestUser.Name!.Length, requestUser.Name!.Length / 3);
                 viaUser.UserIdval = userIdval;
                 return await _daUser.CreateAccount(viaUser, tempPas);
-            }
+            }*/
         }
         catch (Exception ex) {
             return Result<ResponseUserDto>.Error(ex);

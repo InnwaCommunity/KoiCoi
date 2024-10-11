@@ -17,17 +17,30 @@ public class BL_React
         return await _daReact.GetAllReactType(LoginUserId);
     }
 
-    public async Task<Result<string>> ReactPost(ReactPostPayload payload,int LoginUserID)
+    public async Task<Result<int>> ReactPost(ReactPostPayload payload,int LoginUserID)
     {
         return await _daReact.ReactPost(payload, LoginUserID);
     }
 
-    public async Task<Result<string>> CommentPost(CommentPostPayload payload,int LoginUserID)
+    public async Task<Result<GetCommentResponse>> CommentPost(CommentPostPayload payload,int LoginUserID)
     {
         return await _daReact.CommentPost(payload, LoginUserID);
     }
     public async Task<Result<Pagination>> GetComments(GetCommentPayload payload,int LoginUserId)
     {
         return await _daReact.GetComments(payload, LoginUserId);
+    }
+    public async Task<Result<string>> UpdateComment(UpdateCommentPayload payload,int LoginUserID)
+    {
+        return await _daReact.UpdateComment(payload, LoginUserID);
+    }
+    public async Task<Result<string>> DeleteComment(DeleteCommentPayload payload, int LoginUserID)
+    {
+        return await _daReact.DeleteComment(payload, LoginUserID);
+    }
+
+    public async Task<Result<int>> ReactComment(ReactCommentPayload payload, int LoginUserID)
+    {
+        return await _daReact.ReactComment(payload, LoginUserID);
     }
 }

@@ -1,6 +1,8 @@
 ﻿
 using KoiCoi.Models.ChannelDtos.PayloadDtos;
 using KoiCoi.Models.Login_Models;
+using KoiCoi.Modules.Repository.EventFreture;
+using Microsoft.AspNetCore.Http;
 
 namespace KoiCoi.Modules.Repository.ChannelFeature;
 
@@ -53,20 +55,24 @@ public class BL_Channel
         return await _daChannel.CreateChannel(channelReqeust, LoginUserId);
     }
 
-    public async Task<Result<Pagination>> GetChannelsList(int LoginUserId,int PageNumber,int PageSize)
+    public async Task<Result<Pagination>> GetChannelsList(int LoginUserId,int PageNumber,int PageSize, string Status)
     {
-        return await _daChannel.GetChannelsList(LoginUserId,PageNumber,PageSize);
+        return await _daChannel.GetChannelsList(LoginUserId,PageNumber,PageSize,Status);
     }
-
-    public async Task<Result<string>> GetChannelProfile(int ChannelId,string destDir)
+    /*public async Task<Result<string>> GetChannelProfile(int ChannelId,string destDir)
     {
         return await _daChannel.GetChannelProfile(ChannelId,destDir);
+    }*/
+
+    public async Task<Result<string>> UploadChannelProfile(IFormFile file, string ChannelIdval, int LoginUserId)
+    {
+        return await _daChannel.UploadChannelProfile(file, ChannelIdval, LoginUserId);
     }
 
-    public async Task<Result<string>> UploadProfile(int LoginUserId,int ChannelId,string filename,string? imgDes)
+    /*public async Task<Result<string>> UploadProfile(int LoginUserId,int ChannelId,string filename,string? imgDes)
     {
         return await _daChannel.UploadProfile(LoginUserId,ChannelId,filename,imgDes);
-    }
+    }*/
 
     public async Task<Result<string>> GenerateChannelUrl(int ChannelId,int LoginUserId)
     {

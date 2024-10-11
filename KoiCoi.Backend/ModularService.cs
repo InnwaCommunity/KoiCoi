@@ -7,6 +7,7 @@ using KoiCoi.Backend.CustomTokenAuthProvider;
 using KoiCoi.Operational.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.OpenApi.Models;
@@ -48,6 +49,11 @@ public static class ModularService
         {
             options.AllowSynchronousIO = true;
         });
+        builder.Services.Configure<FormOptions>(options =>
+        {
+            options.MultipartBodyLengthLimit = 100 * 1024 * 1024; // 100MB
+        });
+
         return builder;
     }
 

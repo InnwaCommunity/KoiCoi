@@ -570,10 +570,10 @@ public class DA_Post
             {
                 List<PostBalanceResponse> balancereviews = await (from _colbal in _db.PostBalances
                                                  join _allow in _db.EventAllowedMarks on _colbal.MarkId equals _allow.MarkId
-                                                 join _evbalance in _db.EventMarkBalances on _allow.EventPostId equals _evbalance.EventPostId
+                                                 join _evbalance in _db.EventMarkBalances on _allow.MarkId equals _evbalance.MarkId
                                                  join _mark in _db.Marks on _colbal.MarkId equals _mark.MarkId
                                                  where _colbal.PostId == item.PostId && _allow.EventPostId == item.EventPostId
-                                                                  select new PostBalanceResponse
+                                                 select new PostBalanceResponse
                                                  {
                                                      CollectAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_colbal.Balance, balanceSalt)),
                                                      EventTotalAmount = StatusName.ToLower() == "approved" ? Globalfunction.StringToDecimal(Encryption.DecryptID(_evbalance.TotalBalance, balanceSalt))

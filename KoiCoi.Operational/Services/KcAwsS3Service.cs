@@ -142,7 +142,7 @@ public class KcAwsS3Service
             {
                 BucketName = bucketName,
                 Key = key,
-                Expires = DateTime.UtcNow.AddMinutes(10)
+                Expires = DateTime.UtcNow.AddMinutes(3)
             };
 
             var url = _s3Client.GetPreSignedURL(request);

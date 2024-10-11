@@ -1,7 +1,9 @@
 ﻿
+using KoiCoi.Database.AppDbContextModels;
 using KoiCoi.Models;
 using KoiCoi.Models.ChannelDtos.PayloadDtos;
 using KoiCoi.Models.Via;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel.DataAnnotations;
@@ -407,7 +409,8 @@ public class DA_Channel
                                                }).FirstOrDefaultAsync();
             if (data is null) return Result<ChannelDataResponse>.Error("Channel Not Found");
              */
-            return Result<string>.Success("Create Success");
+            string channelIdval = Encryption.DecryptID(newchannel.ChannelId.ToString(), LoginUserId.ToString());
+            return Result<string>.Success(channelIdval);
         }
         catch (Exception ex)
         {
@@ -415,23 +418,23 @@ public class DA_Channel
         }
     }
 
-    public async Task<Result<Pagination>> GetChannelsList(int LoginUserId,int PageNumber,int PageSize)
+    public async Task<Result<Pagination>> GetChannelsList(int LoginUserId,int PageNumber,int PageSize, string Status)
     {
         Result<Pagination> model = null;
         try
         {
-            int? ApprovedStatus = await _db.StatusTypes.Where(x=> x.StatusName.ToLower() == "approved")
+            int? StatusType = await _db.StatusTypes.Where(x=> x.StatusName.ToLower() == Status.ToLower())
                             .Select(x=> x.StatusId)
                             .FirstOrDefaultAsync();
-            if (ApprovedStatus == null) return Result<Pagination>.Error("Status Type Not Found");
+            if (StatusType == null) return Result<Pagination>.Error("Status Type Not Found");
             string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             var  query = await ( from _channel in _db.Channels 
                                                join _chantype in _db.ChannelTypes on _channel.ChannelType equals _chantype.ChannelTypeId
                                                join _mem in _db.ChannelMemberships on _channel.ChannelId equals _mem.ChannelId
                                                join cp in _db.ChannelProfiles on _channel.ChannelId equals cp.ChannelId into chanPro
                                                from cp in chanPro.OrderByDescending(p => p.CreatedDate).Take(1).DefaultIfEmpty()
-                                               where _mem.UserId == LoginUserId && _mem.StatusId == ApprovedStatus
-                                               orderby _channel.ChannelName
+                                               where _mem.UserId == LoginUserId && _mem.StatusId == StatusType
+                                                orderby _channel.ChannelName
                                                select new 
                                                {
                                                    ChannelId=_channel.ChannelId,
@@ -440,6 +443,10 @@ public class DA_Channel
                                                    ChannelDescription = _channel.StatusDescription,
                                                    ChannelType = _chantype.ChannelTypeName,
                                                    MemberCount = _channel.MemberCount,
+                                                   CanEdit = _db.UserTypes
+                                                            .Where(x => x.TypeId == _mem.UserTypeId)
+                                                            .Select(x => x.Name.ToLower())
+                                                            .FirstOrDefault() == "owner",
                                                    ChannelProfile = cp != null ? cp.Url : null
                                                }).ToListAsync();
             List<ChannelDataResponse> Channels = new List<ChannelDataResponse> { };
@@ -463,6 +470,7 @@ public class DA_Channel
                     ChannelDescription = item.ChannelDescription,
                     ChannelType = item.ChannelType,
                     MemberCount = item.MemberCount,
+                    CanEdit= item.CanEdit,
                     ChannelProfile = item.ChannelProfile,
                     BalanceDatas = bala
                 };
@@ -477,8 +485,8 @@ public class DA_Channel
         }
         return model;
     }
-
-    public async Task<Result<string>> GetChannelProfile(int ChannelId,string destDir)
+    /*
+     public async Task<Result<string>> GetChannelProfile(int ChannelId,string destDir)
     {
         Result<string> model = null;
         try
@@ -514,9 +522,10 @@ public class DA_Channel
             model = Result<string>.Error(ex);
         }
         return model;
-    }
+    }*/
 
-    public async Task<Result<string>> UploadProfile(int LoginUserId, int ChannelId,string filename,string? description)
+    /*
+     public async Task<Result<string>> UploadProfile(int LoginUserId, int ChannelId,string filename,string? description)
     {
         Result<string> model = null;
 
@@ -540,6 +549,45 @@ public class DA_Channel
             model = Result<string>.Error(ex);
         }
         return model;
+    }*/
+
+
+    public async Task<Result<string>> UploadChannelProfile(IFormFile file, string ChannelIdval, int LoginUserId)
+    {
+        Result<string> result = null;
+        try
+        {
+            int ChannelId = Convert.ToInt32(Encryption.DecryptID(ChannelIdval, LoginUserId.ToString()));
+            var resda = await _db.Channels.Where(x => x.ChannelId == ChannelId).FirstOrDefaultAsync();
+            if (resda is null) return Result<string>.Error("Channel Not Found");
+            string bucketname = _configuration.GetSection("Buckets:ChannelProfile").Get<string>()!;
+
+            string ext = Path.GetExtension(file.FileName);
+            string uniquekey = Globalfunction.NewUniqueFileKey(ext);
+            Result<string> res = await _kcAwsS3Service.CreateFileAsync(file, bucketname, uniquekey, ext);
+            if (res.IsSuccess)
+            {
+                ChannelProfile channelProfile = new ChannelProfile
+                {
+                    Url = uniquekey,
+                    UrlDescription = "",
+                    ChannelId = ChannelId,
+                    CreatedDate = DateTime.UtcNow,
+                };
+                await _db.ChannelProfiles.AddAsync(channelProfile);
+                await _db.SaveChangesAsync();
+                result = Result<string>.Success("Upload Success");
+            }
+            else
+            {
+                result = res;
+            }
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
+        }
+        return result;
     }
 
     public async Task<Result<string>> GenerateChannelUrl(int ChannelId,int LoginUserId)

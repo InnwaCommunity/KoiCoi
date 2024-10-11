@@ -60,6 +60,10 @@ public class BL_Event
     {
         return await _daEvent.CreateAllowedMarks(payload, LoginUserId);
     }
+    public async Task<Result<string>> UpdateAllowdedMark(UpdateAllowdMarkPayload payload, int LoginUserId)
+    {
+        return await _daEvent.UpdateAllowdedMark(payload, LoginUserId);
+    }
 
     public async Task<Result<Pagination>> GetAllowedMarks(GetAllowedMarkPayload payload,int LoginUserId)
     {
