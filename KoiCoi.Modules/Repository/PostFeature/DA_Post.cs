@@ -1352,6 +1352,7 @@ public class DA_Post
         {
             string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             int? UserId = null;
+            string Status = payload.Status ?? "approved";
             if (!string.IsNullOrEmpty(payload.UserIdval))
             {
                 UserId = Convert.ToInt32(Encryption.DecryptID(payload.UserIdval, LoginUserId.ToString()));
@@ -1387,7 +1388,7 @@ public class DA_Post
                                             join _meship in _db.ChannelMemberships on _ev.ChannelId equals _meship.ChannelId
                                             join _usertype in _db.UserTypes on _meship.UserTypeId equals _usertype.TypeId
                                             where apost.PostId == _ev.PostId &&
-                                                  _sta.StatusName.ToLower() == "approved" &&
+                                                  _sta.StatusName.ToLower() == Status &&
                                                   (UserId != null ? ( _ev.CreatorId == UserId) : ( _ev.CreatorId == LoginUserId)) &&
                                                    (apost.ViewPolicies.GroupMemberOnly != null && apost.ViewPolicies.GroupMemberOnly == true ? _meship.UserId == LoginUserId : true)
                                             select new
@@ -1499,7 +1500,7 @@ public class DA_Post
                                  join _chanme in _db.ChannelMemberships on _event.ChannelId equals _chanme.ChannelId
                                  join _creator in _db.Users on _coll.CreatorId equals _creator.UserId
                                  join _poimg in _db.PostImages on _coll.PostId equals _poimg.PostId into postImages
-                                 where _postStatus.StatusName.ToLower() == "approved" && _coll.PostId == apost.PostId &&
+                                 where _postStatus.StatusName.ToLower() == Status && _coll.PostId == apost.PostId &&
                                  (UserId != null ? ( _coll.CreatorId == UserId) : ( _coll.CreatorId == LoginUserId)) 
                                   && (apost.ViewPolicies.GroupMemberOnly != null && apost.ViewPolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true)
                                  select new
@@ -1553,7 +1554,9 @@ public class DA_Post
                                                                         select new PostBalanceResponse
                                                                         {
                                                                             CollectAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_pobal.Balance, balanceSalt)),
-                                                                            EventTotalAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_po.TotalBalance, balanceSalt)),
+                                                                            EventTotalAmount = Status.ToLower()=="pending" ?
+                                                                            Globalfunction.StringToDecimal(Encryption.DecryptID(_pobal.Balance, balanceSalt)) + Globalfunction.StringToDecimal(Encryption.DecryptID(_po.TotalBalance, balanceSalt))
+                                                                            : Globalfunction.StringToDecimal(Encryption.DecryptID(_po.TotalBalance, balanceSalt)),
                                                                             IsoCode = _mark.Isocode,
                                                                             AllowedMarkName = _allow.AllowedMarkName
                                                                         }).ToListAsync();

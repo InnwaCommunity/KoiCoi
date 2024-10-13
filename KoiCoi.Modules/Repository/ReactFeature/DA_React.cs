@@ -205,7 +205,7 @@ public class DA_React
         try
         {
             if (string.IsNullOrEmpty(payload.PostIdval))
-                return Result<Pagination>.Error("Post Not Found");
+                return Result<Pagination>.Error("Invalide Post");
             int PostId = Convert.ToInt32(Encryption.DecryptID(payload.PostIdval, LoginUserId.ToString()));
             int? ParentCommendId = null;
             if (!string.IsNullOrEmpty(payload.ParentCommandIdval))
@@ -217,7 +217,6 @@ public class DA_React
                                join _com in _db.PostCommands on _post.PostId equals _com.PostId
                                join _creator in _db.Users on _com.UserId equals _creator.UserId
                                join pro in _db.UserProfiles on _creator.UserId equals pro.UserId into profiles
-                               join _cmr in _db.CommandReacts on _com.CommandId equals _cmr.CommandId into cmreacts
                                where _post.PostId == PostId && (ParentCommendId != null ? ParentCommendId == _com.ParentCommandId : true)
                                select new GetCommentResponse
                                {
@@ -228,8 +227,8 @@ public class DA_React
                                    CreatorEmail = _creator.Email,
                                    CanEdit = _creator.UserId == LoginUserId,
                                    CreateData = _com.CreatedDate,
-                                   ReactCount = cmreacts.Count(),
-                                   Selected = _db.CommandReacts.Where(x=> x.UserId == LoginUserId && x.CommandId == _com.CommandId).FirstOrDefault() != null,
+                                   ReactCount = _db.CommandReacts.Count(r => r.CommandId == _com.CommandId),
+                                   Selected = _db.CommandReacts.Where(x => x.UserId == LoginUserId && x.CommandId == _com.CommandId).FirstOrDefault() != null,
                                    CreatorImage = profiles.OrderByDescending(p => p.CreatedDate).Select(x => x.Url).FirstOrDefault(),
                                    HaveChildCommand = _db.PostCommands.Any(x => x.ParentCommandId == _com.CommandId)
                                }).ToListAsync();
