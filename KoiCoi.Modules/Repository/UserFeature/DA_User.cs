@@ -1,9 +1,11 @@
 ﻿
+using KoiCoi.Database.AppDbContextModels;
 using KoiCoi.Models.User_Dto.Payload;
 using KoiCoi.Models.Via;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Protocol.Core.Types;
 using System.Text;
 
 namespace KoiCoi.Modules.Repository.UserFeature;
@@ -95,6 +97,7 @@ public class DA_User
         Result<List<UserLoginAccounts>> result = null;
         try
         {
+            string bucketname = _configuration.GetSection("Buckets:UserProfile").Get<string>()!;
             byte[] data = Convert.FromBase64String(deviceId);
             string decodeddeviceId = Encoding.UTF8.GetString(data);
 
@@ -115,12 +118,21 @@ public class DA_User
                     .OrderByDescending(up => up.CreatedDate)
                     .Select(x=> x.Url)
                     .FirstOrDefaultAsync();
+                string presignedUrl = "";
+                if (!string.IsNullOrEmpty(img))
+                {
+                    Result<string> predata=await _awsS3Service.GetFile(bucketname, img);
+                    if (predata.IsSuccess)
+                    {
+                        presignedUrl = predata.Data;
+                    }
+                }
                 UserLoginAccounts newuser = new UserLoginAccounts
                 {
                     UserIdval = item.UserIdval,
                     UserName = item.UserName,
                     Contact = item.Contact,
-                    UserImage = img ?? ""
+                    UserImage = presignedUrl
                 };
                 loginUserList.Add(newuser);
             }
@@ -463,6 +475,40 @@ public class DA_User
             user.PasswordHash = salt;
             await _db.SaveChangesAsync();
             result = Result<string>.Success("Change Success");
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
+        }
+        return result;
+    }
+
+    public async Task<Result<string>> RemoveLoginAccount(RemoveLoginAccountPayload payload)
+    {
+        Result<string> result = null;
+        try
+        {
+            var loginhistory = await (from _user in _db.Users
+                                      join _history in _db.AccountLoginHistories on _user.UserId equals _history.UserId
+                                      where _user.UserIdval == payload.UserIdval && _history.DeviceId == payload.DeviceId
+                                      select _user).FirstOrDefaultAsync();
+            if( loginhistory is not null)
+            {
+                 _db.Remove(loginhistory);
+                int success = await _db.SaveChangesAsync();
+                if(success > 0)
+                {
+                    result = Result<string>.Success("Remove Success");
+                }
+                else
+                {
+                    result = Result<string>.Error("Fail");
+                }
+            }
+            else
+            {
+                result = Result<string>.Success("Remove Success");
+            }
         }
         catch (Exception ex)
         {

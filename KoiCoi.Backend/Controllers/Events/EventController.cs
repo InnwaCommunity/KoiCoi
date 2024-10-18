@@ -147,4 +147,10 @@ public class EventController : BaseController
         int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blEvent.GetUserContributons(payload, LoginUserId);
     }
+    [HttpPost("EventOverallContributions", Name = "EventOverallContributions")]
+    public async Task<Result<Pagination>> EventOverallContributions(GetEventData payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.EventOverallContributions(payload, LoginUserId);
+    }
 }
