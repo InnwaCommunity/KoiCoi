@@ -1,5 +1,6 @@
 ﻿
 using KoiCoi.Models.ChannelDtos.PayloadDtos;
+using KoiCoi.Models.EventDto.Payload;
 using KoiCoi.Models.Login_Models;
 using KoiCoi.Modules.Repository.EventFreture;
 using Microsoft.AspNetCore.Http;
@@ -129,5 +130,9 @@ public class BL_Channel
     public async Task<Result<Pagination>> FindAccessChannelByName(FindByNamePayload payload,int LoginUserID)
     {
         return await _daChannel.FindAccessChannelByName(payload, LoginUserID);
+    }
+    public async Task<Result<Pagination>> ChannelOverallContribution(OverallContributionPayload payload,int LoginUserID)
+    {
+        return await _daChannel.ChannelOverallContribution(payload, LoginUserID);
     }
 }

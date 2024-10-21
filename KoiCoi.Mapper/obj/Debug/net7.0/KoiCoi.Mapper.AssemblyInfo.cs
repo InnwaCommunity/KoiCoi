@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KoiCoi.Mapper")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+120c58d26432057ae3281a03c345da0bb1f9a76b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9bf5f5a82a22b794c4e8cc1739ef0225d95fb1ba")]
 [assembly: System.Reflection.AssemblyProductAttribute("KoiCoi.Mapper")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KoiCoi.Mapper")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

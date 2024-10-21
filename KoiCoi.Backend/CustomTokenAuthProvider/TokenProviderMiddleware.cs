@@ -240,6 +240,7 @@ public class TokenProviderMiddleware : IMiddleware
             var response = new
             {
                 AccessToken = encodedJwt,
+                CurrentVersion = "1.0.0"
                 //ExpiresIn = (int)_options.Expiration.TotalSeconds,
                 // UserID = AdminID.ToString(),
                 //UserIDval = Encryption.EncryptID(AdminID.ToString(), LoginUserID.ToString()),

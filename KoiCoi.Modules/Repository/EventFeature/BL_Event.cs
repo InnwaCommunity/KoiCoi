@@ -92,9 +92,13 @@ public class BL_Event
     {
         return await _daEvent.GetUserContributons(payload, LoginUserId);
     }
-    public async Task<Result<Pagination>> EventOverallContributions(GetEventData payload, int LoginUserId)
+    public async Task<Result<Pagination>> EventOverallContributions(OverallContributionPayload payload, int LoginUserId)
     {
         return await _daEvent.EventOverallContributions(payload, LoginUserId);
+    }
+    public async Task<Result<Pagination>> GetAllEvent(OrderByMonthPayload payload,int LoginUserId)
+    {
+        return await _daEvent.GetAllEvent(payload, LoginUserId);
     }
 
 }

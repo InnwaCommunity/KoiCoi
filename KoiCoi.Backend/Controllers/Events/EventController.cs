@@ -148,9 +148,16 @@ public class EventController : BaseController
         return await _blEvent.GetUserContributons(payload, LoginUserId);
     }
     [HttpPost("EventOverallContributions", Name = "EventOverallContributions")]
-    public async Task<Result<Pagination>> EventOverallContributions(GetEventData payload)
+    public async Task<Result<Pagination>> EventOverallContributions(OverallContributionPayload payload)
     {
         int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blEvent.EventOverallContributions(payload, LoginUserId);
+    }
+    [HttpPost("GetAllEvent", Name = "GetAllEvent")]
+    public async Task<IActionResult> GetAllEvent(OrderByMonthPayload payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+        Result<Pagination> response = await _blEvent.GetAllEvent(payload, LoginUserId);
+        return Ok(response);
     }
 }

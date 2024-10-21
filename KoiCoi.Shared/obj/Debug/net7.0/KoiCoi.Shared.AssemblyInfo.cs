@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KoiCoi.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+55f374a8466488a6f0010bcaf1be8453f959512d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9bf5f5a82a22b794c4e8cc1739ef0225d95fb1ba")]
 [assembly: System.Reflection.AssemblyProductAttribute("KoiCoi.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KoiCoi.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
