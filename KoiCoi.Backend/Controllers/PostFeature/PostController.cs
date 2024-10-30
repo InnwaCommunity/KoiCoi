@@ -24,6 +24,8 @@ public class PostController : BaseController
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blPost.CreatePostFeature(payload, LoginUserID);
     }
+
+    [RequestSizeLimit(100 * 1024 * 1024)]
     [HttpPost("UploadCollectAttachFile", Name = "UploadCollectAttachFile")]
     public async Task<Result<string>> UploadCollectAttachFile([FromForm] string PostIdval, [FromForm] IFormFile files)
     {

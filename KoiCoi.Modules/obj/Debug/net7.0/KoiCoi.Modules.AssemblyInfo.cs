@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KoiCoi.Modules")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9bf5f5a82a22b794c4e8cc1739ef0225d95fb1ba")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ffb73d97e0082c35056b52451b7ec6b629a995b7")]
 [assembly: System.Reflection.AssemblyProductAttribute("KoiCoi.Modules")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KoiCoi.Modules")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

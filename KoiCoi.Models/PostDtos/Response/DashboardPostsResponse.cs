@@ -47,6 +47,7 @@ public partial class PostReactStatus {
 public partial class DashboardEventPostResponse
 {
     public string? PostType { get; set; }
+    public string? ChannelIdval { get; set; }
     public string? EventPostIdval { get; set; }
     public string? EventName { get; set; }
     public string? EventDescrition { get; set; }

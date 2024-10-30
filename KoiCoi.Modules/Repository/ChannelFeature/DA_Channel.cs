@@ -1446,7 +1446,8 @@ public class DA_Channel
             string? Name = payload.Name;
             var query = await (from _ch in _db.Channels
                                                join _cm in _db.ChannelMemberships on _ch.ChannelId equals _cm.ChannelId
-                                               where _cm.UserId == LoginUserID
+                                                join _status in _db.StatusTypes on _cm.StatusId equals _status.StatusId
+                                                where _cm.UserId == LoginUserID && _status.StatusName.ToLower() == "approved" 
                                                && (string.IsNullOrEmpty(Name) ? true : _ch.ChannelName.Contains(Name))
                                                select new
                                                {

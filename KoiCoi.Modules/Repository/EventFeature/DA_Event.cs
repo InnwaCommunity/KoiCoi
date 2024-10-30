@@ -801,8 +801,11 @@ public class DA_Event
                                                 join _usertype in _db.UserTypes on _meship.UserTypeId equals _usertype.TypeId
                                                 where apost.PostId == _ev.PostId &&
                                                       _sta.StatusName.ToLower() == "approved" &&
+                                                      _ev.ChannelId == ChannelId &&
                                                       (_ev.StartDate <= dateTime && _ev.EndDate >= dateTime) &&
-                                                       (apost.ViewPolicies.GroupMemberOnly != null && apost.ViewPolicies.GroupMemberOnly == true ? _meship.UserId == LoginUserId : true)
+                                                       (apost.ViewPolicies.GroupMemberOnly != null 
+                                                       && apost.ViewPolicies.GroupMemberOnly == true 
+                                                       ? _meship.UserId == LoginUserId : true)
                                                 select new
                                                 {
                                                     Event = _ev,
@@ -818,23 +821,27 @@ public class DA_Event
                         {
                             // Fetch EventMarks
                             var eventMarks = (from _eventMark in _db.EventMarkBalances
-                                              join _mark in _db.Marks on _eventMark.MarkId equals _mark.MarkId
-                                              join _evall in _db.EventAllowedMarks on _eventMark.MarkId equals _evall.MarkId
-                                              where eventQuery.Event.PostId == _eventMark.EventPostId
-                                              select new
-                                              {
-                                                  EventPostId = _eventMark.EventPostId,
-                                                  Mark = new EventMarks
-                                                  {
-                                                      MarkIdval = Encryption.EncryptID(_eventMark.MarkId.ToString(), LoginUserId.ToString()),
-                                                      IsoCode = _mark.Isocode,
-                                                      MarkName = _mark.MarkName,
-                                                      AllowedMarkName = _evall.AllowedMarkName,
-                                                      TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.TotalBalance.ToString(), balanceSalt)),
-                                                      LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.LastBalance.ToString(), balanceSalt)),
-                                                      TargetBalance = _eventMark.TargetBalance != null ? Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.TargetBalance.ToString(), balanceSalt)) : null
-                                                  }
-                                              }).ToList();
+                                             join _mark in _db.Marks on _eventMark.MarkId equals _mark.MarkId
+                                             join _evall in _db.EventAllowedMarks on _eventMark.MarkId equals _evall.MarkId
+                                             where eventQuery.Event.PostId == _eventMark.EventPostId
+                                             group new { _eventMark, _mark, _evall } by _eventMark.MarkId into groupedMarks
+                                             select new
+                                             {
+                                                 EventPostId = groupedMarks.First()._eventMark.EventPostId,
+                                                 Mark = new EventMarks
+                                                 {
+                                                     MarkIdval = Encryption.EncryptID(groupedMarks.Key.ToString(), LoginUserId.ToString()),
+                                                     IsoCode = groupedMarks.First()._mark.Isocode,
+                                                     MarkName = groupedMarks.First()._mark.MarkName,
+                                                     AllowedMarkName = groupedMarks.Select(g => g._evall.AllowedMarkName).Distinct().FirstOrDefault(),
+                                                     TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(groupedMarks.First()._eventMark.TotalBalance.ToString(), balanceSalt)),
+                                                     LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(groupedMarks.First()._eventMark.LastBalance.ToString(), balanceSalt)),
+                                                     TargetBalance = groupedMarks.First()._eventMark.TargetBalance != null
+                            ? Globalfunction.StringToDecimal(Encryption.DecryptID(groupedMarks.First()._eventMark.TargetBalance!.ToString(), balanceSalt))
+                            : null
+                                                 }
+                                             }).ToList();
+
 
                             // Fetch EventAddresses
                             var eventAddresses = (from _add in _db.EventAddresses
@@ -867,6 +874,7 @@ public class DA_Event
                             var finalResult = new DashboardEventPostResponse
                             {
                                 PostType = eventQuery.Post.PostType,
+                                ChannelIdval = Encryption.EncryptID(eventQuery.Event.ChannelId.ToString(), LoginUserId.ToString()),
                                 EventPostIdval = Encryption.EncryptID(eventQuery.Event.PostId.ToString(), LoginUserId.ToString()),
                                 EventName = eventQuery.Event.EventName,
                                 EventDescrition = eventQuery.Event.EventDescription,
@@ -946,20 +954,24 @@ public class DA_Event
                                       join _mark in _db.Marks on _eventMark.MarkId equals _mark.MarkId
                                       join _evall in _db.EventAllowedMarks on _eventMark.MarkId equals _evall.MarkId
                                       where eventIds.Contains(_eventMark.EventPostId)
+                                      group new { _eventMark, _mark, _evall } by new { _eventMark.EventPostId, _eventMark.MarkId } into groupedMarks
                                       select new
                                       {
-                                          EventPostId = _eventMark.EventPostId,
+                                          EventPostId = groupedMarks.Key.EventPostId,
                                           Mark = new EventMarks
                                           {
-                                              MarkIdval = Encryption.EncryptID(_eventMark.MarkId.ToString(), LoginUserId.ToString()),
-                                              IsoCode = _mark.Isocode,
-                                              MarkName = _mark.MarkName,
-                                              AllowedMarkName = _evall.AllowedMarkName,
-                                              TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.TotalBalance.ToString(), balanceSalt)),
-                                              LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.LastBalance.ToString(), balanceSalt)),
-                                              TargetBalance = _eventMark.TargetBalance != null ? Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.TargetBalance.ToString(), balanceSalt)) : null
+                                              MarkIdval = Encryption.EncryptID(groupedMarks.Key.MarkId.ToString(), LoginUserId.ToString()),
+                                              IsoCode = groupedMarks.First()._mark.Isocode,
+                                              MarkName = groupedMarks.First()._mark.MarkName,
+                                              AllowedMarkName = groupedMarks.Select(g => g._evall.AllowedMarkName).Distinct().FirstOrDefault(),
+                                              TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(groupedMarks.First()._eventMark.TotalBalance.ToString(), balanceSalt)),
+                                              LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(groupedMarks.First()._eventMark.LastBalance.ToString(), balanceSalt)),
+                                              TargetBalance = groupedMarks.First()._eventMark.TargetBalance != null
+                                                ? Globalfunction.StringToDecimal(Encryption.DecryptID(groupedMarks.First()._eventMark.TargetBalance.ToString(), balanceSalt))
+                                                : null
                                           }
                                       }).ToList();
+
 
                     // Fetch EventAddresses
                     var eventAddresses = (from _add in _db.EventAddresses
@@ -1538,7 +1550,8 @@ public class DA_Event
                                               join _ev in _db.Events on _po.PostId equals _ev.PostId
                                               join _ch in _db.Channels on _ev.ChannelId equals _ch.ChannelId
                                               join _cm in _db.ChannelMemberships on _ch.ChannelId equals _cm.ChannelId
-                                              where _cm.UserId == LoginUserId &&
+                                              join _status in _db.StatusTypes on _cm.StatusId equals _status.StatusId
+                                              where _cm.UserId == LoginUserId && _status.StatusName.ToLower() == "approved" &&
                                               _ev.StartDate <= now && now <= _ev.EndDate 
                                               && (string.IsNullOrEmpty(Name) ? true : _ev.EventName.Contains(Name))
                                               select new EventNameData
@@ -1908,9 +1921,11 @@ public class DA_Event
                                                     join _cre in _db.Users on _ev.CreatorId equals _cre.UserId
                                                     join _sta in _db.StatusTypes on _ev.StatusId equals _sta.StatusId
                                                     join _meship in _db.ChannelMemberships on _ev.ChannelId equals _meship.ChannelId
+                                                    join _meSta in _db.StatusTypes on _meship.StatusId equals _meSta.StatusId
                                                     join _usertype in _db.UserTypes on _meship.UserTypeId equals _usertype.TypeId
                                                     where apost.PostId == _ev.PostId &&
                                                           _sta.StatusName.ToLower() == "approved" &&
+                                                          _meSta.StatusName.ToLower() == "approved" &&
                                                           (
                                                       status.ToLower() == "active" ?
                                                           _ev.StartDate <= dateTime && _ev.EndDate >= dateTime :
@@ -1937,28 +1952,32 @@ public class DA_Event
 
                             if (eventQuery is not null)
                             {
-                                // Fetch EventMarks
-                                var eventMarks = (from _eventMark in _db.EventMarkBalances
-                                                  join _mark in _db.Marks on _eventMark.MarkId equals _mark.MarkId
-                                                  join _evall in _db.EventAllowedMarks on _eventMark.MarkId equals _evall.MarkId
-                                                  where eventQuery.Event.PostId == _eventMark.EventPostId
-                                                  select new
-                                                  {
-                                                      EventPostId = _eventMark.EventPostId,
-                                                      Mark = new EventMarks
-                                                      {
-                                                          MarkIdval = Encryption.EncryptID(_eventMark.MarkId.ToString(), LoginUserId.ToString()),
-                                                          IsoCode = _mark.Isocode,
-                                                          MarkName = _mark.MarkName,
-                                                          AllowedMarkName = _evall.AllowedMarkName,
-                                                          TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.TotalBalance.ToString(), balanceSalt)),
-                                                          LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.LastBalance.ToString(), balanceSalt)),
-                                                          TargetBalance = _eventMark.TargetBalance != null ? Globalfunction.StringToDecimal(Encryption.DecryptID(_eventMark.TargetBalance.ToString(), balanceSalt)) : null
-                                                      }
-                                                  }).ToList();
+                        // Fetch EventMarks
+                        var eventMarks = (from _eventMark in _db.EventMarkBalances
+                                          join _mark in _db.Marks on _eventMark.MarkId equals _mark.MarkId
+                                          join _evall in _db.EventAllowedMarks on _eventMark.MarkId equals _evall.MarkId
+                                          where eventQuery.Event.PostId == _eventMark.EventPostId
+                                          group new { _eventMark, _mark, _evall } by _eventMark.MarkId into groupedMarks
+                                          select new
+                                          {
+                                              EventPostId = groupedMarks.First()._eventMark.EventPostId,
+                                              Mark = new EventMarks
+                                              {
+                                                  MarkIdval = Encryption.EncryptID(groupedMarks.Key.ToString(), LoginUserId.ToString()),
+                                                  IsoCode = groupedMarks.First()._mark.Isocode,
+                                                  MarkName = groupedMarks.First()._mark.MarkName,
+                                                  AllowedMarkName = groupedMarks.Select(g => g._evall.AllowedMarkName).Distinct().FirstOrDefault(),
+                                                  TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(groupedMarks.First()._eventMark.TotalBalance.ToString(), balanceSalt)),
+                                                  LastBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(groupedMarks.First()._eventMark.LastBalance.ToString(), balanceSalt)),
+                                                  TargetBalance = groupedMarks.First()._eventMark.TargetBalance != null
+                                                    ? Globalfunction.StringToDecimal(Encryption.DecryptID(groupedMarks.First()._eventMark.TargetBalance.ToString(), balanceSalt))
+                                                    : null
+                                              }
+                                          }).ToList();
 
-                                // Fetch EventAddresses
-                                var eventAddresses = (from _add in _db.EventAddresses
+
+                        // Fetch EventAddresses
+                        var eventAddresses = (from _add in _db.EventAddresses
                                                       join _atype in _db.AddressTypes on _add.AddressId equals _atype.AddressId
                                                       where eventQuery.Event.PostId == _add.EventPostId
                                                       select new
@@ -1988,6 +2007,7 @@ public class DA_Event
                                 var finalResult = new DashboardEventPostResponse
                                 {
                                     PostType = eventQuery.Post.PostType,
+                                    ChannelIdval = Encryption.EncryptID(eventQuery.Event.ChannelId.ToString(), LoginUserId.ToString()),
                                     EventPostIdval = Encryption.EncryptID(eventQuery.Event.PostId.ToString(), LoginUserId.ToString()),
                                     EventName = eventQuery.Event.EventName,
                                     EventDescrition = eventQuery.Event.EventDescription,

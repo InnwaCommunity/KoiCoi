@@ -76,10 +76,10 @@ public class TokenProviderMiddleware : IMiddleware
             context.Request.Path.ToString().ToLower().Contains("forgotpassword/requestbyemail") ||
             context.Request.Path.ToString().ToLower().Contains("forgotpassword/changepasswordbyotp") ||
             context.Request.Path.ToString().ToLower().Contains("swagger/") ||//api/v1/User/Testing
-            context.Request.Path.ToString().ToLower().Contains("/api/v1/user/testing") ||
-            context.Request.Path.ToString().ToLower().Contains("/api/v1/user/registeraccount") ||
-            context.Request.Path.ToString().ToLower().Contains("/api/v1/user/accountswithdeviceid") ||
-            context.Request.Path.ToString().ToLower().Contains("api/v1/user/signin")
+            context.Request.Path.ToString().ToLower().Contains("/api/v1/publish/testing") ||
+            context.Request.Path.ToString().ToLower().Contains("/api/v1/publish/registeraccount") ||
+            context.Request.Path.ToString().ToLower().Contains("/api/v1/publish/accountswithdeviceid") ||
+            context.Request.Path.ToString().ToLower().Contains("api/v1/publish/signin")
 
         )
         {
