@@ -1803,7 +1803,7 @@ public class DA_Event
                                        where _colBal.MarkId == _eb.MarkId &&
                                              mark.MarkId == _colBal.MarkId &&
                                              mark.MarkId == _eb.MarkId &&
-                                             (_st.StatusName.ToLower() == "approved" || _st.StatusName.ToLower() == "pending") &&
+                                             (_st.StatusName.ToLower() == "approved") &&//|| _st.StatusName.ToLower() == "pending"
                                              _coll.EventPostId == EventPostId &&
                                              _coll.CreatorId == member.UserId
                                        group new

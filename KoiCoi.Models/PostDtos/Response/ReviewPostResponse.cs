@@ -27,7 +27,7 @@ public partial class PostBalanceResponse
     public decimal CollectAmount { get; set; } = 0;
     public decimal? EventTotalAmount { get; set; }
     public string IsoCode { get; set; } = string.Empty;
-    public string AllowedMarkName { get; set; } = string.Empty;
+    public string MarkName { get; set; } = string.Empty;
 }
 
 public partial class PostTagResponse

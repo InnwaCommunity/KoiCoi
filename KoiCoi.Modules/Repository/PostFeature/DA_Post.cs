@@ -569,17 +569,17 @@ public class DA_Post
             foreach (var item in query)
             {
                 List<PostBalanceResponse> balancereviews = await (from _colbal in _db.PostBalances
-                                                 join _allow in _db.EventAllowedMarks on _colbal.MarkId equals _allow.MarkId
-                                                 join _evbalance in _db.EventMarkBalances on _allow.MarkId equals _evbalance.MarkId
+                                                 //join _allow in _db.EventAllowedMarks on _colbal.MarkId equals _allow.MarkId
+                                                 join _evbalance in _db.EventMarkBalances on _colbal.MarkId equals _evbalance.MarkId
                                                  join _mark in _db.Marks on _colbal.MarkId equals _mark.MarkId
-                                                 where _colbal.PostId == item.PostId && _allow.EventPostId == item.EventPostId
+                                                 where _colbal.PostId == item.PostId && _evbalance.EventPostId == item.EventPostId
                                                  select new PostBalanceResponse
                                                  {
                                                      CollectAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_colbal.Balance, balanceSalt)),
                                                      EventTotalAmount = StatusName.ToLower() == "approved" ? Globalfunction.StringToDecimal(Encryption.DecryptID(_evbalance.TotalBalance, balanceSalt))
                                                      : (Globalfunction.StringToDecimal(Encryption.DecryptID(_evbalance.TotalBalance, balanceSalt)) + Globalfunction.StringToDecimal(Encryption.DecryptID(_colbal.Balance, balanceSalt))),
                                                      IsoCode = _mark.Isocode,
-                                                     AllowedMarkName = _allow.AllowedMarkName
+                                                     MarkName = _mark.MarkName
                                                  }).ToListAsync();
                 List<PostTagResponse> postTags = await (from _ptag in _db.PostTags
                                                   join _evtag in _db.EventTags on _ptag.EventTagId equals _evtag.EventTagId
@@ -1092,18 +1092,43 @@ public class DA_Post
                                                                     PostTagIdval = Encryption.EncryptID(_potag.PostTagId.ToString(), LoginUserId.ToString()),
                                                                     TagName = _evtag.TagName
                                                                 }).ToListAsync();
-                        List<PostBalanceResponse> postBalances = await (from _pobal in _db.PostBalances
-                                                                        join _allow in _db.EventAllowedMarks on _pobal.MarkId equals _allow.MarkId
-                                                                        join _po in _db.EventMarkBalances on _allow.MarkId equals _po.MarkId
+                        var rawData = await (
+                    from _pobal in _db.PostBalances
+                    join _po in _db.EventMarkBalances on _pobal.MarkId equals _po.MarkId
+                    join _mark in _db.Marks on _pobal.MarkId equals _mark.MarkId
+                    where _pobal.PostId == item.PostId && _po.EventPostId == item.EventPostId
+                    select new
+                    {
+                        CollectAmount = _pobal.Balance,
+                        EventTotalAmount = _po.TotalBalance,
+                        IsoCode = _mark.Isocode,
+                        MarkName = _mark.MarkName
+                    }
+                ).ToListAsync();
+
+                        List<PostBalanceResponse> postBalances = rawData
+                            .GroupBy(x => new { x.IsoCode, x.MarkName })
+                            .Select(g => new PostBalanceResponse
+                            {
+                                IsoCode = g.Key.IsoCode,
+                                MarkName = g.Key.MarkName,
+                                CollectAmount = g.Sum(x => Globalfunction.StringToDecimal(Encryption.DecryptID(x.CollectAmount, balanceSalt))),
+                                EventTotalAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(g.First().EventTotalAmount, balanceSalt))
+                            })
+                            .ToList();
+                        /*
+                            List<PostBalanceResponse> postBalances = await (from _pobal in _db.PostBalances
+                                                                        //join _allow in _db.EventAllowedMarks on _pobal.MarkId equals _allow.MarkId
+                                                                        join _po in _db.EventMarkBalances on _pobal.MarkId equals _po.MarkId
                                                                         join _mark in _db.Marks on _pobal.MarkId equals _mark.MarkId
-                                                                        where _pobal.PostId == item.PostId && _allow.EventPostId == item.EventPostId
+                                                                        where _pobal.PostId == item.PostId && _po.EventPostId == item.EventPostId
                                                                         select new PostBalanceResponse
                                                                         {
                                                                             CollectAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_pobal.Balance, balanceSalt)),
                                                                             EventTotalAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_po.TotalBalance, balanceSalt)),
                                                                             IsoCode = _mark.Isocode,
-                                                                            AllowedMarkName = _allow.AllowedMarkName
-                                                                        }).ToListAsync();
+                                                                            MarkName = _mark.MarkName
+                                                                        }).ToListAsync();*/
                         DashboardPostsResponse newPost = new DashboardPostsResponse
                         {
                             PostType=item.PostType,
@@ -1240,19 +1265,48 @@ public class DA_Post
                                                             PostTagIdval = Encryption.EncryptID(_potag.PostTagId.ToString(), LoginUserId.ToString()),
                                                             TagName = _evtag.TagName
                                                         }).ToListAsync();
-                List<PostBalanceResponse> postBalances = await (from _pobal in _db.PostBalances
-                                                                join _allow in _db.EventAllowedMarks on _pobal.MarkId equals _allow.MarkId
-                                                                join _po in _db.EventMarkBalances on _allow.MarkId equals _po.MarkId
-                                                                join _mark in _db.Marks on _pobal.MarkId equals _mark.MarkId
-                                                                where _pobal.PostId == item.PostId && _allow.EventPostId == item.EventPostId
-                                                                select new PostBalanceResponse
-                                                                {
 
-                                                                    CollectAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_pobal.Balance, balanceSalt)),
-                                                                    EventTotalAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_po.TotalBalance, balanceSalt)),
-                                                                    IsoCode = _mark.Isocode,
-                                                                    AllowedMarkName = _allow.AllowedMarkName
-                                                                }).ToListAsync();
+                
+                var rawData = await (
+                    from _pobal in _db.PostBalances
+                    join _po in _db.EventMarkBalances on _pobal.MarkId equals _po.MarkId
+                    join _mark in _db.Marks on _pobal.MarkId equals _mark.MarkId
+                    where _pobal.PostId == item.PostId && _po.EventPostId == item.EventPostId
+                    select new
+                    {
+                        CollectAmount = _pobal.Balance,
+                        EventTotalAmount = _po.TotalBalance,
+                        IsoCode = _mark.Isocode,
+                        MarkName = _mark.MarkName
+                    }
+                ).ToListAsync();
+
+                List<PostBalanceResponse> postBalances = rawData
+                    .GroupBy(x => new { x.IsoCode, x.MarkName })
+                    .Select(g => new PostBalanceResponse
+                    {
+                        IsoCode = g.Key.IsoCode,
+                        MarkName = g.Key.MarkName,
+                        CollectAmount = g.Sum(x => Globalfunction.StringToDecimal(Encryption.DecryptID(x.CollectAmount, balanceSalt))),
+                        EventTotalAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(g.First().EventTotalAmount, balanceSalt))
+                    })
+                    .ToList();
+
+
+
+                /*
+                 List<PostBalanceResponse> postBalances = await (from _pobal in _db.PostBalances
+                                                               join _po in _db.EventMarkBalances on _pobal.MarkId equals _po.MarkId
+                                                               join _mark in _db.Marks on _pobal.MarkId equals _mark.MarkId
+                                                               where _pobal.PostId == item.PostId && _po.EventPostId == item.EventPostId
+                                                               select new PostBalanceResponse
+                                                               {
+
+                                                                   CollectAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_pobal.Balance, balanceSalt)),
+                                                                   EventTotalAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_po.TotalBalance, balanceSalt)),
+                                                                   IsoCode = _mark.Isocode,
+                                                                   MarkName = _mark.MarkName
+                }).ToListAsync();*/
                 DashboardPostsResponse newPost = new DashboardPostsResponse
                 {
                     PostIdval = Encryption.EncryptID(item.PostId.ToString(), LoginUserId.ToString()),
@@ -1557,10 +1611,10 @@ public class DA_Post
                                                                     TagName = _evtag.TagName
                                                                 }).ToListAsync();
                         List<PostBalanceResponse> postBalances = await (from _pobal in _db.PostBalances
-                                                                        join _allow in _db.EventAllowedMarks on _pobal.MarkId equals _allow.MarkId
-                                                                        join _po in _db.EventMarkBalances on _allow.MarkId equals _po.MarkId
+                                                                        //join _allow in _db.EventAllowedMarks on _pobal.MarkId equals _allow.MarkId
+                                                                        join _po in _db.EventMarkBalances on _pobal.MarkId equals _po.MarkId
                                                                         join _mark in _db.Marks on _pobal.MarkId equals _mark.MarkId
-                                                                        where _pobal.PostId == item.PostId && _allow.EventPostId == item.EventPostId
+                                                                        where _pobal.PostId == item.PostId && _po.EventPostId == item.EventPostId
                                                                         select new PostBalanceResponse
                                                                         {
                                                                             CollectAmount = Globalfunction.StringToDecimal(Encryption.DecryptID(_pobal.Balance, balanceSalt)),
@@ -1568,7 +1622,7 @@ public class DA_Post
                                                                             Globalfunction.StringToDecimal(Encryption.DecryptID(_pobal.Balance, balanceSalt)) + Globalfunction.StringToDecimal(Encryption.DecryptID(_po.TotalBalance, balanceSalt))
                                                                             : Globalfunction.StringToDecimal(Encryption.DecryptID(_po.TotalBalance, balanceSalt)),
                                                                             IsoCode = _mark.Isocode,
-                                                                            AllowedMarkName = _allow.AllowedMarkName
+                                                                            MarkName = _mark.MarkName
                                                                         }).ToListAsync();
                         DashboardPostsResponse newPost = new DashboardPostsResponse
                         {
