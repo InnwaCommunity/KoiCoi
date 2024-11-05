@@ -1674,9 +1674,11 @@ public class DA_Event
                                  join _me in _db.EventMemberships on _ev.PostId equals _me.EventPostId
                                  join _ch in _db.Channels on _ev.ChannelId equals _ch.ChannelId
                                  join _chme in _db.ChannelMemberships on _ch.ChannelId equals _chme.ChannelId
-                                 where (UserId != null ? _chme.UserId == UserId : _chme.UserId == LoginUserId)
+                                 join _meStatus in _db.StatusTypes on _chme.StatusId equals _meStatus.StatusId
+                                 where (UserId != null ? (_chme.UserId == UserId && _meStatus.StatusName.ToLower() == "approved") : 
+                                 (_chme.UserId == LoginUserId && _meStatus.StatusName.ToLower() == "approved") )
                                  && _status.StatusName.ToLower() == "approved"
-                           select _ev).ToList();
+                                select _ev).ToList();
             List<dynamic> lastQuery = new List<dynamic>();
             foreach (var newevent in evquery)
             {

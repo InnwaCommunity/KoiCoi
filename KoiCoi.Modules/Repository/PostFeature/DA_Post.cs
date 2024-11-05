@@ -926,12 +926,17 @@ public class DA_Post
                                             join _cre in _db.Users on _ev.CreatorId equals _cre.UserId
                                             join _sta in _db.StatusTypes on _ev.StatusId equals _sta.StatusId
                                             join _meship in _db.ChannelMemberships on _ev.ChannelId equals _meship.ChannelId
+                                            join _meStatus in _db.StatusTypes on _meship.StatusId equals _meStatus.StatusId
                                             join _usertype in _db.UserTypes on _meship.UserTypeId equals _usertype.TypeId
                                             where apost.PostId == _ev.PostId &&
-                                                  _sta.StatusName.ToLower() == "approved"  && _ev.StartDate <= now && _ev.EndDate >= now
-                                                   && (apost.UserInteractions != null ? apost.UserInteractions.VisibilityPercentage < 70 : true) &&
-                                 (apost.ViewPolicies.GroupMemberOnly != null && apost.ViewPolicies.GroupMemberOnly == true ? _meship.UserId == LoginUserId : true) &&
-                                 (apost.ViewPolicies.MaxCount != null ? apost.ViewPolicies.MaxCount > apost.Views : true)
+                                                  _sta.StatusName.ToLower() == "approved"  
+                                                  && _ev.StartDate <= now && _ev.EndDate >= now
+                                                   && (apost.UserInteractions != null ? 
+                                                   apost.UserInteractions.VisibilityPercentage < 70 : true) &&
+                                                    (apost.ViewPolicies.GroupMemberOnly != null 
+                                                    && apost.ViewPolicies.GroupMemberOnly == true ? 
+                                                    (_meship.UserId == LoginUserId && _meStatus.StatusName.ToLower() == "approved") : true) &&
+                                            (apost.ViewPolicies.MaxCount != null ? apost.ViewPolicies.MaxCount > apost.Views : true)
                                             select new
                                             {
                                                 Event = _ev,
@@ -1043,12 +1048,14 @@ public class DA_Post
                                  join _event in _db.Events on _coll.EventPostId equals _event.PostId
                                  join _channel in _db.Channels on _event.ChannelId equals _channel.ChannelId
                                  join _chanme in _db.ChannelMemberships on _event.ChannelId equals _chanme.ChannelId
+                                 join _meStatus in _db.StatusTypes on _chanme.StatusId equals _meStatus.StatusId
                                  join _creator in _db.Users on _coll.CreatorId equals _creator.UserId
                                  join _poimg in _db.PostImages on _coll.PostId equals _poimg.PostId into postImages
                                  where _event.StartDate < DateTime.UtcNow && _event.EndDate > DateTime.UtcNow &&
                                  _postStatus.StatusName.ToLower() == "approved" && _coll.PostId == apost.PostId &&
                                  (apost.UserInteractions != null ? apost.UserInteractions.VisibilityPercentage < 70 : true) &&
-                                 (apost.ViewPolicies.GroupMemberOnly != null && apost.ViewPolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) &&
+                                 (apost.ViewPolicies.GroupMemberOnly != null && apost.ViewPolicies.GroupMemberOnly == true ? 
+                                 (_chanme.UserId == LoginUserId && _meStatus.StatusName.ToLower() == "approved") : true) &&
                                  (apost.ViewPolicies.MaxCount != null ? apost.ViewPolicies.MaxCount > apost.Views : true)
                                  select new
                                  {
@@ -1207,15 +1214,16 @@ public class DA_Post
                          join _event in _db.Events on _post.Post.EventPostId equals _event.PostId
                          join _channel in _db.Channels on _event.ChannelId equals _channel.ChannelId
                          join _chanme in _db.ChannelMemberships on _event.ChannelId equals _chanme.ChannelId
+                         join _meStatus in _db.StatusTypes on _chanme.StatusId equals _meStatus.StatusId
                          join _creator in _db.Users on _post.Post.CreatorId equals _creator.UserId
                          join _poimg in _db.PostImages on _post.Post.PostId equals _poimg.PostId into postImages
                          where _event.PostId == EventPostId &&
                          //_event.StartDate < DateTime.UtcNow && _event.EndDate > DateTime.UtcNow &&
                          _postStatus.StatusName.ToLower() == "approved" &&
                          //(_post.UserInteractions != null ? _post.UserInteractions.VisibilityPercentage < 70 : true) &&
-                         (_post.ViewPolicies.GroupMemberOnly != null && _post.ViewPolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) 
+                         (_post.ViewPolicies.GroupMemberOnly != null && _post.ViewPolicies.GroupMemberOnly == true ? 
+                         (_chanme.UserId == LoginUserId && _meStatus.StatusName.ToLower() == "approved") : true) 
                          //(_post.ViewPolicies.MaxCount != null ? _post.ViewPolicies.MaxCount > _post.Views : true)
-                        
                          select new 
                          {
                              PostId = _post.Post.PostId,
@@ -1445,11 +1453,15 @@ public class DA_Post
                                             join _cre in _db.Users on _ev.CreatorId equals _cre.UserId
                                             join _sta in _db.StatusTypes on _ev.StatusId equals _sta.StatusId
                                             join _meship in _db.ChannelMemberships on _ev.ChannelId equals _meship.ChannelId
+                                            join _meStatus in _db.StatusTypes on _meship.StatusId equals _meStatus.StatusId
                                             join _usertype in _db.UserTypes on _meship.UserTypeId equals _usertype.TypeId
                                             where apost.PostId == _ev.PostId &&
                                                   _sta.StatusName.ToLower() == Status &&
                                                   (UserId != null ? ( _ev.CreatorId == UserId) : ( _ev.CreatorId == LoginUserId)) &&
-                                                   (apost.ViewPolicies.GroupMemberOnly != null && apost.ViewPolicies.GroupMemberOnly == true ? _meship.UserId == LoginUserId : true)
+                                                   (apost.ViewPolicies.GroupMemberOnly != null 
+                                                   && apost.ViewPolicies.GroupMemberOnly == true ? 
+                                                   (_meship.UserId == LoginUserId 
+                                                   && _meStatus.StatusName.ToLower() == "approved") : true)
                                             select new
                                             {
                                                 Event = _ev,
@@ -1562,11 +1574,14 @@ public class DA_Post
                                  join _event in _db.Events on _coll.EventPostId equals _event.PostId
                                  join _channel in _db.Channels on _event.ChannelId equals _channel.ChannelId
                                  join _chanme in _db.ChannelMemberships on _event.ChannelId equals _chanme.ChannelId
+                                 join _mestatus in _db.StatusTypes on _chanme.StatusId equals _mestatus.StatusId
                                  join _creator in _db.Users on _coll.CreatorId equals _creator.UserId
                                  join _poimg in _db.PostImages on _coll.PostId equals _poimg.PostId into postImages
                                  where _postStatus.StatusName.ToLower() == Status && _coll.PostId == apost.PostId &&
                                  (UserId != null ? ( _coll.CreatorId == UserId) : ( _coll.CreatorId == LoginUserId)) 
-                                  && (apost.ViewPolicies.GroupMemberOnly != null && apost.ViewPolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true)
+                                  && (apost.ViewPolicies.GroupMemberOnly != null 
+                                  && apost.ViewPolicies.GroupMemberOnly == true ? 
+                                  (_chanme.UserId == LoginUserId && _mestatus.StatusName.ToLower() == "approved") : true)
                                  select new
                                  {
                                      PostId = apost.PostId,
