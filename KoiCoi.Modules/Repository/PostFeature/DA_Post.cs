@@ -901,6 +901,7 @@ public class DA_Post
             DateTime now = DateTime.UtcNow;
             var posts = await (from _post in _db.Posts
                                where _post.Inactive == false
+                               orderby _post.ModifiedDate descending
                                select new
                                {
                                    PostId = _post.PostId,
@@ -1428,6 +1429,7 @@ public class DA_Post
             DateTime now = DateTime.UtcNow;
             var posts = await (from _post in _db.Posts
                                where _post.Inactive == false
+                               orderby _post.ModifiedDate descending
                                select new
                                {
                                    PostId = _post.PostId,
@@ -1675,6 +1677,58 @@ public class DA_Post
         catch (Exception ex)
         {
             result = Result<Pagination>.Error(ex);
+        }
+        return result;
+    }
+
+    public async Task<Result<string>> DeletePost(int LoginUserId, string postIdval)
+    {
+        Result<string> result = null;
+        try
+        {
+            int PostId = Convert.ToInt32(Encryption.DecryptID(postIdval, LoginUserId.ToString()));
+            var post = await _db.Posts.Where(x => x.PostId == PostId).FirstOrDefaultAsync();
+            if (post is null)
+                return Result<string>.Error("Post Not Found");
+
+            if(post.PostType.ToLower() == "eventpost")
+            {
+                string? statusName = await (from _ev in _db.Events
+                                            join _status in _db.StatusTypes on _ev.StatusId equals _status.StatusId
+                                            where _ev.PostId == PostId
+                                            select _status.StatusName).FirstOrDefaultAsync();
+                if(statusName is not null)
+                {
+                    if (statusName.ToLower() == "approved")
+                        return Result<string>.Error("You can't delete this post because this has been approved by admin");
+
+                    post.Inactive = true;
+                    await _db.SaveChangesAsync();
+                }
+            }else if(post.PostType.ToLower() == "collectpost")
+            {
+                string? statusName = await (from _coll in _db.CollectPosts
+                                            join _status in _db.StatusTypes on _coll.StatusId equals _status.StatusId
+                                            where _coll.PostId == PostId
+                                            select _status.StatusName).FirstOrDefaultAsync();
+                if (statusName is not null)
+                {
+                    if (statusName.ToLower() == "approved")
+                        return Result<string>.Error("You can't delete this post because this has been approved by admin");
+
+                    post.Inactive = true;
+                    await _db.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                return Result<string>.Error("Invalid Post Type");
+            }
+            result = Result<string>.Success("Move to bin successfully");
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
         }
         return result;
     }

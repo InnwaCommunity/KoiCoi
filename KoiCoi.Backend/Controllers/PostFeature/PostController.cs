@@ -82,6 +82,12 @@ public class PostController : BaseController
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _blPost.GetEachUserPosts(LoginUserID, payload);
     }
+    [HttpDelete("DeletePost",Name = "DeletePost")]
+    public async Task<Result<string>> DeletePost(DeletePostPayload payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blPost.DeletePost(LoginUserID, payload.PostIdval);
+    }
     ///CreatePost
     ///ReviewPost
     ///ApproveOrRejectPost

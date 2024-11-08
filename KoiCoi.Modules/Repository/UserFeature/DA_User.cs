@@ -102,15 +102,18 @@ public class DA_User
             string decodeddeviceId = Encoding.UTF8.GetString(data);
 
             var query = await (from _ah in _db.AccountLoginHistories
-                                                   join _user in _db.Users on _ah.UserId equals _user.UserId
-                                                   where _ah.DeviceId == decodeddeviceId
-                                                   select new //UserLoginAccounts
-                                                   {
-                                                       UserId = _ah.UserId,
-                                                       UserIdval = _user.UserIdval,
-                                                       UserName = _user.Name,
-                                                       Contact = _user.Email ?? _user.Phone ?? ""
-                                                   }).ToListAsync();
+                               join _user in _db.Users on _ah.UserId equals _user.UserId
+                               where _ah.DeviceId == decodeddeviceId
+                               orderby _ah.ModifiedData descending
+                               select new
+                               {
+                                   UserId = _ah.UserId,
+                                   UserIdval = _user.UserIdval,
+                                   UserName = _user.Name,
+                                   Contact = _user.Email ?? _user.Phone ?? ""
+                               })
+                   .ToListAsync();
+
             List<UserLoginAccounts> loginUserList = new List<UserLoginAccounts>();
             foreach (var item in query)
             {

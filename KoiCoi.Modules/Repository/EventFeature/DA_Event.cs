@@ -774,6 +774,7 @@ public class DA_Event
                 {
                     var posts = await (from _post in _db.Posts
                                        where _post.Inactive == false && _post.PostType.ToLower() == "eventpost"
+                                        orderby _post.ModifiedDate descending
                                        select new
                                        {
                                            PostId = _post.PostId,
@@ -938,6 +939,7 @@ public class DA_Event
                                                       _ev.StartDate.Year == dateTime.Year &&
                                                       _ev.StartDate.Month == dateTime.Month &&
                                                       _ev.StartDate.Day == dateTime.Day : false)
+                                            orderby _post.ModifiedDate descending
                                             select new
                                             {
                                                 Event = _ev,
@@ -1899,7 +1901,8 @@ public class DA_Event
                     
                     var posts = await (from _post in _db.Posts
                                            where _post.Inactive == false && _post.PostType.ToLower() == "eventpost"
-                                           select new
+                                       orderby _post.ModifiedDate descending
+                                       select new
                                            {
                                                PostId = _post.PostId,
                                                PostType = _post.PostType,
