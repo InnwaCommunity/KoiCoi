@@ -7,12 +7,20 @@
       "RelativeMoniker": "D:1:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\postfeature\\da_post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\koicoi\\koicoi.modules\\repository\\postfeature\\bl_post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\postfeature\\bl_post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\koicoi\\koicoi.backend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\koicoi\\koicoi.backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\koicoi\\koicoi.backend\\controllers\\postfeature\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\postfeature\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|d:\\published\\koicoi\\koicoi.modules\\repository\\postfeature\\bl_post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DED6F6C-4185-4358-97F0-67BA946C1D60}|KoiCoi.Modules\\KoiCoi.Modules.csproj|solutionrelative:koicoi.modules\\repository\\postfeature\\bl_post.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{078C8E18-B170-455D-B47D-6E4EC2428000}|KoiCoi.Models\\KoiCoi.Models.csproj|d:\\published\\koicoi\\koicoi.models\\postdtos\\payload\\deletepostpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -41,14 +49,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\koicoi\\koicoi.backend\\controllers\\user\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\controllers\\user\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\koicoi\\koicoi.backend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\koicoi\\koicoi.backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|solutionrelative:koicoi.backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AC8478A5-DE44-4A67-9A44-7B79FA34AC30}|KoiCoi.Backend\\KoiCoi.Backend.csproj|d:\\published\\koicoi\\koicoi.backend\\customtokenauthprovider\\tokenprovidermiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -380,7 +380,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -395,12 +395,33 @@
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "EventController.cs",
+              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
+              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
+              "ViewState": "AQIAACkAAAAAAAAAAAAgwBcAAAA7AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-28T12:16:08.02Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "PostController.cs",
+              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
+              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
+              "ViewState": "AQIAACMAAAAAAAAAAIAwwDMAAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-30T01:26:13.83Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "DeletePostPayload.cs",
               "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Models\\PostDtos\\Payload\\DeletePostPayload.cs",
               "RelativeDocumentMoniker": "KoiCoi.Models\\PostDtos\\Payload\\DeletePostPayload.cs",
@@ -408,20 +429,32 @@
               "RelativeToolTip": "KoiCoi.Models\\PostDtos\\Payload\\DeletePostPayload.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAA4AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-07T17:04:32.525Z",
+              "WhenOpened": "2024-11-07T17:04:32.525Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Program.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Program.cs",
+              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Program.cs",
+              "RelativeToolTip": "KoiCoi.Backend\\Program.cs",
+              "ViewState": "AQIAABkAAAAAAAAAAAAnwCkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-19T02:58:58.858Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "BL_Post.cs",
-              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
-              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
-              "RelativeToolTip": "KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
-              "ViewState": "AQIAADIAAAAAAAAAAIA0wEEAAAAnAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-03T09:42:25.056Z",
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "KoiCoi.Backend\\Properties\\launchSettings.json",
+              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Properties\\launchSettings.json",
+              "RelativeToolTip": "KoiCoi.Backend\\Properties\\launchSettings.json",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAABwAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-11-02T14:38:14.658Z",
               "EditorCaption": ""
             },
             {
@@ -432,14 +465,18 @@
               "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
               "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
               "RelativeToolTip": "KoiCoi.Modules\\Repository\\PostFeature\\DA_Post.cs",
-              "ViewState": "AQIAAKEGAAAAAAAAAAAnwLYGAAAUAAAA",
+              "ViewState": "AQIAAAoCAAAAAAAAAAAnwB4CAABOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-22T08:23:44.722Z",
               "EditorCaption": ""
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "DA_User.cs",
               "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\UserFeature\\DA_User.cs",
               "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\UserFeature\\DA_User.cs",
@@ -453,32 +490,18 @@
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "EventController.cs",
-              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
-              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\Events\\EventController.cs",
-              "ViewState": "AQIAACkAAAAAAAAAAAAgwBcAAAA7AAAA",
+              "Title": "BL_Post.cs",
+              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
+              "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
+              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
+              "RelativeToolTip": "KoiCoi.Modules\\Repository\\PostFeature\\BL_Post.cs",
+              "ViewState": "AQIAADIAAAAAAAAAAIA0wEEAAAAnAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-28T12:16:08.02Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-03T09:42:25.056Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "PostController.cs",
-              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
-              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\Controllers\\PostFeature\\PostController.cs",
-              "ViewState": "AQIAAEQAAAAAAAAAAAAuwFgAAAAnAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-30T01:26:13.83Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "README.md",
               "DocumentMoniker": "D:\\published\\KoiCoi\\README.md",
               "RelativeDocumentMoniker": "README.md",
@@ -486,12 +509,11 @@
               "RelativeToolTip": "README.md",
               "ViewState": "AQIAAAkAAAAAAAAAAAAAABoAAAALAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
-              "WhenOpened": "2024-11-07T16:32:18.122Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-07T16:32:18.122Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "BL_User.cs",
               "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Modules\\Repository\\UserFeature\\BL_User.cs",
               "RelativeDocumentMoniker": "KoiCoi.Modules\\Repository\\UserFeature\\BL_User.cs",
@@ -499,12 +521,11 @@
               "RelativeToolTip": "KoiCoi.Modules\\Repository\\UserFeature\\BL_User.cs",
               "ViewState": "AQIAADIAAAAAAAAAAAAkwEQAAAAxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-03T15:41:57.062Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-03T15:41:57.062Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "PublishController.cs",
               "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Controllers\\PublishControllers\\PublishController.cs",
               "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\PublishControllers\\PublishController.cs",
@@ -512,12 +533,11 @@
               "RelativeToolTip": "KoiCoi.Backend\\Controllers\\PublishControllers\\PublishController.cs",
               "ViewState": "AQIAABIAAAAAAAAAAAAYwB0AAAA1AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-16T02:35:07.586Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-16T02:35:07.586Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "UserController.cs",
               "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Controllers\\User\\UserController.cs",
               "RelativeDocumentMoniker": "KoiCoi.Backend\\Controllers\\User\\UserController.cs",
@@ -525,33 +545,7 @@
               "RelativeToolTip": "KoiCoi.Backend\\Controllers\\User\\UserController.cs",
               "ViewState": "AQIAABEAAAAAAAAAAAAcwEQAAAAtAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-18T07:52:26.454Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "launchSettings.json",
-              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Properties\\launchSettings.json",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Properties\\launchSettings.json",
-              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Properties\\launchSettings.json",
-              "RelativeToolTip": "KoiCoi.Backend\\Properties\\launchSettings.json",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAABwAAAAvAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-11-02T14:38:14.658Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Program.cs",
-              "RelativeDocumentMoniker": "KoiCoi.Backend\\Program.cs",
-              "ToolTip": "D:\\published\\KoiCoi\\KoiCoi.Backend\\Program.cs",
-              "RelativeToolTip": "KoiCoi.Backend\\Program.cs",
-              "ViewState": "AQIAABkAAAAAAAAAAAAnwCkAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-19T02:58:58.858Z"
+              "WhenOpened": "2024-07-18T07:52:26.454Z"
             },
             {
               "$type": "Document",

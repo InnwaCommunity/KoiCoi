@@ -533,7 +533,7 @@ public class DA_Post
                                                     join _em in _db.EventMemberships on _event.PostId equals _em.EventPostId
                                                     join _logu in _db.Users on _em.UserId equals _logu.UserId
                                                     join _ut in _db.UserTypes on _em.UserTypeId equals _ut.TypeId
-                                                    where _event.PostId == EventPostId &&
+                                                    where _event.PostId == EventPostId && _post.Inactive == false &&
                                                     _status.StatusName.ToLower() == StatusName.ToLower() &&
                                                     _logu.UserId == LoginUserId &&
                                                     (_ut.Name.ToLower() == "admin" ||
