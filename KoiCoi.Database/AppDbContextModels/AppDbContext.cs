@@ -634,6 +634,8 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
+            entity.Property(e => e.FacebookUserId).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.GoogleUserId).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Inactive)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("inactive");

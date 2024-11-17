@@ -41,5 +41,16 @@
         {
             return await _bLUser.Signin(paylod);
         }
+
+        [HttpPost("CheckSocialAccount",Name = "CheckSocialAccount")]
+        public async Task<Result<UserLoginAccounts>> CheckSocialAccount(CheckSocialAccountPayload payload)
+        {
+            return await _bLUser.CheckSocialAccount(payload);
+        }
+        [HttpPost("CreateSocialAccount",Name = "CreateSocialAccount")]
+        public async Task<Result<ResponseUserDto>> CreateSocialAccount(SocialSignInPayload payload)
+        {
+            return await _bLUser.CreateSocialAccount(payload);
+        }
     }
 }

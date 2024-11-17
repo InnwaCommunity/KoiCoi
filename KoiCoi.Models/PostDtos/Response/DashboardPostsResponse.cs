@@ -62,6 +62,7 @@ public partial class DashboardEventPostResponse
     public int CommandTotalCount { get; set; }
     public int ShareTotalCount { get; set; }
     public int ViewTotalCount { get; set; }
+    public bool IsMember { get; set; } = false;
     public bool Selected { get; set; }
     public bool CanLike { get; set; }
     public bool CanCommand { get; set; }

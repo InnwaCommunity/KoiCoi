@@ -79,7 +79,9 @@ public class TokenProviderMiddleware : IMiddleware
             context.Request.Path.ToString().ToLower().Contains("/api/v1/publish/testing") ||
             context.Request.Path.ToString().ToLower().Contains("/api/v1/publish/registeraccount") ||
             context.Request.Path.ToString().ToLower().Contains("/api/v1/publish/accountswithdeviceid") ||
-            context.Request.Path.ToString().ToLower().Contains("api/v1/publish/signin")
+            context.Request.Path.ToString().ToLower().Contains("api/v1/publish/signin") ||
+            context.Request.Path.ToString().ToLower().Contains("api/v1/publish/createsocialaccount") ||
+            context.Request.Path.ToString().ToLower().Contains("api/v1/publish/checksocialaccount")
 
         )
         {

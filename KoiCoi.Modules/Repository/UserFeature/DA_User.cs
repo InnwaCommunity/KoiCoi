@@ -494,7 +494,7 @@ public class DA_User
             var loginhistory = await (from _user in _db.Users
                                       join _history in _db.AccountLoginHistories on _user.UserId equals _history.UserId
                                       where _user.UserIdval == payload.UserIdval && _history.DeviceId == payload.DeviceId
-                                      select _user).FirstOrDefaultAsync();
+                                      select _history).FirstOrDefaultAsync();
             if( loginhistory is not null)
             {
                  _db.Remove(loginhistory);
@@ -516,6 +516,218 @@ public class DA_User
         catch (Exception ex)
         {
             result = Result<string>.Error(ex);
+        }
+        return result;
+    }
+
+
+    public async Task<Result<string>> GetUserProfile(GetUserData payload, int LoginEmpID)
+    {
+        Result<string> result;
+        try
+        {
+            int UserId = LoginEmpID;
+            if (!string.IsNullOrEmpty(payload.UserIdval))
+            {
+                UserId = Convert.ToInt32(Encryption.DecryptID(payload.UserIdval, LoginEmpID.ToString()));
+            }
+            var LatestProfile = await (from us in _db.Users
+                              join up in _db.UserProfiles on us.UserId equals up.UserId into profiles
+                              where us.UserId == UserId
+                              select new
+                              {
+                                  Url = profiles.OrderByDescending(p => p.CreatedDate)
+                                  .Select(x=> x.Url)
+                                  .FirstOrDefault()
+                              })
+                  .AsNoTracking()
+                  .FirstOrDefaultAsync();
+
+            if (LatestProfile is null || LatestProfile.Url is null)
+                return Result<string>.Error("Image Not Found");
+            string purl = "";
+            if (!string.IsNullOrEmpty(LatestProfile.Url))
+            {
+                string url = LatestProfile.Url!;
+                string bucketname = _configuration.GetSection("Buckets:UserProfile").Get<string>()!;
+                Result<string> res = await _awsS3Service.GetFile(bucketname, url);
+                if (res.IsSuccess)
+                {
+                    purl = res.Data;
+                }
+                else
+                {
+                    return Result<string>.Error("Image Not Found");
+                }
+            }
+            result = Result<string>.Success(purl);
+        }
+        catch (Exception ex)
+        {
+            result = Result<string>.Error(ex);
+        }
+        return result;
+    }
+    public async Task<Result<UserLoginAccounts>> CheckSocialAccount(CheckSocialAccountPayload payload)
+    {
+        Result<UserLoginAccounts> result = null;
+        try
+        {
+            if(payload.FacebookUserId == null && payload.GoogleUserId == null)
+                return Result<UserLoginAccounts>.Error("Invalid Social");
+
+            User? user = null;
+            if (payload.FacebookUserId != null)
+            {
+                 user= await _db.Users.Where(x=> x.FacebookUserId == payload.FacebookUserId).FirstOrDefaultAsync();
+                
+            }
+            else if (payload.GoogleUserId != null)
+            {
+                user = await _db.Users.Where(x => x.GoogleUserId == payload.GoogleUserId).FirstOrDefaultAsync();
+            }
+            if (user is null)
+                return Result<UserLoginAccounts>.Error("Account Not Found");
+            string? LatestProfileUrl = await _db.UserProfiles
+                    .Where(x => x.UserId == user.UserId)
+                    .OrderByDescending(p => p.CreatedDate)
+                    .Select(x => x.Url)
+                    .FirstOrDefaultAsync();
+            string purl = "";
+            if (!string.IsNullOrEmpty(LatestProfileUrl))
+            {
+                string bucketname = _configuration.GetSection("Buckets:UserProfile").Get<string>()!;
+                Result<string> res = await _awsS3Service.GetFile(bucketname, LatestProfileUrl);
+                if (res.IsSuccess)
+                {
+                    purl = res.Data;
+                }
+            }
+            result = Result<UserLoginAccounts>.Success(new UserLoginAccounts
+            {
+                UserIdval = user.UserIdval,
+                UserName = user.Name,
+                UserImage = purl,
+                Contact = user.Email ?? user.Phone ?? ""
+            });
+        }
+        catch (Exception ex)
+        {
+            result = Result<UserLoginAccounts>.Error(ex);
+        }
+        return result;
+    }
+    public async Task<Result<ResponseUserDto>> CreateSocialAccount(SocialSignInPayload payload)
+    {
+        Result<ResponseUserDto> result = null;
+        try
+        {
+            if (payload.FacebookUserId == null && payload.GoogleUserId == null)
+                return Result<ResponseUserDto>.Error("Invalid Social");
+
+
+
+            string aseKey = _configuration.GetSection("AesEncryption:AseKey").Get<string>()!;
+            string aseIv = _configuration.GetSection("AesEncryption:AseIV").Get<string>()!;
+            if (payload.Password is null)
+                return Result<ResponseUserDto>.Error("Invalid Password");
+
+            if (payload.FacebookUserId is not null)
+            {
+                var auser = await _db.Users.Where(x => x.FacebookUserId == payload.FacebookUserId).FirstOrDefaultAsync();
+                if(auser is not null)
+                    return Result<ResponseUserDto>.Error("Have Been Created");
+                //if (!(await checkEmailUnique(requestUser.Email ?? "")))
+                //    return Result<string>.Error("Your Email Have Been Registered");
+                string payloadpassword = AesEncryption.Decrypt(payload.Password, aseKey, aseIv);
+
+                // Generate a new 12-character password with at least 1 non-alphanumeric character.
+                RandomPassword passwordGenerator = new RandomPassword();
+                string salt = SaltedHash.GenerateSalt();
+                string password = SaltedHash.ComputeHash(salt, payloadpassword.ToString());
+                string userIdval = 
+                    Encryption.EncryptID(payload.UserName, salt) + 
+                    passwordGenerator.CreatePassword(payload.UserName.Length, payload.UserName.Length / 3);
+
+                User user = new User
+                {
+                    UserIdval = userIdval,
+                    Name = payload.UserName,
+                    Email = payload.Email,
+                    Password = password,
+                    PasswordHash = salt,
+                    Phone = payload.Phone,
+                    DeviceId = payload.DeviceId,
+                    DateCreated = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow,
+                    Inactive = false,
+                    FacebookUserId = payload.FacebookUserId,
+                };
+                var newUserEntry = await _db.Users.AddAsync(user);
+                int result1 = await _db.SaveChangesAsync();
+                if (result1 == 0 || newUserEntry.Entity == null)
+                    return Result<ResponseUserDto>.Error("Registration Failed");
+
+                // Prepare the success response model
+                result = Result<ResponseUserDto>.Success(new ResponseUserDto
+                {
+                    UserIdval = newUserEntry.Entity.UserIdval,
+                    Name = newUserEntry.Entity.Name!,
+                    Password = AesEncryption.Encrypt(payloadpassword, aseKey, aseIv)
+                });
+            }
+            else if(payload.GoogleUserId is not null)
+            {
+                var auser = await _db.Users.Where(x => x.GoogleUserId == payload.GoogleUserId).FirstOrDefaultAsync();
+                if (auser is not null)
+                    return Result<ResponseUserDto>.Error("Have Been Created");
+                //if (!(await checkEmailUnique(requestUser.Email ?? "")))
+                //    return Result<string>.Error("Your Email Have Been Registered");
+                string payloadpassword = AesEncryption.Decrypt(payload.Password, aseKey, aseIv);
+
+                // Generate a new 12-character password with at least 1 non-alphanumeric character.
+                RandomPassword passwordGenerator = new RandomPassword();
+                string salt = SaltedHash.GenerateSalt();
+                string password = SaltedHash.ComputeHash(salt, payloadpassword.ToString());
+                string userIdval =
+                    Encryption.EncryptID(payload.UserName, salt) +
+                    passwordGenerator.CreatePassword(payload.UserName.Length, payload.UserName.Length / 3);
+
+                User user = new User
+                {
+                    UserIdval = userIdval,
+                    Name = payload.UserName,
+                    Email = payload.Email,
+                    Password = password,
+                    PasswordHash = salt,
+                    Phone = payload.Phone,
+                    DeviceId = payload.DeviceId,
+                    DateCreated = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow,
+                    Inactive = false,
+                    GoogleUserId = payload.GoogleUserId,
+                };
+                var newUserEntry = await _db.Users.AddAsync(user);
+                int result1 = await _db.SaveChangesAsync();
+                if (result1 == 0 || newUserEntry.Entity == null)
+                    return Result<ResponseUserDto>.Error("Registration Failed");
+
+                // Prepare the success response model
+                result= Result<ResponseUserDto>.Success(new ResponseUserDto
+                {
+                    UserIdval = newUserEntry.Entity.UserIdval,
+                    Name = newUserEntry.Entity.Name!,
+                    Password = AesEncryption.Encrypt(payloadpassword, aseKey, aseIv)
+                });
+            }
+            else
+            {
+                result = Result<ResponseUserDto>.Error("Invalid Social");
+            }
+        }
+        catch (Exception ex)
+        {
+            result = Result<ResponseUserDto>.Error(ex);
         }
         return result;
     }

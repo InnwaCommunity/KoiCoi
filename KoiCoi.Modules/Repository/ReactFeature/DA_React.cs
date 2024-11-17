@@ -217,7 +217,7 @@ public class DA_React
                                join _com in _db.PostCommands on _post.PostId equals _com.PostId
                                join _creator in _db.Users on _com.UserId equals _creator.UserId
                                join pro in _db.UserProfiles on _creator.UserId equals pro.UserId into profiles
-                               where _post.PostId == PostId && (ParentCommendId != null ? ParentCommendId == _com.ParentCommandId : true)
+                               where _post.PostId == PostId && (ParentCommendId != null ? ParentCommendId == _com.ParentCommandId : _com.ParentCommandId==null)
                                select new GetCommentResponse
                                {
                                    CommandIdval = Encryption.EncryptID(_com.CommandId.ToString(), LoginUserId.ToString()),

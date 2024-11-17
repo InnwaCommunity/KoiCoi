@@ -27,5 +27,9 @@ public partial class User
 
     public bool? Inactive { get; set; }
 
+    public decimal? FacebookUserId { get; set; }
+
+    public decimal? GoogleUserId { get; set; }
+
     public virtual ICollection<Mark> Marks { get; set; } = new List<Mark>();
 }

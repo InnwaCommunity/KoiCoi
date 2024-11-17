@@ -1003,6 +1003,10 @@ public class DA_Post
                                                     imgDescription = x.UrlDescription
                                                 }
                                             }).ToList();
+
+                        bool IsMember = await _db.ChannelMemberships
+                            .Where(x => x.ChannelId == eventQuery.Event.ChannelId
+                            && x.UserId == LoginUserId).FirstOrDefaultAsync() != null;
                         var finalResult = new DashboardEventPostResponse
                         {
                             PostType = eventQuery.Post.PostType,
@@ -1021,6 +1025,7 @@ public class DA_Post
                             LikeTotalCount = apost.Likes,
                             CommandTotalCount = apost.Commands,
                             ShareTotalCount = apost.Shares,
+                            IsMember = IsMember,
                             Selected = (_db.Reacts.Where(x => x.UserId == LoginUserId && apost.PostId == x.PostId).FirstOrDefault() != null ? true : false),
                             CanLike = (apost.LikePolicies.GroupMemberOnly != null && apost.LikePolicies.GroupMemberOnly == true ? eventQuery.CMemberShip.UserId == LoginUserId : true) &&
                                           (apost.LikePolicies.MaxCount != null ? apost.LikePolicies.MaxCount > apost.Likes : true),
@@ -1254,7 +1259,7 @@ public class DA_Post
                              (_post.CommandPolicies.MaxCount != null ? _post.CommandPolicies.MaxCount > _post.Commands : true),
                              CanShare = (_post.SharePolicies.GroupMemberOnly != null && _post.SharePolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) &&
                              (_post.SharePolicies.MaxCount != null ? _post.SharePolicies.MaxCount > _post.Shares : true),
-                             CanEdit = _chanme.UserId == LoginUserId,
+                             CanEdit = _creator.UserId == LoginUserId,
                              ImageResponse = postImages.Select(img => new PostImageResponse
                              {
                                  ImageIdval = Encryption.EncryptID(img.PostId.ToString(), LoginUserId.ToString()),
@@ -1529,6 +1534,9 @@ public class DA_Post
                                                     imgDescription = x.UrlDescription
                                                 }
                                             }).ToList();
+
+                        bool IsMember = await _db.ChannelMemberships.Where(x => x.ChannelId == eventQuery.Event.ChannelId
+                        && x.UserId == LoginUserId).FirstOrDefaultAsync() != null;
                         var finalResult = new DashboardEventPostResponse
                         {
                             PostType = eventQuery.Post.PostType,
@@ -1547,6 +1555,7 @@ public class DA_Post
                             LikeTotalCount = apost.Likes,
                             CommandTotalCount = apost.Commands,
                             ShareTotalCount = apost.Shares,
+                            IsMember = IsMember,
                             Selected = (_db.Reacts.Where(x => x.UserId == LoginUserId && apost.PostId == x.PostId).FirstOrDefault() != null ? true : false),
                             CanLike = (apost.LikePolicies.GroupMemberOnly != null && apost.LikePolicies.GroupMemberOnly == true ? eventQuery.CMemberShip.UserId == LoginUserId : true) &&
                                           (apost.LikePolicies.MaxCount != null ? apost.LikePolicies.MaxCount > apost.Likes : true),
@@ -1608,7 +1617,7 @@ public class DA_Post
                                      (apost.CommandPolicies.MaxCount != null ? apost.CommandPolicies.MaxCount > apost.Commands : true),
                                      CanShare = (apost.SharePolicies.GroupMemberOnly != null && apost.SharePolicies.GroupMemberOnly == true ? _chanme.UserId == LoginUserId : true) &&
                                      (apost.SharePolicies.MaxCount != null ? apost.SharePolicies.MaxCount > apost.Shares : true),
-                                     CanEdit = _chanme.UserId == LoginUserId,
+                                     CanEdit = _creator.UserId == LoginUserId,
                                      ImageResponse = postImages.Select(img => new PostImageResponse
                                      {
                                          ImageIdval = Encryption.EncryptID(img.PostId.ToString(), LoginUserId.ToString()),

@@ -872,6 +872,9 @@ public class DA_Event
                                                         imgDescription = x.UrlDescription
                                                     }
                                                 }).ToList();
+                            bool IsMember = await _db.ChannelMemberships
+                                .Where(x => x.ChannelId == eventQuery.Event.ChannelId
+                                && x.UserId == LoginUserId).FirstOrDefaultAsync() != null;
                             var finalResult = new DashboardEventPostResponse
                             {
                                 PostType = eventQuery.Post.PostType,
@@ -890,6 +893,7 @@ public class DA_Event
                                 LikeTotalCount = apost.Likes,
                                 CommandTotalCount = apost.Commands,
                                 ShareTotalCount = apost.Shares,
+                                IsMember = IsMember,
                                 Selected = (_db.Reacts.Where(x => x.UserId == LoginUserId && apost.PostId == x.PostId).FirstOrDefault() != null ? true : false),
                                 CanLike = (apost.LikePolicies.GroupMemberOnly != null && apost.LikePolicies.GroupMemberOnly == true ? eventQuery.CMemberShip.UserId == LoginUserId : true) &&
                                               (apost.LikePolicies.MaxCount != null ? apost.LikePolicies.MaxCount > apost.Likes : true),
@@ -1782,7 +1786,8 @@ public class DA_Event
                                         join _members in _db.ChannelMemberships on _user.UserId equals _members.UserId
                                         join _event in _db.Events on _members.ChannelId equals _event.ChannelId
                                         join _pro in _db.UserProfiles on _user.UserId equals _pro.UserId into profile
-                                        where _event.PostId == EventPostId
+                                        join _coll in _db.CollectPosts on _user.UserId equals _coll.CreatorId
+                                        where _event.PostId == EventPostId && _coll.EventPostId == EventPostId
                                         select new
                                         {
                                             UserId = _user.UserId,
@@ -1791,7 +1796,7 @@ public class DA_Event
                                             Image = profile.OrderByDescending(p => p.CreatedDate)
                                             .Select(x => x.Url)
                                             .FirstOrDefault()
-                                        }).ToListAsync();
+                                        }).Distinct().ToListAsync();
 
 
             foreach (var member in members)
@@ -2009,7 +2014,11 @@ public class DA_Event
                                                             imgDescription = x.UrlDescription
                                                         }
                                                     }).ToList();
-                                var finalResult = new DashboardEventPostResponse
+
+                        bool IsMember = await _db.ChannelMemberships
+                            .Where(x => x.ChannelId == eventQuery.Event.ChannelId
+                            && x.UserId == LoginUserId).FirstOrDefaultAsync() != null;
+                        var finalResult = new DashboardEventPostResponse
                                 {
                                     PostType = eventQuery.Post.PostType,
                                     ChannelIdval = Encryption.EncryptID(eventQuery.Event.ChannelId.ToString(), LoginUserId.ToString()),
@@ -2026,6 +2035,7 @@ public class DA_Event
                                     LikeTotalCount = apost.Likes,
                                     CommandTotalCount = apost.Commands,
                                     ShareTotalCount = apost.Shares,
+                                    IsMember = IsMember,
                                     Selected = (_db.Reacts.Where(x => x.UserId == LoginUserId && apost.PostId == x.PostId).FirstOrDefault() != null ? true : false),
                                     CanLike = (apost.LikePolicies.GroupMemberOnly != null && apost.LikePolicies.GroupMemberOnly == true ? eventQuery.CMemberShip.UserId == LoginUserId : true) &&
                                                   (apost.LikePolicies.MaxCount != null ? apost.LikePolicies.MaxCount > apost.Likes : true),

@@ -76,6 +76,13 @@ public class UserController : BaseController
         return await _bLUser.ChangeLoginPassword(paylod, LoginEmpID);
     }
 
+    [HttpPost("GetUserProfile",Name ="GetUserProfile")]
+    public async Task<Result<string>> GetUserProfile(GetUserData payload)
+    {
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _bLUser.GetUserProfile(payload,LoginEmpID);
+    }
+
 
     //[HttpGet("GetAccountByVertifiedEmail/{email}/{OTPPasscode}/{OTPPrefix}", Name = "GetAccountByVertifiedEmail")]
     //public async Task<Result<UserInfoResponse>> GetAccountByVertifiedEmail(string email,string OTPPasscode,string OTPPrefix)
