@@ -36,6 +36,11 @@ public class DA_Post
         {
             string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
             int EventPostId = Convert.ToInt32(Encryption.DecryptID(payload.EventPostIdval!, LoginUserId.ToString()));
+            int CreatorId = LoginUserId;
+            if(payload.CreatorIdval is not null)
+            {
+                CreatorId= Convert.ToInt32(Encryption.DecryptID(payload.CreatorIdval, LoginUserId.ToString()));
+            }
             //int? TagId = payload.TagIdval is not null ? Convert.ToInt32(Encryption.DecryptID(payload.TagIdval, LoginUserId.ToString())) : null;
 
             //int MarkId = Convert.ToInt32(Encryption.DecryptID(payload.MarkIdval!,LoginUserId.ToString()));
@@ -181,14 +186,14 @@ public class DA_Post
             var checkEventOwner = await (from _em in _db.EventMemberships
                                          join _ust in _db.UserTypes on _em.UserTypeId equals _ust.TypeId
                                          where _em.EventPostId == EventPostId
-                                         && _em.UserId == LoginUserId
+                                         && _em.UserId == CreatorId
                                          && _ust.Name.ToLower() == "owner"
                                          select new
                                          {
                                              LoginId = _em.UserId
                                          })
                                          .FirstOrDefaultAsync();
-            if (checkEventOwner is not null)
+            if (checkEventOwner is not null && payload.CreatorIdval is null)
             {
                 ///Already Approved because Post Creator is event owner
                 int approvedStatus = await _db.StatusTypes
@@ -204,7 +209,7 @@ public class DA_Post
                     EventPostId = EventPostId,
                     //CollectAmount = Encryption.EncryptID(payload.CollectAmount!.ToString()!, balanceSalt),
                     //MarkId=MarkId,
-                    CreatorId = LoginUserId,
+                    CreatorId = CreatorId,
                     StatusId = approvedStatus,
                 };
                 await _db.CollectPosts.AddAsync(newCollect);
@@ -282,7 +287,7 @@ public class DA_Post
                     EventPostId = EventPostId,
                     //CollectAmount = Encryption.EncryptID(payload.CollectAmount!.ToString()!, balanceSalt),
                     //MarkId = MarkId,
-                    CreatorId = LoginUserId,
+                    CreatorId = CreatorId,
                     StatusId = pendingStatus,
                 };
                 await _db.CollectPosts.AddAsync(newCollect);

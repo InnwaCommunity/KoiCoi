@@ -100,5 +100,9 @@ public class BL_Event
     {
         return await _daEvent.GetAllEvent(payload, LoginUserId);
     }
+    public async Task<Result<Pagination>> GetChannelMemberByEventId(GetEventData payload,int LoginUserId)
+    {
+        return await _daEvent.GetChannelMemberByEventId(payload, LoginUserId);
+    }
 
 }

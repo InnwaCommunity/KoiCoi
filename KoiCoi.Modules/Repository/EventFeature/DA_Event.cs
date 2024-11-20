@@ -2073,4 +2073,38 @@ public class DA_Event
         }
         return result;
     }
+
+    public async Task<Result<Pagination>> GetChannelMemberByEventId(GetEventData payload, int LoginUserId)
+    {
+        Result<Pagination> result = null;
+        try
+        {
+            int EventPostId = Convert.ToInt32(Encryption.DecryptID(payload.EventIdval, LoginUserId.ToString()));
+            var query = await (from ep in _db.Posts
+                               join _ev in _db.Events on ep.PostId equals _ev.PostId
+                               join _chh in _db.Channels on _ev.ChannelId equals _chh.ChannelId
+                               join _cm in _db.ChannelMemberships on _chh.ChannelId equals _cm.ChannelId
+                               join _ut in _db.UserTypes on _cm.UserTypeId equals _ut.TypeId
+                               join _user in _db.Users on _cm.UserId equals _user.UserId
+                               where ep.PostId == EventPostId
+                               select new
+                               {
+                                   UserIdval = Encryption.EncryptID(_user.UserId.ToString(), LoginUserId.ToString()),
+                                   UserName = _user.Name,
+                                   Content = _user.Email ?? _user.Phone,
+                                   UserType = _ut.Name,
+                                   JoinedDate = _cm.JoinedDate,
+                                   ProfileImage = _db.UserProfiles.Where(x => x.UserId == _user.UserId)
+                                                        .OrderByDescending(x => x.CreatedDate)
+                                                        .Select(x => x.Url).LastOrDefault()
+                               }).ToListAsync();
+            Pagination data = RepoFunService.getWithPagination(payload.pageNumber, payload.pageSize, query);
+            result = Result<Pagination>.Success(data);
+        }
+        catch (Exception ex)
+        {
+            result = Result<Pagination>.Error(ex);
+        }
+        return result;
+    }
 }

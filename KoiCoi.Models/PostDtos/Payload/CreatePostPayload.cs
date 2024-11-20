@@ -4,6 +4,7 @@ public partial class CreatePostPayload
 {
     public string? Content { get; set; }
     public string? EventPostIdval { get; set; }
+    public string? CreatorIdval { get; set; }
     //public string? TagIdval { get; set; }
     //public decimal CollectAmount { get; set; }
     //public string? MarkIdval { get; set; }

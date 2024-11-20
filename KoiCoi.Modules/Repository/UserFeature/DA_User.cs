@@ -377,7 +377,9 @@ public class DA_User
         Result<ResponseUserDto> result = null;
         try
         {
-            var user = await _db.Users.Where(x=> x.Email == paylod.Email).FirstOrDefaultAsync();
+            var user = await _db.Users.Where(
+                x=> x.Email == paylod.Email && x.FacebookUserId==null && x.GoogleUserId==null
+                ).FirstOrDefaultAsync();
             if(user is null)
                 return Result<ResponseUserDto>.Error("Email Not Found");
 

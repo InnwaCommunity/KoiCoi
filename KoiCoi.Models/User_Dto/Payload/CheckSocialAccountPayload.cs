@@ -2,6 +2,6 @@
 
 public partial class CheckSocialAccountPayload
 {
-    public decimal? FacebookUserId { get; set; }
-    public decimal? GoogleUserId { get; set; }
+    public string? FacebookUserId { get; set; }
+    public string? GoogleUserId { get; set; }
 }

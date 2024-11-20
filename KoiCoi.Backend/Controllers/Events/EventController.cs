@@ -160,4 +160,10 @@ public class EventController : BaseController
         Result<Pagination> response = await _blEvent.GetAllEvent(payload, LoginUserId);
         return Ok(response);
     }
+    [HttpPost("GetChannelMemberByEventId",Name = "GetChannelMemberByEventId")]
+    public async Task<Result<Pagination>> GetChannelMemberByEventId(GetEventData payload)
+    {
+        int LoginUserId = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blEvent.GetChannelMemberByEventId(payload, LoginUserId);
+    }
 }

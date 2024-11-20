@@ -7,6 +7,6 @@ public partial class SocialSignInPayload
     public string? Phone { get; set; }
     public string Password { get; set;} =  string.Empty;
     public string DeviceId { get; set; } = string.Empty;
-    public decimal? FacebookUserId { get; set; }
-    public decimal? GoogleUserId { get; set; }
+    public string? FacebookUserId { get; set; }
+    public string? GoogleUserId { get; set; }
 }
