@@ -129,7 +129,7 @@ public class DA_React
                     };
                     await _db.PostCommands.AddAsync(newCommand);
                     await _db.SaveChangesAsync();
-                    var query = await (from _com in _db.PostCommands
+                    /*var query = await (from _com in _db.PostCommands
                                        join _creator in _db.Users on _com.UserId equals _creator.UserId
                                        join pro in _db.UserProfiles on _creator.UserId equals pro.UserId into profiles
                                        join _cmr in _db.CommandReacts on _com.CommandId equals _cmr.CommandId into cmreacts
@@ -147,8 +147,41 @@ public class DA_React
                                            Selected = _db.CommandReacts.Where(x => x.UserId == LoginUserID && x.CommandId == _com.CommandId).FirstOrDefault() != null,
                                            CreatorImage = profiles.OrderByDescending(p => p.CreatedDate).Select(x => x.Url).FirstOrDefault(),
                                            HaveChildCommand = _db.PostCommands.Any(x => x.ParentCommandId == _com.CommandId)
-                                       }).FirstOrDefaultAsync();
-                    if(query is null)
+                                       }).FirstOrDefaultAsync();*/
+                    var baseQuery = from _com in _db.PostCommands
+                                    join _creator in _db.Users on _com.UserId equals _creator.UserId
+                                    join pro in _db.UserProfiles on _creator.UserId equals pro.UserId into profiles
+                                    join _cmr in _db.CommandReacts on _com.CommandId equals _cmr.CommandId into cmreacts
+                                    where _com.CommandId == newCommand.CommandId
+                                    select new
+                                    {
+                                        _com,
+                                        _creator,
+                                        ProfileUrl = profiles.OrderByDescending(p => p.CreatedDate).Select(x => x.Url).FirstOrDefault(),
+                                        ReactCount = cmreacts.Count(),
+                                        Selected = _db.CommandReacts.Any(x => x.UserId == LoginUserID && x.CommandId == _com.CommandId),
+                                        HaveChildCommand = _db.PostCommands.Any(x => x.ParentCommandId == _com.CommandId)
+                                    };
+
+                    var materializedData = await baseQuery.FirstOrDefaultAsync();
+                    if (materializedData == null)
+                        return Result<GetCommentResponse>.Error("Fail");
+
+                    var query = new GetCommentResponse
+                    {
+                        CommandIdval = Encryption.EncryptID(materializedData._com.CommandId.ToString(), LoginUserID.ToString()),
+                        Content = materializedData._com.Content,
+                        CreatorIdval = Encryption.EncryptID(materializedData._creator.UserId.ToString(), LoginUserID.ToString()),
+                        CreatorName = materializedData._creator.Name,
+                        CreatorEmail = materializedData._creator.Email,
+                        CanEdit = materializedData._creator.UserId == LoginUserID,
+                        CreateData = materializedData._com.CreatedDate,
+                        ReactCount = materializedData.ReactCount,
+                        Selected = materializedData.Selected,
+                        CreatorImage = materializedData.ProfileUrl,
+                        HaveChildCommand = materializedData.HaveChildCommand
+                    };
+                    if (query is null)
                         return Result<GetCommentResponse>.Error("Fail"); 
                     result = Result<GetCommentResponse>.Success(query);
                 }
