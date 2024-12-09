@@ -15,6 +15,7 @@ using Org.BouncyCastle.Utilities.Encoders;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Globalization;
+using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -1494,6 +1495,7 @@ public class DA_Event
                                    UserIdval = Encryption.EncryptID(_user.UserId.ToString(), LoginUserId.ToString()),
                                    UserName = _user.Name,
                                    Content = _user.Email ?? _user.Phone,
+                                   UserTypeIdval = Encryption.EncryptID(_ut.TypeId.ToString(), LoginUserId.ToString()),
                                    UserType = _ut.Name,
                                    JoinedDate = _cm.JoinedDate,
                                    ProfileImage = _db.UserProfiles.Where(x => x.UserId == _user.UserId)
@@ -1516,11 +1518,7 @@ public class DA_Event
         Result<EventMenuAccess> result = null;
         try
         {
-            EventMenuAccess menuAccess = new EventMenuAccess
-            {
-                CanPostReview = false,
-                CanPostAction = false,
-            };
+            
             int EventPostId = Convert.ToInt32(Encryption.DecryptID(payload.EventPostIdval!, LoginUserId.ToString()));
             var admin = await (from _ev in _db.Events
                                join _em in _db.EventMemberships on _ev.PostId equals _em.EventPostId
@@ -1528,13 +1526,14 @@ public class DA_Event
                                where _ev.PostId == EventPostId &&
                                _em.UserId == LoginUserId &&
                                (_ut.Name.ToLower() == "admin" || _ut.Name.ToLower() == "owner")
-                               select _em
+                               select new{ TypeName = _ut.Name}
                                ).FirstOrDefaultAsync();
-            if(admin is not null)
+            EventMenuAccess menuAccess = new EventMenuAccess
             {
-                menuAccess.CanPostReview = true;
-                menuAccess.CanPostAction = true;
-            }
+                CanPostReview = admin is not null,
+                CanPostAction = admin is not null,
+                CanEditMember = admin is not null && admin.TypeName.ToLower() == "owner"
+            };
             result = Result<EventMenuAccess>.Success(menuAccess);
         }
         catch (Exception ex)
@@ -1554,10 +1553,11 @@ public class DA_Event
             string? Name = payload.Name;
             List<EventNameData> query = await (from _po in _db.Posts
                                               join _ev in _db.Events on _po.PostId equals _ev.PostId
-                                              join _ch in _db.Channels on _ev.ChannelId equals _ch.ChannelId
+                                              join _estatus in _db.StatusTypes on _ev.StatusId equals _estatus.StatusId
+                                               join _ch in _db.Channels on _ev.ChannelId equals _ch.ChannelId
                                               join _cm in _db.ChannelMemberships on _ch.ChannelId equals _cm.ChannelId
                                               join _status in _db.StatusTypes on _cm.StatusId equals _status.StatusId
-                                              where _cm.UserId == LoginUserId && _status.StatusName.ToLower() == "approved" &&
+                                              where _cm.UserId == LoginUserId && _status.StatusName.ToLower() == "approved" && _estatus.StatusName.ToLower() == "approved" &&
                                               _ev.StartDate <= now && now <= _ev.EndDate 
                                               && (string.IsNullOrEmpty(Name) ? true : _ev.EventName.Contains(Name))
                                               select new EventNameData
@@ -1625,10 +1625,11 @@ public class DA_Event
                                ).ToListAsync();*/
             var query = await (from _ev in _db.Events
                                join _coll in _db.CollectPosts on _ev.PostId equals _coll.EventPostId
+                               join _cstatus in _db.StatusTypes on _coll.StatusId equals _cstatus.StatusId
                                join _colBal in _db.PostBalances on _coll.PostId equals _colBal.PostId
                                join _eb in _db.EventMarkBalances on _ev.PostId equals _eb.EventPostId
                                join _user in _db.Users on _coll.CreatorId equals _user.UserId
-                               where _ev.PostId == EventPostId && _colBal.MarkId == MarkId && _eb.MarkId == MarkId
+                               where _ev.PostId == EventPostId && _colBal.MarkId == MarkId && _eb.MarkId == MarkId && _cstatus.StatusName.ToLower() == "approved"
                                select new
                                {
                                    UserId = _coll.CreatorId,
@@ -1676,11 +1677,13 @@ public class DA_Event
             
 
             var evquery = (from _ev in _db.Events
+                           join _po in _db.Posts on _ev.PostId equals _po.PostId
                                  join _status in _db.StatusTypes on _ev.StatusId equals _status.StatusId
                                  join _me in _db.EventMemberships on _ev.PostId equals _me.EventPostId
                                  join _ch in _db.Channels on _ev.ChannelId equals _ch.ChannelId
                                  join _chme in _db.ChannelMemberships on _ch.ChannelId equals _chme.ChannelId
                                  join _meStatus in _db.StatusTypes on _chme.StatusId equals _meStatus.StatusId
+                                 orderby _po.ModifiedDate descending
                                  where (UserId != null ? (_chme.UserId == UserId && _meStatus.StatusName.ToLower() == "approved") : 
                                  (_chme.UserId == LoginUserId && _meStatus.StatusName.ToLower() == "approved") )
                                  && _status.StatusName.ToLower() == "approved"
@@ -1730,13 +1733,17 @@ public class DA_Event
                     TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(x.TotalBalance, balanceSalt))
                 }).ToList();
 
-                var data = new
+                if (queryresult != null && queryresult.Any())
                 {
-                    EventPostIdval = Encryption.EncryptID(newevent.PostId.ToString(), LoginUserId.ToString()),
-                    EventName = newevent.EventName,
-                    Balances = queryresult
-                };
-                lastQuery.Add(data);
+                    var data = new
+                    {
+                        EventPostIdval = Encryption.EncryptID(newevent.PostId.ToString(), LoginUserId.ToString()),
+                        EventName = newevent.EventName,
+                        Balances = queryresult
+                    };
+                    lastQuery.Add(data);
+                }
+
             }
             Pagination pa = RepoFunService.getWithPagination(payload.pageNumber, payload.pageSize, lastQuery);
             result = Result<Pagination>.Success(pa);
@@ -1787,7 +1794,8 @@ public class DA_Event
                                         join _event in _db.Events on _members.ChannelId equals _event.ChannelId
                                         join _pro in _db.UserProfiles on _user.UserId equals _pro.UserId into profile
                                         join _coll in _db.CollectPosts on _user.UserId equals _coll.CreatorId
-                                        where _event.PostId == EventPostId && _coll.EventPostId == EventPostId
+                                        join _st in _db.StatusTypes on _coll.StatusId equals _st.StatusId
+                                        where _event.PostId == EventPostId && _coll.EventPostId == EventPostId && _st.StatusName.ToLower() == "approved"
                                         select new
                                         {
                                             UserId = _user.UserId,
@@ -2086,7 +2094,7 @@ public class DA_Event
                                join _cm in _db.ChannelMemberships on _chh.ChannelId equals _cm.ChannelId
                                join _ut in _db.UserTypes on _cm.UserTypeId equals _ut.TypeId
                                join _user in _db.Users on _cm.UserId equals _user.UserId
-                               where ep.PostId == EventPostId
+                               where ep.PostId == EventPostId && (!string.IsNullOrEmpty(payload.SearchData) ? _user.Name.Contains(payload.SearchData) : true)
                                select new
                                {
                                    UserIdval = Encryption.EncryptID(_user.UserId.ToString(), LoginUserId.ToString()),

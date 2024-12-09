@@ -538,12 +538,13 @@ public class DA_Post
                                                     join _em in _db.EventMemberships on _event.PostId equals _em.EventPostId
                                                     join _logu in _db.Users on _em.UserId equals _logu.UserId
                                                     join _ut in _db.UserTypes on _em.UserTypeId equals _ut.TypeId
+                                                    orderby _post.ModifiedDate descending
                                                     where _event.PostId == EventPostId && _post.Inactive == false &&
                                                     _status.StatusName.ToLower() == StatusName.ToLower() &&
                                                     _logu.UserId == LoginUserId &&
                                                     (_ut.Name.ToLower() == "admin" ||
-                                                    _ut.Name.ToLower() == "owner")
-                                                    select new 
+                                                    _ut.Name.ToLower() == "owner") 
+                               select new 
                                                     {
                                                         PostId = _post.PostId,
                                                         //PostIdval = Encryption.EncryptID(_post.PostId.ToString(), LoginUserId.ToString()),
@@ -1233,8 +1234,9 @@ public class DA_Post
                          _postStatus.StatusName.ToLower() == "approved" &&
                          //(_post.UserInteractions != null ? _post.UserInteractions.VisibilityPercentage < 70 : true) &&
                          (_post.ViewPolicies.GroupMemberOnly != null && _post.ViewPolicies.GroupMemberOnly == true ? 
-                         (_chanme.UserId == LoginUserId && _meStatus.StatusName.ToLower() == "approved") : true) 
+                         (_chanme.UserId == LoginUserId && _meStatus.StatusName.ToLower() == "approved") : true)
                          //(_post.ViewPolicies.MaxCount != null ? _post.ViewPolicies.MaxCount > _post.Views : true)
+                         orderby _post.ModifiedDate descending
                          select new 
                          {
                              PostId = _post.Post.PostId,

@@ -383,20 +383,21 @@ public class DA_User
             if(user is null)
                 return Result<ResponseUserDto>.Error("Email Not Found");
 
+            string aseKey = _configuration.GetSection("AesEncryption:AseKey").Get<string>()!;
+            string aseIv = _configuration.GetSection("AesEncryption:AseIV").Get<string>()!;
+            string realpass = AesEncryption.Decrypt(paylod.Password, aseKey, aseIv);
             string oldsalt = user.PasswordHash!;
             string oldhash = user.Password!;
-            bool flag = SaltedHash.Verify(oldsalt, oldhash, paylod.Password);
+            bool flag = SaltedHash.Verify(oldsalt, oldhash, realpass);
 
             if (flag == false)
                 return Result<ResponseUserDto>.Error("Incorrect Login Password for user account : " + paylod.Email);
 
-            string aseKey = _configuration.GetSection("AesEncryption:AseKey").Get<string>()!;
-            string aseIv = _configuration.GetSection("AesEncryption:AseIV").Get<string>()!;
             result = Result<ResponseUserDto>.Success(new ResponseUserDto
             {
                 UserIdval = user.UserIdval!,
                 Name = user.Name!,
-                Password = AesEncryption.Encrypt(user.Password, aseKey, aseIv)
+                Password = paylod.Password
             });
 
         }

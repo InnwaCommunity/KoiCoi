@@ -97,27 +97,28 @@ public class DA_React
         return result;
     }
 
-    public async Task<Result<GetCommentResponse>> CommentPost(CommentPostPayload payload, int LoginUserID)
+    public async Task<Result<string>> CommentPost(CommentPostPayload payload, int LoginUserID)
     {
-        Result<GetCommentResponse> result = null;
+        //Result<GetCommentResponse> result = null;
+        Result<string> result = null;
         try
         {
             if (payload.PostIdval is null && payload.ParentIdval is null)
-                return Result<GetCommentResponse>.Error("Post can be null");
+                return Result<string>.Error("Post can be null");
 
             if(payload.PostIdval is not null)
             {
                 int PostId = Convert.ToInt32(Encryption.DecryptID(payload.PostIdval, LoginUserID.ToString()));
                 var post = await _db.Posts.Where(x=> x.PostId== PostId).FirstOrDefaultAsync();
                 if(post is null)
-                    return Result<GetCommentResponse>.Error("Post can't found");
+                    return Result<string>.Error("Post can't found");
                 if (payload.ParentIdval is not null)
                 {
                     int ParentCommandId = Convert.ToInt32(Encryption.DecryptID(payload.ParentIdval, LoginUserID.ToString()));
                     var parentCommand = await _db.PostCommands.Where(x=> x.CommandId == ParentCommandId).FirstOrDefaultAsync();
                         
                     if (parentCommand is null)
-                        return Result<GetCommentResponse>.Error("Parent Command can't found");
+                        return Result<string>.Error("Parent Command can't found");
                     PostCommand newCommand = new PostCommand
                     {
                         Content = payload.Content,
@@ -148,7 +149,7 @@ public class DA_React
                                            CreatorImage = profiles.OrderByDescending(p => p.CreatedDate).Select(x => x.Url).FirstOrDefault(),
                                            HaveChildCommand = _db.PostCommands.Any(x => x.ParentCommandId == _com.CommandId)
                                        }).FirstOrDefaultAsync();*/
-                    var baseQuery = from _com in _db.PostCommands
+                    /*var baseQuery = from _com in _db.PostCommands
                                     join _creator in _db.Users on _com.UserId equals _creator.UserId
                                     join pro in _db.UserProfiles on _creator.UserId equals pro.UserId into profiles
                                     join _cmr in _db.CommandReacts on _com.CommandId equals _cmr.CommandId into cmreacts
@@ -182,8 +183,9 @@ public class DA_React
                         HaveChildCommand = materializedData.HaveChildCommand
                     };
                     if (query is null)
-                        return Result<GetCommentResponse>.Error("Fail"); 
-                    result = Result<GetCommentResponse>.Success(query);
+                        return Result<GetCommentResponse>.Error("Fail");
+                     */
+                    result = Result<string>.Success("Success");
                 }
                 else
                 {
@@ -197,7 +199,7 @@ public class DA_React
                     };
                     await _db.PostCommands.AddAsync(newCommand);
                     await _db.SaveChangesAsync();
-                    var query = await (from _com in _db.PostCommands
+                    /*var query = await (from _com in _db.PostCommands
                                        join _creator in _db.Users on _com.UserId equals _creator.UserId
                                        join pro in _db.UserProfiles on _creator.UserId equals pro.UserId into profiles
                                        join _cmr in _db.CommandReacts on _com.CommandId equals _cmr.CommandId into cmreacts
@@ -216,19 +218,19 @@ public class DA_React
                                            CreatorImage = profiles.OrderByDescending(p => p.CreatedDate).Select(x => x.Url).FirstOrDefault(),
                                            HaveChildCommand = _db.PostCommands.Any(x => x.ParentCommandId == _com.CommandId)
                                        }).FirstOrDefaultAsync();
-                    if (query is null)
-                        return Result<GetCommentResponse>.Error("Fail");
-                    result = Result<GetCommentResponse>.Success(query);
+                     */
+                    
+                    result = Result<string>.Success("Success");
                 }
             }
             else
             {
-                result = Result<GetCommentResponse>.Error("Fail");
+                result = Result<string>.Error("Fail");
             }
         }
         catch (Exception ex)
         {
-            result = Result<GetCommentResponse>.Error(ex);
+            result = Result<string>.Error(ex);
         }
         return result;
     }
