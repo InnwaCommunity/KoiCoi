@@ -1,14 +1,9 @@
-﻿
-using KoiCoi.Database.AppDbContextModels;
-using KoiCoi.Models;
-using KoiCoi.Models.ChannelDtos.PayloadDtos;
+﻿using Amazon;
+using KoiCoi.Models.EventDto.Payload;
 using KoiCoi.Models.Via;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
-using System.ComponentModel.DataAnnotations;
-using System.Drawing.Printing;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Microsoft.IdentityModel.Tokens;
 
 namespace KoiCoi.Modules.Repository.ChannelFeature;
 
@@ -777,70 +772,100 @@ public class DA_Channel
         Result<string> model = null;
         try
         {
-            string urlSalt = _configuration["appSettings:UrlSalt"] ?? throw new Exception("Invalid UrlSalt");
-            string desdata = Encryption.DecryptID(payload.InviteLink!, urlSalt);
-            string[] splidata = desdata.Split('/');
-            int inviterId = Convert.ToInt32(splidata[0]);
-            int channelId = Convert.ToInt32(splidata[1]);
-
-            ///Join
-            if (payload.IsJoin ?? true)
+            if (!string.IsNullOrEmpty(payload.InviteLink))
             {
-                var IsMember = await _db.ChannelMemberships
-                                        .Where(x => x.UserId == LoginUserId && x.ChannelId == channelId)
-                                        .FirstOrDefaultAsync();
-                if (IsMember is not null) return Result<string>.Error("Already Joined");
 
-                var hasChannel = await _db.Channels.Where(x => x.ChannelId == channelId).FirstOrDefaultAsync();
-                if (hasChannel is null) return Result<string>.Error("Channel Not Found");
-                int? memberLevel = await _db.UserTypes.Where(x => x.Name.ToLower() == "member").Select(x => x.TypeId).FirstOrDefaultAsync();
-                if (memberLevel is null) return Result<string>.Error("Member User Type Not Found");
-                ChannelMembership meship = new ChannelMembership
+                string urlSalt = _configuration["appSettings:UrlSalt"] ?? throw new Exception("Invalid UrlSalt");
+                string desdata = Encryption.DecryptID(payload.InviteLink!, urlSalt);
+                string[] splidata = desdata.Split('/');
+                int inviterId = Convert.ToInt32(splidata[0]);
+                int channelId = Convert.ToInt32(splidata[1]);
+
+                ///Join
+                if (payload.IsJoin ?? true)
                 {
-                    ChannelId = channelId,
-                    UserId = LoginUserId,
-                    UserTypeId = memberLevel.Value,
-                    StatusId = 1,
-                    JoinedDate = DateTime.UtcNow,
-                    InviterId = inviterId,
-                };
-                await _db.ChannelMemberships.AddAsync(meship);
-                await _db.SaveChangesAsync();
-                model = Result<string>.Success("Joined Success");
+                    var IsMember = await _db.ChannelMemberships
+                                            .Where(x => x.UserId == LoginUserId && x.ChannelId == channelId)
+                                            .FirstOrDefaultAsync();
+                    if (IsMember is not null) return Result<string>.Error("Already Joined");
+
+                    var hasChannel = await _db.Channels.Where(x => x.ChannelId == channelId).FirstOrDefaultAsync();
+                    if (hasChannel is null) return Result<string>.Error("Channel Not Found");
+                    int? memberLevel = await _db.UserTypes.Where(x => x.Name.ToLower() == "member").Select(x => x.TypeId).FirstOrDefaultAsync();
+                    if (memberLevel is null) return Result<string>.Error("Member User Type Not Found");
+                    ChannelMembership meship = new ChannelMembership
+                    {
+                        ChannelId = channelId,
+                        UserId = LoginUserId,
+                        UserTypeId = memberLevel.Value,
+                        StatusId = 1,
+                        JoinedDate = DateTime.UtcNow,
+                        InviterId = inviterId,
+                    };
+                    await _db.ChannelMemberships.AddAsync(meship);
+                    await _db.SaveChangesAsync();
+                    model = Result<string>.Success("Joined Success");
 
 
-                ///Save to Notification
-                var NotiInfo = await (from chann in _db.ChannelMemberships
-                                      join user in _db.Users on chann.UserId equals user.UserId
-                                      join inviter in _db.Users on chann.InviterId equals inviter.UserId
-                                      join channel in _db.Channels on chann.ChannelId equals channel.ChannelId
-                                      where channel.ChannelId == channelId && user.UserId == LoginUserId
-                                      select new
-                                      {
-                                          MembershipId = chann.MembershipId,
-                                          UserName = user.Name,
-                                          InviterName = user.Name,
-                                          ChannelName = channel.ChannelName,
-                                          JoinDate = Globalfunction.CalculateDateTime(chann.JoinedDate) 
-                                      }).FirstOrDefaultAsync();
-                List<int> admins = await (from chan in _db.ChannelMemberships
-                                          join admin in _db.Users on chan.UserId equals admin.UserId
-                                          join userType in _db.UserTypes on chan.UserTypeId equals userType.TypeId
-                                          where chan.ChannelId == channelId && 
-                                          (userType.Name.ToLower() == "admin" || userType.Name.ToLower() == "owner")
-                                          select admin.UserId).ToListAsync();
-                if(NotiInfo is not null)
+                    ///Save to Notification
+                    var NotiInfo = await (from chann in _db.ChannelMemberships
+                                          join user in _db.Users on chann.UserId equals user.UserId
+                                          join inviter in _db.Users on chann.InviterId equals inviter.UserId
+                                          join channel in _db.Channels on chann.ChannelId equals channel.ChannelId
+                                          where channel.ChannelId == channelId && user.UserId == LoginUserId
+                                          select new
+                                          {
+                                              MembershipId = chann.MembershipId,
+                                              UserName = user.Name,
+                                              InviterName = user.Name,
+                                              ChannelName = channel.ChannelName,
+                                              JoinDate = Globalfunction.CalculateDateTime(chann.JoinedDate)
+                                          }).FirstOrDefaultAsync();
+                    List<int> admins = await (from chan in _db.ChannelMemberships
+                                              join admin in _db.Users on chan.UserId equals admin.UserId
+                                              join userType in _db.UserTypes on chan.UserTypeId equals userType.TypeId
+                                              where chan.ChannelId == channelId &&
+                                              (userType.Name.ToLower() == "admin" || userType.Name.ToLower() == "owner")
+                                              select admin.UserId).ToListAsync();
+                    if (NotiInfo is not null)
+                    {
+                        await _saveNotifications.SaveNotification(
+                            admins,
+                            LoginUserId,
+                            $"Join New Member to {NotiInfo.ChannelName}",
+                            $"{NotiInfo.UserName} who invited by ${NotiInfo.InviterName} Joined the {NotiInfo.ChannelName}",
+                            $"JoinedNewMember/{NotiInfo.MembershipId}");
+                    }
+                }
+                else
                 {
-                    await _saveNotifications.SaveNotification(
-                        admins,
-                        LoginUserId,
-                        $"Join New Member to {NotiInfo.ChannelName}",
-                        $"{NotiInfo.UserName} who invited by ${NotiInfo.InviterName} Joined the {NotiInfo.ChannelName}",
-                        $"JoinedNewMember/{NotiInfo.MembershipId}");
+                    ///Cancel
+                    var isReqeust = await _db.ChannelMemberships
+                                            .Where(x => x.UserId == LoginUserId
+                                            && x.ChannelId == channelId)
+                                            .FirstOrDefaultAsync();
+                    if (isReqeust is not null)
+                    {
+                        if (isReqeust.StatusId == 1 || isReqeust.StatusId == 3)
+                        {
+                            _db.ChannelMemberships.Remove(isReqeust);
+                            await _db.SaveChangesAsync();
+                            model = Result<string>.Success("Cancel Success");
+                        }
+                        else
+                        {
+                            model = Result<string>.Warning("You are already member,so you can leave in channel detail");
+                        }
+                    }
+                    else
+                    {
+                        model = Result<string>.Warning("You are already cancel");
+                    }
                 }
             }
-            else
+            else if(!string.IsNullOrEmpty(payload.ChannelIdval))
             {
+                int channelId = Convert.ToInt32(Encryption.DecryptID(payload.ChannelIdval, LoginUserId.ToString()));
                 ///Cancel
                 var isReqeust = await _db.ChannelMemberships
                                         .Where(x => x.UserId == LoginUserId
@@ -856,12 +881,12 @@ public class DA_Channel
                     }
                     else
                     {
-                        model = Result<string>.Error("You are already member,so you can leave in channel detail");
+                        model = Result<string>.Warning("You are already member,so you can leave in channel detail");
                     }
                 }
                 else
                 {
-                    model = Result<string>.Error("You are already cancel");
+                    model = Result<string>.Warning("You are already cancel");
                 }
             }
         }
@@ -1421,7 +1446,8 @@ public class DA_Channel
             string? Name = payload.Name;
             var query = await (from _ch in _db.Channels
                                                join _cm in _db.ChannelMemberships on _ch.ChannelId equals _cm.ChannelId
-                                               where _cm.UserId == LoginUserID
+                                                join _status in _db.StatusTypes on _cm.StatusId equals _status.StatusId
+                                                where _cm.UserId == LoginUserID && _status.StatusName.ToLower() == "approved" 
                                                && (string.IsNullOrEmpty(Name) ? true : _ch.ChannelName.Contains(Name))
                                                select new
                                                {
@@ -1430,6 +1456,145 @@ public class DA_Channel
                                                }).ToListAsync();
             Pagination data = RepoFunService.getWithPagination(payload.PageNumber, payload.PageSize, query);
             result = Result<Pagination>.Success(data);
+        }
+        catch (Exception ex)
+        {
+            result = Result<Pagination>.Error(ex);
+        }
+        return result;
+    }
+    public async Task<Result<Pagination>> ChannelOverallContribution(OverallContributionPayload payload, int LoginUserId)
+    {
+        Result<Pagination> result = null;
+        try
+        {
+
+            string balanceSalt = _configuration["appSettings:BalanceSalt"] ?? throw new Exception("Invalid Balance Salt");
+            int ChannelId = Convert.ToInt32(Encryption.DecryptID(payload.Idval, LoginUserId.ToString()));
+
+            // Fetch allowed marks for the event
+            List<Mark> allowedMarks = await (from _mark in _db.Marks
+                                             join _cb in _db.ChannelMarkBalances on _mark.MarkId equals _cb.MarkId
+                                             where _cb.ChannelId == ChannelId
+                                             select _mark)
+                                .Distinct()
+                                .ToListAsync();
+            List<OverallContributionsResponse> overallContributions = new List<OverallContributionsResponse>();
+
+            if (!allowedMarks.Any())
+            {
+                Pagination pa1 = RepoFunService.getWithPagination(payload.pageNumber, payload.pageSize, overallContributions);
+                return Result<Pagination>.Success(pa1);
+            }
+
+            var firstMark = allowedMarks.FirstOrDefault();
+            int firstMarkId = firstMark!.MarkId;
+            string SortMarkIdval = Encryption.EncryptID(firstMarkId.ToString(), LoginUserId.ToString());
+            if (!payload.MarkIdval.IsNullOrEmpty())
+            {
+                int SortMarkId = Convert.ToInt32(Encryption.DecryptID(payload.MarkIdval!, LoginUserId.ToString()));
+                firstMarkId = allowedMarks.Where(x => x.MarkId == SortMarkId).Select(x => x.MarkId).FirstOrDefault();
+                SortMarkIdval = Encryption.EncryptID(firstMarkId.ToString(), LoginUserId.ToString());
+            }
+
+            // Fetch the list of event members
+            var members = await (from _user in _db.Users
+                                        join _members in _db.ChannelMemberships on _user.UserId equals _members.UserId
+                                        join _pro in _db.UserProfiles on _user.UserId equals _pro.UserId into pro
+                                        where _members.ChannelId == ChannelId
+                                        select new
+                                        {
+                                            UserId = _user.UserId,
+                                            Name = _user.Name,
+                                            Email = _user.Email,
+                                            Image = pro.OrderByDescending(p => p.CreatedDate)
+                                            .Select(x=> x.Url)
+                                            .FirstOrDefault()
+                                        })
+                                        .Distinct()
+                                        .ToListAsync();
+
+
+            foreach (var member in members)
+            {
+                List<ContributionResponse> contributions = new List<ContributionResponse>();
+
+                foreach (var mark in allowedMarks)
+                {
+                    var query = await (from _coll in _db.CollectPosts
+                                       join _st in _db.StatusTypes on _coll.StatusId equals _st.StatusId
+                                       join _colBal in _db.PostBalances on _coll.PostId equals _colBal.PostId
+                                       join _ev in _db.Events on _coll.EventPostId equals _ev.PostId
+                                       join _cb in _db.ChannelMarkBalances on _ev.ChannelId equals _cb.ChannelId
+                                       where _colBal.MarkId == _cb.MarkId &&
+                                             mark.MarkId == _colBal.MarkId &&
+                                             mark.MarkId == _cb.MarkId &&
+                                             (_st.StatusName.ToLower() == "approved" || _st.StatusName.ToLower() == "pending") &&
+                                             _cb.ChannelId == ChannelId &&
+                                             _coll.CreatorId == member.UserId
+                                       group new
+                                       {
+                                           _colBal.Balance,
+                                           _cb.TotalBalance
+                                       }
+                                       by _cb.TotalBalance into grouped
+                                       select new
+                                       {
+                                           CollectBalance = grouped.Select(x => x.Balance).ToList(),
+                                           TotalBalance = grouped.Key
+                                       }).ToListAsync();
+
+                    // If no contributions are found, add a default contribution for the mark
+                    if (!query.Any())
+                    {
+                        string? totalBalance = await _db.ChannelMarkBalances
+                                                  .Where(x => x.ChannelId == ChannelId && x.MarkId == mark.MarkId)
+                                                  .Select(x => x.TotalBalance)
+                                                  .FirstOrDefaultAsync();
+
+                        contributions.Add(new ContributionResponse
+                        {
+                            MarkIdval = Encryption.EncryptID(mark.MarkId.ToString(), LoginUserId.ToString()),
+                            MarkName = mark.MarkName,
+                            IsoCode = mark.Isocode,
+                            CollectBalance = 0,
+                            TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(totalBalance!, balanceSalt))
+                        });
+                    }
+                    else
+                    {
+                        // Process contributions from the query
+                        contributions.AddRange(query.Select(x => new ContributionResponse
+                        {
+                            MarkIdval = Encryption.EncryptID(mark.MarkId.ToString(), LoginUserId.ToString()),
+                            MarkName = mark.MarkName,
+                            IsoCode = mark.Isocode,
+                            CollectBalance = x.CollectBalance
+                                .Sum(bal => Globalfunction.StringToDecimal(Encryption.DecryptID(bal, balanceSalt))),
+                            TotalBalance = Globalfunction.StringToDecimal(Encryption.DecryptID(x.TotalBalance, balanceSalt))
+                        }));
+                    }
+                }
+
+                // Create the overall contribution response
+                overallContributions.Add(new OverallContributionsResponse
+                {
+                    ContributorIdval = Encryption.EncryptID(member.UserId.ToString(), LoginUserId.ToString()),
+                    ContributorName = member.Name,
+                    Contact = member.Email ?? "",
+                    UserImageUrl = member.Image ?? "",
+                    contributions = contributions
+                });
+            }
+
+            // Sort the overall contributions by the first mark (e.g., USD)
+            overallContributions = overallContributions
+                .OrderByDescending(over => over.contributions
+                    .FirstOrDefault(c => c.MarkIdval == SortMarkIdval)?.CollectBalance ?? 0)
+                .ToList();
+
+            Pagination pa = RepoFunService.getWithPagination(payload.pageNumber, payload.pageSize, overallContributions);
+            result = Result<Pagination>.Success(pa);
         }
         catch (Exception ex)
         {

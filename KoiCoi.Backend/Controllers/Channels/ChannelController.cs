@@ -374,4 +374,11 @@ public class ChannelController : BaseController
         return await _blChannel.FindAccessChannelByName(payload, LoginUserID);
     }
 
+    [HttpPost("ChannelOverallContribution",Name = "ChannelOverallContribution")]
+    public async Task<Result<Pagination>> ChannelOverallContribution(OverallContributionPayload payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blChannel.ChannelOverallContribution(payload, LoginUserID);
+    }
+
 }

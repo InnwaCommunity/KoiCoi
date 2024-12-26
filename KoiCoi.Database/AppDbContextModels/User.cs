@@ -27,5 +27,9 @@ public partial class User
 
     public bool? Inactive { get; set; }
 
+    public string? FacebookUserId { get; set; }
+
+    public string? GoogleUserId { get; set; }
+
     public virtual ICollection<Mark> Marks { get; set; } = new List<Mark>();
 }

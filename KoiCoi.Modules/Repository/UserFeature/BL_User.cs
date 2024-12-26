@@ -106,4 +106,20 @@ public class BL_User
     {
         return await _daUser.ChangeLoginPassword(paylod, LoginUserId);
     }
+    public async Task<Result<string>> RemoveLoginAccount(RemoveLoginAccountPayload payload)
+    {
+        return await _daUser.RemoveLoginAccount(payload);
+    }
+    public async Task<Result<string>> GetUserProfile(GetUserData payload,int LoginEmpID)
+    {
+        return await _daUser.GetUserProfile(payload, LoginEmpID);
+    }
+    public async Task<Result<UserLoginAccounts>> CheckSocialAccount(CheckSocialAccountPayload payload)
+    {
+        return await _daUser.CheckSocialAccount(payload);
+    }
+    public async Task<Result<ResponseUserDto>> CreateSocialAccount(SocialSignInPayload payload)
+    {
+        return await _daUser.CreateSocialAccount(payload);
+    }
 }

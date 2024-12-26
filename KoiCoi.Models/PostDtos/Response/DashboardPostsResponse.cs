@@ -47,6 +47,7 @@ public partial class PostReactStatus {
 public partial class DashboardEventPostResponse
 {
     public string? PostType { get; set; }
+    public string? ChannelIdval { get; set; }
     public string? EventPostIdval { get; set; }
     public string? EventName { get; set; }
     public string? EventDescrition { get; set; }
@@ -61,6 +62,7 @@ public partial class DashboardEventPostResponse
     public int CommandTotalCount { get; set; }
     public int ShareTotalCount { get; set; }
     public int ViewTotalCount { get; set; }
+    public bool IsMember { get; set; } = false;
     public bool Selected { get; set; }
     public bool CanLike { get; set; }
     public bool CanCommand { get; set; }

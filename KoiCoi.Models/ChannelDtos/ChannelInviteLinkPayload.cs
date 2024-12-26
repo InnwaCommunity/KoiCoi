@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KoiCoi.Models.ChannelDtos;
+﻿namespace KoiCoi.Models.ChannelDtos;
 
 public partial class ChannelInviteLinkPayload
 {
@@ -14,5 +8,6 @@ public partial class ChannelInviteLinkPayload
 public partial class JoinChannelInviteLinkPayload
 {
     public string? InviteLink { get; set; }
+    public string? ChannelIdval { get; set; }
     public bool? IsJoin { get; set; }
 }

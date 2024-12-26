@@ -61,4 +61,8 @@ public  class BL_Post
     {
         return await _daPost.GetEachUserPosts(LoginUserId, payload);
     }
+    public async Task<Result<string>> DeletePost(int LoginUserID, string postIdval)
+    {
+        return await _daPost.DeletePost(LoginUserID, postIdval);
+    }
 }

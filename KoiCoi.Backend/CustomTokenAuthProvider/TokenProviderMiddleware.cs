@@ -76,11 +76,12 @@ public class TokenProviderMiddleware : IMiddleware
             context.Request.Path.ToString().ToLower().Contains("forgotpassword/requestbyemail") ||
             context.Request.Path.ToString().ToLower().Contains("forgotpassword/changepasswordbyotp") ||
             context.Request.Path.ToString().ToLower().Contains("swagger/") ||//api/v1/User/Testing
-            context.Request.Path.ToString().ToLower().Contains("/api/v1/user/testing") ||
-            context.Request.Path.ToString().ToLower().Contains("/api/v1/user/registeraccount") ||
-            context.Request.Path.ToString().ToLower().Contains("/api/v1/user/accountswithdeviceid") ||
-            //context.Request.Path.ToString().ToLower().Contains("api/imagefileservice") ||
-            context.Request.Path.ToString().ToLower().Contains("api/v1/user/signin")
+            context.Request.Path.ToString().ToLower().Contains("/api/v1/publish/testing") ||
+            context.Request.Path.ToString().ToLower().Contains("/api/v1/publish/registeraccount") ||
+            context.Request.Path.ToString().ToLower().Contains("/api/v1/publish/accountswithdeviceid") ||
+            context.Request.Path.ToString().ToLower().Contains("api/v1/publish/signin") ||
+            context.Request.Path.ToString().ToLower().Contains("api/v1/publish/createsocialaccount") ||
+            context.Request.Path.ToString().ToLower().Contains("api/v1/publish/checksocialaccount")
 
         )
         {
@@ -241,6 +242,7 @@ public class TokenProviderMiddleware : IMiddleware
             var response = new
             {
                 AccessToken = encodedJwt,
+                CurrentVersion = "1.0.0"
                 //ExpiresIn = (int)_options.Expiration.TotalSeconds,
                 // UserID = AdminID.ToString(),
                 //UserIDval = Encryption.EncryptID(AdminID.ToString(), LoginUserID.ToString()),

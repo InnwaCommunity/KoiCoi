@@ -1,7 +1,4 @@
-﻿using KoiCoi.Modules.Repository.EventFreture;
-using KoiCoi.Modules.Repository.PostFeature;
-
-namespace KoiCoi.Backend.Controllers.User;
+﻿namespace KoiCoi.Backend.Controllers.User;
 
 [Route("api/v1/[controller]")]
 [ApiController]
@@ -14,24 +11,6 @@ public class UserController : BaseController
         _bLUser = blUser;
     }
 
-    [HttpGet("Testing", Name = "Testing")]
-    public IActionResult Testing()
-    {
-        return Ok(new { data = "Hello, this is a DB testing response!" });
-    }
-
-    [HttpPost("RegisterAccount", Name = "RegisterAccount")]
-    public async Task<IActionResult> RegisterAccount(RequestUserDto requestUser)
-    {
-        var respo = await _bLUser.CreateAccount(requestUser);
-        return Ok(respo);
-    }
-
-    [HttpGet("AccountsWithDeviceId/{deviceId}",Name = "AccountsWithDeviceId")]
-    public async Task<Result<List<UserLoginAccounts>>> AccountsWithDeviceId(string deviceId)
-    {
-        return await _bLUser.AccountsWithDeviceId(deviceId);
-    }
 
     [HttpPost("UpdateUserInfo", Name = "UpdateUserInfo")]
     public async Task<IActionResult> UpdateUserInfo(RequestUserDto requestUser)
@@ -83,12 +62,6 @@ public class UserController : BaseController
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _bLUser.GetUserTypes(LoginEmpID);
     }
-
-    [HttpPost("Signin", Name = "Signin")]
-    public async Task<Result<ResponseUserDto>> Signin(LoginPayload paylod)
-    {
-        return await _bLUser.Signin(paylod);
-    }
     [HttpGet("GetLoginUserInfo",Name = "GetLoginUserInfo")]
     public async Task<Result<LoginUserInfo>> GetLoginUserInfo()
     {
@@ -101,6 +74,13 @@ public class UserController : BaseController
     {
         int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
         return await _bLUser.ChangeLoginPassword(paylod, LoginEmpID);
+    }
+
+    [HttpPost("GetUserProfile",Name ="GetUserProfile")]
+    public async Task<Result<string>> GetUserProfile(GetUserData payload)
+    {
+        int LoginEmpID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _bLUser.GetUserProfile(payload,LoginEmpID);
     }
 
 

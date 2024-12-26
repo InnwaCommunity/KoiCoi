@@ -25,6 +25,7 @@ global using KoiCoi.Models.PostTagDto.Response;
 global using KoiCoi.Models.Mark.Payload;
 global using KoiCoi.Models.Currency;
 global using KoiCoi.Models.FileDto.Payload;
+global using KoiCoi.Models.ChannelDtos.PayloadDtos;
 
 //Mapper
 

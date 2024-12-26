@@ -5,6 +5,7 @@ public class Result<T>
 {
     public bool IsSuccess { get; set; }
     public bool IsError { get { return !IsSuccess; } }
+    public bool IsWarning { get; set; }
     public T Data { get; set; }
     public string Message { get; set; }
 
@@ -26,6 +27,16 @@ public class Result<T>
             IsSuccess = false,
         };
     }
+    public static Result<T> Warning(string message)
+    {
+        return new Result<T>()
+        {
+            Message = message,
+            IsSuccess = false,
+            IsWarning = true
+        };
+    }
+
 
     public static Result<T> Error(Exception ex)
     {
