@@ -25,6 +25,7 @@ var app = builder.Build();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Happy Cooky v1"));
 //}
 
+app.MapGet("/test", () => "Hello World!");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

@@ -33,6 +33,7 @@ public class KcAwsS3Service
             var bucketExists = await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketname);
             if (!bucketExists)
             {
+                //create bucket
                 await _s3Client.PutBucketAsync(bucketname);
             }
 
@@ -68,6 +69,10 @@ public class KcAwsS3Service
         }
         catch (AmazonS3Exception ex)
         {
+            Console.WriteLine($"Amazon S3 Error: {ex.Message}");
+            Console.WriteLine($"Error Code: {ex.ErrorCode}");
+            Console.WriteLine($"Request ID: {ex.RequestId}");
+            Console.WriteLine($"Status Code: {ex.StatusCode}");
             return Result<string>.Error(ex);
         }
         catch (Exception ex)

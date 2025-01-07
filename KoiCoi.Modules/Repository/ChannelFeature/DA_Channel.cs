@@ -404,7 +404,8 @@ public class DA_Channel
                                                }).FirstOrDefaultAsync();
             if (data is null) return Result<ChannelDataResponse>.Error("Channel Not Found");
              */
-            string channelIdval = Encryption.DecryptID(newchannel.ChannelId.ToString(), LoginUserId.ToString());
+
+            string channelIdval = Encryption.EncryptID(newchannel.ChannelId.ToString(), LoginUserId.ToString());
             return Result<string>.Success(channelIdval);
         }
         catch (Exception ex)

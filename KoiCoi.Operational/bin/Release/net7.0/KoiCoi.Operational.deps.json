@@ -8,6 +8,8 @@
     ".NETCoreApp,Version=v7.0": {
       "KoiCoi.Operational/1.0.0": {
         "dependencies": {
+          "AWSSDK.Extensions.NETCore.Setup": "3.7.301",
+          "AWSSDK.S3": "3.7.402.2",
           "Dapper": "2.1.35",
           "Google.Apis.Auth": "1.68.0",
           "Google.Apis.FirebaseCloudMessaging.v1": "1.68.0.3431",
@@ -29,6 +31,39 @@
         },
         "runtime": {
           "KoiCoi.Operational.dll": {}
+        }
+      },
+      "AWSSDK.Core/3.7.400.11": {
+        "runtime": {
+          "lib/netcoreapp3.1/AWSSDK.Core.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.400.11"
+          }
+        }
+      },
+      "AWSSDK.Extensions.NETCore.Setup/3.7.301": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.400.11",
+          "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.0"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/AWSSDK.Extensions.NETCore.Setup.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.7.0"
+          }
+        }
+      },
+      "AWSSDK.S3/3.7.402.2": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.400.11"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/AWSSDK.S3.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.402.2"
+          }
         }
       },
       "Azure.Core/1.35.0": {
@@ -2932,6 +2967,27 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "AWSSDK.Core/3.7.400.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bRntRauoB4FwswqaeEiUAcwjZd0AOeHjZCoFPvOMNaT9tJVWRvF0SHTPE1A5zR2MLeFHCZjbLJxJYOIgVJiCXA==",
+      "path": "awssdk.core/3.7.400.11",
+      "hashPath": "awssdk.core.3.7.400.11.nupkg.sha512"
+    },
+    "AWSSDK.Extensions.NETCore.Setup/3.7.301": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hXejqa+G72kVCSmpKlNVWDEqa8KVWOFL/asgoE2mairQOnmTCv6vMxaXjJ0nQaad5/21zTdKDIfDiki5YTne1Q==",
+      "path": "awssdk.extensions.netcore.setup/3.7.301",
+      "hashPath": "awssdk.extensions.netcore.setup.3.7.301.nupkg.sha512"
+    },
+    "AWSSDK.S3/3.7.402.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KCrbnIvPNqSCcEyvcVwXUJuVO6mCQf67FykLUA6qrf8rlYQsDk1oj/QhZW5PHTqTVFvOuHlT2bPkqLGQt/Ag7w==",
+      "path": "awssdk.s3/3.7.402.2",
+      "hashPath": "awssdk.s3.3.7.402.2.nupkg.sha512"
     },
     "Azure.Core/1.35.0": {
       "type": "package",

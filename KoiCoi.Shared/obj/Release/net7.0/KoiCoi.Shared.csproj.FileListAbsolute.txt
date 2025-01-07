@@ -10,3 +10,15 @@ D:\published\AwsDeployment\KoiCoi\KoiCoi.Shared\obj\Release\net7.0\KoiCoi.Shared
 D:\published\AwsDeployment\KoiCoi\KoiCoi.Shared\obj\Release\net7.0\refint\KoiCoi.Shared.dll
 D:\published\AwsDeployment\KoiCoi\KoiCoi.Shared\obj\Release\net7.0\KoiCoi.Shared.pdb
 D:\published\AwsDeployment\KoiCoi\KoiCoi.Shared\obj\Release\net7.0\ref\KoiCoi.Shared.dll
+D:\published\KoiCoi\KoiCoi.Shared\bin\Release\net7.0\KoiCoi.Shared.deps.json
+D:\published\KoiCoi\KoiCoi.Shared\bin\Release\net7.0\KoiCoi.Shared.dll
+D:\published\KoiCoi\KoiCoi.Shared\bin\Release\net7.0\KoiCoi.Shared.pdb
+D:\published\KoiCoi\KoiCoi.Shared\obj\Release\net7.0\KoiCoi.Shared.GeneratedMSBuildEditorConfig.editorconfig
+D:\published\KoiCoi\KoiCoi.Shared\obj\Release\net7.0\KoiCoi.Shared.AssemblyInfoInputs.cache
+D:\published\KoiCoi\KoiCoi.Shared\obj\Release\net7.0\KoiCoi.Shared.AssemblyInfo.cs
+D:\published\KoiCoi\KoiCoi.Shared\obj\Release\net7.0\KoiCoi.Shared.csproj.CoreCompileInputs.cache
+D:\published\KoiCoi\KoiCoi.Shared\obj\Release\net7.0\KoiCoi.Shared.sourcelink.json
+D:\published\KoiCoi\KoiCoi.Shared\obj\Release\net7.0\KoiCoi.Shared.dll
+D:\published\KoiCoi\KoiCoi.Shared\obj\Release\net7.0\refint\KoiCoi.Shared.dll
+D:\published\KoiCoi\KoiCoi.Shared\obj\Release\net7.0\KoiCoi.Shared.pdb
+D:\published\KoiCoi\KoiCoi.Shared\obj\Release\net7.0\ref\KoiCoi.Shared.dll

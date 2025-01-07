@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KoiCoi.Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+abe7db89df75d79494e9ed9723c81adfb054d39b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dbdd55938a1de03c9ca4fd7662b66c1ceebe5585")]
 [assembly: System.Reflection.AssemblyProductAttribute("KoiCoi.Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KoiCoi.Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
