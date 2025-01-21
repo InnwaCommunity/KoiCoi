@@ -1,0 +1,18 @@
+
+{
+    "region" : "ap-southeast-1",
+    "profile" : "koicoi-developer",
+    "configuration" : "Release",
+    "framework"     : "net8.0",
+    "function-name" : "KoiCoi-Backend-Api",
+    "function-description" : "",
+    "package-type"         : "Zip",
+    "function-handler"     : "KoiCoi.Backend",
+    "function-memory-size" : 256,
+    "function-timeout"     : 30,
+    "function-runtime"     : "dotnet8",
+    "function-architecture" : "x86_64",
+    "tracing-mode"          : "PassThrough",
+    "environment-variables" : "",
+    "image-tag"             : ""
+}

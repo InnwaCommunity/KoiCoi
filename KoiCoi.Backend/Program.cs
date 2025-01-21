@@ -1,5 +1,6 @@
 
 using KoiCoi.Backend.CustomTokenAuthProvider;
+using Amazon.Lambda.AspNetCoreServer.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder
     .ConfigureCors()
     .ConfigureModelBindingExceptionHandling();
 
+builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 //builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();

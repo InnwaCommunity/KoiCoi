@@ -3,6 +3,7 @@ using Serilog;
 using System.Drawing.Imaging;
 using System.Drawing;
 using KoiCoi.Modules.Repository.EventFreture;
+using KoiCoi.Modules.Repository.PostFeature;
 namespace KoiCoi.Backend.Controllers.Channels;
 
 [Route("api/[controller]")]
@@ -117,6 +118,12 @@ public class ChannelController : BaseController
         {
             return Result<string>.Error(ex);
         }
+    }
+    [HttpDelete("DeleteChannel", Name = "DeleteChannel")]
+    public async Task<Result<string>> DeleteChannel(DeletePayload payload)
+    {
+        int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
+        return await _blChannel.DeleteChannel(LoginUserID, payload);
     }
 
     [HttpGet("GetChannelsList/{PageNumber}/{PageSize}/{Status}", Name = "GetChannelsList")]
@@ -304,11 +311,11 @@ public class ChannelController : BaseController
     }
 
     [HttpPost("GetChannelMember", Name = "GetChannelMember")]
-    public async Task<Result<List<ChannelMemberResponse>>> GetChannelMember(GetMembershipPayload payload)
+    public async Task<Result<Pagination>> GetChannelMember(GetMembershipPayload payload)
     {
-        if (string.IsNullOrEmpty(payload.ChannelIdval) || string.IsNullOrEmpty(payload.MemberState)) return Result< List < ChannelMemberResponse >>.Error("Channel Id can't be empty or null");
+        if (string.IsNullOrEmpty(payload.ChannelIdval) || string.IsNullOrEmpty(payload.MemberState)) return Result<Pagination>.Error("Channel Id can't be empty or null");
         int LoginUserID = Convert.ToInt32(_tokenData.LoginUserId);
-        return await _blChannel.GetChannelMember(payload.ChannelIdval,payload.MemberState.ToLower(), LoginUserID);
+        return await _blChannel.GetChannelMember(payload, LoginUserID);
     }
 
     [HttpPost("ApproveRejectChannelMember",Name = "ApproveRejectChannelMember")]
